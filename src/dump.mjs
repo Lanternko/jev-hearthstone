@@ -1,0 +1,11 @@
+import {readFile} from 'node:fs/promises';
+import {snapshot} from './power.mjs';
+const list=JSON.parse(await readFile(new URL('../data/cards.enUS.json',import.meta.url),'utf8'));
+const cards=Object.fromEntries(list.map(c=>[c.id,c]));
+const s=await snapshot(undefined,cards);
+const st=s.state;
+const line=c=>`${c.name??c.cardId??('entity '+c.entityId)} ${c.ATK??0}/${(c.HEALTH??0)-(c.DAMAGE??0)}${c.ARMOR?` +${c.ARMOR}armor`:''} [${c.CARDTYPE}]${c.text?` :: ${String(c.text).replace(/\s+/g,' ')}`:''}`;
+console.log('== MANA ==',JSON.stringify(st.me.mana??st.me.resources??{}));
+console.log('== MY BOARD ==');(st.me.board??[]).forEach(c=>console.log(' ',line(c)));
+console.log('== MY HAND ==');(st.me.hand??[]).forEach(c=>console.log(' ',line(c)));
+console.log('== OPP BOARD ==');(st.opponent.board??[]).forEach(c=>console.log(' ',line(c)));

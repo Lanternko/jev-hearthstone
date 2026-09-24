@@ -1,0 +1,21 @@
+{
+  "name": "jev-hearthstone",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "smoke": "node --env-file-if-exists=.env.local src/smoke.mjs",
+    "test": "node --test",
+    "decide": "node --env-file-if-exists=.env.local src/decide.mjs",
+    "calibrate": "node src/calibrate.mjs",
+    "play": "node --env-file-if-exists=.env.local src/play.mjs",
+    "verify": "node src/verify-decision.mjs",
+    "loop": "node src/loop.mjs",
+    "override": "node --env-file-if-exists=.env.local src/override.mjs",
+    "gestures": "node src/gesture-report.mjs",
+    "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1"
+  },
+  "dependencies": {
+    "ai": "7.0.107"
+  }
+}

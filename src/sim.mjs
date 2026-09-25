@@ -22,6 +22,11 @@ const kw=(c,tag,word)=>on(c,tag)||(!silenced(c)&&new RegExp(`\\b${word}\\b`,'i')
 // swing inexact. Deathrattle and Reborn only matter when the body actually dies.
 const COMBAT_TRIGGER=/\b(?:after|whenever|when)\b[^.]*\b(?:attacks?|damaged?|dies|die|destroy|kills?)\b|\boverkill\b|\bfrenzy\b|\bhonorable kill\b|\bspellburst\b/i;
 const ON_DEATH=/\bdeathrattle\b|\breborn\b/i;
+// Text a card hands to others sits in quotes: Braingill's Battlecry gives Murlocs "Deathrattle:
+// Draw a card." and has none itself. Reading it as its own Deathrattle cut every plan that killed it.
+const ownText=t=>(t??'').replace(/"[^"]*"/g,'');
+// Chronoclaws: the swing is plain arithmetic; only the hand changes, and predictably so.
+const DISCARD_HIGH=/^after your hero attacks, discard your highest cost card\.?$/i;
 
 function body(c,side){
   const hp=num(c.HEALTH??c.baseHealth)-num(c.DAMAGE);
@@ -158,8 +163,15 @@ export function apply(s0,m){
     const a=s.me.find(b=>b.id===m.id),t=s.opp.find(b=>b.id===m.targetId);
     let exact=true;const notes=[];
     if(COMBAT_TRIGGER.test(a.text)||COMBAT_TRIGGER.test(t.text)){exact=false;notes.push('a combat trigger fires')}
-    if(a.type==='HERO'&&s.weapon){
-      if(s.weapon.text){exact=false;notes.push(`${s.weapon.name} triggers`)}
+    if(a.type==='HERO'&&s.weapon?.text){
+      if(DISCARD_HIGH.test(s.weapon.text)){
+        if(s.hand.length){
+          const top=Math.max(...s.hand.map(x=>x.cost)),tied=s.hand.filter(x=>x.cost===top),lost=tied[0];
+          s.hand=s.hand.filter(x=>x!==lost);s.discarded=[...(s.discarded??[]),lost];
+          if(tied.length>1){exact=false;notes.push(`${s.weapon.name} discards one of ${tied.map(x=>x.name).join(', ')} at random`)}
+          if(FODDER.test(lost.text)&&!DRAW_ONLY.test(lost.text)){exact=false;notes.push(`discarding ${lost.name} triggers its text`)}
+        }
+      }else{exact=false;notes.push(`${s.weapon.name} triggers`)}
     }
     const before=hpOf(t);
     const hitT=strike(a,t,a.atk);
@@ -167,7 +179,7 @@ export function apply(s0,m){
     if(hitT&&a.lifesteal){const h=hero(s,'me');if(h)h.hp+=a.atk}
     if(t.type==='HERO')s.faceDealt+=before-hpOf(t);
     a.attacks++;a.stealth=false;
-    for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(b.text)){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
+    for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
     s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
     return {s,exact,note:notes.join('; ')};
   }

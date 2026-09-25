@@ -1,5 +1,18 @@
 import {atkOf,enemyHero,heroHp,attackOptions,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
+import {readFileSync} from 'node:fs';
+// Public stats for this list: how often games were won when the card stayed in the opening hand.
+// Only that column is passed on. Played win rate is confounded by *when* a card gets played --
+// Hand of Gul'dan shows 31.7% because it is hard-cast once the discard plan has failed -- and
+// read as a verdict on the card it would talk Jev out of plays that are right.
+let MULL={cards:{}};
+try{MULL=JSON.parse(readFileSync(new URL('../data/mulligan.json',import.meta.url),'utf8'))}catch{}
+export const mulliganWR=c=>MULL.cards?.[c?.name]?.mulliganWR??null;
+export const mulliganKept=c=>MULL.cards?.[c?.name]?.kept??null;
+const mullStat=c=>{
+  const wr=mulliganWR(c);
+  return wr!=null?`; kept in opening hands it wins ${wr}% vs the deck's ${MULL.deckWinrate}% average`:'';
+};
 // Candidates reach Jev as raw option records: {"option":1,"entityId":49,"targetId":78}.
 // Nothing in that says "attack the enemy hero with a 1/1", so spell it out.
 // Heroes included: with a weapon equipped "Attack with your hero" otherwise hides both
@@ -59,6 +72,10 @@ function discardTargets(state,src){
 // game' that counters like Duke of Below use -- those count discards, they do not cause them.
 const DISCARD_OUTLET=/\bto discard\b|\bdiscards? (?:a|an|your|the|it|them|one|two|three|\d)\b/i;
 const DISCARD_COUNTER=/you'?ve discarded|you have discarded|cards? you discarded/i;
+// User ruling (2026-09-25, game 9): the opponent shuffled Abyssal Curse into our hand and Jev
+// never saw it as a threat. Its text arrives with the numbers unfilled ("take {0} damage"), so
+// the damage-reading patterns miss it; the phrasing alone says what it is.
+export const isCurse=c=>c?.CARDTYPE==='SPELL'&&/at the start of your turn,? take/i.test(flat(c?.text));
 const DRAWS=/\bdraws? (?:a|your|one|two|three|\d|cards)\b/i;
 // A card in hand has no keyword tags yet, so its text is the only source; a body already in
 // play has tags, and once it is Silenced the tag is gone while the text still reads Taunt.
@@ -87,6 +104,7 @@ export function roles(card){
   // decides whether their board is already lethal.
   if(hasTaunt(card))out.push('taunt');
   if(DRAWS.test(t))out.push('draw');
+  if(isCurse(card))out.push('curse: damages you every turn while held -- discard it or cast it to be rid of it');
   if(!out.length&&card?.CARDTYPE==='MINION')out.push('plain minion');
   return out;
 }
@@ -134,6 +152,27 @@ function coinNote(state,src){
 // could never cast) over Disposable Acolytes, whose "when you discard this" summons two minions
 // for free at end of turn. What the pick is worth depends on the mana left and on that trigger.
 const cost=c=>c?.COST??c?.baseCost??0;
+
+// Board slots a card fills when played: the minion itself plus what its text summons.
+const SUMMONS=/\bsummon (a|an|one|two|three|four|\d+)\b/i;
+const COUNT={a:1,an:1,one:1,two:2,three:3,four:4};
+export const summoned=c=>{const m=SUMMONS.exec(flat(c?.text));return m?COUNT[m[1].toLowerCase()]??Number(m[1]):0};
+export const bodies=c=>(c?.CARDTYPE==='MINION'?1:0)+summoned(c);
+const slotsFree=state=>7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+
+// User ruling (2026-09-25, game 6): Catacombs offered Disposable Acolytes and Silverware Golem at
+// 0 mana, and "要考慮" which. Both pay out when discarded; what differs is the board they leave --
+// two random 1-Cost minions in two slots, or a 3/3 in one -- against the room left and the
+// summoners still in hand. Say both, so the pick weighs them instead of reading two payoffs.
+function discardBoard(state,c){
+  const t=flat(c.text);
+  const n=/\bsummon it\b/i.test(t)?1:summoned(c);
+  if(!n)return '';
+  const what=/\bsummon it\b/i.test(t)?`itself as a ${c.ATK??c.baseAttack}/${c.HEALTH??c.baseHealth}`:`${n} minion(s) as its text says`;
+  const others=(state.me?.hand??[]).filter(x=>bodies(x)>0).map(x=>`${name(x)} (${cost(x)} mana, ${bodies(x)} slot(s))`);
+  return ` Discarded, it summons ${what}, filling ${n} of your ${slotsFree(state)} free board slot(s) out of 7.`
+    +(others.length?` Cards in hand that also need board slots: ${others.join('; ')}.`:'');
+}
 function pickNote(state,c){
   if(!c)return '';
   const mana=state.me?.mana??0,temp=/\btemporary\b/i.test(flat(state.choice?.source?.text));
@@ -144,7 +183,7 @@ function pickNote(state,c){
     :' Nothing happens when it is discarded, so an uncast copy is simply lost.';
   return ` ${name(state.choice.source)} makes the pick Temporary: it is discarded at the end of this turn.`
     +` You have ${mana} mana left, so `+(castable?`it can still be cast this turn.`:`it cannot be cast this turn and is only worth what its discard does.`)
-    +onDiscard;
+    +onDiscard+(DISCARD_PAYOFF.test(flat(c.text))?discardBoard(state,c):'');
 }
 
 // The hero power is spare-mana value: 2 mana for a card later. Offered Life Tap at 3 mana
@@ -171,7 +210,7 @@ export function describe(state,action){
       const cost=c?.COST??c?.baseCost;
       if(cost==null)return name(c);
       return `${name(c)} (${cost} mana ${(c?.CARDTYPE??'card').toLowerCase()}${stats(c)}`
-        +(flat(c?.text)?`: "${flat(c.text)}"`:'')+')';
+        +(flat(c?.text)?`: "${flat(c.text)}"`:'')+mullStat(c)+')';
     };
     const hand=state.me.hand??[];
     const out=action.replace.map(id=>find(id)).filter(Boolean);

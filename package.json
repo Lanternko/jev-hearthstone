@@ -13,7 +13,10 @@
     "loop": "node src/loop.mjs",
     "override": "node --env-file-if-exists=.env.local src/override.mjs",
     "gestures": "node src/gesture-report.mjs",
-    "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1"
+    "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
+    "eval-pick": "node src/eval-pick.mjs",
+    "label": "node src/eval-label.mjs",
+    "eval": "node --env-file-if-exists=.env.local src/eval-score.mjs"
   },
   "dependencies": {
     "ai": "7.0.107"

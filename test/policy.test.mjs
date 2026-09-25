@@ -168,9 +168,12 @@ test('a look-at-3 outlet blocks only while at most two cards in hand are not fod
   // Three cards are shown out of the hand the Chamber leaves behind; with two non-fodder cards
   // left, one of the three must be fodder. A third non-fodder card and it is a gamble again.
   const tight=[GULDAN,BARRAGE,CHAMBER,SOULARIUM,FILLER(1)];
-  assert.deepEqual(ids(hand(tight),tight),['o4','o6','o101']);
+  assert.equal(reliableOutletFor(hand(tight),GULDAN)?.entityId,4);
   const loose=[...tight,FILLER(2)];
-  assert.deepEqual(ids(hand(loose),loose).sort(),['o1','o102','o2','o4','o6','o101'].sort());
+  assert.equal(reliableOutletFor(hand(loose),GULDAN),null);
+  // Game-10 ruling on top: the cards that draw go first either way, so the menu is those two.
+  assert.deepEqual(ids(hand(tight),tight),['o4','o6']);
+  assert.deepEqual(ids(hand(loose),loose),['o4','o6']);
 });
 
 test('a highest-cost outlet blocks only while the fodder is the dearest thing in hand',()=>{
@@ -204,10 +207,14 @@ const body=n=>({entityId:200+n,CARDTYPE:'MINION',ATK:2,HEALTH:2});
 
 test('whispers reaches the fodder only when the fodder is the cheapest card in hand',()=>{
   const cheaper=[WHISPERS,EGG,FILLER(1)];                    // the 1-cost filler goes first
-  assert.equal(reliableOutletFor(hand(cheaper),EGG),null);
+  const short=hand(cheaper);short.me.mana=1;                 // ...unless it can be cast before
+  assert.equal(reliableOutletFor(short,EGG),null);
+  const spell=[WHISPERS,EGG,{...FILLER(1),CARDTYPE:'SPELL',text:'Draw a card.'}];
+  assert.equal(reliableOutletFor(hand(spell),EGG),null);     // a cheaper non-body always blocks
   const dearest=[WHISPERS,EGG,{...FILLER(1),COST:3}];        // now the Egg is the cheapest
   assert.equal(reliableOutletFor(hand(dearest),EGG)?.entityId,8);
-  assert.deepEqual(ids(hand(dearest),dearest),['o8','o101']);
+  const poor=(...a)=>{const x=hand(...a);x.me.mana=Math.min(...a[0].map(c=>c.COST??0).filter(Boolean).slice(1));return x}; // room for one card, so whispersWaits stays out of it
+  assert.deepEqual(ids(poor(dearest),dearest),['o8','o101']);
   // The Golem at three is not reached while the Egg at two sits beside it.
   const both=[WHISPERS,EGG,GOLEM];
   assert.equal(reliableOutletFor(hand(both),GOLEM),null);
@@ -223,17 +230,41 @@ test('whispers is off the table with no board and a real card as the cheapest',(
   const payoff=[WHISPERS,EGG];
   assert.deepEqual(ids(hand(payoff),payoff),['o8']);
   // One body on board and the buff half works, whatever it eats.
-  assert.deepEqual(ids(hand(loss,[body(1)]),loss),['o8','o101']);
+  const one1=hand(loss,[body(1)]);one1.me.mana=1;
+  assert.deepEqual(ids(one1,loss),['o8','o101']);
   // A tie it might survive is Jev's call, not ours.
   const tied=[WHISPERS,FILLER(1),{...EGG,COST:1}];
-  assert.ok(ids(hand(tied),tied).includes('o8'));
+  const t1=hand(tied);t1.me.mana=1;
+  assert.ok(ids(t1,tied).includes('o8'));
+});
+
+// 2026-09-25 game, our 3rd turn: 3 mana, Whispers, Acolytes, Party Fiend in hand, one body out.
+// Jev cast Whispers first; the user's line is Fiend, then Whispers eating Acolytes.
+const ACOLYTES={entityId:11,name:'Disposable Acolytes',CARDTYPE:'SPELL',COST:2,text:'Summon two 1/1 Acolytes. If you discard this, summon them.'};
+const FIEND={entityId:12,name:'Party Fiend',CARDTYPE:'MINION',COST:1,ATK:1,HEALTH:1,text:'<b>Battlecry:</b> Summon two 1/1 Felhounds.'};
+const TAP={entityId:13,name:'Life Tap',CARDTYPE:'HERO_POWER',COST:2,text:'Draw a card and take $2 damage.'};
+test('bodies go down before whispers',()=>{
+  const h=[WHISPERS,ACOLYTES,FIEND,{...GULDAN,entityId:14}];
+  const s=hand(h,[body(1),TAP]);s.me.mana=3;
+  const menu=[{id:'end',type:'END_TURN'},...h.slice(0,3).map(c=>({id:`o${c.entityId}`,entityId:c.entityId})),{id:'o13',entityId:13}];
+  const c=constrainActions(s,menu);
+  assert.deepEqual(c.map(a=>a.id),['end','o12','o13']);  // Acolytes waits to be eaten
+  assert.deepEqual(spendFirst(s,c).map(a=>a.id),['o12']); // and Life Tap would price the line out
+  // Fiend played, 2 mana left: now Whispers, eating Acolytes.
+  const after=hand([WHISPERS,ACOLYTES,{...GULDAN,entityId:14}],[body(1),body(2),TAP]);after.me.mana=2;
+  assert.deepEqual(constrainActions(after,menu.filter(a=>a.id!=='o12')).map(a=>a.id),['end','o8','o13']);
+  // No room for both: Whispers would eat the Fiend. Game 12's ruling covers this -- cast the Fiend,
+  // and Whispers is left to eat the Acolytes on a later turn.
+  const tight=hand(h,[body(1)]);tight.me.mana=1;
+  assert.deepEqual(constrainActions(tight,menu).map(a=>a.id).filter(id=>id==='o8'||id==='o12'),['o12']);
 });
 
 test('three bodies out and whispers in hand takes END_TURN away',()=>{
   const h=[WHISPERS,FILLER(1)];
   const board=[body(1),body(2),body(3)];
   const acts=[{id:'o8',entityId:8},{id:'o101',entityId:101},{id:'end',type:'END_TURN'}];
-  assert.deepEqual(constrainActions(hand(h,board),acts).map(a=>a.id),['o8','o101']);
+  const full=hand(h,board);full.me.mana=1;                // room for one card, so Whispers is not waiting
+  assert.deepEqual(constrainActions(full,acts).map(a=>a.id),['o8','o101']);
   // Two bodies is the user's line, and below it ending the turn stays legal.
   assert.ok(constrainActions(hand(h,[body(1),body(2)]),acts).map(a=>a.id).includes('end'));
   // No mana for it and there is nothing to stay for.
@@ -263,6 +294,19 @@ test('mulligan throws back everything but the opening whitelist',()=>{
  const out=constrainActions({choice:{type:'MULLIGAN',entities}},actions);
  assert.ok(out.length>0&&out.every(a=>[4,5,18].every(id=>a.replace.includes(id))));
  assert.ok(out.some(a=>!a.replace.includes(11)),'Acolytes may stay');
+});
+
+test('mulligan follows the opening-hand win rates where a card has one',()=>{
+ const entities=[
+  {entityId:1,name:'Cursed Catacombs',CARDTYPE:'SPELL',COST:0,text:'Discover another card from your deck. Make it Temporary.'},  // 71.9 keep
+  {entityId:2,name:'Ocular Occultist',CARDTYPE:'MINION',COST:3,text:'Taunt Battlecry: Choose a card in your hand to discard.'},  // 70.7 keep
+  {entityId:3,name:"Hand of Gul'dan",CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'},             // 62.5 toss
+  {entityId:4,name:'Boneweb Egg',CARDTYPE:'MINION',COST:2,text:'Deathrattle: Summon two 1/2 Spiders. If you discard this, trigger its Deathrattle.'}]; // 64.2 free
+ const ids=[1,2,3,4];
+ const actions=Array.from({length:16},(_,mask)=>({replace:ids.filter((x,i)=>mask&(1<<i))}));
+ const out=constrainActions({choice:{type:'MULLIGAN',entities}},actions);
+ assert.ok(out.every(a=>a.replace.includes(3)&&!a.replace.includes(1)&&!a.replace.includes(2)));
+ assert.deepEqual(out.map(a=>a.replace.includes(4)).sort(),[false,true],'the middle band is Jev\'s call');
 });
 
 test('burn goes face only when it finishes the game',()=>{
@@ -326,4 +370,258 @@ test('a battlecry picking a card in hand is not an attack (game 1, turn 11)',()=
 test('an open choice is left alone',()=>{
  const s={...spendBoard(),choice:{type:'DISCOVER'}};
  assert.equal(spendFirst(s,turnMenu),turnMenu);
+});
+
+// 2026-09-25, game 4. Turn 2: 2 mana, Occultist (3) in hand beside Acolytes, Acolytes and Egg.
+// Turn 3: Occultist with no board of ours discarded Hand of Gul'dan over the bodies.
+const occultist={entityId:9,name:'Ocular Occultist',CARDTYPE:'MINION',COST:3,text:'<b>Taunt</b> <b>Battlecry:</b> Choose a card in your hand to discard.'};
+const acolytes=id=>({entityId:id,name:'Disposable Acolytes',CARDTYPE:'SPELL',COST:2,text:'When you play or discard this, summon two random 1-Cost minions.'});
+const egg={entityId:32,name:'Boneweb Egg',CARDTYPE:'MINION',COST:2,text:'<b>Deathrattle:</b> Summon two 2/1 Spiders. If you discard this, trigger its <b>Deathrattle</b>.'};
+const hog={entityId:5,name:"Hand of Gul'dan",CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'};
+const board=[{entityId:64,CARDTYPE:'HERO',HEALTH:30},{entityId:65,CARDTYPE:'HERO_POWER',COST:2,text:'Draw a card and take $2 damage.'}];
+test('an outlet out of reach this turn, with fodder to spare, does not hold the fodder back',()=>{
+ const state={me:{mana:2,board,hand:[occultist,acolytes(6),egg,acolytes(29)]},opponent:{board:[]}};
+ const acts=[{id:'o0',type:'END_TURN'},{id:'hp',entityId:65},{id:'a',entityId:6},{id:'e',entityId:32},{id:'b',entityId:29}];
+ assert.deepEqual(constrainActions(state,acts).map(a=>a.id),['o0','hp','a','e','b']);
+ // The last fodder card stays protected, and so does any fodder once the outlet is castable.
+ const last={me:{mana:2,board,hand:[occultist,acolytes(6)]},opponent:{board:[]}};
+ assert.ok(!constrainActions(last,acts).some(a=>a.id==='a'));
+ const castable={me:{mana:3,board,hand:[occultist,acolytes(6),egg,acolytes(29)]},opponent:{board:[]}};
+ assert.ok(!constrainActions(castable,acts).some(a=>['a','e','b'].includes(a.id)));
+});
+test('with no board, the Occultist discards a card that makes bodies',()=>{
+ const state={me:{mana:3,board,hand:[hog,occultist,acolytes(6),egg]},opponent:{board:[]}};
+ const acts=[5,6,32].map(t=>({id:'t'+t,entityId:9,targetId:t}));
+ assert.deepEqual(constrainActions(state,acts).map(a=>a.id),['t6','t32']);
+ const held={...state,me:{...state.me,board:[...board,{entityId:70,CARDTYPE:'MINION',ATK:2,HEALTH:2}]}};
+ assert.equal(constrainActions(held,acts).length,3);
+ // Their hero in burn range: drawing for the kill is back on the table.
+ const close={...state,opponent:{board:[{entityId:80,CARDTYPE:'HERO',HEALTH:30,DAMAGE:20}]}};
+ assert.equal(constrainActions(close,acts).length,3);
+});
+
+// 2026-09-25, game 6, turn 1: Soulfire's only offered target was our own hero -- the enemy face was
+// cut as "wasted burn" on an empty board. User ruling: 「要攻擊選擇對手的臉」.
+const soulfire={entityId:10,name:'Soulfire',CARDTYPE:'SPELL',COST:1,text:'Deal $4 damage. Discard a random card.'};
+const burnMenu=[{id:'o0',type:'END_TURN'},{id:'o1t0',type:'POWER',entityId:10,targetId:66},{id:'o1t1',type:'POWER',entityId:10,targetId:68}];
+const burnState=theirs=>({me:{mana:1,hand:[soulfire,{entityId:11,CARDTYPE:'MINION',COST:3}],board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},
+ opponent:{board:[{entityId:68,CARDTYPE:'HERO',HEALTH:30},...theirs]}});
+test('burn never goes to our own face, and goes to theirs on an empty board',()=>{
+ assert.deepEqual(constrainActions(burnState([]),burnMenu).map(a=>a.id),['o0','o1t1']);
+});
+test('burn to a non-lethal face is still cut while they have minions',()=>{
+ const m=[...burnMenu,{id:'o1t2',type:'POWER',entityId:10,targetId:70}];
+ const ids=constrainActions(burnState([{entityId:70,CARDTYPE:'MINION',ATK:2,HEALTH:2}]),m).map(a=>a.id);
+ assert.ok(!ids.includes('o1t0')&&!ids.includes('o1t1')&&ids.includes('o1t2'));
+});
+
+// Game 6, turn 5: five on board, Party Fiend (3 bodies) played into 2 slots before the attacks
+// cleared any. User ruling: 「先解牌空出位置，再打派對惡魔」.
+const fiend={entityId:20,name:'Party Fiend',CARDTYPE:'MINION',COST:1,text:'<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 2 damage to your hero.'};
+const crowded=n=>({me:{mana:5,hand:[fiend],board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30},
+ ...Array.from({length:n},(_,i)=>({entityId:30+i,CARDTYPE:'MINION',ATK:1,HEALTH:1}))]},
+ opponent:{board:[{entityId:68,CARDTYPE:'HERO',HEALTH:30},{entityId:70,CARDTYPE:'MINION',ATK:1,HEALTH:1}]}});
+const fiendMenu=[{id:'o0',type:'END_TURN'},{id:'o1',type:'POWER',entityId:20},{id:'o2t0',type:'POWER',entityId:30,targetId:70}];
+test('a multi-body card that would overflow the board waits for the attacks',()=>{
+ assert.ok(!constrainActions(crowded(5),fiendMenu).some(a=>a.id==='o1'));
+});
+test('with room for every body, or nothing to attack with, it is played',()=>{
+ assert.ok(constrainActions(crowded(4),fiendMenu).some(a=>a.id==='o1'));
+ assert.ok(constrainActions(crowded(5),fiendMenu.filter(a=>a.id!=='o2t0')).some(a=>a.id==='o1'));
+});
+test('with a hand of nothing but fodder, a discarding burn may still go face',()=>{
+ const s=burnState([{entityId:70,CARDTYPE:'MINION',ATK:2,HEALTH:2}]);
+ s.me.hand=[soulfire,{entityId:11,name:'Disposable Acolytes',CARDTYPE:'SPELL',COST:2,text:'When you play or discard this, summon two random 1-Cost minions.'}];
+ const ids=constrainActions(s,[...burnMenu,{id:'o1t2',type:'POWER',entityId:10,targetId:70}]).map(a=>a.id);
+ assert.ok(ids.includes('o1t1')&&!ids.includes('o1t0'));
+});
+
+// User ruling (2026-09-25, after game 6): 低語+侍僧；魔眼+殭屍；派對+buff stay together.
+test('opening combos stay together, over the win-rate bands',()=>{
+ const card=(entityId,name,CARDTYPE,COST,text)=>({entityId,name,CARDTYPE,COST,text});
+ const whispers=card(1,'Wicked Whispers','SPELL',1,'Discard your lowest Cost card. Give your minions +1/+1.');
+ const acolytes=card(2,'Disposable Acolytes','SPELL',2,'When you play or discard this, summon two random 1-Cost minions.');
+ const soulfire=card(3,'Soulfire','SPELL',1,'Deal $4 damage. Discard a random card.');
+ const run=entities=>{
+  const ids=entities.map(c=>c.entityId);
+  const actions=Array.from({length:1<<ids.length},(_,mask)=>({replace:ids.filter((x,i)=>mask&(1<<i))}));
+  return constrainActions({choice:{type:'MULLIGAN',entities}},actions);
+ };
+ assert.deepEqual(run([whispers,acolytes,soulfire]).map(a=>a.replace),[[3]]);
+ const occ=card(4,'Ocular Occultist','MINION',3,'Taunt Battlecry: Choose a card in your hand to discard.');
+ const dead=card(5,'Walking Dead','MINION',3,'Taunt If you discard this minion, summon it.');
+ assert.ok(run([occ,dead,soulfire]).every(a=>!a.replace.includes(5)));
+ const fiend=card(6,'Party Fiend','MINION',1,'Battlecry: Summon two 1/1 Felbeasts. Deal 2 damage to your hero.');
+ const cont=card(7,'Entropic Continuity','SPELL',2,'Give your minions +1/+1.');
+ assert.ok(run([fiend,cont,soulfire]).every(a=>!a.replace.includes(7)&&a.replace.includes(3)));
+ // Without its partner, a middle-band card is still Jev's call.
+ assert.deepEqual(run([whispers,soulfire]).map(a=>a.replace.includes(1)).sort(),[false,true]);
+});
+
+// Game 7 rulings: Soul Barrage (65.2%) is tossed; with a low board, Chamber of Viscidus discards Walking Dead.
+test('a middle-band card almost nobody keeps goes back; a 4-drop stays only beside a cheap card',()=>{
+ const card=(entityId,name,COST)=>({entityId,name,CARDTYPE:'SPELL',COST,text:''});
+ const run=entities=>{
+  const ids=entities.map(c=>c.entityId);
+  return constrainActions({choice:{type:'MULLIGAN',entities}},Array.from({length:1<<ids.length},(_,m)=>({replace:ids.filter((x,i)=>m&(1<<i))})));
+ };
+ // Soul Barrage: 65.2% but kept by 18% -- always tossed.
+ assert.ok(run([card(1,'Soul Barrage',4),card(2,'Boneweb Egg',2)]).every(a=>a.replace.includes(1)));
+ // Duke of Below is already a toss; a middle-band 4-drop needs a cheap card kept beside it.
+ const fake={entityId:3,name:'Unknown Four',CARDTYPE:'MINION',COST:4,text:'Taunt'};
+ const dead=card(4,'Walking Dead',3);dead.CARDTYPE='MINION';
+ const out=constrainActions({choice:{type:'MULLIGAN',entities:[fake,dead]}},[{replace:[]},{replace:[3]},{replace:[4]},{replace:[3,4]}]);
+ assert.ok(out.every(a=>a.replace.includes(3)),'no card of 2 or less: the 4-drop goes');
+});
+test('a choose-to-discard pick on a low board takes the card that summons itself',()=>{
+ const entities=[
+  {entityId:85,name:'Walking Dead',CARDTYPE:'MINION',COST:3,text:'<b>Taunt</b>\nIf you discard this minion, summon it.'},
+  {entityId:88,name:'Soul Barrage',CARDTYPE:'SPELL',COST:4,text:'When you play\nor discard this, deal $5 damage randomly split among all enemies.'},
+  {entityId:91,name:'Platysaur',CARDTYPE:'MINION',COST:1,text:'<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.'}];
+ const source={name:'Chamber of Viscidus',text:'[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.'};
+ const actions=entities.map(c=>({id:`c3e${c.entityId}`,type:'CHOICE',entityId:c.entityId}));
+ const s=n=>({me:{mana:0,board:Array.from({length:n},(_,i)=>({entityId:200+i,CARDTYPE:'MINION'}))},
+  opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},choice:{type:'GENERAL',source,entities}});
+ assert.deepEqual(constrainActions(s(1),actions).map(a=>a.id),['c3e85']);
+ assert.equal(constrainActions(s(3),actions).length,3,'a full enough board leaves it to Jev');
+});
+test('a discard pick clears a swarm with Soul Barrage, else weighs bodies against the buff in hand',()=>{
+ const E=[
+  {entityId:85,name:'Walking Dead',CARDTYPE:'MINION',COST:3,text:'<b>Taunt</b>\nIf you discard this minion, summon it.'},
+  {entityId:88,name:'Soul Barrage',CARDTYPE:'SPELL',COST:4,text:'When you play\nor discard this, deal $5 damage randomly split among all enemies.'},
+  {entityId:92,name:'Disposable Acolytes',CARDTYPE:'SPELL',COST:2,text:'When you play or discard this, summon two random 1-Cost minions.'}];
+ const source={name:'Chamber of Viscidus',text:'Look at 3 cards in your hand and choose one to discard. Draw two cards.'};
+ const actions=E.map(c=>({id:`c${c.entityId}`,type:'CHOICE',entityId:c.entityId}));
+ const s=(foes,hand=[])=>({me:{mana:0,hand,board:[{entityId:200,CARDTYPE:'MINION'}]},
+  opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30},...foes.map((h,i)=>({entityId:300+i,CARDTYPE:'MINION',HEALTH:h}))]},
+  choice:{type:'GENERAL',source,entities:E}});
+ const ids=st=>constrainActions(st,actions).map(a=>a.id);
+ assert.deepEqual(ids(s([1,2,2])),['c88'],'three small enemy minions: Soul Barrage');
+ assert.deepEqual(ids(s([5])),['c85'],'no buff: the big body');
+ const whispers={entityId:9,name:'Wicked Whispers',CARDTYPE:'SPELL',COST:1,text:'Discard your lowest Cost card. Give your minions +1/+1.'};
+ assert.deepEqual(ids(s([5],[whispers])),['c92'],'buff in hand: the wide pick');
+});
+
+// Game 8 ruling: Soul Barrage into an empty board with the enemy at 30 is only face damage.
+test('a random-split spell waits while the enemy has no minions and is far from lethal',()=>{
+ const foe=(hp,minions=[])=>({me:{mana:5,hand:[BARRAGE,{entityId:9,name:'Duke',CARDTYPE:'MINION',COST:3}],board:[]},
+  opponent:{board:[{entityId:50,CARDTYPE:'HERO',baseHealth:30,HEALTH:30,DAMAGE:30-hp},...minions]}});
+ const acts=[{id:'o2',entityId:2},{id:'o9',entityId:9},{id:'o0',type:'END_TURN'}];
+ assert.deepEqual(constrainActions(foe(30),acts).map(a=>a.id),['o9','o0']);
+ assert.ok(constrainActions(foe(10),acts).some(a=>a.id==='o2'));
+ assert.ok(constrainActions(foe(30,[{entityId:51,CARDTYPE:'MINION',HEALTH:2,ATK:1}]),acts).some(a=>a.id==='o2'));
+});
+
+// Game 9 rulings.
+const GULDAN9={entityId:5,CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'};
+const CURSE={entityId:6,CARDTYPE:'SPELL',COST:2,text:'At the start of your turn, take {0} damage. ({1} turns remaining)'};
+const drawState=(deckCount,extra=0)=>({me:{mana:10,deckCount,hand:[GULDAN9,...Array.from({length:extra},(_,i)=>({entityId:40+i,CARDTYPE:'MINION',COST:1}))],board:[]},opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30,DAMAGE:0}]}});
+const drawActs=[{id:'o0',type:'END_TURN'},{id:'o1',entityId:5},{id:'o2',entityId:40}];
+test('a draw-three waits when the deck cannot cover it',()=>{
+ assert.deepEqual(constrainActions(drawState(1,3),drawActs).map(a=>a.id),['o0','o2']);
+});
+test('a draw-three waits when it would burn cards from a full hand',()=>{
+ assert.ok(!constrainActions(drawState(20,9),drawActs).some(a=>a.id==='o1'));
+ assert.ok(constrainActions(drawState(20,3),drawActs).some(a=>a.id==='o1'));
+});
+test('a choose-to-discard pick takes the curse first',()=>{
+ const state={me:{deckCount:10,hand:[GULDAN9,CURSE],board:[]},opponent:{board:[]},choice:{type:'GENERAL',source:{text:'Choose a card in your hand to discard.'},entities:[GULDAN9,CURSE]}};
+ assert.deepEqual(constrainActions(state,[{id:'c1',type:'CHOICE',entityId:5},{id:'c2',type:'CHOICE',entityId:6}]).map(a=>a.id),['c2']);
+});
+
+// Game 10 rulings (2026-09-26). Turns 4, 7 and 8: draw first, unless the mana is spent exactly.
+const HERO10=(hp=30)=>({entityId:70,CARDTYPE:'HERO',HEALTH:30,DAMAGE:30-hp});
+const TAP10={entityId:71,CARDTYPE:'HERO_POWER',COST:2,text:'Draw a card and take $2 damage.'};
+const c10=(id,cost,extra={})=>({entityId:id,CARDTYPE:'MINION',COST:cost,text:'',...extra});
+const menu10=cards=>[{id:'end',type:'END_TURN'},{id:'tap',entityId:71},...cards.map(c=>({id:`o${c.entityId}`,entityId:c.entityId}))];
+const game10=(cards,mana,board=[HERO10(),TAP10],hazards=[])=>({me:{mana,hand:cards,board,deckCount:20,drawHazards:hazards},opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30}]}});
+test('with mana left over, Life Tap goes before the plays (game 10, turn 4)',()=>{
+ const h=[c10(81,3),c10(82,2)];
+ assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap']);
+});
+test('a play that spends the mana exactly stays beside Life Tap (the 1+3 line)',()=>{
+ const h=[c10(81,3),c10(82,2),c10(83,1)];
+ assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap','o81','o83']);
+});
+test('a card that draws goes before the cards that do not (game 10, turn 8: the Soularium)',()=>{
+ const soul={entityId:84,name:'The Soularium',CARDTYPE:'SPELL',COST:2,text:'Draw 3 cards. At the end of turn, discard them.'};
+ const buff={entityId:85,name:'Buff',CARDTYPE:'SPELL',COST:2,text:'Give your minions +1/+1.'};
+ const h=[soul,buff];
+ const s=game10(h,4,[HERO10(),{entityId:86,CARDTYPE:'MINION',ATK:1,HEALTH:1}]);
+ assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85}]).map(a=>a.id),['end','o84']);
+});
+test('a draw that is sure to pull a Shred of Time into lethal waits; one that might is left to Jev',()=>{
+ const h=[c10(81,5)];
+ const s=(hp,deck)=>{const st=game10(h,4,[HERO10(hp),TAP10],[3]);st.me.deckCount=deck;return st};
+ assert.ok(!constrainActions(s(5,1),menu10(h)).some(a=>a.id==='tap'));
+ assert.ok(constrainActions(s(6,1),menu10(h)).some(a=>a.id==='tap'));
+ assert.ok(constrainActions(s(5,20),menu10(h)).some(a=>a.id==='tap'));
+});
+// The game-10 swing itself (7 HP, 5-attack Muncher, two Shreds in ten cards) was the user's
+// comeback line: only a swing that cannot miss the Shreds is taken away.
+test('a Chronoclaws swing that discards Hand of Gul\'dan counts the Shreds it must draw',()=>{
+ const claws={entityId:72,CARDTYPE:'WEAPON',ATK:3,text:'After your hero attacks, discard your highest Cost card.'};
+ const guldan={entityId:73,CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'};
+ const s=(hazards,deckCount=10)=>({me:{mana:0,hand:[guldan,c10(81,1)],board:[HERO10(7),claws],deckCount,drawHazards:hazards},
+  opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30},{entityId:98,CARDTYPE:'MINION',ATK:5,HEALTH:3}]}});
+ const acts=[{id:'end',type:'END_TURN'},{id:'hit',entityId:70,targetId:98},{id:'face',entityId:70,targetId:99}];
+ assert.ok(constrainActions(s([3,3]),acts).some(a=>a.id==='hit'),'game 10: a gamble, left to Jev');
+ assert.deepEqual(constrainActions(s([3,3],4),acts).map(a=>a.id),['end','face'],'four cards left, two Shreds: one is certain');
+ assert.ok(constrainActions(s([]),acts).some(a=>a.id==='hit'));
+});
+test('a location still cooling down is never clicked (game 10, turn 4)',()=>{
+ const loc=cd=>({entityId:74,CARDTYPE:'LOCATION',LOCATION_ACTION_COOLDOWN:cd});
+ const acts=[{id:'end',type:'END_TURN'},{id:'loc',entityId:74}];
+ assert.deepEqual(constrainActions(game10([],4,[HERO10(),loc(1)]),acts).map(a=>a.id),['end']);
+ assert.ok(constrainActions(game10([],4,[HERO10(),loc(0)]),acts).some(a=>a.id==='loc'));
+});
+test('the armed hero swings before the minions trade (game 11, turn 4)',()=>{
+ const claws={entityId:72,CARDTYPE:'WEAPON',ATK:4,text:'After your hero attacks, discard your highest Cost card.'};
+ const occ={entityId:32,CARDTYPE:'MINION',ATK:3,HEALTH:6};
+ const s=board=>({me:{mana:0,hand:[],board,deckCount:18,drawHazards:[]},
+  opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30},{entityId:101,CARDTYPE:'MINION',ATK:1,HEALTH:3,TAUNT:1}]}});
+ const acts=[{id:'end',type:'END_TURN'},{id:'occ',entityId:32,targetId:101},{id:'hero',entityId:70,targetId:101}];
+ assert.deepEqual(constrainActions(s([HERO10(),claws,occ]),acts).map(a=>a.id),['end','hero']);
+ assert.deepEqual(constrainActions(s([HERO10(),claws,occ]),acts.slice(0,2)).map(a=>a.id),['end','occ'],'hero already swung');
+ assert.deepEqual(constrainActions(s([HERO10(),occ]),acts.slice(0,2)).map(a=>a.id),['end','occ'],'no weapon');
+ assert.deepEqual(constrainActions(s([HERO10(1),claws,occ]),acts).map(a=>a.id),['end','occ'],'a swing that kills us does not hold the minions back');
+});
+// Game 12 ruling (2026-09-26), turn 4: 「在手上同時有低語和連鎖的情況下，應該打連鎖。因為打完連鎖，最低費變成魔像」.
+test('Whispers waits while the card it would eat can be cast instead (game 12, turn 4)',()=>{
+ const golem=c10(41,3,{name:'Silverware Golem',text:'If you discard this minion, summon it.'});
+ const cont={entityId:42,name:'Entropic Continuity',CARDTYPE:'SPELL',COST:1,text:'Give your minions +1/+1.'};
+ const whispers={entityId:43,name:'Wicked Whispers',CARDTYPE:'SPELL',COST:1,text:'Discard your lowest Cost card. Give your minions +1/+1.'};
+ const duke=c10(44,4),guldan={entityId:45,CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'};
+ const board=[HERO10(),TAP10,{entityId:86,CARDTYPE:'MINION',ATK:3,HEALTH:2}];
+ const acts=[{id:'end',type:'END_TURN'},{id:'cont',entityId:42},{id:'wh',entityId:43}];
+ assert.deepEqual(constrainActions(game10([golem,guldan,duke,cont,whispers],1,board),acts).map(a=>a.id),['end','cont']);
+ // Continuity gone: Whispers now eats the Golem, which is the point.
+ assert.ok(constrainActions(game10([golem,guldan,duke,whispers],1,board),acts.filter(a=>a.id!=='cont')).some(a=>a.id==='wh'));
+});
+
+// User ruling (2026-09-26, game 13, turn 4): Walking Dead was doomed by Platysaur's deathrattle, so
+// Occultist should discard Soul Barrage instead.
+test('a choose-discard does not pick the card a deathrattle already discards (game 13)',()=>{
+ const occ=c10(3,3,{name:'Ocular Occultist',text:'<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in your hand to discard.'});
+ const wd=c10(36,3,{name:'Walking Dead',text:'<b>Taunt</b>\nIf you discard this minion, summon it.',doomed:true});
+ const barrage=c10(40,4,{name:'Soul Barrage',CARDTYPE:'SPELL',text:'When you play or discard this, deal $5 damage randomly split among all enemies.'});
+ const s=game10([occ,wd,barrage],3,[HERO10(),TAP10]);
+ const acts=[{id:'end',type:'END_TURN'},{id:'wd',type:'POWER',entityId:3,targetId:36},{id:'sb',type:'POWER',entityId:3,targetId:40}];
+ assert.deepEqual(constrainActions(s,acts).map(a=>a.id),['end','sb']);
+ // The same on a Chamber of Viscidus pick.
+ const chamber={...s,choice:{type:'GENERAL',source:{text:'Look at 3 cards in your hand and choose one to discard. Draw two cards.'},entities:[wd,barrage]}};
+ assert.deepEqual(constrainActions(chamber,[{id:'c36',type:'CHOICE',entityId:36},{id:'c40',type:'CHOICE',entityId:40}]).map(a=>a.id),['c40']);
+ // Nothing else to pick: the doomed card stays.
+ assert.deepEqual(constrainActions(s,acts.slice(0,2)).map(a=>a.id),['end','wd']);
+});
+
+// User ruling (2026-09-26, game 13, turn 5): Soulfire went before Duke of Below, and its random
+// discard could have thrown the Duke away.
+test('a random discard waits while Duke of Below can be cast (game 13)',()=>{
+ const duke=c10(44,4,{name:'Duke of Below',text:"<b>Rush</b>\nGains +2/+2 for each card you've discarded this game."});
+ const fire=c10(63,1,{name:'Soulfire',CARDTYPE:'SPELL',text:'Deal $4 damage. Discard a random card.'});
+ const s=game10([duke,fire,c10(5,2)],5,[HERO10(),TAP10]);
+ const acts=[{id:'end',type:'END_TURN'},{id:'duke',type:'POWER',entityId:44},{id:'fire',type:'POWER',entityId:63,targetId:99}];
+ assert.deepEqual(constrainActions(s,acts).map(a=>a.id),['end','duke']);
+ assert.deepEqual(constrainActions(s,[acts[0],acts[2]]).map(a=>a.id),['end','fire'],'Duke not castable: Soulfire is free');
 });

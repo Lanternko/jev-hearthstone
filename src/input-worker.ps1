@@ -17,7 +17,7 @@ public class Hs {
  [StructLayout(LayoutKind.Sequential)] public struct POINT{public int X,Y;}
  [StructLayout(LayoutKind.Sequential)] public struct MOUSEINPUT{public int dx;public int dy;public uint mouseData;public uint dwFlags;public uint time;public IntPtr dwExtraInfo;}
  [StructLayout(LayoutKind.Sequential)] public struct INPUT{public uint type;public MOUSEINPUT mi;}
- const uint MOVE=0x0001,LDOWN=0x0002,LUP=0x0004,ABS=0x8000,VDESK=0x4000;
+ const uint MOVE=0x0001,LDOWN=0x0002,LUP=0x0004,RDOWN=0x0008,RUP=0x0010,ABS=0x8000,VDESK=0x4000;
  static INPUT Mk(uint flags,int x,int y){INPUT i=new INPUT();i.type=0;i.mi.dwFlags=flags;i.mi.dx=x;i.mi.dy=y;return i;}
  // Screen pixels -> the 0..65535 absolute range. The divisor is vw, not vw-1: Windows maps the
  // value back with (dx * vw) >> 16, so dividing by vw-1 landed the pointer one pixel short of
@@ -33,6 +33,8 @@ public class Hs {
   return SendInput(1,new INPUT[]{Mk(MOVE|ABS|VDESK,nx,ny)},Marshal.SizeOf(typeof(INPUT)));}
  public static uint Down(){return SendInput(1,new INPUT[]{Mk(LDOWN,0,0)},Marshal.SizeOf(typeof(INPUT)));}
  public static uint Up(){return SendInput(1,new INPUT[]{Mk(LUP,0,0)},Marshal.SizeOf(typeof(INPUT)));}
+ public static uint RDown(){return SendInput(1,new INPUT[]{Mk(RDOWN,0,0)},Marshal.SizeOf(typeof(INPUT)));}
+ public static uint RUp(){return SendInput(1,new INPUT[]{Mk(RUP,0,0)},Marshal.SizeOf(typeof(INPUT)));}
  public static long WindowAtCursor(){POINT p;GetCursorPos(out p);return (long)WindowFromPoint(p);}
 }
 "@
@@ -115,6 +117,11 @@ while ($null -ne ($line = [Console]::In.ReadLine())) {
         $p = New-Object Hs+POINT; [void][Hs]::GetCursorPos([ref]$p)
         [void][Hs]::Move($p.X + 1, $p.Y); [void][Hs]::Move($p.X, $p.Y)
         Reply @{ok=$true}
+      }
+      # Right-click where the pointer sits: drops a card held on the cursor, or a targeting arrow.
+      'cancel' {
+        $rcD = [Hs]::RDown(); Start-Sleep -Milliseconds 70; $rcU = [Hs]::RUp()
+        Reply @{ok=$true;rc=@{down=[int]$rcD;up=[int]$rcU}}
       }
       'click' {
         $script:T0 = Get-Date

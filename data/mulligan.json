@@ -1,0 +1,25 @@
+{
+  "source": "Public deck stats screenshot supplied by the user, 2026-09-25 (this 棄牌 Warlock list).",
+  "note": "mulliganWR = win rate of games where the card stayed in the opening hand. Only this column is used: Played WR is confounded by when a card gets played (Hand of Gul'dan is hard-cast when the discard plan has already failed) and must not reach Jev.",
+  "deckWinrate": 67.5,
+  "deckWinrateNote": "Not shown directly; inferred from the site's up/down arrows (68.4 marked up, 67.0 marked down).",
+  "cards": {
+    "Cursed Catacombs": {"mulliganWR": 71.9, "kept": 94.9},
+    "Entropic Continuity": {"mulliganWR": 62.1, "kept": 28.9},
+    "Party Fiend": {"mulliganWR": 72.6, "kept": 94.9},
+    "Platysaur": {"mulliganWR": 71.0, "kept": 89.7},
+    "Soulfire": {"mulliganWR": 61.7, "kept": 32.1},
+    "Wicked Whispers": {"mulliganWR": 66.6, "kept": 67.5},
+    "Boneweb Egg": {"mulliganWR": 64.2, "kept": 46.9},
+    "Disposable Acolytes": {"mulliganWR": 66.5, "kept": 62.6},
+    "The Soularium": {"mulliganWR": 65.9, "kept": 57.7},
+    "Chamber of Viscidus": {"mulliganWR": 68.4, "kept": 45.0},
+    "Ocular Occultist": {"mulliganWR": 70.7, "kept": 58.5},
+    "Silverware Golem": {"mulliganWR": 66.9, "kept": 28.0},
+    "Walking Dead": {"mulliganWR": 67.0, "kept": 35.4},
+    "Chronoclaws": {"mulliganWR": 64.0, "kept": 13.6},
+    "Duke of Below": {"mulliganWR": 61.1, "kept": 8.9},
+    "Soul Barrage": {"mulliganWR": 65.2, "kept": 18.1},
+    "Hand of Gul'dan": {"mulliganWR": 62.5, "kept": 26.9}
+  }
+}

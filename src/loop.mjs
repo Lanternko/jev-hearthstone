@@ -58,8 +58,13 @@ const heartbeat=dry?null:setInterval(()=>{if(!busy)win.nudge().catch(()=>{})},30
 // A fixed 3.5s wait did not help (6 of 6 turns still died): the server hands us our turn 3.4 to
 // 8.5s before the client has finished playing the opponent's. So wait for the playback copy of
 // the log to reach our turn, then for the "Your Turn" banner.
-const TURN_SETTLE=2000,ACTION_SETTLE=1200;
+// User ruling (2026-09-26, game 12): "第六回合的第一次出牌要稍微再等久一點" -- the Duke drag died
+// as the first gesture of the turn. 2s after the banner was not enough; 3.5s.
+const TURN_SETTLE=3500,ACTION_SETTLE=1200,DRAW_SETTLE=3000,DRAW_EACH=800;
 let lastTurn=null;
+// The mulligan is offered while the hero intro still plays; gestures then are dropped.
+const MULLIGAN_INTRO=6000;
+let mullSeen=null;
 async function onScreen(turn,ms=20000){
  const until=Date.now()+ms;
  while(Date.now()<until){
@@ -86,6 +91,13 @@ try{
       await wait(1500);continue;
     }
     idle=0;
+    // 2026-09-25, game 9: the loop started 2s after the offer, the first read did not show the
+    // mulligan yet, the check above never fired, and the toggle retries left one card of four.
+    // So the intro wait is also checked against the state the decision was made on.
+    if(d.state.choice?.type==='MULLIGAN'&&!dry){
+      mullSeen??=Date.now();
+      if(mullSeen+MULLIGAN_INTRO>Date.now())continue;
+    }
 
     let steps;
     try{steps=plan(box,d.state,d.action)}catch(e){console.log(`${stamp()} transient plan: ${e.message}`);await wait(800);continue}
@@ -106,6 +118,14 @@ try{
       verdict:after?.verdict??'dead',misfire:after?.verdict==='misfire',
       action:d.action.id,turn:d.state.turn,index:i,of:gestures.length,...g,
     })));
+    // 2026-09-25, game 8: "play Ocular Occultist -> discard Boneweb Egg". The drag died, the discard
+    // click still went out onto a hand card with no battlecry waiting -- which picks that card up --
+    // and the retry's drag then played the Egg. Twice. When a two-gesture action does not come out
+    // as asked, right-click first, so nothing is left on the cursor for the retry to drop.
+    if(d.action.type!=='MULLIGAN'&&gestures.length>1&&(!after||after.verdict==='misfire')){
+      try{await win.cancel();console.log(`${stamp()} ${d.action.id}: right-click to drop anything left on the cursor`)}catch(e){console.log(`${stamp()} cancel failed: ${e.message}`)}
+      await wait(400);
+    }
     if(!after){
       // A click that changes nothing used to stop the run. In a live game that is worse than
       // the bad click: the turn stalls and the clock runs out. Skip the action and ask again.
@@ -128,7 +148,21 @@ try{
       if(++missed>=2){console.log('Two misfires in a row -- layout is off; stopping.');break}
     }else missed=0;
     if(d.action.type==='END_TURN')console.log(`${stamp()} turn ended`);
-    else await wait(ACTION_SETTLE);
+    // User ruling (2026-09-25, game 9): a drawn card flies into the hand for about two seconds,
+    // and a gesture aimed at the hand meanwhile lands on the wrong card. Wait it out.
+    // User ruling (2026-09-26, game 11): "抽牌的動畫要再等久一點才能出牌". Two seconds was not enough:
+    // after the Soularium's three draws the Catacombs drag died. The log can also report the draw
+    // after the verdict came in, so the hand is read again once the action has settled, and each
+    // extra card drawn adds to the wait.
+    else{
+      const had=new Set((d.state.me?.hand??[]).map(c=>c.entityId));
+      const fresh=c=>!had.has(c.entityId);
+      await wait(ACTION_SETTLE);
+      let hand=after.s.state.me?.hand??[];
+      try{const now=(await inspect()).state.me?.hand;if(now&&now.filter(fresh).length>hand.filter(fresh).length)hand=now}catch{}
+      const drew=hand.filter(fresh).length;
+      if(drew)await wait(DRAW_SETTLE+DRAW_EACH*(drew-1));
+    }
   }
   console.log(`${stamp()} done, ${acted} action(s)`);
 }catch(e){console.error(`${stamp()} ${e.message}`)}

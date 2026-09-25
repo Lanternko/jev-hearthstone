@@ -35,6 +35,15 @@ test('only supported valid options and targets survive',()=>{
  const p=parsePower(fixture+'\n'+options),s=publicState(p,1);assert.deepEqual(candidates(p,s).map(a=>a.id),['o0','o1t0']);
  p.game.tags.STATE='COMPLETE';assert.deepEqual(candidates(p,publicState(p,1)),[]);
 });
+test('a new turn voids the last menu until its own options are printed',()=>{
+ // 2026-09-25: read ~120ms after TURN changed, the leftover END-only menu ended our turn.
+ const opts=(id,...items)=>[`id=${id}`,...items].map(s=>`D 00:00:00 GameState.DebugPrintOptions() - ${s}`).join('\n');
+ const p=createParser().feed(fixture+'\n'+opts(4,'option 0 type=END_TURN mainEntity= error=NONE'));
+ p.feed(power('TAG_CHANGE Entity=GameEntity tag=TURN value=3'));
+ const r=p.result();assert.deepEqual(candidates(r,publicState(r,1)),[]);
+ p.feed(opts(5,'option 0 type=END_TURN mainEntity= error=NONE','option 1 type=POWER mainEntity=4 error=NONE'));
+ const q=p.result();assert.deepEqual(candidates(q,publicState(q,1)).map(a=>a.id),['o0','o1']);
+});
 test('new game resets entities and delayed duplicate stream is ignored',()=>{
  const p=parsePower(fixture+'\nPowerTaskList.DebugPrintPower() - CREATE_GAME\n'+power('CREATE_GAME\nGameEntity EntityID=1'));
  assert.equal(p.gameNumber,2);assert.equal(p.entities.size,1);
@@ -74,4 +83,33 @@ test('shownTurn follows the playback copy of the log, not the server',()=>{
   assert.equal(p.result().shownTurn,2);
   p.feed('D 15:10:16.30 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=TURN value=3 ');
   assert.equal(p.result().shownTurn,3);
+});
+
+test('a Shred of Time in our deck is carried as its damage only',async()=>{
+ const {drawnSelfDamage}=await import('../src/power.mjs');
+ assert.equal(drawnSelfDamage({text:'<b>Casts When Drawn</b>\nDeal $3 damage to your hero.'}),3);
+ assert.equal(drawnSelfDamage({text:'Draw a card.'}),0);
+});
+
+// Game 13, turn 4: Platysaur drew Walking Dead; the enchantment on Platysaur names it.
+test('the card a friendly deathrattle will discard is marked doomed',()=>{
+ const cards={PLATY:{text:'<b>Battlecry:</b> Draw a card.\n<b>Deathrattle:</b> Discard it.'},OTHER:{text:''}};
+ const log=fixture+'\n'+power(`FULL_ENTITY - Creating ID=20 CardID=PLATY
+tag=CONTROLLER value=1
+tag=ZONE value=PLAY
+tag=CARDTYPE value=MINION
+FULL_ENTITY - Creating ID=21 CardID=OTHER
+tag=CONTROLLER value=1
+tag=ZONE value=HAND
+tag=CARDTYPE value=MINION
+FULL_ENTITY - Creating ID=22 CardID=PLATYe
+tag=CONTROLLER value=1
+tag=CARDTYPE value=ENCHANTMENT
+tag=ATTACHED value=20
+tag=ZONE value=PLAY
+TAG_CHANGE Entity=22 tag=TAG_SCRIPT_DATA_NUM_1 value=21`);
+ const hand=s=>s.me.hand.map(c=>[c.entityId,!!c.doomed]);
+ assert.deepEqual(hand(publicState(parsePower(log),1,cards)),[[4,false],[21,true]]);
+ // Once Platysaur has died, the discard has happened (or can no longer happen).
+ assert.deepEqual(hand(publicState(parsePower(log+'\n'+power('TAG_CHANGE Entity=20 tag=ZONE value=GRAVEYARD')),1,cards)),[[4,false],[21,false]]);
 });

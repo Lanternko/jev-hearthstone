@@ -25,9 +25,34 @@ export function score(start,s){
   const spent=start.mana-s.mana;
   v-=spent*0.5;                                  // a card from hand is not free
   for(const c of s.discarded??[])v-=/if you discard this|when you (?:play or )?discard this/i.test(c.text)?-2:c.cost;
+  // Health is a resource while it is plentiful: a weapon soaking a big minion's hit keeps our
+  // board, and the board is what wins. Low, every point counts as much as a minion's.
+  const hurt=hpOf(hero(start,'me'))-hpOf(me);
+  if(me&&hurt>0)v-=hurt*(hpOf(me)>15?0.1:1);
   // Leaving their lethal on the board when this plan could have prevented it.
   if(me&&threat(s)>=hpOf(me)+wall(s))v-=50;
   return v;
+}
+
+// User ruling (2026-09-26, game 13, turn 4): Platysaur 2/2 hit a Risen Footman 1/3 and left it at
+// 1/1, then Walking Dead 3/3 finished it -- Walking Dead alone kills it, so Platysaur's swing was
+// thrown away. A plan that chips a minion and later kills it with an attacker that would have
+// killed it unaided has a wasted step; the same plan without the chip is always also searched.
+export function wastedChip(start,steps){
+  let s=start;const chipped=new Map();          // target id -> Health before the first chip
+  for(const m of steps){
+    const r=apply(s,m);
+    if(m.kind==='attack'){
+      const t0=who(s,m.targetId),t1=who(r.s,m.targetId),a0=who(s,m.id);
+      if(t0?.type==='MINION'){
+        const dead=!t1||t1.hp<=0;
+        if(dead&&chipped.has(m.targetId)&&a0&&a0.atk>=chipped.get(m.targetId))return true;
+        if(!dead&&!t0.ds&&!chipped.has(m.targetId))chipped.set(m.targetId,t0.hp);
+      }
+    }
+    s=r.s;
+  }
+  return false;
 }
 
 // Beam search over exact steps. A node whose last step was inexact is terminal: the plan ends
@@ -57,7 +82,9 @@ export function search(state,actions,{beam=300,depth=12}={}){
     }
     frontier=[...next.values()].map(n=>({...n,score:score(start,n.s)})).sort((a,b)=>b.score-a.score).slice(0,beam);
   }
-  return {start,plans:[...done.values()].sort((a,b)=>b.score-a.score)};
+  const all=[...done.values()].sort((a,b)=>b.score-a.score);
+  const clean=all.filter(n=>!wastedChip(start,n.steps));
+  return {start,plans:clean.length?clean:all};
 }
 
 // Top plans, kept different from each other: the best by the overall score, plus the most face

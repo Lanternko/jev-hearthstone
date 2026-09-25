@@ -62,6 +62,8 @@ face damage, and attack with every minion -- stopping to price the trade only ag
 
 ## Mulligan
 
-Keep a cheap minion for turns 1-2 and discard fodder for the outlets; keep a location, which
-costs nothing to hold. With neither a cheap minion nor fodder, throw everything else back. Burn (Soulfire) and buffs
-go back too: early they have no target worth the card and no board to buff.
+Each mulligan option states, per card, how often games were won when that card stayed in the
+opening hand, against the deck's average. Those are results over many games of this exact list:
+weigh them above general principles. Cards far above average always stay and cards far below
+always go; the ones in between are yours to judge. A card in between is worth more next to an
+outlet if it is fodder, and worth more next to a cheap minion if it is a buff.

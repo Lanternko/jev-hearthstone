@@ -42,7 +42,10 @@ export function createParser(){
       a=s.match(/Player EntityID=(\d+) PlayerID=(\d+)/);if(a){block=ensure(Number(a[1]));block.playerId=Number(a[2]);continue}
       a=s.match(/FULL_ENTITY - Creating ID=(\d+) CardID=(\S*)/);if(a){block=ensure(Number(a[1]));block.cardId=a[2];continue}
       a=s.match(/(?:SHOW_ENTITY|CHANGE_ENTITY) - Updating Entity=(.+) CardID=(\S*)/);if(a){const id=resolve(a[1]);block=id==null?null:ensure(id);if(block)block.cardId=a[2];continue}
-      a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null)ensure(id).tags[a[2]]=a[3];block=null;continue}
+      // A new turn voids the last menu. The server prints this turn's options ~120ms after the
+      // TURN change; a read in that gap used to find last turn's leftover END-only menu, take it
+      // as forced, and end our turn with Whispers and two minions castable (2026-09-25).
+      a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];if(id===game&&a[2]==='TURN')options=null;}block=null;continue}
       a=s.match(/^tag=(\S+) value=(\S+)/);if(a&&block){block.tags[a[1]]=a[2];continue}
       a=s.match(/HIDE_ENTITY - Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];ensure(id).cardId='';}block=null;continue}
       block=null;continue;
@@ -69,25 +72,36 @@ export function createParser(){
   return api;
 }
 export const parsePower=text=>createParser().feed(text).result();
-const visibleTags=['COST','ATK','HEALTH','DAMAGE','ARMOR','DURABILITY','ZONE_POSITION','CARDTYPE','TAUNT','DIVINE_SHIELD','STEALTH','WINDFURY','FROZEN','EXHAUSTED','NUM_ATTACKS_THIS_TURN','SILENCED','CHARGE','RUSH','DORMANT','COOLDOWN','UNTARGETABLE_BY_SPELLS','IMMUNE'];
+const visibleTags=['COST','ATK','HEALTH','DAMAGE','ARMOR','DURABILITY','ZONE_POSITION','CARDTYPE','TAUNT','DIVINE_SHIELD','STEALTH','WINDFURY','FROZEN','EXHAUSTED','NUM_ATTACKS_THIS_TURN','SILENCED','CHARGE','RUSH','DORMANT','COOLDOWN','LOCATION_ACTION_COOLDOWN','UNTARGETABLE_BY_SPELLS','IMMUNE'];
 // Only what can change the decision. The full fingerprint also covers optionsId, step, status and playstate, which churn on every options print and animation and were discarding correct decisions.
 function material(s){
   return {turn:s.turn,
-    me:{playerId:s.me.playerId,mana:s.me.mana,maxMana:s.me.maxMana,current:s.me.current,hand:s.me.hand,board:s.me.board,deckCount:s.me.deckCount},
+    me:{playerId:s.me.playerId,mana:s.me.mana,maxMana:s.me.maxMana,current:s.me.current,hand:s.me.hand,board:s.me.board,deckCount:s.me.deckCount,drawHazards:s.me.drawHazards},
     opponent:{mana:s.opponent.mana,board:s.opponent.board,handCount:s.opponent.handCount},
     choice:s.choice&&{id:s.choice.id,type:s.choice.type,min:s.choice.min,max:s.choice.max,entities:s.choice.entities}};
 }
 export function publicState(parsed,playerId,cards={}){
   if(![1,2].includes(playerId))throw Error('Explicit local player ID 1 or 2 required');
   const all=[...parsed.entities.values()];
+  // User ruling (2026-09-26, game 13, turn 4): Platysaur drew Walking Dead, and its "Deathrattle:
+  // Discard it" was going to throw that card away anyway; Occultist discarded it a second time. The
+  // link is an enchantment on the minion whose TAG_SCRIPT_DATA_NUM_1 names the drawn card.
+  const doomed=new Set(all.filter(e=>e.tags.CARDTYPE==='ENCHANTMENT'&&e.tags.ZONE==='PLAY'&&e.tags.TAG_SCRIPT_DATA_NUM_1).filter(e=>{
+   const m=parsed.entities.get(Number(e.tags.ATTACHED));
+   return m?.tags.ZONE==='PLAY'&&Number(m.tags.CONTROLLER)===playerId&&/deathrattle:[^.]*discard it/i.test((cards[m.cardId]?.text??'').replace(/<[^>]+>/g,''));
+  }).map(e=>Number(e.tags.TAG_SCRIPT_DATA_NUM_1)));
   function card(e){const def=cards[e.cardId]??{};return {entityId:e.id,cardId:e.cardId,name:def.name,text:def.text,baseCost:def.cost,baseAttack:def.attack,baseHealth:def.health,...Object.fromEntries(visibleTags.filter(t=>t in e.tags).map(t=>[t,/^\d+$/.test(e.tags[t])?Number(e.tags[t]):e.tags[t]]))}}
-  function side(id){const es=all.filter(e=>Number(e.tags.CONTROLLER)===id),p=es.find(e=>e.playerId===id);return {playerId:id,mana:p?Number(p.tags.RESOURCES??0)+Number(p.tags.TEMP_RESOURCES??0)-Number(p.tags.RESOURCES_USED??0):null,maxMana:Number(p?.tags.RESOURCES??0),current:p?.tags.CURRENT_PLAYER==='1',playstate:p?.tags.PLAYSTATE,handCount:es.filter(e=>e.tags.ZONE==='HAND').length,deckCount:es.filter(e=>e.tags.ZONE==='DECK').length,board:es.filter(e=>e.tags.ZONE==='PLAY'&&['MINION','HERO','HERO_POWER','WEAPON','LOCATION'].includes(e.tags.CARDTYPE)).map(card).sort((a,b)=>(a.ZONE_POSITION??0)-(b.ZONE_POSITION??0)),...(id===playerId?{hand:es.filter(e=>e.tags.ZONE==='HAND').map(card).sort((a,b)=>a.ZONE_POSITION-b.ZONE_POSITION)}:{})}}
+  function side(id){const es=all.filter(e=>Number(e.tags.CONTROLLER)===id),p=es.find(e=>e.playerId===id);return {playerId:id,mana:p?Number(p.tags.RESOURCES??0)+Number(p.tags.TEMP_RESOURCES??0)-Number(p.tags.RESOURCES_USED??0):null,maxMana:Number(p?.tags.RESOURCES??0),current:p?.tags.CURRENT_PLAYER==='1',playstate:p?.tags.PLAYSTATE,handCount:es.filter(e=>e.tags.ZONE==='HAND').length,deckCount:es.filter(e=>e.tags.ZONE==='DECK').length,board:es.filter(e=>e.tags.ZONE==='PLAY'&&['MINION','HERO','HERO_POWER','WEAPON','LOCATION'].includes(e.tags.CARDTYPE)).map(card).sort((a,b)=>(a.ZONE_POSITION??0)-(b.ZONE_POSITION??0)),...(id===playerId?{hand:es.filter(e=>e.tags.ZONE==='HAND').map(e=>doomed.has(e.id)?{...card(e),doomed:true}:card(e)).sort((a,b)=>a.ZONE_POSITION-b.ZONE_POSITION),drawHazards:es.filter(e=>e.tags.ZONE==='DECK'&&e.cardId).map(e=>drawnSelfDamage(cards[e.cardId])).filter(Boolean)}:{})}}
   const state={gameNumber:parsed.gameNumber,turn:Number(parsed.game?.tags.TURN??0),step:parsed.game?.tags.STEP,status:parsed.game?.tags.STATE,me:side(playerId),opponent:side(3-playerId),optionsId:parsed.options?.id};
   const activeChoice=[...parsed.choices.values()].filter(c=>c.playerId===playerId).at(-1);
   if(activeChoice&&(activeChoice.type!=='MULLIGAN'||state.step==='BEGIN_MULLIGAN')){const src=parsed.entities.get(activeChoice.sourceId);state.choice={...activeChoice,entities:activeChoice.entities.map(id=>parsed.entities.get(id)).filter(Boolean).map(card),...(src?{source:card(src)}:{})};}
   state.fingerprint=createHash('sha256').update(JSON.stringify(state)).digest('hex').slice(0,20);
   state.decisionFingerprint=createHash('sha256').update(JSON.stringify(material(state))).digest('hex').slice(0,20);return state;
 }
+// A card we put into our own deck (Shred of Time) is revealed to us; what it deals when drawn is
+// the only thing about it the state carries.
+const DRAWN_HURTS=/casts when drawn[^.]*?deal \$?(\d+) damage to\s+your hero/i;
+export const drawnSelfDamage=def=>{const m=DRAWN_HURTS.exec((def?.text??'').replace(/<[^>]+>/g,'').replace(/\s+/g,' '));return m?Number(m[1]):0};
 // GAME_005, the classic coin, is the one variant whose id lacks "COIN", so match the name first.
 export const isCoin=c=>c.name==='The Coin'||/COIN/i.test(c.cardId||'');
 // The mulligan row shows only the replaceable cards. The Coin sits in hand and is not on that row,

@@ -152,3 +152,40 @@ test('the hero never swings into a minion that kills it',()=>{
   const {plans}=search(state,actions);
   assert.ok(plans.every(p=>p.steps.every(s=>s.id!==1)),'no plan attacks with the hero');
 });
+
+test('Deathrattle text a card gives away is not its own',()=>{
+  // 2026-09-25: Braingill's Battlecry hands Murlocs "Deathrattle: Draw a card."; killing it ended every plan.
+  const {state,actions}=board({mine:[{name:'A',ATK:3,HEALTH:3}],
+    theirs:[{name:'Braingill',ATK:2,HEALTH:1,text:'<b>Battlecry:</b> Give your other Murlocs "<b>Deathrattle:</b> Draw a card."'}]});
+  const {start,plans}=search(state,actions);
+  const kill=plans.find(p=>p.steps[0].targetId===50);
+  assert.equal(apply(start,kill.steps[0]).exact,true);
+});
+
+test('healthy, the weapon takes the big hit and the minion the small one',()=>{
+  // 2026-09-25: 25 Health and Chronoclaws, yet the 3/6 Taunt traded into the 3/2 and dropped to 3/3.
+  const {state,actions}=board({myHp:25,mine:[{name:'Occultist',ATK:3,HEALTH:6}],
+    theirs:[{name:'Puddlestomper',ATK:3,HEALTH:2},{name:'Minnow',ATK:1,HEALTH:1}],
+    hand:[{name:'Cheap',COST:1,text:''},{name:'Dear',COST:2,text:''}],mana:0});
+  Object.assign(state.me.board[0],{ATK:4});
+  state.me.board.push({entityId:5,CARDTYPE:'WEAPON',name:'Chronoclaws',text:'After your hero attacks, discard your highest Cost card.'});
+  actions.push({id:'o9t0',type:'POWER',entityId:1,targetId:50},{id:'o9t1',type:'POWER',entityId:1,targetId:51});
+  const {start,plans}=search(state,actions);
+  const best=plans[0];
+  assert.ok(best.steps.some(s=>s.id===1&&s.targetId===50),'the hero hits the 3-Attack minion');
+  const swing=best.steps.find(s=>s.id===1);
+  assert.equal(swing.exact,true,'a known discard does not end the plan');
+  assert.deepEqual(best.steps.reduce((s,m)=>apply(s,m).s,start).hand.map(c=>c.name),['Cheap']);
+});
+
+// User ruling (2026-09-26, game 13, turn 4): Platysaur 2/2 chipped a Risen Footman 1/3 that Walking
+// Dead 3/3 then killed alone; Platysaur's swing was wasted.
+test('no swing is spent chipping a minion that a later attacker kills alone',()=>{
+  const {state,actions}=board({
+    mine:[{name:'Platysaur',ATK:2,HEALTH:2},{name:'Walking Dead',ATK:3,HEALTH:3,TAUNT:1}],
+    theirs:[{name:'Risen Footman',ATK:1,HEALTH:3,TAUNT:1},{name:'Necromancer',ATK:2,HEALTH:2}]});
+  const {plans}=search(state,actions);
+  const chips=p=>p.steps.some((m,i)=>m.id===10&&m.targetId===50&&p.steps.slice(i+1).some(n=>n.id===11&&n.targetId===50));
+  assert.ok(plans.length);
+  assert.ok(!plans.some(chips));
+});

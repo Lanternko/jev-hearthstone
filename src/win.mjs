@@ -44,4 +44,5 @@ export async function move(x,y){return call({op:'move',x:Math.round(x),y:Math.ro
 export async function nudge(){return call({op:'nudge'})}
 export async function click(x,y,{settle=200,hold=70}={}){return call({op:'click',x:Math.round(x),y:Math.round(y),settle,hold})}
 export async function drag(x,y,x2,y2,{settle=200,hold=110}={}){return call({op:'drag',x:Math.round(x),y:Math.round(y),x2:Math.round(x2),y2:Math.round(y2),settle,hold})}
+export async function cancel(){return call({op:'cancel'})}
 export function stop(){if(proc){proc.stdin.end();proc=null;ready=null}}

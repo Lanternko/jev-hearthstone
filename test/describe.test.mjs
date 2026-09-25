@@ -44,7 +44,11 @@ test('end turn and mulligan read as plain instructions', () => {
   // alone gave Jev no basis to choose. Cards with no definition degrade to the bare name.
   const r=say(m,{id:'m1',type:'MULLIGAN',replace:[70]});
   assert.match(r,/^Replace Chronoclaws\. Keeping /);
-  assert.match(r,/Boneweb Egg \(2 mana minion 0\/2\)/);
+  // Cards listed in data/mulligan.json carry their opening-hand win rate; others stay bare.
+  assert.match(r,/Boneweb Egg \(2 mana minion 0\/2; kept in opening hands it wins 64\.2% vs the deck's 67\.5% average\)/);
+  assert.match(r,/Soul Barrage \(4 mana spell; kept in opening hands it wins 65\.2%/);
+  assert.doesNotMatch(r,/Chronoclaws[^;]*wins/);   // no definition -> bare name, no stat
+  assert.doesNotMatch(r,/Played|played win/i);
   assert.match(r,/redrawn at random\.$/);
   assert.match(say(m,{id:'m0',type:'MULLIGAN',replace:[]}),/^Keep the whole opening hand: /);
 });

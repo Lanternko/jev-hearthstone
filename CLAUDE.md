@@ -11,7 +11,6 @@ A Hearthstone bot. Jev (called through the AI Gateway) picks the actions, and `s
   - the tail of `runtime/decisions.jsonl`;
   - `npm run gestures`.
 - **One batch of fixes per session.** After a batch, record it in `STATUS.md` and have the user start a new session. Don't carry the old conversation forward. `STATUS.md` is the running record.
-- **AI opponents only** (Innkeeper / Practice). Never run the bot in ranked or casual games against people.
 
 ## Commands
 ```bash

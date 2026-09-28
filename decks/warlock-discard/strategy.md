@@ -24,7 +24,11 @@ Take the favourable trade before going face. Attack with everything means everyt
 not that everything attacks the hero. A Rush minion exists to clear on the turn it lands.
 
 Remove enemy minions with a recurring trigger -- per-turn draw, summon, or any "at the
-start/end of turn" -- ahead of face damage. A 0-Attack body costs nothing to kill.
+start/end of turn" -- ahead of face damage. The same goes for aura and engine minions, whose
+text buffs or rewards the rest of their board ("your other minions have...", "after you
+summon/play a X, give it..."): a small body like Treasure Distributor (1 mana 1/2, +1 Attack
+to every Pirate) is worth more than its stats, so kill it on sight, even with a trade
+that costs you a minion. A 0-Attack body costs nothing to kill.
 
 Board-wide buffs need a board: price them by how many bodies they touch, counting 0-Attack
 minions, which generate no attack option and so vanish from any damage tally until buffed.

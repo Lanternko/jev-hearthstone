@@ -180,7 +180,10 @@ test('a highest-cost outlet blocks only while the fodder is the dearest thing in
   // Chronoclaws discards the highest-cost card after a swing, so it reaches Hand of Gul'dan at
   // six and nothing else. It counts equipped as well as in hand: the text is already on the board.
   const equipped=[GULDAN,BARRAGE,FILLER(1)];
-  assert.deepEqual(ids(hand(equipped,[CLAWS]),equipped),['o2','o101']);
+  const HERO={entityId:80,name:"Gul'dan",CARDTYPE:'HERO',ATK:4,HEALTH:30};
+  assert.deepEqual(ids(hand(equipped,[CLAWS,HERO]),equipped),['o2','o101']);
+  // Game 15, turn 6: a Frozen hero cannot swing, so the weapon discards nothing this turn.
+  assert.deepEqual(ids(hand(equipped,[CLAWS,{...HERO,FROZEN:1}]),equipped),['o1','o2','o101']);
   // Soul Barrage at four is not the highest, so casting it stays Jev's call.
   assert.equal(reliableOutletFor(hand(equipped,[CLAWS]),BARRAGE),null);
   // A dearer non-fodder card in hand and even Gul'dan is a coin flip.

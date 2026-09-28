@@ -320,7 +320,10 @@ export function reliableOutletFor(state,fodder){
 // cannot be cast this turn protects nothing today, and while other fodder is left for it later,
 // the body now is worth more than a spare discard target. So the card is freed when both hold:
 // no outlet usable this turn, and the outlet still has other fodder to hit afterwards.
-const outletUsable=(state,o)=>o.CARDTYPE==='WEAPON'||costOf(o)<=Number(state?.me?.mana??0);
+// Game 15 (2026-09-29), our turn 6: a Frozen hero with Chronoclaws kept both Boneweb Eggs in
+// hand with 3 mana spare -- the weapon discards only when the hero swings, so a hero that cannot
+// swing this turn is no outlet today.
+const outletUsable=(state,o)=>o.CARDTYPE==='WEAPON'?heroCanSwing(state):costOf(o)<=Number(state?.me?.mana??0);
 const without=(state,c)=>({...state,me:{...state.me,hand:(state.me?.hand??[]).filter(x=>x.entityId!==c.entityId)}});
 function protectedFodder(state,c){
  const o=reliableOutletFor(state,c);

@@ -1,17 +1,23 @@
 import {atkOf,enemyHero,heroHp,attackOptions,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
-import {readFileSync} from 'node:fs';
+import {deckFor} from './deck.mjs';
+import {immediateDraws,heroAttackGain,heroCanSwing,textOf} from './mechanics.mjs';
 // Public stats for this list: how often games were won when the card stayed in the opening hand.
 // Only that column is passed on. Played win rate is confounded by *when* a card gets played --
 // Hand of Gul'dan shows 31.7% because it is hard-cast once the discard plan has failed -- and
 // read as a verdict on the card it would talk Jev out of plays that are right.
-let MULL={cards:{}};
-try{MULL=JSON.parse(readFileSync(new URL('../data/mulligan.json',import.meta.url),'utf8'))}catch{}
-export const mulliganWR=c=>MULL.cards?.[c?.name]?.mulliganWR??null;
-export const mulliganKept=c=>MULL.cards?.[c?.name]?.kept??null;
-const mullStat=c=>{
-  const wr=mulliganWR(c);
-  return wr!=null?`; kept in opening hands it wins ${wr}% vs the deck's ${MULL.deckWinrate}% average`:'';
+// The numbers belong to one list, so they come from the deck the state is playing (deck.mjs).
+const MULL=state=>deckFor(state).mulligan;
+export const mulliganWR=(c,state)=>MULL(state).cards?.[c?.name]?.mulliganWR??null;
+export const mulliganKept=(c,state)=>MULL(state).cards?.[c?.name]?.kept??null;
+export const mulliganRelative=(c,state)=>MULL(state).cards?.[c?.name]?.relativeToDeck??null;
+const mullStat=(c,state)=>{
+  const wr=mulliganWR(c,state);
+  if(wr==null)return '';
+  const kept=mulliganKept(c,state),relative=mulliganRelative(c,state);
+  if(deckFor(state).name==='dh-void')
+    return `; opening-hand WR ${wr}%, kept ${kept??'?'}%${relative?`, ${relative} this deck's average`:''}`;
+  return `; kept in opening hands it wins ${wr}% vs the deck's ${MULL(state).deckWinrate}% average`;
 };
 // Candidates reach Jev as raw option records: {"option":1,"entityId":49,"targetId":78}.
 // Nothing in that says "attack the enemy hero with a 1/1", so spell it out.
@@ -157,6 +163,38 @@ const cost=c=>c?.COST??c?.baseCost??0;
 const SUMMONS=/\bsummon (a|an|one|two|three|four|\d+)\b/i;
 const COUNT={a:1,an:1,one:1,two:2,three:3,four:4};
 export const summoned=c=>{const m=SUMMONS.exec(flat(c?.text));return m?COUNT[m[1].toLowerCase()]??Number(m[1]):0};
+
+function dhDiscoverNote(state,picked){
+  if(deckFor(state).name!=='dh-void'||!state.choice?.source||
+    !/discover/i.test(flat(state.choice.source.text)))return '';
+  const offers=state.choice.entities??[],mana=Number(state.me?.mana??0);
+  const tagged=(c,key)=>c?.[key]===1||c?.[key]==='1';
+  const bodiesOnBoard=(state.me?.board??[]).filter(c=>c.CARDTYPE==='MINION'&&!tagged(c,'DORMANT')).length;
+  const handSize=(state.me?.hand??[]).length;
+  // Stealth prevents targeting, not attacking next turn. Only Dormant or currently Frozen
+  // minions are excluded from the opponent's likely next-turn attack total.
+  const enemy=(state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION'&&!tagged(c,'DORMANT')&&!tagged(c,'FROZEN'));
+  const incoming=enemy.reduce((n,c)=>n+Number(c.ATK??c.baseAttack??0),0);
+  const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
+  const health=Math.max(0,Number(hero?.HEALTH??hero?.baseHealth??0)-Number(hero?.DAMAGE??0));
+  const urgency=incoming>=health&&incoming>0;
+  const describeOffer=c=>{
+    const t=flat(c.text),cost=Number(c.COST??c.baseCost??0);
+    const removal=/\bdeal \d+ damage\b|\bdestroy\b|\bkill\b|\btransform\b|\bsilence\b|\bfreeze\b/i.test(t);
+    const dormant=tagged(c,'DORMANT')||/\bdormant\b/i.test(t);
+    const delayed=dormant||/at the start of your next turn|next turn/i.test(t);
+    const draw=/\bdraw (?:a|one|two|three|\d+) cards?\b/i.test(t);
+    const body=c.CARDTYPE==='MINION'||/\bsummon\b/i.test(t);
+    const tags=[];
+    if(removal)tags.push('解場候選');
+    if(body)tags.push(dormant?'休眠手下（暫不攻擊）':delayed?'下回合生效':'手下／鋪場');
+    if(draw)tags.push('抽牌');
+    if(!tags.length)tags.push('其他效果，依卡文評估');
+    return `${name(c)} (${cost}費：${tags.join('、')}${cost>mana?'；本回合費用不足':''}${delayed?'；不會立即生效':''})`;
+  };
+  const selected=offers.find(c=>c.entityId===picked?.entityId);
+  return ` 惡魔獵人發現選擇請按當前需求比較：目前敵方可攻擊手下約有 ${incoming} 攻擊、我方 ${health} 血${urgency?'（已達致命線，先找本回合能移除或阻止攻擊的牌）':''}；我方有 ${bodiesOnBoard} 隻非休眠手下、手牌 ${handSize} 張、剩餘 ${mana} 費。選項分類：${offers.map(describeOffer).join('; ')}。解場要確認目標合法且傷害足以擊殺；若場面不急且手牌少，抽牌較有價值；若場面空或落後，優先能立刻站場的手下。休眠或下回合才召喚的牌不算立即解場／防斬殺。${selected?`目前候選 ${name(selected)}，依上述局勢評估是否比其他選項更合適。`:''}`;
+}
 export const bodies=c=>(c?.CARDTYPE==='MINION'?1:0)+summoned(c);
 const slotsFree=state=>7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
 
@@ -177,7 +215,19 @@ function pickNote(state,c){
   if(!c)return '';
   const mana=state.me?.mana??0,temp=/\btemporary\b/i.test(flat(state.choice?.source?.text));
   const castable=cost(c)<=mana;
-  if(!temp)return ` You have ${mana} mana left this turn${castable?'':', so it cannot be cast this turn'}.`;
+  if(!temp){
+    const source=state.choice?.source,sourceText=flat(source?.text);
+    const map=/if you play it this turn, also pick one of the others/i.test(sourceText);
+    const studies=/your next one costs \(1\) less/i.test(sourceText)&&/outcast/i.test(sourceText);
+    const effective=Math.max(0,cost(c)-(studies?1:0));
+    return ` You have ${mana} mana left this turn.`
+      +(source?` Choice source: ${name(source)} — "${sourceText}".`:'')
+      +(map?` Playing the discovered spell this turn unlocks another pick from the original offers; ${effective<=mana?'its mana cost fits, but it still needs a legal target and board space.':'its cost exceeds your remaining mana, so do not count that bonus this turn.'}`:'')
+      +(studies?` Your next Outcast card costs (1) less; if spent on this pick its cost is ${effective}. The discount is shared with other Outcast cards in hand.`:'')
+      +(!map&&effective>mana?' This pick cannot be cast this turn with the current mana.':'')
+      +(isOutcast(c)?' It enters at the right end, so Outcast is available immediately; adding another card can bury it.':'')
+      +dhDiscoverNote(state,c);
+  }
   const onDiscard=DISCARD_PAYOFF.test(flat(c.text))
     ?' Being discarded triggers its text, so it pays out at end of turn even if never cast.'
     :' Nothing happens when it is discarded, so an uncast copy is simply lost.';
@@ -196,6 +246,76 @@ function crowdOut(state,src){
     +(lost.length?` Castable now but not after it: ${lost.map(c=>`${name(c)} (${cost(c)})`).join('; ')}.`:' It prices no card in your hand out of this turn.');
 }
 
+// Outcast (Demon Hunter) fires only when the card sits at the left or right end of the hand,
+// and nothing in a hand list says which cards those are. The hand arrives sorted by
+// ZONE_POSITION (power.mjs), and every card that enters the hand -- drawn, discovered, generated
+// -- lands at the right end. So each play states three facts: whether this card's own Outcast is
+// on right now, whether playing it leaves another Outcast card at an end, and whether the cards
+// it adds push a rightmost Outcast card off the end.
+export const isOutcast=c=>/\bOutcast:/i.test(flat(c?.text));
+const outcastText=c=>flat(c?.text).match(/\bOutcast:\s*([^.]*\.?)/i)?.[1]??'';
+const ADDS_CARDS=/\b(draw|draws|get|discover)\b/i;
+function outcastNote(state,src){
+  const hand=state.me.hand??[],i=hand.findIndex(c=>c.entityId===src?.entityId);
+  if(i<0)return '';
+  const n=hand.length,out=[];
+  if(isOutcast(src)){
+    if(i===0||i===n-1)out.push(` It is the ${i===0?'leftmost':'rightmost'} card in your hand, so its Outcast is active: "${outcastText(src)}"`);
+    else out.push(` Its Outcast is not active: it is not at either end of your hand (${i} card(s) to its left, ${n-1-i} to its right). Played from here it does only its base text.`);
+  }
+  // After this card leaves, the hand closes up around the gap.
+  const rest=hand.filter(c=>c!==hand[i]),last=rest.length-1;
+  const opened=rest.filter((c,j)=>isOutcast(c)&&(j===0||j===last)&&!(hand.indexOf(c)===0||hand.indexOf(c)===n-1));
+  if(opened.length)out.push(` Playing it leaves ${opened.map(name).join(' and ')} at an end of your hand, which turns on its Outcast.`);
+  const right=rest[last];
+  if(ADDS_CARDS.test(flat(src?.text))&&last>0&&isOutcast(right))
+    out.push(` Cards it adds to your hand go to the right end, pushing ${name(right)} off that end, so its Outcast turns off.`);
+  return out.join('');
+}
+
+function dhNote(state,src,target){
+  if(deckFor(state).name!=='dh-void')return '';
+  const text=textOf(src),n=immediateDraws(src,state),out=[];
+  const hit=src?.CARDTYPE==='SPELL'&&/^Deal (\d+) damage\b/i.exec(text);
+  if(hit&&target?.CARDTYPE==='MINION'){
+    const hp=Number(target.HEALTH??target.baseHealth??0)-Number(target.DAMAGE??0);
+    out.push(` Printed spell damage ${hit[1]} versus ${hp} remaining Health (${Math.max(0,Number(hit[1])-hp)} excess before shields or damage modifiers). Check ready weapon/Rush trades before spending this card; extra damage does not improve a kill.`);
+  }
+  if(n)out.push(` This play draws ${n} card(s) now${isOutcast(src)?' including its currently active Outcast bonus':''}.`);
+  if(/at the start of your next turn/i.test(text))out.push(' This effect happens next turn: count no new body, Taunt or damage this turn.');
+  if(/summon a random dormant/i.test(text))out.push(' The summoned minion is Dormant: it occupies a slot but cannot attack or protect you with Taunt while dormant.');
+  if(src?.CARDTYPE==='WEAPON'){
+    const old=(state.me.board??[]).find(c=>c.CARDTYPE==='WEAPON');
+    if(old)out.push(` Equipping this replaces ${name(old)}; any remaining attack with the old weapon is lost if you replace it first.`);
+    out.push(` Equipping does not reset your hero's attacks. ${heroCanSwing(state)?'Your hero still has an attack available.':'Your hero cannot attack again in its current state.'}`);
+  }
+  if(/get two 1-Cost Gorishi Stingers/i.test(text))out.push(' This adds two cards, not two minions. Each Stinger costs another 1 mana and needs its own legal target and a board slot for the Rush Grub.');
+  if(src?.name==='Infestation'){
+    const left=Number(state.me.mana??0)-Number(src.COST??src.baseCost??2);
+    out.push(` After this play ${left} mana remains: at printed cost you can pay for ${Math.max(0,Math.min(2,Math.floor(left)))} Stinger(s) now. Without follow-up mana it supplies no board or damage this turn, but banking both Stingers is productive use of spare mana even on an empty enemy board. With no enemy minions, prefer Grim Harvest when available, then bank Stingers rather than waste mana or use Demon Claws.`);
+  }
+  if(src?.name==='Illidari Studies'||immediateDraws(src,state)>0)
+    out.push(' Resolve this new information before committing known plays when mana, hand space and Outcast order allow; replan from the cards actually obtained.');
+  if(src?.name==='Grim Harvest')
+    out.push(' The card drawn enters at the right end. Playing Harvest to the right of Eye Beam does not guarantee Eye Beam remains Outcast after the draw; you must also afford to play the newly drawn rightmost card. Do not budget an unverified Outcast discount.');
+  if(src?.name==='Chaos Strike')
+    out.push(' This buys temporary +2 hero Attack as well as a draw. Compare the safe trade it enables with Sigil of Cinder development; do not spend two mana automatically just for the draw or nonlethal face damage.');
+  if(src?.name==='Press the Advantage')
+    out.push(' Its +1 hero Attack lasts only this turn. If you will cast this and attack with the hero, cast it first so the swing uses the extra Attack; the draw may reveal a better continuation.');
+  if(src?.name==='Gorishi Stinger'){
+    const room=7-(state.me.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+    out.push(' Resolve the 2 spell damage first, then summon a 2/1 Rush Grub.');
+    out.push(room>0?' The Grub can attack an enemy minion immediately, possibly a different target, for 2 combat damage; it cannot attack the enemy hero this turn. This is not an unconditional 4-damage spell. Respect Taunt, Stealth, Divine Shield and retaliation, and replan after the summon.':' The board is full: do not count the Grub unless this spell frees a friendly slot.');
+    if(target?.CARDTYPE==='MINION'){
+      const hp=Number(target.HEALTH??target.baseHealth??0)-Number(target.DAMAGE??0);
+      out.push(` The target currently has ${hp} Health. Compare that with the spell hit and your existing ready attackers before spending another removal; preserve mana for Void Souls.`);
+    }
+  }
+  if(/summon a random .*demon.*improve your future void souls/i.test(text))out.push(' Reobserve after summoning the random Demon. Future copies improve; do not count an unknown summoned body as immediate damage.');
+  if(/summon a random\s+1-cost demon.*improve your future void souls/i.test(text))out.push(` This costs ${src?.COST??src?.baseCost??1} mana for one actual random 1-Cost Demon body now, then improves future Void Souls; the stats and keywords are uncertain, but it is a real summon rather than a setup-only spell. Use it when there is board room unless an urgent play needs the mana.`);
+  return out.join('');
+}
+
 export function describe(state,action){
   const all=[...(state.me.hand??[]),...(state.me.board??[]),...(state.opponent.board??[]),...(state.choice?.entities??[])];
   const find=id=>all.find(c=>c.entityId===id);
@@ -210,7 +330,7 @@ export function describe(state,action){
       const cost=c?.COST??c?.baseCost;
       if(cost==null)return name(c);
       return `${name(c)} (${cost} mana ${(c?.CARDTYPE??'card').toLowerCase()}${stats(c)}`
-        +(flat(c?.text)?`: "${flat(c.text)}"`:'')+mullStat(c)+')';
+        +(flat(c?.text)?`: "${flat(c.text)}"`:'')+mullStat(c,state)+')';
     };
     const hand=state.me.hand??[];
     const out=action.replace.map(id=>find(id)).filter(Boolean);
@@ -276,12 +396,16 @@ export function describe(state,action){
       +(/summon|discover|discard/i.test(text)?space:'')
       +discardTargets(state,src)
       +roleNote(state,src)
-      +coinNote(state,src);
+      +coinNote(state,src)
+      +outcastNote(state,src)
+      +dhNote(state,src,target);
     return `Play ${name(src)} from hand for ${src?.COST??src?.baseCost} mana (${(src?.CARDTYPE??'card').toLowerCase()}${stats(src)}).${body}${context}${targetText}`;
   }
   if(src?.CARDTYPE==='HERO_POWER'){
     const t=flat(src?.text).replace(/^Hero Power\s*/i,'').replace(/\$(\d+)/g,'$1');
-    return `Use hero power ${name(src)} for ${src?.COST??2} mana.${t?` Text: "${t}".`:''}${crowdOut(state,src)}${targetText}`;
+    const gain=heroAttackGain(src),h=(state.me.board??[]).find(c=>c.CARDTYPE==='HERO');
+    const attack=gain?` Your hero's Attack becomes ${Number(h?.ATK??0)+gain} this turn. This does not grant an extra attack${heroCanSwing(state)?'':'; your hero cannot swing in its current state'}.`:'';
+    return `Use hero power ${name(src)} for ${src?.COST??src?.baseCost??2} mana.${t?` Text: "${t}".`:''}${attack}${crowdOut(state,src)}${targetText}`;
   }
   if(src?.CARDTYPE==='HERO'){
     // Swinging the hero fires the equipped weapon's after-attack text. Left unsaid, Jev was

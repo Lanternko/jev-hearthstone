@@ -8,6 +8,6 @@ export async function ask(state, questions) {
   const until = process.env.JEV_PRICING_CHECKED_UNTIL ?? '2026-09-25T00:00:00Z';
   if (Date.now()>=Date.parse(until)) throw new Error(`Jev pricing was last checked for use until ${until}; recheck it, then set JEV_PRICING_CHECKED_UNTIL in .env.local.`);
   const start = performance.now();
-  const r = await evaluate({model: MODEL, state: JSON.parse(JSON.stringify(state)), questions: JSON.parse(JSON.stringify(questions)), maxRetries: 0, abortSignal: AbortSignal.timeout(15000), providerOptions:{gateway:{only:['typesafe-ai']}}});
+  const r = await evaluate({model: MODEL, state: JSON.parse(JSON.stringify(state)), questions: JSON.parse(JSON.stringify(questions)), maxRetries: 0, abortSignal: AbortSignal.timeout(5000), providerOptions:{gateway:{only:['typesafe-ai']}}});
   return {model: r.response.modelId, latencyMs: Math.round(performance.now()-start), answers:r.answers, usage:r.usage, metadata:r.providerMetadata};
 }

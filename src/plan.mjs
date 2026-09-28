@@ -8,6 +8,7 @@
 // board. The search only shortlists: the heuristic below orders thousands of sequences, Jev still
 // makes the call between the handful that survive, with the consequences spelled out.
 import {fromState,moves,apply,signature,hero,hpOf,cardModel} from './sim.mjs';
+import {deckFor} from './deck.mjs';
 
 const value=b=>b.type==='HERO'?0:b.atk+b.hp+(b.taunt?2:0)+(b.ds?b.atk:0)+(b.text?1:0);
 const boardValue=list=>list.reduce((n,b)=>n+value(b),0);
@@ -105,6 +106,47 @@ export function shortlist(plans,start,k=5){
 }
 
 const who=(s,id)=>[...s.me,...s.opp].find(b=>b.id===id);
+
+// Jev must not choose a strictly more expensive version of the same trade. Compare only
+// matching enemy results, triggers, hero health and hand. A one-for-one survivor swap is
+// comparable only for bodies with keywords or already-spent Battlecries/Dormant text.
+const plainSurvivor=b=>!!b&&!b.text.replace(/battlecry:[^.]*(?:\.|$)/ig,'')
+  .replace(/dormant for \d+ turns?\.?/ig,'')
+  .replace(/\b(?:taunt|rush|charge|divine shield|windfury|stealth|poisonous|lifesteal|elusive)\b/ig,'')
+  .replace(/[\s.,]/g,'');
+const remainingAttacks=b=>b.canAttack&&!b.frozen&&!b.dormant?Math.max(0,b.maxAttacks-b.attacks):0;
+const combatKey=b=>[b.id,b.atk,b.hp,b.maxHp,b.armor,b.taunt,b.ds,b.stealth,b.poison,b.lifesteal,
+  b.windfury,b.rush,b.ignoreTaunt,b.dormant,b.immune,b.frozen,b.attacks,b.maxAttacks,b.canAttack,b.rushOnly];
+const tradeOutcome=p=>{
+ const s=p.s,h=hero(s,'me');
+ const hkey=h?combatKey({...h,atk:remainingAttacks(h)?h.atk:0}):null;
+ return JSON.stringify([s.opp.map(combatKey).sort((a,b)=>a[0]-b[0]),hkey,s.weapon,s.locations,
+   s.hand.map(c=>[c.id,c.cost]),s.discarded??[],s.faceDealt,
+   p.steps.filter(m=>!m.exact).map(m=>m.note)]);
+};
+export function efficientTradePlans(start,plans){
+ const keys=new Map(plans.map(p=>[p,tradeOutcome(p)]));
+ return plans.filter(p=>!plans.some(q=>{
+  if(p===q||q.score<=p.score||q.s.mana<p.s.mana||keys.get(p)!==keys.get(q))return false;
+  const weaker=p.s.me.filter(b=>b.type==='MINION'),stronger=q.s.me.filter(b=>b.type==='MINION');
+  if(weaker.length!==stronger.length)return false;
+  for(const a of weaker){
+   const b=stronger.find(b=>b.id===a.id);
+   if(b&&JSON.stringify(combatKey(a))!==JSON.stringify(combatKey(b)))return false;
+  }
+  const lost=weaker.filter(a=>!stronger.some(b=>b.id===a.id));
+  const gained=stronger.filter(b=>!weaker.some(a=>a.id===b.id));
+  if(!lost.length&&!gained.length)return true; // Same board and more unspent mana.
+  if(lost.length!==1||gained.length!==1)return false;
+  const a=lost[0],b=gained[0];
+  if(![a,b,who(start,a.id),who(start,b.id)].every(plainSurvivor))return false;
+  if(b.atk<a.atk||b.hp<a.hp||b.maxHp<a.maxHp||remainingAttacks(b)<remainingAttacks(a))return false;
+  if(b.frozen&&!a.frozen||b.dormant&&!a.dormant||b.rushOnly&&!a.rushOnly)return false;
+  if(/elusive/i.test(a.text)&&!/elusive/i.test(b.text))return false;
+  return ['taunt','ds','stealth','poison','lifesteal','windfury','rush','ignoreTaunt','immune']
+    .every(k=>!a[k]||b[k]);
+ }));
+}
 const hand=(s,id)=>s.hand.find(c=>c.id===id);
 const st=b=>b.type==='HERO'?`${hpOf(b)} Health`:`${b.atk}/${b.hp}`;
 
@@ -120,6 +162,8 @@ export function narrate(start,plan){
         :!t1?`${t0.name} dies`:t1.ds!==t0.ds?`its Divine Shield pops`:`it survives at ${st(t1)}`;
       const back=t0.type==='HERO'?'':!a1?`; your ${a0.name} dies`:a1.hp<a0.hp?`; your ${a0.name} survives at ${st(a1)}`:'';
       lines.push(`${i+1}) ${a0.type==='HERO'?'Your hero':a0.name} ${st(a0)} attacks ${tName}: ${res}${back}.`);
+    }else if(m.kind==='power'){
+      lines.push(`${i+1}) Use ${s.power.name} (${s.power.cost} mana): your hero gains ${s.power.gain} Attack this turn.`);
     }else{
       const c=hand(s,m.id),model=cardModel(c);
       const extra=model.summon?`, summoning ${model.summon.n} ${model.summon.atk}/${model.summon.hp}`+(model.selfHit?` and dealing ${model.selfHit} damage to your hero`:'')
@@ -127,7 +171,8 @@ export function narrate(start,plan){
       // The planner only sequences minions it can model. Any other minion that fits in the mana
       // left would also be buffed if played first; say so rather than let the order hide it.
       const before=model.kind==='buff'?s.hand.filter(x=>x.id!==c.id&&x.type==='MINION'&&x.playable&&x.cost+c.cost<=s.mana):[];
-      lines.push(`${i+1}) Play ${c.name} (${c.cost} mana)`+(model.kind==='buff'?`: your minions get +${model.atk}/+${model.hp}`:` as a ${c.atk}/${c.hp}${extra}`)
+      lines.push(`${i+1}) Play ${c.name} (${c.cost} mana)`+(model.kind==='buff'?`: your minions get +${model.atk}/+${model.hp}`
+        :model.kind==='weapon'?`: equip ${c.atk} Attack; your hero has ${hero(r.s,'me')?.atk??0} Attack`:` as a ${c.atk}/${c.hp}${extra}`)
         +(before.length?` (the buff misses any minion played after it; still affordable before it: ${before.map(x=>`${x.name} (${x.cost})`).join(', ')})`:'')
         +((r.s.discarded?.length??0)>(s.discarded?.length??0)?`, discarding ${r.s.discarded.at(-1).name}`:'')+'.');
     }
@@ -156,7 +201,8 @@ export function menu(state,actions,base){
   // To Jev they read identically, so only the first of each wording survives.
   const seen=new Set();
   const distinct=plans.filter(p=>{const t=narrate(start,p);if(seen.has(t))return false;seen.add(t);p.text=t;return true});
-  const picked=shortlist(distinct,start);
+  const shortlisted=shortlist(distinct,start);
+  const picked=deckFor(state).name==='dh-void'?efficientTradePlans(start,shortlisted):shortlisted;
   // score() returns 1e4 only when the enemy hero ends at 0 or below. Every step but the last is
   // exact by construction, and the last one's damage lands before any trigger it sets off.
   const lethal=plans[0]?.score>=1e4?plans[0].steps:null;

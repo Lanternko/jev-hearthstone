@@ -1,6 +1,9 @@
-import {isCurse,roles,mulliganWR,mulliganKept,bodies,summoned} from './describe.mjs';
+import {isCurse,roles,mulliganWR,mulliganKept,mulliganRelative,bodies,summoned} from './describe.mjs';
 import {lethalStrike,enemyHero,heroHp,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
+import {deckFor} from './deck.mjs';
+import {immediateDraws,heroAttackGain,heroCanSwing} from './mechanics.mjs';
+const isDH=state=>deckFor(state).name==='dh-void';
 
 // Explicit user correction: early tempo takes precedence over speculative combos.
 // Second correction (2026-09-24, "為什麼留靈魂之火？"): with Disposable Acolytes in hand the old
@@ -13,9 +16,12 @@ export function keepInOpening(c){
  if(c?.CARDTYPE==='MINION')return cost<=2;
  if(c?.CARDTYPE==='LOCATION')return true;
  if(PAYS_ON_DISCARD.test(t))return true;
- return c?.CARDTYPE==='SPELL'&&cost<=2&&/\bsummon\b/i.test(t)&&!/\bdeal\b/i.test(t);
+ // Second deck (Demon Hunter, 2026-09-27): its list has no win rates yet, so this whitelist decides
+ // every card, and a tempo list lives on 1-2 mana cantrips and discovers. A cheap spell that adds
+ // a body or a card stays open to Jev, as long as it is not also a damage spell.
+ return c?.CARDTYPE==='SPELL'&&cost<=2&&/\b(summon|draw|discover|get)\b/i.test(t)&&!/\bdeal\b/i.test(t);
 }
-// Third ruling (2026-09-25): the public opening-hand win rates (data/mulligan.json) replace the
+// Third ruling (2026-09-25): the public opening-hand win rates (decks/<deck>/mulligan.json) replace the
 // whitelist wherever a card has one. The whitelist threw back Cursed Catacombs (71.9%, kept by
 // 95% of players) and Ocular Occultist (70.7%), and forced Hand of Gul'dan (62.5%) to stay as
 // fodder. Now: >=70% always stays, <=62.5% always goes, and the middle band is Jev's call with
@@ -25,12 +31,25 @@ export function keepInOpening(c){
 // Not a new win-rate line -- "可能有少數場合可以留" -- but when both the win rate and the keep
 // rate are low there is nothing to think about, so a middle-band card almost nobody keeps goes.
 export const MULL_KEEP=70,MULL_TOSS=62.5,MULL_RARELY_KEPT=25;
-export function mulliganVerdict(c){
- const wr=mulliganWR(c);
+export function mulliganVerdict(c,state){
+ const wr=mulliganWR(c,state);
  if(wr==null)return keepInOpening(c)?'free':'toss';
+ const kept=mulliganKept(c,state);
  if(wr>=MULL_KEEP)return 'keep';
+ if(isDH(state)){
+  // The DH screenshot gives arrows relative to this deck's average but omits the baseline.
+  // Do not apply another deck's absolute-WR toss cutoff to these numbers.
+  const keepOverride=Number(deckFor(state).mulligan.keepRateOverride??Infinity);
+  if(kept!=null&&kept>=keepOverride)return 'keep';
+  if(mulliganRelative(c,state)==='above')return 'keep';
+  if(kept!=null&&kept<MULL_RARELY_KEPT)return 'toss';
+  return 'free';
+ }
+ // This deck's supplied data shows several highly successful cards are nearly always kept,
+ // despite sitting below the generic absolute-WR cutoff. Respect that deck-specific evidence.
+ const keepOverride=Number(deckFor(state).mulligan.keepRateOverride??Infinity);
+ if(kept!=null&&kept>=keepOverride)return 'keep';
  if(wr<=MULL_TOSS)return 'toss';
- const kept=mulliganKept(c);
  return kept!=null&&kept<MULL_RARELY_KEPT?'toss':'free';
 }
 // Same ruling: "4 費牌要很後面才會用到，手上沒有低費牌時不可能留". A 4+ cost card may stay only
@@ -44,15 +63,12 @@ const keepsLateAlone=(cards,a)=>{
 // With both halves in the opening hand, both stay, over the win-rate bands (Continuity's 62.1
 // would otherwise force the buff back beside Party Fiend). One buff is enough for Party Fiend.
 // Soulfire stays a toss: 「靈魂之火還是換掉吧，畢竟是隨機棄牌」 -- its 61.7 already does that.
-const named=n=>c=>c?.name===n;
-const MULL_COMBOS=[
- [named('Wicked Whispers'),named('Disposable Acolytes')],
- [named('Ocular Occultist'),named('Walking Dead')],
- [named('Party Fiend'),c=>roles(c).includes('buff')],
-];
-export function mulliganCombos(cards){
+// The pairs live in the deck's mulligan.json ("combos"): a card name, or "role:<role>" for any
+// card roles() tags that way.
+const matcher=k=>k.startsWith('role:')?c=>roles(c).includes(k.slice(5)):c=>c?.name===k;
+export function mulliganCombos(cards,state){
  const keep=new Set();
- for(const [a,b] of MULL_COMBOS){
+ for(const [a,b] of (deckFor(state).mulligan.combos??[]).map(p=>p.map(matcher))){
   const x=cards.find(c=>a(c)),y=cards.filter(c=>b(c)&&c!==x).sort((p,q)=>costOf(p)-costOf(q))[0];
   if(x&&y){keep.add(x.entityId);keep.add(y.entityId)}
  }
@@ -60,9 +76,9 @@ export function mulliganCombos(cards){
 }
 function mulliganConstraint(state,actions){
  const cards=(state.choice.entities??[]).filter(c=>!isCoin(c));
- const combo=mulliganCombos(cards);
- const toss=cards.filter(c=>mulliganVerdict(c)==='toss'&&!combo.has(c.entityId)).map(c=>c.entityId);
- const keep=cards.filter(c=>mulliganVerdict(c)==='keep'||combo.has(c.entityId)).map(c=>c.entityId);
+ const combo=mulliganCombos(cards,state);
+ const toss=cards.filter(c=>mulliganVerdict(c,state)==='toss'&&!combo.has(c.entityId)).map(c=>c.entityId);
+ const keep=cards.filter(c=>mulliganVerdict(c,state)==='keep'||combo.has(c.entityId)).map(c=>c.entityId);
  let out=actions.filter(a=>toss.every(id=>a.replace?.includes(id))&&!keep.some(id=>a.replace?.includes(id)));
  if(!out.length)out=actions;
  const early=out.filter(a=>!keepsLateAlone(cards,a));
@@ -119,7 +135,7 @@ function drawKills(state){
  if(!board.some(c=>c.CARDTYPE==='HERO'))return ()=>false;
  return a=>{
   const c=hand.find(x=>x.entityId===a.entityId)??board.find(x=>x.entityId===a.entityId&&x.CARDTYPE==='HERO_POWER');
-  const n=drawCount(c),dmg=n?selfDamageCost(c)+worstDraw(state,n):0;
+  const n=drawCount(c,state),dmg=n?selfDamageCost(c)+worstDraw(state,n):0;
   return dmg>0&&dmg>=hp;
  };
 }
@@ -230,7 +246,8 @@ export function forbidsSelfDamage(state){
 export const spendableAt=(state,mana)=>{
   const hand=(state?.me?.hand??[]).filter(c=>!isCoin(c));
   const hp=(state?.me?.board??[]).find(c=>c.CARDTYPE==='HERO_POWER');
-  const hpReady=hp&&!(hp.EXHAUSTED===1||hp.EXHAUSTED==='1')&&(hp.COST??hp.baseCost??2)<=mana;
+  const hpReady=hp&&!(hp.EXHAUSTED===1||hp.EXHAUSTED==='1')&&(hp.COST??hp.baseCost??2)<=mana
+    &&(!heroAttackGain(hp)||heroCanSwing(state));
   return hand.some(c=>(c.COST??c.baseCost??0)<=mana)||!!hpReady;
 };
 export const deadCoin=state=>!spendableAt(state,(state?.me?.mana??0)+1);
@@ -451,13 +468,14 @@ function discardPick(state,actions){
 // `played` says whether the card leaves the hand first (cast) or not (hero power stays on board).
 const DRAW_N=/\bdraw (a|one|two|three|\d+) cards?\b/i;
 const WORDS={a:1,one:1,two:2,three:3};
-export function drawCount(card){
+export function drawCount(card,state){
+ if(state)return immediateDraws(card,state);
  const m=DRAW_N.exec(flat(card?.text));
  if(!m)return 0;
  return WORDS[m[1].toLowerCase()]??Number(m[1]);
 }
 export function overdraws(state,card,played=true){
- const n=drawCount(card);
+ const n=played?drawCount(card,state):drawCount(card);
  if(!n)return false;
  const deck=state.me?.deckCount;
  const hand=(state.me?.hand??[]).length-(played?1:0);
@@ -555,10 +573,38 @@ function counterFirst(state,out){
  const kept=out.filter(a=>!DISCARDS_RANDOM.test(flat(inHand(a.entityId)?.text)));
  return kept.length?kept:out;
 }
+function freezeThreatFirst(state,actions){
+ const shard=(state.me?.hand??[]).filter(c=>c.name==='Glacial Shard');
+ let out=actions;
+ for(const c of shard){
+  const choices=out.filter(a=>a.entityId===c.entityId);
+  const threats=choices.map(a=>(state.opponent?.board??[]).find(t=>t.entityId===a.targetId))
+   .filter(t=>t?.CARDTYPE==='MINION'&&!on(t,'FROZEN')&&!on(t,'DORMANT')&&Number(t.ATK??t.baseAttack??0)>0);
+  if(!threats.length)continue;
+  const highest=Math.max(...threats.map(t=>Number(t.ATK??t.baseAttack??0)));
+  const targets=new Set(threats.filter(t=>Number(t.ATK??t.baseAttack??0)===highest).map(t=>t.entityId));
+  out=out.filter(a=>a.entityId!==c.entityId||targets.has(a.targetId));
+ }
+ return out;
+}
+
+// Only productive board development: removal/discover and unknown random damage still wait
+// for judgement. A delayed Seas summon is good tempo, but is never immediate lethal damage.
+export function dhTempoActions(state,actions){
+ if(!isDH(state)||state.choice)return [];
+ const room=7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+ return actions.filter(a=>{
+  const c=(state.me?.hand??[]).find(c=>c.entityId===a.entityId);
+  if(c?.name==='Infestation')return (state.me.hand??[]).length<=9;
+  if(c?.name==='Sigil of Cinder')return true;
+  return room>0&&c&&(c.CARDTYPE==='MINION'||['Sigil of the Seas','Void Soul','Grim Harvest'].includes(c.name));
+ });
+}
+
 export function constrainActions(state,actions){
  if(state.choice?.type==='MULLIGAN')return mulliganConstraint(state,actions);
  if(state.choice)return discardPick(state,doomedPick(state,temporaryPick(state,actions)));
- let out=actions;
+ let out=freezeThreatFirst(state,actions);
  if(deadCoin(state)){
   const hand=state.me?.hand??[];
   out=out.filter(a=>!hand.some(c=>c.entityId===a.entityId&&isCoin(c)));
@@ -584,7 +630,7 @@ export function constrainActions(state,actions){
  {const od=overdrawWaits(state);const kept=out.filter(a=>!od(a));if(kept.length)out=kept;}
  {const dk=drawKills(state);const kept=out.filter(a=>!dk(a));if(kept.length)out=kept;}
  {const rest=locationResting(state);const kept=out.filter(a=>!rest(a));if(kept.length)out=kept;}
- out=weaponFirst(state,out);
+ if(!isDH(state))out=weaponFirst(state,out);
  const wasted=wastedFodder(state);
  if(wasted.size){
   out=out.filter(a=>!wasted.has(a.entityId));
@@ -604,7 +650,13 @@ export function constrainActions(state,actions){
   const trimmed=out.filter(a=>a.type!=='END_TURN');
   if(trimmed.length)out=trimmed;
  }
- out=drawCardFirst(state,drawFirst(state,out));
+ // Warlock's historical rulings must not hide DH's Outcast enablers, attacks before weapon
+ // replacement, or attacks before a generated card buries the rightmost Outcast.
+ if(!isDH(state))out=drawCardFirst(state,drawFirst(state,out));
+ else out=out.filter(a=>{
+  const hp=(state.me.board??[]).find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
+  return !heroAttackGain(hp)||heroCanSwing(state);
+ });
  if(myMinions(state)>0)return out;
  const hand=state.me.hand??[];
  return out.filter(a=>!pureBoardBuff(hand.find(c=>c.entityId===a.entityId)));
@@ -653,6 +705,14 @@ export function mustSpend(state,actions){
 }
 export function spendFirst(state,actions){
  if(state?.choice)return actions;
+ // DH has damage spells, delayed Sigils and generated cards whose order is a real choice.
+ // Keep those alternatives (including saving a removal spell) available to the planner/Jev.
+ if(isDH(state)){
+  const tempo=dhTempoActions(state,actions);
+  if(!tempo.length)return actions;
+  const hp=heroPowerOf(state);
+  return actions.filter(a=>a.type!=='END_TURN'&&a.entityId!==hp?.entityId);
+ }
  const {cards,power,pricedOut}=mustSpend(state,actions);
  const hp=heroPowerOf(state);
  let out=actions;

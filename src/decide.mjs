@@ -3,9 +3,9 @@ import {ask} from './jev.mjs';
 import {snapshot} from './power.mjs';
 import {constrainActions,forcedAction} from './policy.mjs';
 import {criteria} from './describe.mjs';
+import {deckFor} from './deck.mjs';
 const cardList=JSON.parse(await readFile(new URL('../data/cards.enUS.json',import.meta.url),'utf8'));
 const cards=Object.fromEntries(cardList.map(c=>[c.id,c]));
-const strategy=await readFile(new URL('../strategy.md',import.meta.url),'utf8');
 try{
   const playerArg=process.argv.find(x=>x.startsWith('--player='));
   const s=await snapshot(playerArg?Number(playerArg.split('=')[1]):undefined,cards);
@@ -19,7 +19,7 @@ try{
     const maxAge=Number(process.env.JEV_LOG_MAX_AGE_MS||600000);
     if(Date.now()-s.mtime>maxAge)throw Error(`Game log is stale (${Math.round((Date.now()-s.mtime)/1000)}s); no decision requested.`);
     const forced=forcedAction(s.state,s.actions);
-    const result=forced?{model:null,source:forced.source,latencyMs:0,answers:{move:{choice:forced.action.id}},metadata:{gateway:{cost:'0'}}}:await ask({board:s.state,strategy}, {move:{type:'choice',instructions:'Select the best ONE next legal action. Use entity IDs to identify cards and targets. Do not assume opponent hidden cards or deck order. Re-evaluation follows each action.',criteria:criteria(s.state,s.actions)}});
+    const result=forced?{model:null,source:forced.source,latencyMs:0,answers:{move:{choice:forced.action.id}},metadata:{gateway:{cost:'0'}}}:await ask({board:s.state,strategy:deckFor(s.state).strategy},{move:{type:'choice',instructions:'Select the best ONE next legal action. Use entity IDs to identify cards and targets. Do not assume opponent hidden cards or deck order. Re-evaluation follows each action.',criteria:criteria(s.state,s.actions)}});
     const action=s.actions.find(a=>a.id===result.answers.move.choice);if(!action)throw Error('Unknown model action');
     const now=await snapshot(s.state.me.playerId,cards);if(now.state.decisionFingerprint!==s.state.decisionFingerprint)throw Error('State changed while Jev was thinking; discard this decision.');
     const decision={...result,action,stateFingerprint:s.state.decisionFingerprint,optionsId:s.state.optionsId,createdAt:new Date().toISOString(),execution:'pending_visual_verification'};

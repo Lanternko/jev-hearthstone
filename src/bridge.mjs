@@ -3,12 +3,14 @@ import {fileURLToPath} from 'node:url';
 import {snapshot} from './power.mjs';
 import {constrainActions,spendFirst} from './policy.mjs';
 import {actionFor} from './plan.mjs';
-import {prepare,askJev,resolve} from './choose.mjs';
+import {prepare,askJev,resolve,rulePick} from './choose.mjs';
 import {fromState,signature} from './sim.mjs';
+import {deckFor} from './deck.mjs';
+import {createJevRecovery} from './jev-recovery.mjs';
+import {respectsDHTactics} from './dh-tactics.mjs';
 process.loadEnvFile(fileURLToPath(new URL('../.env.local',import.meta.url)));
 const definitions=JSON.parse(await readFile(new URL('../data/cards.enUS.json',import.meta.url),'utf8'));
 const cards=Object.fromEntries(definitions.map(c=>[c.id,c]));
-const strategy=await readFile(new URL('../strategy.md',import.meta.url),'utf8');
 export async function inspect(){return snapshot(undefined,cards)}
 // Whole-turn plans (plan.mjs) replace the raw attack options; JEV_PLANNER=0 restores the
 // one-option-at-a-time menu. A chosen plan's remaining steps run without asking again, but only
@@ -16,6 +18,8 @@ export async function inspect(){return snapshot(undefined,cards)}
 // Secret, a late log line) drops the rest of the plan and the turn is asked afresh.
 const PLANNER=process.env.JEV_PLANNER!=='0';
 let queue=[],queueLethal=false;
+// How long one decision may keep failing to reach Jev before a rule pick is taken instead.
+const recoverJev=createJevRecovery({budgetMs:Number(process.env.JEV_FALLBACK_MS??5000)});
 const record=async decision=>{
  await mkdir(new URL('../runtime/',import.meta.url),{recursive:true});
  await appendFile(new URL('../runtime/decisions.jsonl',import.meta.url),JSON.stringify(decision)+'\n');
@@ -31,7 +35,7 @@ export async function next(){
   const step=queue[0];
   const live=queueLethal?full:acts;
   const action=signature(fromState(s.state,full))===step.before&&actionFor(live,step);
-  if(action){queue.shift();return {ready:true,action,state:s.state,source:queueLethal?'planned_lethal':'plan',latencyMs:0,cost:'0'}}
+  if(action&&(queueLethal||respectsDHTactics(s.state,acts,action))){queue.shift();return {ready:true,action,state:s.state,source:queueLethal?'planned_lethal':'plan',latencyMs:0,cost:'0'}}
  }
  queue=[];queueLethal=false;
  const p=prepare(s.state,full,{planner:PLANNER});
@@ -39,10 +43,12 @@ export async function next(){
  if(Date.now()-s.mtime>600000)return {ready:false,reason:'stale_log',state:s.state};
  if(p.lethal){queue=p.rest;queueLethal=true;return {ready:true,...p.lethal,state:s.state,latencyMs:0,cost:'0'}}
  s.actions=p.acts;
- const result=await askJev(s.state,p,strategy);
+ const result=await recoverJev(
+  ()=>askJev(s.state,p,deckFor(s.state).strategy),
+  e=>({model:null,source:'rule_fallback',latencyMs:0,answers:{move:{choice:rulePick(p)}},error:e.message}));
  const fresh=await inspect();if(fresh.state.decisionFingerprint!==s.state.decisionFingerprint)return {ready:false,reason:'state_changed'};
  const pick=result.answers.move.choice,{action,plan}=resolve(p,pick);
  if(plan)queue=plan.slice(1);
  await record({createdAt:new Date().toISOString(),state:s.state,options:s.actions,...(plan?{plan:{id:pick,steps:plan,text:p.crit[pick].description}}:{}),action,...result});
- return {ready:true,action,state:s.state,plan:plan&&pick,latencyMs:result.latencyMs,cost:result.metadata?.gateway?.cost};
+ return {ready:true,action,state:s.state,plan:plan&&pick,source:result.source,latencyMs:result.latencyMs,cost:result.metadata?.gateway?.cost};
 }

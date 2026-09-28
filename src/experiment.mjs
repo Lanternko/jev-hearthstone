@@ -12,8 +12,8 @@ import {readFile} from 'node:fs/promises';
 import {ask} from './jev.mjs';
 import {criteria} from './describe.mjs';
 import {forcedAction} from './policy.mjs';
+import {deckFor} from './deck.mjs';
 
-const strategy=await readFile(new URL('../strategy.md',import.meta.url),'utf8');
 const log=(await readFile(new URL('../runtime/decisions.jsonl',import.meta.url),'utf8'))
   .trim().split('\n').map(l=>JSON.parse(l));
 
@@ -49,7 +49,7 @@ for(const c of cases){
   console.log(`#${c.i} turn ${c.state.turn}: ${c.actions.length-1} free face attack(s) worth ${dmg} against ${hp} Health`);
   const kill=forcedAction(c.state,c.actions);
   if(kill){console.log(`   ${kill.source} -> ${kill.action.id} (never reaches Jev)\n`);continue}
-  const out=await ask({board:c.state,strategy},{move:{type:'choice',instructions:'Select the best ONE next legal action. Use entity IDs to identify cards and targets. Do not assume opponent hidden cards or deck order. Re-evaluation follows each action.',criteria:criteria(c.state,c.actions)}});
+  const out=await ask({board:c.state,strategy:deckFor(c.state).strategy},{move:{type:'choice',instructions:'Select the best ONE next legal action. Use entity IDs to identify cards and targets. Do not assume opponent hidden cards or deck order. Re-evaluation follows each action.',criteria:criteria(c.state,c.actions)}});
   const now=out.answers.move.probabilities,pick=out.answers.move.choice;
   console.log(`   then P(END_TURN)=${c.then.o0}  chose ${c.thenChoice}`);
   console.log(`   now  P(END_TURN)=${now.o0}  chose ${pick}  ${pick==='o0'?'STILL ENDS THE TURN':'attacks'}\n`);

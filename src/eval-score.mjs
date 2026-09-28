@@ -9,6 +9,7 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {spendFirst} from './policy.mjs';
 import {prepare,askJev,resolve} from './choose.mjs';
+import {deckFor} from './deck.mjs';
 
 const live=process.argv.includes('--live');
 const positions=JSON.parse(await readFile(new URL('../eval/positions.json',import.meta.url),'utf8'));
@@ -36,14 +37,13 @@ console.log(`\nspendFirst removes every best action in ${blocked.length} positio
 for(const p of blocked)console.log(`  ${p.id}  best: ${labels[p.id].best.map(id=>nameOf(p,id)).join(' / ')}${labels[p.id].note?`  -- ${labels[p.id].note}`:''}`);
 
 if(live){
- const strategy=await readFile(new URL('../strategy.md',import.meta.url),'utf8');
  const rows=[];
  for(const p of set){
   const pr=prepare(p.state,raw(p));
   let pick,source,probabilities,cost;
   if(pr.forced||pr.lethal){({action:{id:pick},source}=pr.forced??pr.lethal)}
   else{
-   const r=await askJev(p.state,pr,strategy);
+   const r=await askJev(p.state,pr,deckFor(p.state).strategy);
    pick=resolve(pr,r.answers.move.choice).action.id;source=pr.plans[r.answers.move.choice]?'plan':'jev';
    probabilities=r.answers.move.probabilities;cost=r.metadata?.gateway?.cost;
   }

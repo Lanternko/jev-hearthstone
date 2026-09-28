@@ -68,7 +68,8 @@ export function createParser(){
   }
   return api;
   }
-  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,localPlayer,revision,gameNumber,shownTurn})};
+  function ownHand(){const n=new Map();for(const e of entities.values())if(e.tags?.ZONE==='HAND'&&e.cardId){const c=Number(e.tags.CONTROLLER);n.set(c,(n.get(c)||0)+1)}const r=[...n].sort((a,b)=>b[1]-a[1]);return r.length&&(r.length===1||r[0][1]>r[1][1])?r[0][0]:null}
+  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,localPlayer:ownHand()??localPlayer,revision,gameNumber,shownTurn})};
   return api;
 }
 export const parsePower=text=>createParser().feed(text).result();
@@ -78,7 +79,7 @@ function material(s){
   return {turn:s.turn,
     me:{playerId:s.me.playerId,mana:s.me.mana,maxMana:s.me.maxMana,current:s.me.current,hand:s.me.hand,board:s.me.board,deckCount:s.me.deckCount,drawHazards:s.me.drawHazards},
     opponent:{mana:s.opponent.mana,board:s.opponent.board,handCount:s.opponent.handCount},
-    choice:s.choice&&{id:s.choice.id,type:s.choice.type,min:s.choice.min,max:s.choice.max,entities:s.choice.entities}};
+    choice:s.choice&&{id:s.choice.id,type:s.choice.type,min:s.choice.min,max:s.choice.max,entities:s.choice.entities,source:s.choice.source}};
 }
 export function publicState(parsed,playerId,cards={}){
   if(![1,2].includes(playerId))throw Error('Explicit local player ID 1 or 2 required');
@@ -91,7 +92,8 @@ export function publicState(parsed,playerId,cards={}){
    return m?.tags.ZONE==='PLAY'&&Number(m.tags.CONTROLLER)===playerId&&/deathrattle:[^.]*discard it/i.test((cards[m.cardId]?.text??'').replace(/<[^>]+>/g,''));
   }).map(e=>Number(e.tags.TAG_SCRIPT_DATA_NUM_1)));
   function card(e){const def=cards[e.cardId]??{};return {entityId:e.id,cardId:e.cardId,name:def.name,text:def.text,baseCost:def.cost,baseAttack:def.attack,baseHealth:def.health,...Object.fromEntries(visibleTags.filter(t=>t in e.tags).map(t=>[t,/^\d+$/.test(e.tags[t])?Number(e.tags[t]):e.tags[t]]))}}
-  function side(id){const es=all.filter(e=>Number(e.tags.CONTROLLER)===id),p=es.find(e=>e.playerId===id);return {playerId:id,mana:p?Number(p.tags.RESOURCES??0)+Number(p.tags.TEMP_RESOURCES??0)-Number(p.tags.RESOURCES_USED??0):null,maxMana:Number(p?.tags.RESOURCES??0),current:p?.tags.CURRENT_PLAYER==='1',playstate:p?.tags.PLAYSTATE,handCount:es.filter(e=>e.tags.ZONE==='HAND').length,deckCount:es.filter(e=>e.tags.ZONE==='DECK').length,board:es.filter(e=>e.tags.ZONE==='PLAY'&&['MINION','HERO','HERO_POWER','WEAPON','LOCATION'].includes(e.tags.CARDTYPE)).map(card).sort((a,b)=>(a.ZONE_POSITION??0)-(b.ZONE_POSITION??0)),...(id===playerId?{hand:es.filter(e=>e.tags.ZONE==='HAND').map(e=>doomed.has(e.id)?{...card(e),doomed:true}:card(e)).sort((a,b)=>a.ZONE_POSITION-b.ZONE_POSITION),drawHazards:es.filter(e=>e.tags.ZONE==='DECK'&&e.cardId).map(e=>drawnSelfDamage(cards[e.cardId])).filter(Boolean)}:{})}}
+  // heroClass picks the deck folder (deck.mjs); it is read off the hero card on the board.
+  function side(id){const es=all.filter(e=>Number(e.tags.CONTROLLER)===id),p=es.find(e=>e.playerId===id);return {playerId:id,heroClass:cards[es.find(e=>e.tags.ZONE==='PLAY'&&e.tags.CARDTYPE==='HERO')?.cardId]?.cardClass,mana:p?Number(p.tags.RESOURCES??0)+Number(p.tags.TEMP_RESOURCES??0)-Number(p.tags.RESOURCES_USED??0):null,maxMana:Number(p?.tags.RESOURCES??0),current:p?.tags.CURRENT_PLAYER==='1',playstate:p?.tags.PLAYSTATE,handCount:es.filter(e=>e.tags.ZONE==='HAND').length,deckCount:es.filter(e=>e.tags.ZONE==='DECK').length,board:es.filter(e=>e.tags.ZONE==='PLAY'&&['MINION','HERO','HERO_POWER','WEAPON','LOCATION'].includes(e.tags.CARDTYPE)).map(card).sort((a,b)=>(a.ZONE_POSITION??0)-(b.ZONE_POSITION??0)),...(id===playerId?{hand:es.filter(e=>e.tags.ZONE==='HAND').map(e=>doomed.has(e.id)?{...card(e),doomed:true}:card(e)).sort((a,b)=>a.ZONE_POSITION-b.ZONE_POSITION),drawHazards:es.filter(e=>e.tags.ZONE==='DECK'&&e.cardId).map(e=>drawnSelfDamage(cards[e.cardId])).filter(Boolean)}:{})}}
   const state={gameNumber:parsed.gameNumber,turn:Number(parsed.game?.tags.TURN??0),step:parsed.game?.tags.STEP,status:parsed.game?.tags.STATE,me:side(playerId),opponent:side(3-playerId),optionsId:parsed.options?.id};
   const activeChoice=[...parsed.choices.values()].filter(c=>c.playerId===playerId).at(-1);
   if(activeChoice&&(activeChoice.type!=='MULLIGAN'||state.step==='BEGIN_MULLIGAN')){const src=parsed.entities.get(activeChoice.sourceId);state.choice={...activeChoice,entities:activeChoice.entities.map(id=>parsed.entities.get(id)).filter(Boolean).map(card),...(src?{source:card(src)}:{})};}

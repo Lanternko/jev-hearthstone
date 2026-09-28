@@ -10,13 +10,15 @@
 // whole text is keywords, and board-wide +X/+Y buffs (with Whispers' lowest-cost discard).
 // Inexact: Deathrattles and Reborn on a death, attack triggers, weapon text, anything random.
 
-const flat=t=>(t??'').replace(/\[x\]/g,' ').replace(/<[^>]+>/g,'').replace(/\$(\d)/g,'$1').replace(/\s+/g,' ').trim();
+import {textOf,heroAttackGain,ignoresTaunt} from './mechanics.mjs';
+const flat=t=>textOf({text:t});
 const on=(c,tag)=>c?.[tag]===1||c?.[tag]==='1';
 const num=v=>Number(v??0);
 const cost=c=>num(c?.COST??c?.baseCost);
 const silenced=c=>on(c,'SILENCED');
 // A keyword counts when the tag says so, or -- for a card whose tags are not set yet -- its text.
-const kw=(c,tag,word)=>on(c,tag)||(!silenced(c)&&new RegExp(`\\b${word}\\b`,'i').test(flat(c?.text)));
+const kw=(c,tag,word)=>c?.[tag]!=null?on(c,tag):(!silenced(c)&&new RegExp(`\\b${word}\\b`,'i')
+  .test(flat(c?.text).replace(/all friendly attacks ignore taunt\.?/i,'')));
 
 // Things that happen in combat the model does not follow. Any of them on a participant makes the
 // swing inexact. Deathrattle and Reborn only matter when the body actually dies.
@@ -31,10 +33,11 @@ const DISCARD_HIGH=/^after your hero attacks, discard your highest cost card\.?$
 function body(c,side){
   const hp=num(c.HEALTH??c.baseHealth)-num(c.DAMAGE);
   return {id:c.entityId,side,type:c.CARDTYPE,name:c.name,text:silenced(c)?'':flat(c.text),
-    atk:num(c.ATK??c.baseAttack),hp,armor:num(c.ARMOR),
+    atk:num(c.ATK??c.baseAttack),hp,maxHp:num(c.HEALTH??c.baseHealth),armor:num(c.ARMOR),
     taunt:kw(c,'TAUNT','taunt'),ds:on(c,'DIVINE_SHIELD'),stealth:on(c,'STEALTH'),
     poison:kw(c,'POISONOUS','poisonous'),lifesteal:kw(c,'LIFESTEAL','lifesteal'),
-    windfury:kw(c,'WINDFURY','windfury'),
+    windfury:kw(c,'WINDFURY','windfury'),rush:kw(c,'RUSH','rush'),ignoreTaunt:ignoresTaunt(c),
+    exhausted:on(c,'EXHAUSTED'),
     dormant:on(c,'DORMANT'),immune:on(c,'IMMUNE'),frozen:on(c,'FROZEN'),
     attacks:num(c.NUM_ATTACKS_THIS_TURN)};
 }
@@ -60,17 +63,23 @@ export function fromState(state,actions=[]){
     b.targets=t0.get(b.id)??new Set();
     // Rush on its first turn: may swing at minions only. Visible directly when nothing guards the
     // hero; behind a Taunt it cannot be told, so a Rush body is assumed to be the rush-only kind.
-    b.rushOnly=b.canAttack&&!!oppHero&&!b.targets.has(oppHero.id)&&(!tauntUp||kw(b,'RUSH','rush'));
+    b.rushOnly=b.canAttack&&!!oppHero&&!b.targets.has(oppHero.id)&&(!tauntUp||b.rush);
     b.maxAttacks=b.windfury?2:1;
   }
   const plays=new Set(actions.filter(a=>a.targetId==null&&(state.me.hand??[]).some(c=>c.entityId===a.entityId)).map(a=>a.entityId));
+  const hp=(state.me.board??[]).find(c=>heroAttackGain(c)>0&&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
   return {mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
       atk:num(c.ATK??c.baseAttack),hp:num(c.HEALTH??c.baseHealth),raw:c,playable:plays.has(c.entityId)})),
-    me:mine,opp:theirs,weapon:weapon?{id:weapon.entityId,name:weapon.name,text:flat(weapon.text)}:null,
+    me:mine,opp:theirs,weapon:weapon?weaponBody(weapon):null,
+    power:hp?{id:hp.entityId,name:hp.name,cost:cost(hp),gain:heroAttackGain(hp),used:on(hp,'EXHAUSTED')}:null,
     locations,tauntAtStart:tauntUp,faceDealt:0,nextToken:0};
 }
 
-const clone=s=>({...s,hand:s.hand.map(c=>({...c})),me:s.me.map(b=>({...b})),opp:s.opp.map(b=>({...b}))});
+const weaponBody=c=>({id:c.entityId,name:c.name,text:flat(c.text),atk:num(c.ATK??c.baseAttack),
+  durability:c.HEALTH!=null||c.baseHealth!=null?num(c.HEALTH??c.baseHealth)-num(c.DAMAGE)
+    :c.DURABILITY!=null?num(c.DURABILITY):null});
+const clone=s=>({...s,hand:s.hand.map(c=>({...c})),me:s.me.map(b=>({...b})),opp:s.opp.map(b=>({...b})),
+  weapon:s.weapon&&{...s.weapon},power:s.power&&{...s.power}});
 const room=s=>7-s.me.filter(b=>b.type==='MINION').length-s.locations;
 const guards=b=>b.type==='MINION'&&b.taunt&&!b.stealth&&!b.dormant;
 export const hero=(s,side)=>(side==='me'?s.me:s.opp).find(b=>b.type==='HERO');
@@ -88,6 +97,10 @@ const COUNT={a:1,an:1,one:1,two:2,three:3};
 const SUMMON=/^battlecry: summon (a|an|one|two|three) (\d+)\/(\d+) [a-z' -]+?(?: with ((?:(?:taunt|rush|divine shield|poisonous|lifesteal|windfury|stealth)(?:,? and |, | )?)+))?\.?$/i;
 const SELF_HIT=/^deal (\d+) damage to your hero\.?$/i;
 export function cardModel(c){
+  // Kayn's continuous aura is recalculated from the surviving board after every swing.
+  if(c.type==='MINION'&&/^charge\s+all friendly attacks ignore taunt\.?$/i.test(c.text))return {kind:'minion'};
+  // Equip itself is deterministic; Scythe's generated card makes its later swing terminal.
+  if(c.type==='WEAPON'&&(!c.text||/^after your hero attacks, get a void soul\.?$/i.test(c.text)))return {kind:'weapon'};
   if(c.type==='MINION'){
     let summon=null,selfHit=0;
     for(const p of c.text.split(/(?<=\.)\s+/).filter(Boolean)){
@@ -119,22 +132,26 @@ export function moves(s){
   const out=[];
   const oppAlive=s.opp.filter(b=>b.hp>0);
   const wall=oppAlive.some(guards);
+  const bypass=s.me.some(b=>b.hp>0&&b.ignoreTaunt);
   for(const a of s.me){
-    if(!a.canAttack||a.hp<=0||a.atk<=0||a.frozen||a.attacks>=a.maxAttacks)continue;
+    if(!a.canAttack||a.hp<=0||a.atk<=0||a.frozen||a.dormant||a.attacks>=a.maxAttacks)continue;
     for(const t of oppAlive){
       if(t.stealth||t.dormant||t.immune)continue;
-      if(wall&&!guards(t))continue;
+      if(wall&&!bypass&&!guards(t))continue;
       if(t.type==='HERO'&&a.rushOnly)continue;
       // A hero swinging into a minion takes its Attack back. A game was lost on exactly that:
       // 5 Health into a 7-Attack Void Terror, planned as an ordinary trade.
-      if(a.type==='HERO'&&t.type==='MINION'&&t.atk>=hpOf(a))continue;
+      if(a.type==='HERO'&&t.type==='MINION'&&!a.immune&&!a.ds&&t.atk>=hpOf(a))continue;
       // The game's own targets rule while the Taunt picture is unchanged; once the last Taunt
       // is gone, the bodies behind it open up.
-      const known=a.targets.has(t.id)||(s.tauntAtStart&&!wall);
+      const known=a.targets.has(t.id)||(s.tauntAtStart&&(!wall||bypass));
       if(!known)continue;
       out.push({kind:'attack',id:a.id,targetId:t.id});
     }
   }
+  const h=hero(s,'me');
+  if(s.power&&!s.power.used&&s.power.cost<=s.mana&&h&&!h.frozen&&!h.exhausted&&h.attacks<h.maxAttacks)
+    out.push({kind:'power',id:s.power.id});
   const free=room(s);
   for(const c of s.hand){
     if(!c.playable||c.cost>s.mana)continue;
@@ -159,6 +176,12 @@ function strike(dealer,victim,n){
 // must stop after this step.
 export function apply(s0,m){
   const s=clone(s0);
+  if(m.kind==='power'){
+    const h=hero(s,'me');
+    s.mana-=s.power.cost;s.power.used=true;h.atk+=s.power.gain;
+    enableHero(s,h);
+    return {s,exact:true,note:''};
+  }
   if(m.kind==='attack'){
     const a=s.me.find(b=>b.id===m.id),t=s.opp.find(b=>b.id===m.targetId);
     let exact=true;const notes=[];
@@ -176,9 +199,13 @@ export function apply(s0,m){
     const before=hpOf(t);
     const hitT=strike(a,t,a.atk);
     if(t.type==='MINION')strike(t,a,t.atk);
-    if(hitT&&a.lifesteal){const h=hero(s,'me');if(h)h.hp+=a.atk}
+    if(hitT&&a.lifesteal){const h=hero(s,'me');if(h)h.hp=Math.min(h.maxHp,h.hp+a.atk)}
     if(t.type==='HERO')s.faceDealt+=before-hpOf(t);
     a.attacks++;a.stealth=false;
+    if(a.type==='HERO'&&s.weapon?.durability!=null){
+      s.weapon.durability--;
+      if(s.weapon.durability<=0){a.atk=Math.max(0,a.atk-s.weapon.atk);s.weapon=null;}
+    }
     for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
     s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
     return {s,exact,note:notes.join('; ')};
@@ -186,10 +213,18 @@ export function apply(s0,m){
   if(m.kind==='play'){
     const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=cardModel(c);
     s.hand.splice(i,1);s.mana-=c.cost;
+    if(model.kind==='weapon'){
+      const h=hero(s,'me'),previous=s.weapon;
+      s.weapon=weaponBody(c.raw);
+      if(h){h.atk=Math.max(0,h.atk-(previous?.atk??0))+s.weapon.atk;enableHero(s,h)}
+      // Replacing an unknown Deathrattle weapon may change the board or hand.
+      const exact=!previous||!ON_DEATH.test(previous.text);
+      return {s,exact,note:exact?'':'replaced weapon has a Deathrattle'};
+    }
     if(model.kind==='minion'){
       const b=body({...c.raw,entityId:c.id},'me');
       const charge=kw(c.raw,'CHARGE','charge'),rush=kw(c.raw,'RUSH','rush');
-      Object.assign(b,{canAttack:charge||rush,rushOnly:rush&&!charge,targets:new Set(),maxAttacks:b.windfury?2:1});
+      Object.assign(b,{canAttack:!b.dormant&&(charge||rush),rushOnly:rush&&!charge,targets:new Set(),maxAttacks:b.windfury?2:1});
       // A fresh body has no targets from the game's options; charge/rush may hit what is open.
       if(b.canAttack)for(const t of s.opp)b.targets.add(t.id);
       s.me.push(b);
@@ -220,16 +255,23 @@ export function apply(s0,m){
         s.discarded=[...(s.discarded??[]),lost];
       }
     }
-    for(const b of s.me)if(b.type==='MINION'){b.atk+=model.atk;b.hp+=model.hp}
+    for(const b of s.me)if(b.type==='MINION'&&!b.dormant){b.atk+=model.atk;b.hp+=model.hp;b.maxHp+=model.hp}
     return {s,exact,note:notes.join('; ')};
   }
   throw Error(`unknown move ${m.kind}`);
+}
+
+function enableHero(s,h){
+  if(h.frozen||h.exhausted||h.attacks>=h.maxAttacks)return;
+  h.canAttack=true;
+  // A hero at zero Attack had no printed attack options before the power/equip.
+  h.targets=new Set(s.opp.map(t=>t.id));
 }
 
 // Enough of the board to tell whether reality followed the prediction: who is where, at what
 // stats, and what is still in hand. Attack counts and exhaustion are left out; they are tags the
 // log flushes late and they never change the next step's legality in a way the options miss.
 export const signature=s=>JSON.stringify([
-  s.me.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds]).sort((x,y)=>x[0]-y[0]),
-  s.opp.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds]).sort((x,y)=>x[0]-y[0]),
-  s.hand.map(c=>c.id).sort((x,y)=>x-y),s.mana]);
+  s.me.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds,b.taunt,b.dormant,b.frozen,b.ignoreTaunt]).sort((x,y)=>x[0]-y[0]),
+  s.opp.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds,b.taunt,b.dormant,b.frozen]).sort((x,y)=>x[0]-y[0]),
+  s.hand.map(c=>c.id),s.mana,s.weapon&&[s.weapon.id,s.weapon.atk,s.weapon.durability]]);

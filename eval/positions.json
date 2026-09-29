@@ -14222,5 +14222,4454 @@
     "o2t2": 0.02
    }
   }
+ },
+ {
+  "id": "g6t1r425",
+  "row": 425,
+  "fingerprint": "6accab6134848ff4cc8b",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 6,
+   "turn": 1,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "mana": 1,
+    "maxMana": 1,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 4,
+    "deckCount": 26,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 24,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 28,
+      "cardId": "BOT_568",
+      "name": "The Soularium",
+      "text": "Draw 3 cards.\nThey are <b>Temporary</b>.",
+      "baseCost": 2,
+      "COST": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 31,
+      "cardId": "EX1_308",
+      "name": "Soulfire",
+      "text": "[x]Deal $4 damage.\nDiscard a random card.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 6,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 2,
+    "mana": 0,
+    "maxMana": 0,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 5,
+    "deckCount": 26,
+    "board": [
+     {
+      "entityId": 68,
+      "cardId": "HERO_08at_Celeste",
+      "name": "Dragon Dance Celeste",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 69,
+      "cardId": "HERO_08fbp",
+      "name": "Fireblast",
+      "text": "<b>Hero Power</b>\nDeal $1 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     }
+    ]
+   },
+   "optionsId": 1,
+   "fingerprint": "48bea6a5fef0b8a2489d",
+   "decisionFingerprint": "6accab6134848ff4cc8b"
+  },
+  "options": [
+   {
+    "id": "o0",
+    "type": "END_TURN",
+    "option": 0,
+    "label": "結束回合",
+    "description": "End the turn."
+   },
+   {
+    "option": 1,
+    "entityId": 31,
+    "type": "POWER",
+    "id": "o1t0",
+    "targetId": 66,
+    "label": "打出 Soulfire（1） → Nemesis Gul'dan",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 0/7; 7 space(s) free. Role: discard outlet. Target: friendly hero Nemesis Gul'dan 0/30. A hero never deals damage back when attacked, so this attack is free."
+   },
+   {
+    "id": "xface",
+    "type": "POWER",
+    "entityId": 31,
+    "targetId": 68,
+    "synthetic": true,
+    "label": "打出 Soulfire（1） → Dragon Dance Celeste",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 0/7; 7 space(s) free. Role: discard outlet. Target: enemy hero Dragon Dance Celeste 0/30. A hero never deals damage back when attacked, so this attack is free."
+   }
+  ],
+  "then": {
+   "choice": "o1t0",
+   "plan": null,
+   "confidence": 0.08,
+   "probabilities": {
+    "o0": 0.46,
+    "o1t0": 0.54
+   }
+  }
+ },
+ {
+  "id": "g7t1r436",
+  "row": 436,
+  "fingerprint": "57cc761e7a6f26e38520",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 7,
+   "turn": 1,
+   "step": "BEGIN_MULLIGAN",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 0,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 27,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 18,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 11,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 4,
+      "cardId": "BT_300",
+      "name": "Hand of Gul'dan",
+      "text": "When you play\nor discard this,\ndraw 3 cards.",
+      "baseCost": 6,
+      "COST": 6,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 2,
+    "mana": 0,
+    "maxMana": 0,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 5,
+    "deckCount": 26,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07e",
+      "name": "Felheart Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     }
+    ]
+   },
+   "choice": {
+    "id": 1,
+    "playerId": 1,
+    "type": "MULLIGAN",
+    "min": 0,
+    "max": 3,
+    "entities": [
+     {
+      "entityId": 18,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 11,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 4,
+      "cardId": "BT_300",
+      "name": "Hand of Gul'dan",
+      "text": "When you play\nor discard this,\ndraw 3 cards.",
+      "baseCost": 6,
+      "COST": 6,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     }
+    ],
+    "revision": 51697
+   },
+   "fingerprint": "3191aea172c0d2ba0eb6",
+   "decisionFingerprint": "57cc761e7a6f26e38520"
+  },
+  "options": [
+   {
+    "id": "m4",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+     4
+    ],
+    "label": "換掉：Hand of Gul'dan",
+    "description": "Replace Hand of Gul'dan (6 mana spell: \"When you play or discard this, draw 3 cards.\"; kept in opening hands it wins 62.5% vs the deck's 67.5% average). Keeping Walking Dead (3 mana minion 2/5: \"Taunt If you discard this minion, summon it.\"; kept in opening hands it wins 67% vs the deck's 67.5% average); Soul Barrage (4 mana spell: \"When you play or discard this, deal $5 damage randomly split among all enemies.\"; kept in opening hands it wins 65.2% vs the deck's 67.5% average). Replaced cards go back into the deck and are redrawn at random."
+   },
+   {
+    "id": "m5",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+     18,
+     4
+    ],
+    "label": "換掉：Walking Dead、Hand of Gul'dan",
+    "description": "Replace Walking Dead (3 mana minion 2/5: \"Taunt If you discard this minion, summon it.\"; kept in opening hands it wins 67% vs the deck's 67.5% average); Hand of Gul'dan (6 mana spell: \"When you play or discard this, draw 3 cards.\"; kept in opening hands it wins 62.5% vs the deck's 67.5% average). Keeping Soul Barrage (4 mana spell: \"When you play or discard this, deal $5 damage randomly split among all enemies.\"; kept in opening hands it wins 65.2% vs the deck's 67.5% average). Replaced cards go back into the deck and are redrawn at random."
+   },
+   {
+    "id": "m6",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+     11,
+     4
+    ],
+    "label": "換掉：Soul Barrage、Hand of Gul'dan",
+    "description": "Replace Soul Barrage (4 mana spell: \"When you play or discard this, deal $5 damage randomly split among all enemies.\"; kept in opening hands it wins 65.2% vs the deck's 67.5% average); Hand of Gul'dan (6 mana spell: \"When you play or discard this, draw 3 cards.\"; kept in opening hands it wins 62.5% vs the deck's 67.5% average). Keeping Walking Dead (3 mana minion 2/5: \"Taunt If you discard this minion, summon it.\"; kept in opening hands it wins 67% vs the deck's 67.5% average). Replaced cards go back into the deck and are redrawn at random."
+   },
+   {
+    "id": "m7",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+     18,
+     11,
+     4
+    ],
+    "label": "換掉：Walking Dead、Soul Barrage、Hand of Gul'dan",
+    "description": "Replace Walking Dead (3 mana minion 2/5: \"Taunt If you discard this minion, summon it.\"; kept in opening hands it wins 67% vs the deck's 67.5% average); Soul Barrage (4 mana spell: \"When you play or discard this, deal $5 damage randomly split among all enemies.\"; kept in opening hands it wins 65.2% vs the deck's 67.5% average); Hand of Gul'dan (6 mana spell: \"When you play or discard this, draw 3 cards.\"; kept in opening hands it wins 62.5% vs the deck's 67.5% average). Keeping nothing. Replaced cards go back into the deck and are redrawn at random."
+   }
+  ],
+  "then": {
+   "choice": "m4",
+   "plan": null,
+   "confidence": 0.38,
+   "probabilities": {
+    "m4": 0.53,
+    "m7": 0.17,
+    "m5": 0.1,
+    "m6": 0.2
+   }
+  }
+ },
+ {
+  "id": "g7t5r440",
+  "row": 440,
+  "fingerprint": "c083d37ef1b9b6c187e3",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 7,
+   "turn": 5,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 3,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 5,
+    "deckCount": 23,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 5,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 15,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 20,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "LOCATION"
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 18,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 11,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 6,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 26,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 19,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION"
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 2,
+    "mana": 0,
+    "maxMana": 2,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 7,
+    "deckCount": 21,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07e",
+      "name": "Felheart Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 7,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     }
+    ]
+   },
+   "optionsId": 14,
+   "choice": {
+    "id": 3,
+    "playerId": 1,
+    "type": "GENERAL",
+    "min": 1,
+    "max": 1,
+    "entities": [
+     {
+      "entityId": 85,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 88,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 91,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "CARDTYPE": "MINION"
+     }
+    ],
+    "revision": 54938,
+    "sourceId": 20,
+    "source": {
+     "entityId": 20,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "LOCATION"
+    }
+   },
+   "fingerprint": "f601b5861a9450a2077d",
+   "decisionFingerprint": "c083d37ef1b9b6c187e3"
+  },
+  "options": [
+   {
+    "id": "c3e85",
+    "type": "CHOICE",
+    "choiceId": 3,
+    "entityId": 85,
+    "label": "選 Walking Dead",
+    "description": "Choose Walking Dead (minion, 3 mana 2/5). Its text: \"Taunt If you discard this minion, summon it.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\". This pick cannot be cast this turn with the current mana."
+   },
+   {
+    "id": "c3e88",
+    "type": "CHOICE",
+    "choiceId": 3,
+    "entityId": 88,
+    "label": "選 Soul Barrage",
+    "description": "Choose Soul Barrage (spell, 4 mana). Its text: \"When you play or discard this, deal $5 damage randomly split among all enemies.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\". This pick cannot be cast this turn with the current mana."
+   },
+   {
+    "id": "c3e91",
+    "type": "CHOICE",
+    "choiceId": 3,
+    "entityId": 91,
+    "label": "選 Platysaur",
+    "description": "Choose Platysaur (minion, 1 mana 1/2). Its text: \"Battlecry: Draw a card. Deathrattle: Discard it.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\". This pick cannot be cast this turn with the current mana."
+   }
+  ],
+  "then": {
+   "choice": "c3e88",
+   "plan": null,
+   "confidence": 0.13,
+   "probabilities": {
+    "c3e88": 0.42,
+    "c3e85": 0.27,
+    "c3e91": 0.31
+   }
+  }
+ },
+ {
+  "id": "g8t6r447",
+  "row": 447,
+  "fingerprint": "b0ccbfb501f8bbbae56d",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 8,
+   "turn": 6,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 4,
+    "maxMana": 3,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 6,
+    "deckCount": 22,
+    "board": [
+     {
+      "entityId": 79,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 80,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 67,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 97,
+      "cardId": "CORE_GIL_558",
+      "name": "Swamp Leech",
+      "text": "<b>Lifesteal</b>",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 98,
+      "cardId": "TTN_906",
+      "name": "X-21 Repairbot",
+      "text": "<b>Deathrattle:</b> Return any Mechs <b>Magnetized</b> to this to your hand.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 50,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 55,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 76,
+      "cardId": "BT_300",
+      "name": "Hand of Gul'dan",
+      "text": "When you play\nor discard this,\ndraw 3 cards.",
+      "baseCost": 6,
+      "COST": 6,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 59,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 61,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 65,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 3,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 7,
+    "deckCount": 31,
+    "board": [
+     {
+      "entityId": 77,
+      "cardId": "HERO_01am_Garrosh",
+      "name": "Onslaught Garrosh",
+      "baseHealth": 30,
+      "HEALTH": 40,
+      "ARMOR": 1,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 78,
+      "cardId": "HERO_01dbp",
+      "name": "Armor Up!",
+      "text": "<b>Hero Power</b>\nGain $d2 Armor.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     }
+    ]
+   },
+   "optionsId": 13,
+   "fingerprint": "22ff68c79cc5918b5a77",
+   "decisionFingerprint": "b0ccbfb501f8bbbae56d"
+  },
+  "options": [
+   {
+    "option": 1,
+    "entityId": 50,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Boneweb Egg（2）",
+    "description": "Play Boneweb Egg from hand for 2 mana (minion 0/2). Text: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now."
+   },
+   {
+    "option": 2,
+    "entityId": 55,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Boneweb Egg（2）",
+    "description": "Play Boneweb Egg from hand for 2 mana (minion 0/2). Text: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now."
+   },
+   {
+    "option": 3,
+    "entityId": 59,
+    "type": "POWER",
+    "id": "o3",
+    "label": "打出 Soul Barrage（4）",
+    "description": "Play Soul Barrage from hand for 4 mana (spell). Text: \"When you play or discard this, deal $5 damage randomly split among all enemies.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now."
+   },
+   {
+    "option": 4,
+    "entityId": 61,
+    "type": "POWER",
+    "id": "o4",
+    "label": "打出 Duke of Below（4）",
+    "description": "Play Duke of Below from hand for 4 mana (minion 2/2). Text: \"Rush Has +2/+2 for each card you've discarded this game.\" Your board is 3/7; 4 space(s) free. Role: rush."
+   },
+   {
+    "option": 5,
+    "entityId": 65,
+    "type": "POWER",
+    "id": "o5",
+    "label": "打出 Walking Dead（3）",
+    "description": "Play Walking Dead from hand for 3 mana (minion 2/5). Text: \"Taunt If you discard this minion, summon it.\" Your board is 3/7; 4 space(s) free. Role: discard fodder, taunt. No discard outlet is in your hand, so casting it is the only way to use it now."
+   }
+  ],
+  "then": {
+   "choice": "o3",
+   "plan": null,
+   "confidence": 0.11,
+   "probabilities": {
+    "o2": 0.09,
+    "o1": 0.2,
+    "o4": 0.28,
+    "o3": 0.28,
+    "o5": 0.14
+   }
+  }
+ },
+ {
+  "id": "g1t7r515",
+  "row": 515,
+  "fingerprint": "41b7fc1b33c9218cd311",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 1,
+   "turn": 7,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 4,
+    "maxMana": 4,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 4,
+    "deckCount": 21,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 81,
+      "cardId": "KAR_029",
+      "name": "Runic Egg",
+      "text": "<b>Deathrattle:</b> Draw a card.",
+      "baseCost": 1,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 56,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "LOCATION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 91,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 52,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 4,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 55,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 45,
+      "cardId": "CATA_499",
+      "name": "Disposable Acolytes",
+      "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+      "baseCost": 2,
+      "COST": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 60,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 1,
+    "maxMana": 3,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 5,
+    "deckCount": 22,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 5,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 5,
+      "cardId": "CORE_RLK_121",
+      "name": "Acolyte of Death",
+      "text": "After a friendly Undead dies, draw a card.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 4,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 33,
+      "cardId": "RLK_061",
+      "name": "Battlefield Necromancer",
+      "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 94,
+      "cardId": "RLK_061t",
+      "name": "Risen Footman",
+      "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 19,
+   "fingerprint": "c5ba77a843bbaf769a5d",
+   "decisionFingerprint": "41b7fc1b33c9218cd311"
+  },
+  "options": [
+   {
+    "option": 1,
+    "entityId": 52,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Silverware Golem（3）",
+    "description": "Play Silverware Golem from hand for 3 mana (minion 3/4). Text: \"If you discard this minion, summon it.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now. Damage clock: the attacks still available this turn total 0 against the enemy hero's 25 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 2,
+    "entityId": 55,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Party Fiend（1）",
+    "description": "Play Party Fiend from hand for 1 mana (minion 1/1). Text: \"Battlecry: Summon two 1/1 Felbeasts. Deal 3 damage to your hero.\" Your board is 3/7; 4 space(s) free. Role: plain minion. Damage clock: the attacks still available this turn total 0 against the enemy hero's 25 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 3,
+    "entityId": 45,
+    "type": "POWER",
+    "id": "o3",
+    "label": "打出 Disposable Acolytes（2）",
+    "description": "Play Disposable Acolytes from hand for 2 mana (spell). Text: \"When you play or discard this, summon two random 1-Cost minions.\" You control 2 minion(s). Your board is 3/7; 4 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now. Damage clock: the attacks still available this turn total 0 against the enemy hero's 25 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 4,
+    "entityId": 60,
+    "type": "POWER",
+    "id": "o4",
+    "label": "打出 Walking Dead（3）",
+    "description": "Play Walking Dead from hand for 3 mana (minion 2/5). Text: \"Taunt If you discard this minion, summon it.\" Your board is 3/7; 4 space(s) free. Role: discard fodder, taunt. No discard outlet is in your hand, so casting it is the only way to use it now. Damage clock: the attacks still available this turn total 0 against the enemy hero's 25 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "id": "xtap",
+    "type": "POWER",
+    "entityId": 67,
+    "synthetic": true,
+    "label": "英雄技能 Life Tap",
+    "description": "Use hero power Life Tap for 2 mana. Text: \"Draw a card and take 2 damage.\". You have 4 mana; this leaves 2. Castable now but not after it: Silverware Golem (3); Walking Dead (3). Damage clock: the attacks still available this turn total 0 against the enemy hero's 25 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   }
+  ],
+  "then": {
+   "choice": "o3",
+   "plan": null,
+   "confidence": 0.23,
+   "probabilities": {
+    "o3": 0.43,
+    "o1": 0.21,
+    "o4": 0.13,
+    "o2": 0.23
+   }
+  }
+ },
+ {
+  "id": "g1t13r530",
+  "row": 530,
+  "fingerprint": "fa0ea53ee93ee840226b",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 1,
+   "turn": 13,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 7,
+    "maxMana": 7,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 11,
+    "board": [
+     {
+      "entityId": 35,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 0,
+      "CARDTYPE": "WEAPON",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "ATK": 4,
+      "HEALTH": 30,
+      "DAMAGE": 8,
+      "CARDTYPE": "HERO",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 81,
+      "cardId": "KAR_029",
+      "name": "Runic Egg",
+      "text": "<b>Deathrattle:</b> Draw a card.",
+      "baseCost": 1,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 52,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 4,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 42,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 38,
+      "cardId": "TIME_026",
+      "name": "Entropic Continuity",
+      "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 1,
+    "maxMana": 6,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 9,
+    "deckCount": 15,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 13,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     }
+    ]
+   },
+   "optionsId": 58,
+   "fingerprint": "9b4d06027732c03ec5f4",
+   "decisionFingerprint": "fa0ea53ee93ee840226b"
+  },
+  "options": [
+   {
+    "option": 1,
+    "entityId": 52,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Silverware Golem（3）",
+    "description": "Play Silverware Golem from hand for 3 mana (minion 3/4). Text: \"If you discard this minion, summon it.\" Your board is 1/7; 6 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now."
+   },
+   {
+    "option": 3,
+    "entityId": 38,
+    "type": "POWER",
+    "id": "o3",
+    "label": "打出 Entropic Continuity（1）",
+    "description": "Play Entropic Continuity from hand for 1 mana (spell). Text: \"Give your minions +1/+1. Shuffle 2 Shreds of Time into your deck.\" You control 1 minion(s). Role: buff. It would give +1 Attack to all 1 of your minions, raising this turn's minion damage from 0 to as much as 0."
+   },
+   {
+    "option": 5,
+    "entityId": 67,
+    "type": "POWER",
+    "id": "o5",
+    "label": "英雄技能 Life Tap",
+    "description": "Use hero power Life Tap for 2 mana. Text: \"Draw a card and take 2 damage.\". You have 7 mana; this leaves 5. It prices no card in your hand out of this turn."
+   }
+  ],
+  "then": {
+   "choice": "o1",
+   "plan": null,
+   "confidence": 0.51,
+   "probabilities": {
+    "o5": 0.13,
+    "o3": 0.2,
+    "o1": 0.67
+   }
+  }
+ },
+ {
+  "id": "g1t15r534",
+  "row": 534,
+  "fingerprint": "f8dc1291c4cbae92c057",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 1,
+   "turn": 15,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 8,
+    "maxMana": 8,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 2,
+    "deckCount": 8,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "ATK": 0,
+      "HEALTH": 30,
+      "DAMAGE": 13,
+      "CARDTYPE": "HERO",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 52,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 4,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 61,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 58,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "WEAPON"
+     }
+    ]
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 7,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 8,
+    "deckCount": 14,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 24,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 6,
+      "cardId": "RLK_958",
+      "name": "Skeletal Sidekick",
+      "text": "<b>Battlecry:</b> Give a friendly Undead +2 Attack.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 163,
+      "cardId": "RLK_118t3",
+      "name": "Menacing Zombie",
+      "text": "<b>Taunt</b>",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 164,
+      "cardId": "RLK_118t3",
+      "name": "Menacing Zombie",
+      "text": "<b>Taunt</b>",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 70,
+   "fingerprint": "458aa461e3e6af97e7de",
+   "decisionFingerprint": "f8dc1291c4cbae92c057"
+  },
+  "options": [
+   {
+    "option": 2,
+    "entityId": 58,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Chronoclaws（4）",
+    "description": "Play Chronoclaws from hand for 4 mana (weapon 4/3). Text: \"After your hero attacks, discard your highest Cost card.\" Your board is 1/7; 6 space(s) free. It would discard Boneweb Egg (discarding it: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\") (2 mana). Every card the discard can hit pays out when discarded, so the discard costs you no card. Role: discard outlet."
+   },
+   {
+    "option": 3,
+    "entityId": 67,
+    "type": "POWER",
+    "id": "o3",
+    "label": "英雄技能 Life Tap",
+    "description": "Use hero power Life Tap for 2 mana. Text: \"Draw a card and take 2 damage.\". You have 8 mana; this leaves 6. It prices no card in your hand out of this turn."
+   }
+  ],
+  "then": {
+   "choice": "o2",
+   "plan": null,
+   "confidence": 0.82,
+   "probabilities": {
+    "o2": 0.91,
+    "o3": 0.09
+   }
+  }
+ },
+ {
+  "id": "g2t7r560",
+  "row": 560,
+  "fingerprint": "c123d84bc889c3a19d3b",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 2,
+   "turn": 7,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 4,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 18,
+    "board": [
+     {
+      "entityId": 11,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 0,
+      "CARDTYPE": "WEAPON"
+     },
+     {
+      "entityId": 64,
+      "cardId": "HERO_07",
+      "name": "Gul'dan",
+      "baseHealth": 30,
+      "ATK": 4,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_07bp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 27,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 90,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 94,
+      "cardId": "SCH_147t",
+      "name": "Boneweb Spider",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 32,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 8,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 20,
+      "cardId": "DMF_119",
+      "name": "Wicked Whispers",
+      "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 18,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 2,
+    "mana": 1,
+    "maxMana": 3,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 4,
+    "deckCount": 23,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 10,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 39,
+      "cardId": "RLK_061",
+      "name": "Battlefield Necromancer",
+      "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 101,
+      "cardId": "RLK_061t",
+      "name": "Risen Footman",
+      "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 22,
+   "fingerprint": "e876760cca0fba1f6c69",
+   "decisionFingerprint": "c123d84bc889c3a19d3b"
+  },
+  "options": [
+   {
+    "id": "o0",
+    "type": "END_TURN",
+    "option": 0,
+    "label": "結束回合",
+    "description": "End the turn."
+   },
+   {
+    "option": 1,
+    "entityId": 64,
+    "type": "POWER",
+    "id": "o1t0",
+    "targetId": 101,
+    "label": "攻擊：Gul'dan → Risen Footman",
+    "description": "Attack with your hero 4/30. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\". Your equipped Chronoclaws then triggers: \"After your hero attacks, discard your highest Cost card.\". It would discard Soul Barrage (discarding it: \"When you play or discard this, deal $5 damage randomly split among all enemies.\") (4 mana). Every card the discard can hit pays out when discarded, so the discard costs you no card."
+   },
+   {
+    "option": 2,
+    "entityId": 27,
+    "type": "POWER",
+    "id": "o2t0",
+    "targetId": 101,
+    "label": "攻擊：Platysaur → Risen Footman",
+    "description": "Attack with your Platysaur 1/2. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\"."
+   },
+   {
+    "option": 3,
+    "entityId": 90,
+    "type": "POWER",
+    "id": "o3t0",
+    "targetId": 101,
+    "label": "攻擊：Walking Dead → Risen Footman",
+    "description": "Attack with your Walking Dead 2/3. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\"."
+   },
+   {
+    "option": 4,
+    "entityId": 94,
+    "type": "POWER",
+    "id": "o4t0",
+    "targetId": 101,
+    "label": "攻擊：Boneweb Spider → Risen Footman",
+    "description": "Attack with your Boneweb Spider 2/1. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 32,
+    "type": "POWER",
+    "id": "o5t0",
+    "targetId": 101,
+    "label": "攻擊：Ocular Occultist → Risen Footman",
+    "description": "Attack with your Ocular Occultist 3/6. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\"."
+   }
+  ],
+  "then": {
+   "choice": "o5t0",
+   "plan": "Plan of 1 step(s), carried out in this order: 1) Ocular Occultist 3/6 attacks Risen Footman 1/3: Risen Footman dies; your Ocular Occultist survives at 3/5. Result: enemy hero 20 -> 20 Health. Enemy minions killed: Risen Footman (1 Attack). Your minions lost: none. Their board can then attack for 2 next turn, against your 30 Health behind 8 Health of Taunt; before this plan it was 3. Still able to attack afterwards: your hero, Platysaur, Walking Dead, Boneweb Spider. Cards and mana not used by this plan stay available afterwards (0 mana left).",
+   "confidence": 0.22,
+   "probabilities": {
+    "p2": 0.1,
+    "p5": 0.04,
+    "p4": 0.33999999999999997,
+    "o0": 0.19,
+    "p1": 0.28,
+    "p3": 0.05
+   }
+  }
+ },
+ {
+  "id": "g3t7r586",
+  "row": 586,
+  "fingerprint": "fa30cfb7e66aa34f4639",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 3,
+   "turn": 7,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "mana": 1,
+    "maxMana": 4,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 6,
+    "deckCount": 19,
+    "board": [
+     {
+      "entityId": 68,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 7,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 69,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 13,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 8,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "LOCATION",
+      "EXHAUSTED": 1,
+      "LOCATION_ACTION_COOLDOWN": 0
+     },
+     {
+      "entityId": 6,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 105,
+      "cardId": "SCH_147t",
+      "name": "Boneweb Spider",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 1,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 106,
+      "cardId": "SCH_147t",
+      "name": "Boneweb Spider",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 1,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 4,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 4,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 23,
+      "cardId": "BT_300",
+      "name": "Hand of Gul'dan",
+      "text": "When you play\nor discard this,\ndraw 3 cards.",
+      "baseCost": 6,
+      "COST": 6,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 22,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 6,
+      "HEALTH": 6,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 16,
+      "cardId": "TIME_026",
+      "name": "Entropic Continuity",
+      "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 14,
+      "cardId": "DMF_119",
+      "name": "Wicked Whispers",
+      "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 25,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 6,
+      "HEALTH": 6,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 2,
+    "mana": 0,
+    "maxMana": 3,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 4,
+    "deckCount": 25,
+    "board": [
+     {
+      "entityId": 70,
+      "cardId": "HERO_04a",
+      "name": "Lady Liadrin",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 86,
+      "cardId": "EDR_445p",
+      "name": "Blessing of the Dragon",
+      "text": "[x]Shuffle two Emerald\nPortals into your deck.\n<i>(Your Portals summon\n<b>",
+      "baseCost": 1,
+      "COST": 1,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 85,
+      "cardId": "ULD_217",
+      "name": "Micro Mummy",
+      "text": "[x]<b>Reborn</b>\nAt the end of your turn, give\nanother random friendly\nminion +1 Attack.",
+      "baseCost": 2,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 1,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 52,
+      "cardId": "WW_344",
+      "name": "Hi Ho Silverwing",
+      "text": "<b>Divine Shield</b>\n<b>Deathrattle:</b> Draw a\nHoly spell.",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 2,
+      "ATK": 4,
+      "HEALTH": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "DIVINE_SHIELD": 1,
+      "EXHAUSTED": 1,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 100,
+      "cardId": "BAR_063",
+      "name": "Lushwater Scout",
+      "text": "After you summon a Murloc, give it +1 Attack and <b>Rush</b>.",
+      "baseCost": 2,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 2,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 21,
+   "fingerprint": "9e2e2038a68aaa8b9cde",
+   "decisionFingerprint": "fa30cfb7e66aa34f4639"
+  },
+  "options": [
+   {
+    "option": 1,
+    "entityId": 16,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Entropic Continuity（1）",
+    "description": "Play Entropic Continuity from hand for 1 mana (spell). Text: \"Give your minions +1/+1. Shuffle 2 Shreds of Time into your deck.\" You control 4 minion(s). Role: buff. It would give +1 Attack to all 4 of your minions, raising this turn's minion damage from 0 to as much as 0."
+   },
+   {
+    "option": 2,
+    "entityId": 14,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Wicked Whispers（1）",
+    "description": "Play Wicked Whispers from hand for 1 mana (spell). Text: \"Discard your lowest Cost card. Give your minions +1/+1.\" You control 4 minion(s). Your board is 5/7; 2 space(s) free. It would discard Entropic Continuity (nothing happens when it is discarded; the card is simply lost) (1 mana). Role: discard outlet, buff. It would give +1 Attack to all 4 of your minions, raising this turn's minion damage from 0 to as much as 0."
+   }
+  ],
+  "then": {
+   "choice": "o2",
+   "plan": null,
+   "confidence": 0.08,
+   "probabilities": {
+    "o1": 0.46,
+    "o2": 0.54
+   }
+  }
+ },
+ {
+  "id": "g4t7r616",
+  "row": 616,
+  "fingerprint": "8d58222e5091ac69a4c8",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 4,
+   "turn": 7,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 4,
+    "maxMana": 4,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 8,
+    "deckCount": 16,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 2,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 34,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 54,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 59,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "LOCATION",
+      "EXHAUSTED": 1,
+      "LOCATION_ACTION_COOLDOWN": 0
+     },
+     {
+      "entityId": 101,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "DAMAGE": 3,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 44,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 6,
+      "HEALTH": 6,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 51,
+      "cardId": "DMF_119",
+      "name": "Wicked Whispers",
+      "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 36,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 60,
+      "cardId": "DMF_119",
+      "name": "Wicked Whispers",
+      "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 41,
+      "cardId": "TIME_026",
+      "name": "Entropic Continuity",
+      "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 58,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 57,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 7,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 40,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 8,
+      "CARDTYPE": "SPELL"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 1,
+    "maxMana": 3,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 4,
+    "deckCount": 23,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 9,
+      "cardId": "RLK_061",
+      "name": "Battlefield Necromancer",
+      "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 104,
+      "cardId": "RLK_061t",
+      "name": "Risen Footman",
+      "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 90,
+      "cardId": "RLK_061t",
+      "name": "Risen Footman",
+      "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 11,
+      "cardId": "RLK_061",
+      "name": "Battlefield Necromancer",
+      "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 20,
+   "fingerprint": "1c4ae30792715a1646b5",
+   "decisionFingerprint": "8d58222e5091ac69a4c8"
+  },
+  "options": [
+   {
+    "option": 2,
+    "entityId": 44,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Duke of Below（4）",
+    "description": "Play Duke of Below from hand for 4 mana (minion 6/6). Text: \"Rush Has +2/+2 for each card you've discarded this game.\" Your board is 4/7; 3 space(s) free. Role: rush. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 5,
+    "entityId": 41,
+    "type": "POWER",
+    "id": "o5",
+    "label": "打出 Entropic Continuity（1）",
+    "description": "Play Entropic Continuity from hand for 1 mana (spell). Text: \"Give your minions +1/+1. Shuffle 2 Shreds of Time into your deck.\" You control 3 minion(s). Role: buff. It would give +1 Attack to all 3 of your minions, raising this turn's minion damage from 0 to as much as 1 -- the 1 minion(s) at 0 Attack can attack once buffed, unless summoning sick. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 6,
+    "entityId": 58,
+    "type": "POWER",
+    "id": "o6",
+    "label": "打出 Party Fiend（1）",
+    "description": "Play Party Fiend from hand for 1 mana (minion 1/1). Text: \"Battlecry: Summon two 1/1 Felbeasts. Deal 3 damage to your hero.\" Your board is 4/7; 3 space(s) free. Role: plain minion. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t0",
+    "targetId": 51,
+    "label": "打出 Ocular Occultist（3） → Wicked Whispers",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Wicked Whispers. It reads: \"Discard your lowest Cost card. Give your minions +1/+1.\". Nothing happens when this card is discarded; it is simply lost. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t1",
+    "targetId": 44,
+    "label": "打出 Ocular Occultist（3） → Duke of Below",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Duke of Below 6/6. It reads: \"Rush Has +2/+2 for each card you've discarded this game.\". Nothing happens when this card is discarded; it is simply lost. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t2",
+    "targetId": 36,
+    "label": "打出 Ocular Occultist（3） → Walking Dead",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Walking Dead 2/5. It reads: \"Taunt If you discard this minion, summon it.\". Discarding it triggers that text, so the card is not lost -- it pays out from the discard. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t3",
+    "targetId": 60,
+    "label": "打出 Ocular Occultist（3） → Wicked Whispers",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Wicked Whispers. It reads: \"Discard your lowest Cost card. Give your minions +1/+1.\". Nothing happens when this card is discarded; it is simply lost. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t4",
+    "targetId": 41,
+    "label": "打出 Ocular Occultist（3） → Entropic Continuity",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Entropic Continuity. It reads: \"Give your minions +1/+1. Shuffle 2 Shreds of Time into your deck.\". Nothing happens when this card is discarded; it is simply lost. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t5",
+    "targetId": 58,
+    "label": "打出 Ocular Occultist（3） → Party Fiend",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Party Fiend 1/1. It reads: \"Battlecry: Summon two 1/1 Felbeasts. Deal 3 damage to your hero.\". Nothing happens when this card is discarded; it is simply lost. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 57,
+    "type": "POWER",
+    "id": "o7t6",
+    "targetId": 40,
+    "label": "打出 Ocular Occultist（3） → Soul Barrage",
+    "description": "Play Ocular Occultist from hand for 3 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 4/7; 3 space(s) free. Role: discard outlet, taunt. Target: card in your hand Soul Barrage. It reads: \"When you play or discard this, deal $5 damage randomly split among all enemies.\". Discarding it triggers that text, so the card is not lost -- it pays out from the discard. Damage clock: the attacks still available this turn total 0 against the enemy hero's 30 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   }
+  ],
+  "then": {
+   "choice": "o7t2",
+   "plan": null,
+   "confidence": 0.34,
+   "probabilities": {
+    "o7t0": 0.07,
+    "o7t5": 0.02,
+    "o7t3": 0.01,
+    "o2": 0.19,
+    "o7t4": 0.01,
+    "o7t1": 0.01,
+    "o6": 0.03,
+    "o7t6": 0.23,
+    "o5": 0.03,
+    "o7t2": 0.39999999999999997
+   }
+  }
+ },
+ {
+  "id": "g4t9r621",
+  "row": 621,
+  "fingerprint": "85dcb4427acf76b41cf3",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 4,
+   "turn": 9,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "mana": 5,
+    "maxMana": 5,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 6,
+    "deckCount": 13,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 2,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 34,
+      "cardId": "TLC_603",
+      "name": "Platysaur",
+      "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 54,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 1,
+      "HEALTH": 3,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 57,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 4,
+      "HEALTH": 7,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 106,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 44,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 12,
+      "HEALTH": 12,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 41,
+      "cardId": "TIME_026",
+      "name": "Entropic Continuity",
+      "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 40,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 37,
+      "cardId": "BT_300",
+      "name": "Hand of Gul'dan",
+      "text": "When you play\nor discard this,\ndraw 3 cards.",
+      "baseCost": 6,
+      "COST": 6,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 47,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 12,
+      "HEALTH": 12,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 63,
+      "cardId": "EX1_308",
+      "name": "Soulfire",
+      "text": "[x]Deal $4 damage.\nDiscard a random card.",
+      "baseCost": 1,
+      "COST": 1,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "SPELL"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 1,
+    "mana": 0,
+    "maxMana": 4,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 22,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_11",
+      "name": "The Lich King",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_11bp",
+      "name": "Ghoul Charge",
+      "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 20,
+      "cardId": "RLK_503",
+      "name": "Body Bagger",
+      "text": "<b>Battlecry</b>: Gain a <b>Corpse</b>.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 27,
+      "cardId": "CORE_RLK_121",
+      "name": "Acolyte of Death",
+      "text": "After a friendly Undead dies, draw a card.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 4,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 11,
+      "cardId": "RLK_061",
+      "name": "Battlefield Necromancer",
+      "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+      "baseCost": 2,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 115,
+      "cardId": "RLK_061t",
+      "name": "Risen Footman",
+      "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 31,
+   "fingerprint": "8dc55c80cf37c6b6f4f3",
+   "decisionFingerprint": "85dcb4427acf76b41cf3"
+  },
+  "options": [
+   {
+    "option": 1,
+    "entityId": 44,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Duke of Below（4）",
+    "description": "Play Duke of Below from hand for 4 mana (minion 12/12). Text: \"Rush Has +2/+2 for each card you've discarded this game.\" Your board is 4/7; 3 space(s) free. Role: rush."
+   },
+   {
+    "option": 2,
+    "entityId": 41,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Entropic Continuity（1）",
+    "description": "Play Entropic Continuity from hand for 1 mana (spell). Text: \"Give your minions +1/+1. Shuffle 2 Shreds of Time into your deck.\" You control 4 minion(s). Role: buff. It would give +1 Attack to all 4 of your minions, raising this turn's minion damage from 0 to as much as 0."
+   },
+   {
+    "option": 3,
+    "entityId": 40,
+    "type": "POWER",
+    "id": "o3",
+    "label": "打出 Soul Barrage（4）",
+    "description": "Play Soul Barrage from hand for 4 mana (spell). Text: \"When you play or discard this, deal $5 damage randomly split among all enemies.\" Your board is 4/7; 3 space(s) free. Role: discard fodder. You also hold 1 discard outlet(s) -- Soulfire -- and each would trigger this card's discard text without spending its 4 mana."
+   },
+   {
+    "option": 4,
+    "entityId": 47,
+    "type": "POWER",
+    "id": "o4",
+    "label": "打出 Duke of Below（4）",
+    "description": "Play Duke of Below from hand for 4 mana (minion 12/12). Text: \"Rush Has +2/+2 for each card you've discarded this game.\" Your board is 4/7; 3 space(s) free. Role: rush."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t2",
+    "targetId": 34,
+    "label": "打出 Soulfire（1） → Platysaur",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: friendly minion Platysaur 2/1. It reads: \"Battlecry: Draw a card. Deathrattle: Discard it.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t3",
+    "targetId": 54,
+    "label": "打出 Soulfire（1） → Boneweb Egg",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: friendly minion Boneweb Egg 1/2. It reads: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t4",
+    "targetId": 11,
+    "label": "打出 Soulfire（1） → Battlefield Necromancer",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: enemy minion Battlefield Necromancer 2/2. It reads: \"At the end of your turn, raise a Corpse as a 1/3 Risen Footman with Taunt.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t5",
+    "targetId": 57,
+    "label": "打出 Soulfire（1） → Ocular Occultist",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: friendly minion Ocular Occultist 4/7. It reads: \"Taunt Battlecry: Choose a card in your hand to discard.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t6",
+    "targetId": 106,
+    "label": "打出 Soulfire（1） → Walking Dead",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: friendly minion Walking Dead 3/6. It reads: \"Taunt If you discard this minion, summon it.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t7",
+    "targetId": 27,
+    "label": "打出 Soulfire（1） → Acolyte of Death",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: enemy minion Acolyte of Death 2/4. It reads: \"After a friendly Undead dies, draw a card.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t8",
+    "targetId": 20,
+    "label": "打出 Soulfire（1） → Body Bagger",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: enemy minion Body Bagger 1/3. It reads: \"Battlecry: Gain a Corpse.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 63,
+    "type": "POWER",
+    "id": "o5t9",
+    "targetId": 115,
+    "label": "打出 Soulfire（1） → Risen Footman",
+    "description": "Play Soulfire from hand for 1 mana (spell). Text: \"Deal $4 damage. Discard a random card.\" Your board is 4/7; 3 space(s) free. Role: discard outlet. Target: enemy minion Risen Footman 1/3. It reads: \"Taunt Doesn't leave a Corpse.\"."
+   }
+  ],
+  "then": {
+   "choice": "o5t4",
+   "plan": null,
+   "confidence": 0.21,
+   "probabilities": {
+    "o2": 0.03,
+    "o5t6": 0.02,
+    "o5t4": 0.27,
+    "o5t8": 0.11,
+    "o5t7": 0.1,
+    "o5t5": 0.01,
+    "o3": 0.07,
+    "o5t9": 0.08,
+    "o4": 0.05,
+    "o5t2": 0.05,
+    "o5t3": 0.05,
+    "o1": 0.16
+   }
+  }
+ },
+ {
+  "id": "g4t11r1187",
+  "row": 1187,
+  "fingerprint": "1c1e8effbbbaa9574937",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 4,
+   "turn": 11,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "heroClass": "WARLOCK",
+    "mana": 3,
+    "maxMana": 6,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 2,
+    "deckCount": 16,
+    "board": [
+     {
+      "entityId": 73,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 0,
+      "CARDTYPE": "WEAPON",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 80,
+      "cardId": "HERO_07f",
+      "name": "Nemesis Gul'dan",
+      "baseHealth": 30,
+      "ATK": 4,
+      "HEALTH": 30,
+      "DAMAGE": 16,
+      "CARDTYPE": "HERO",
+      "FROZEN": 1,
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 81,
+      "cardId": "HERO_07ebp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 114,
+      "cardId": "VAC_940t",
+      "name": "Felbeast",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 3,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 75,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 113,
+      "cardId": "VAC_940t",
+      "name": "Felbeast",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 3,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 116,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 5,
+      "HEALTH": 6,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 60,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 70,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 1,
+    "heroClass": "MAGE",
+    "mana": 0,
+    "maxMana": 5,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 6,
+    "deckCount": 31,
+    "board": [
+     {
+      "entityId": 78,
+      "cardId": "HERO_08c",
+      "name": "Fire Mage Jaina",
+      "baseHealth": 30,
+      "HEALTH": 40,
+      "DAMAGE": 15,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 79,
+      "cardId": "HERO_08bp",
+      "name": "Fireblast",
+      "text": "<b>Hero Power</b>\nDeal $1 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 15,
+      "cardId": "GIL_667",
+      "name": "Rotten Applebaum",
+      "text": "<b>Taunt</b>\n<b>Deathrattle:</b> Restore #6 Health to your hero.",
+      "baseCost": 5,
+      "baseAttack": 4,
+      "baseHealth": 6,
+      "COST": 5,
+      "ATK": 4,
+      "HEALTH": 6,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 29,
+   "fingerprint": "17db6d2c0ddf490b7a37",
+   "decisionFingerprint": "1c1e8effbbbaa9574937"
+  },
+  "options": [
+   {
+    "id": "o0",
+    "type": "END_TURN",
+    "option": 0,
+    "label": "結束回合",
+    "description": "End the turn."
+   },
+   {
+    "option": 3,
+    "entityId": 75,
+    "type": "POWER",
+    "id": "o3t0",
+    "targetId": 15,
+    "label": "攻擊：Party Fiend → Rotten Applebaum",
+    "description": "Attack with your Party Fiend 3/3. Target: enemy minion Rotten Applebaum 4/6. It reads: \"Taunt Deathrattle: Restore #6 Health to your hero.\"."
+   },
+   {
+    "option": 4,
+    "entityId": 113,
+    "type": "POWER",
+    "id": "o4t0",
+    "targetId": 15,
+    "label": "攻擊：Felbeast → Rotten Applebaum",
+    "description": "Attack with your Felbeast 3/3. Target: enemy minion Rotten Applebaum 4/6. It reads: \"Taunt Deathrattle: Restore #6 Health to your hero.\"."
+   },
+   {
+    "option": 5,
+    "entityId": 114,
+    "type": "POWER",
+    "id": "o5t0",
+    "targetId": 15,
+    "label": "攻擊：Felbeast → Rotten Applebaum",
+    "description": "Attack with your Felbeast 3/3. Target: enemy minion Rotten Applebaum 4/6. It reads: \"Taunt Deathrattle: Restore #6 Health to your hero.\"."
+   },
+   {
+    "option": 6,
+    "entityId": 116,
+    "type": "POWER",
+    "id": "o6t0",
+    "targetId": 15,
+    "label": "攻擊：Silverware Golem → Rotten Applebaum",
+    "description": "Attack with your Silverware Golem 5/6. Target: enemy minion Rotten Applebaum 4/6. It reads: \"Taunt Deathrattle: Restore #6 Health to your hero.\"."
+   },
+   {
+    "id": "xplay",
+    "type": "POWER",
+    "entityId": 60,
+    "synthetic": true,
+    "label": "打出 Boneweb Egg（2）",
+    "description": "Play Boneweb Egg from hand for 2 mana (minion 0/2). Text: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\" Your board is 4/7; 3 space(s) free. Role: discard fodder. No discard outlet is in your hand, so casting it is the only way to use it now."
+   }
+  ],
+  "then": {
+   "choice": "o6t0",
+   "plan": "Plan of 2 step(s), carried out in this order: 1) Silverware Golem 5/6 attacks Rotten Applebaum 4/6: it survives at 4/1; your Silverware Golem survives at 5/2. 2) Felbeast 3/3 attacks Rotten Applebaum 4/1: Rotten Applebaum dies; your Felbeast dies.    After this step the result is not predictable (Rotten Applebaum dies with a Deathrattle/Reborn), so the turn is re-planned from the real board. Result: enemy hero 25 -> 25 Health. Enemy minions killed: Rotten Applebaum (4 Attack). Your minions lost: Felbeast. Their board can then attack for 0 next turn, against your 14 Health; before this plan it was 4. Still able to attack afterwards: Party Fiend, Felbeast. Cards and mana not used by this plan stay available afterwards (3 mana left).",
+   "confidence": 0.09,
+   "probabilities": {
+    "o0": 0.17,
+    "p3": 0.26,
+    "p2": 0.19,
+    "p4": 0.1,
+    "p1": 0.28
+   }
+  }
+ },
+ {
+  "id": "g1t20r1242",
+  "row": 1242,
+  "fingerprint": "654963c1038f5d840c9a",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 1,
+   "turn": 20,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "heroClass": "WARLOCK",
+    "mana": 10,
+    "maxMana": 10,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 1,
+    "deckCount": 7,
+    "board": [
+     {
+      "entityId": 17,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 0,
+      "CARDTYPE": "WEAPON",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 37,
+      "cardId": "HERO_07",
+      "name": "Gul'dan",
+      "baseHealth": 30,
+      "ATK": 4,
+      "HEALTH": 30,
+      "DAMAGE": 21,
+      "CARDTYPE": "HERO",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 38,
+      "cardId": "HERO_07bp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 16,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "ATK": 1,
+      "HEALTH": 3,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 28,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 15,
+      "HEALTH": 15,
+      "DAMAGE": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0,
+      "RUSH": 1
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 19,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 1,
+    "heroClass": "PALADIN",
+    "mana": 0,
+    "maxMana": 10,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 2,
+    "deckCount": 11,
+    "board": [
+     {
+      "entityId": 73,
+      "cardId": "HERO_04",
+      "name": "Uther Lightbringer",
+      "baseHealth": 30,
+      "ATK": 0,
+      "HEALTH": 30,
+      "DAMAGE": 21,
+      "CARDTYPE": "HERO",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 74,
+      "cardId": "HERO_04bp",
+      "name": "Reinforce",
+      "text": "<b>Hero Power</b>\nSummon a {0} Silver Hand Recruit.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 191,
+      "cardId": "TIME_700t",
+      "name": "Chronological Drake",
+      "text": "<b>Taunt</b>",
+      "baseCost": 4,
+      "baseAttack": 3,
+      "baseHealth": 5,
+      "COST": 4,
+      "ATK": 7,
+      "HEALTH": 9,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "DIVINE_SHIELD": 1,
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 89,
+   "fingerprint": "1a614195a428a2a966b5",
+   "decisionFingerprint": "654963c1038f5d840c9a"
+  },
+  "options": [
+   {
+    "id": "o0",
+    "type": "END_TURN",
+    "option": 0,
+    "label": "結束回合",
+    "description": "End the turn."
+   },
+   {
+    "option": 1,
+    "entityId": 19,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Ocular Occultist（1）",
+    "description": "Play Ocular Occultist from hand for 1 mana (minion 3/6). Text: \"Taunt Battlecry: Choose a card in your hand to discard.\" Your board is 2/7; 5 space(s) free. Role: discard outlet, taunt."
+   },
+   {
+    "option": 2,
+    "entityId": 37,
+    "type": "POWER",
+    "id": "o2t0",
+    "targetId": 191,
+    "label": "攻擊：Gul'dan → Chronological Drake",
+    "description": "Attack with your hero 4/9. Target: enemy minion Chronological Drake 7/9. It reads: \"Taunt\". Your equipped Chronoclaws then triggers: \"After your hero attacks, discard your highest Cost card.\". It would discard Ocular Occultist (nothing happens when it is discarded; the card is simply lost) (1 mana)."
+   },
+   {
+    "option": 3,
+    "entityId": 38,
+    "type": "POWER",
+    "id": "o3",
+    "label": "英雄技能 Life Tap",
+    "description": "Use hero power Life Tap for 2 mana. Text: \"Draw a card and take 2 damage.\". You have 10 mana; this leaves 8. It prices no card in your hand out of this turn."
+   }
+  ],
+  "then": {
+   "choice": "o2t0",
+   "plan": "Plan of 1 step(s), carried out in this order: 1) Your hero 9 Health attacks Chronological Drake 7/9: its Divine Shield pops; your Gul'dan survives at 2 Health. Result: enemy hero 9 -> 9 Health. Enemy minions killed: none. Your minions lost: none. Their board can then attack for 7 next turn, against your 2 Health; before this plan it was 7. No attacker is left unused. Cards and mana not used by this plan stay available afterwards (10 mana left).",
+   "confidence": 0.26,
+   "probabilities": {
+    "p1": 0.44,
+    "o0": 0.09,
+    "o3": 0.12,
+    "o1": 0.35
+   }
+  }
+ },
+ {
+  "id": "g4t10r1308",
+  "row": 1308,
+  "fingerprint": "10e81fea145ebb723dcd",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 4,
+   "turn": 10,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "heroClass": "WARLOCK",
+    "mana": 5,
+    "maxMana": 5,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 7,
+    "deckCount": 10,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_07",
+      "name": "Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 8,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_07bp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 112,
+      "cardId": "RLK_650",
+      "name": "Lingering Zombie",
+      "text": "[x]<b>Deathrattle:</b> Summon a\n1/1 Disarmed Zombie with\n\"<b>Deathrattle:</b> Summon\na 1/1 Zombie.\"",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 113,
+      "cardId": "VAC_412",
+      "name": "Catch of the Day",
+      "text": "[x]<b>Rush</b>\n<b>Battlecry:</b> Summon a 2/1\nWorm for your opponent.",
+      "baseCost": 1,
+      "baseAttack": 3,
+      "baseHealth": 3,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 114,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 23,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 14,
+      "HEALTH": 14,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 16,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 4,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1
+     },
+     {
+      "entityId": 10,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 14,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 4,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 27,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "WEAPON"
+     },
+     {
+      "entityId": 31,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 14,
+      "HEALTH": 14,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 32,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 7,
+      "CARDTYPE": "WEAPON"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 2,
+    "heroClass": "MAGE",
+    "mana": 0,
+    "maxMana": 5,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 22,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_08c",
+      "name": "Fire Mage Jaina",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 14,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_08bp",
+      "name": "Fireblast",
+      "text": "<b>Hero Power</b>\nDeal $1 damage.",
+      "baseCost": 2,
+      "COST": 0,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 54,
+      "cardId": "SCH_350",
+      "name": "Wand Thief",
+      "text": "<b>Combo:</b> <b>Discover</b> a Mage spell.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 60,
+      "cardId": "SW_319",
+      "name": "Peasant",
+      "text": "At the start of your turn, draw a card.",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 56,
+      "cardId": "SCH_312",
+      "name": "Tour Guide",
+      "text": "<b>Battlecry:</b> Your next Hero Power costs (0).",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 34,
+   "fingerprint": "149e5f337e2ab1e63f13",
+   "decisionFingerprint": "10e81fea145ebb723dcd"
+  },
+  "options": [
+   {
+    "option": 3,
+    "entityId": 10,
+    "type": "POWER",
+    "id": "o3",
+    "label": "打出 Boneweb Egg（2）",
+    "description": "Play Boneweb Egg from hand for 2 mana (minion 0/2). Text: \"Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. You also hold 2 discard outlet(s) -- Chronoclaws; Chronoclaws -- and each would trigger this card's discard text without spending its 2 mana."
+   },
+   {
+    "option": 4,
+    "entityId": 14,
+    "type": "POWER",
+    "id": "o4",
+    "label": "打出 Silverware Golem（3）",
+    "description": "Play Silverware Golem from hand for 3 mana (minion 3/4). Text: \"If you discard this minion, summon it.\" Your board is 3/7; 4 space(s) free. Role: discard fodder. You also hold 2 discard outlet(s) -- Chronoclaws; Chronoclaws -- and each would trigger this card's discard text without spending its 3 mana."
+   },
+   {
+    "option": 8,
+    "entityId": 65,
+    "type": "POWER",
+    "id": "o8",
+    "label": "英雄技能 Life Tap",
+    "description": "Use hero power Life Tap for 2 mana. Text: \"Draw a card and take 2 damage.\". You have 5 mana; this leaves 3. Castable now but not after it: Duke of Below (4); Walking Dead (4); Chronoclaws (4); Duke of Below (4); Chronoclaws (4)."
+   },
+   {
+    "id": "xplay",
+    "type": "POWER",
+    "entityId": 23,
+    "synthetic": true,
+    "label": "打出 Duke of Below（4）",
+    "description": "Play Duke of Below from hand for 4 mana (minion 14/14). Text: \"Rush Has +2/+2 for each card you've discarded this game.\" Your board is 3/7; 4 space(s) free. Role: rush."
+   }
+  ],
+  "then": {
+   "choice": "o3",
+   "plan": null,
+   "confidence": 0.05,
+   "probabilities": {
+    "o4": 0.27,
+    "o8": 0.36,
+    "o3": 0.37
+   }
+  }
+ },
+ {
+  "id": "g4t14r1313",
+  "row": 1313,
+  "fingerprint": "264ade6823ffae52b4ce",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 4,
+   "turn": 14,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 1,
+    "heroClass": "WARLOCK",
+    "mana": 5,
+    "maxMana": 7,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 6,
+    "deckCount": 5,
+    "board": [
+     {
+      "entityId": 64,
+      "cardId": "HERO_07",
+      "name": "Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 18,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 65,
+      "cardId": "HERO_07bp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 127,
+      "cardId": "RLK_650t",
+      "name": "Disarmed Zombie",
+      "text": "<b>Deathrattle:</b> Summon a 1/1 Zombie.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 114,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "DAMAGE": 1,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 10,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 14,
+      "cardId": "KAR_205",
+      "name": "Silverware Golem",
+      "text": "If you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 4,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 4,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 30,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 129,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 2,
+      "HEALTH": 5,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 9,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 7,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 23,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 16,
+      "HEALTH": 16,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 27,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "WEAPON"
+     },
+     {
+      "entityId": 31,
+      "cardId": "CATA_493",
+      "name": "Duke of Below",
+      "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+      "baseCost": 4,
+      "baseAttack": 2,
+      "baseHealth": 2,
+      "COST": 4,
+      "ATK": 16,
+      "HEALTH": 16,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "RUSH": 1
+     },
+     {
+      "entityId": 32,
+      "cardId": "END_016",
+      "name": "Chronoclaws",
+      "text": "After your hero attacks, discard your highest Cost card.",
+      "baseCost": 4,
+      "baseAttack": 4,
+      "baseHealth": 3,
+      "COST": 4,
+      "ATK": 4,
+      "HEALTH": 3,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "WEAPON"
+     },
+     {
+      "entityId": 18,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+      "baseCost": 2,
+      "baseAttack": 0,
+      "baseHealth": 2,
+      "COST": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION"
+     },
+     {
+      "entityId": 4,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "LOCATION"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 2,
+    "heroClass": "MAGE",
+    "mana": 1,
+    "maxMana": 7,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 20,
+    "board": [
+     {
+      "entityId": 66,
+      "cardId": "HERO_08c",
+      "name": "Fire Mage Jaina",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 20,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 67,
+      "cardId": "HERO_08bp",
+      "name": "Fireblast",
+      "text": "<b>Hero Power</b>\nDeal $1 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 37,
+      "cardId": "CS3_024",
+      "name": "Taelan Fordring",
+      "text": "[x]<b><b>Taunt</b>, Divine Shield</b>\n<b>Deathrattle:</b> Draw your\nhighest Cost minion.",
+      "baseCost": 5,
+      "baseAttack": 3,
+      "baseHealth": 3,
+      "COST": 5,
+      "ATK": 3,
+      "HEALTH": 5,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "DIVINE_SHIELD": 1,
+      "EXHAUSTED": 1
+     },
+     {
+      "entityId": 48,
+      "cardId": "CORE_ULD_191",
+      "name": "Beaming Sidekick",
+      "text": "<b>Battlecry:</b> Give a friendly minion +2 Health.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 2,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 2,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 53,
+   "fingerprint": "cc2092f032e9b5860959",
+   "decisionFingerprint": "264ade6823ffae52b4ce"
+  },
+  "options": [
+   {
+    "id": "o0",
+    "type": "END_TURN",
+    "option": 0,
+    "label": "結束回合",
+    "description": "End the turn. Damage clock: ending the turn now gives up 0 damage that is still available against the enemy hero's 10 Health, and those attacks cannot be taken back. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 1,
+    "entityId": 27,
+    "type": "POWER",
+    "id": "o1",
+    "label": "打出 Chronoclaws（4）",
+    "description": "Play Chronoclaws from hand for 4 mana (weapon 4/3). Text: \"After your hero attacks, discard your highest Cost card.\" Your board is 7/7; 0 space(s) free, so nothing you summon this turn can enter play. The highest-cost cards remaining in hand tie at 4 mana -- Duke of Below (nothing happens when it is discarded; the card is simply lost); Duke of Below (nothing happens when it is discarded; the card is simply lost); Chronoclaws (nothing happens when it is discarded; the card is simply lost) -- so the discard picks one of them at random (1 in 3 each). Role: discard outlet. Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 2,
+    "entityId": 32,
+    "type": "POWER",
+    "id": "o2",
+    "label": "打出 Chronoclaws（4）",
+    "description": "Play Chronoclaws from hand for 4 mana (weapon 4/3). Text: \"After your hero attacks, discard your highest Cost card.\" Your board is 7/7; 0 space(s) free, so nothing you summon this turn can enter play. The highest-cost cards remaining in hand tie at 4 mana -- Duke of Below (nothing happens when it is discarded; the card is simply lost); Chronoclaws (nothing happens when it is discarded; the card is simply lost); Duke of Below (nothing happens when it is discarded; the card is simply lost) -- so the discard picks one of them at random (1 in 3 each). Role: discard outlet. Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 3,
+    "entityId": 114,
+    "type": "POWER",
+    "id": "o3t0",
+    "targetId": 37,
+    "label": "攻擊：Walking Dead → Taelan Fordring",
+    "description": "Attack with your Walking Dead 2/4. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 4,
+    "entityId": 14,
+    "type": "POWER",
+    "id": "o4t0",
+    "targetId": 37,
+    "label": "攻擊：Silverware Golem → Taelan Fordring",
+    "description": "Attack with your Silverware Golem 3/4. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 5,
+    "entityId": 127,
+    "type": "POWER",
+    "id": "o5t0",
+    "targetId": 37,
+    "label": "攻擊：Disarmed Zombie → Taelan Fordring",
+    "description": "Attack with your Disarmed Zombie 1/1. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 6,
+    "entityId": 30,
+    "type": "POWER",
+    "id": "o6t0",
+    "targetId": 37,
+    "label": "攻擊：Ocular Occultist → Taelan Fordring",
+    "description": "Attack with your Ocular Occultist 3/6. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 7,
+    "entityId": 129,
+    "type": "POWER",
+    "id": "o7t0",
+    "targetId": 37,
+    "label": "攻擊：Walking Dead → Taelan Fordring",
+    "description": "Attack with your Walking Dead 2/5. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   },
+   {
+    "option": 8,
+    "entityId": 9,
+    "type": "POWER",
+    "id": "o8t0",
+    "targetId": 37,
+    "label": "攻擊：Party Fiend → Taelan Fordring",
+    "description": "Attack with your Party Fiend 1/1. Target: enemy minion Taelan Fordring 3/5. It reads: \"Taunt, Divine Shield Deathrattle: Draw your highest Cost minion.\". Damage clock: the attacks still available this turn total 0 against the enemy hero's 10 Health. You also control 1 minion(s) with 0 Attack; they produce no attack option until something gives them Attack."
+   }
+  ],
+  "then": {
+   "choice": "o3t0",
+   "plan": "Plan of 3 step(s), carried out in this order: 1) Walking Dead 2/4 attacks Taelan Fordring 3/5: its Divine Shield pops; your Walking Dead survives at 2/1. 2) Silverware Golem 3/4 attacks Taelan Fordring 3/5: it survives at 3/2; your Silverware Golem survives at 3/1. 3) Ocular Occultist 3/6 attacks Taelan Fordring 3/2: Taelan Fordring dies; your Ocular Occultist survives at 3/3.    After this step the result is not predictable (Taelan Fordring dies with a Deathrattle/Reborn), so the turn is re-planned from the real board. Result: enemy hero 10 -> 10 Health. Enemy minions killed: Taelan Fordring (3 Attack). Your minions lost: none. Their board can then attack for 1 next turn, against your 12 Health behind 9 Health of Taunt; before this plan it was 4. Still able to attack afterwards: Disarmed Zombie, Walking Dead, Party Fiend. Cards and mana not used by this plan stay available afterwards (5 mana left).",
+   "confidence": 0.1,
+   "probabilities": {
+    "o2": 0.04,
+    "p2": 0.14,
+    "o1": 0.06,
+    "p4": 0.16,
+    "p3": 0.13,
+    "p5": 0.05,
+    "o0": 0.07,
+    "p6": 0.16,
+    "p1": 0.19
+   }
+  }
+ },
+ {
+  "id": "g6t8r1359",
+  "row": 1359,
+  "fingerprint": "3ede5f54d65c56b01c91",
+  "tags": [
+   "ruling"
+  ],
+  "state": {
+   "gameNumber": 6,
+   "turn": 8,
+   "step": "MAIN_ACTION",
+   "status": "RUNNING",
+   "me": {
+    "playerId": 2,
+    "heroClass": "WARLOCK",
+    "mana": 0,
+    "maxMana": 4,
+    "current": true,
+    "playstate": "PLAYING",
+    "handCount": 3,
+    "deckCount": 18,
+    "board": [
+     {
+      "entityId": 95,
+      "cardId": "HERO_07",
+      "name": "Gul'dan",
+      "baseHealth": 30,
+      "HEALTH": 30,
+      "DAMAGE": 5,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 96,
+      "cardId": "HERO_07bp",
+      "name": "Life Tap",
+      "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER"
+     },
+     {
+      "entityId": 123,
+      "cardId": "BT_727",
+      "name": "Soulbound Ashtongue",
+      "text": "Whenever this minion takes damage, also deal that amount to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 4,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 5,
+      "DAMAGE": 2,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 126,
+      "cardId": "RLK_532",
+      "name": "Walking Dead",
+      "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+      "baseCost": 3,
+      "baseAttack": 2,
+      "baseHealth": 5,
+      "COST": 3,
+      "ATK": 3,
+      "HEALTH": 6,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0,
+      "NUM_ATTACKS_THIS_TURN": 0
+     },
+     {
+      "entityId": 92,
+      "cardId": "CATA_490",
+      "name": "Ocular Occultist",
+      "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+      "baseCost": 3,
+      "baseAttack": 3,
+      "baseHealth": 6,
+      "COST": 3,
+      "ATK": 4,
+      "HEALTH": 7,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION",
+      "TAUNT": 1,
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 131,
+      "cardId": "OG_241",
+      "name": "Possessed Villager",
+      "text": "<b>Deathrattle:</b> Summon a 1/1 Shadowbeast.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 2,
+      "HEALTH": 2,
+      "ZONE_POSITION": 4,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 132,
+      "cardId": "CORE_EX1_011",
+      "name": "Voodoo Doctor",
+      "text": "<b>Battlecry:</b> Restore #2 Health.",
+      "baseCost": 1,
+      "baseAttack": 2,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 3,
+      "HEALTH": 2,
+      "ZONE_POSITION": 5,
+      "CARDTYPE": "MINION",
+      "EXHAUSTED": 0
+     },
+     {
+      "entityId": 68,
+      "cardId": "WON_103",
+      "name": "Chamber of Viscidus",
+      "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+      "baseCost": 3,
+      "baseHealth": 2,
+      "COST": 3,
+      "HEALTH": 2,
+      "ZONE_POSITION": 6,
+      "CARDTYPE": "LOCATION"
+     }
+    ],
+    "hand": [
+     {
+      "entityId": 85,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "ZONE_POSITION": 1,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 79,
+      "cardId": "TLC_451",
+      "name": "Cursed Catacombs",
+      "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+      "baseCost": 0,
+      "ZONE_POSITION": 2,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 88,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "ZONE_POSITION": 3,
+      "CARDTYPE": "MINION"
+     }
+    ],
+    "drawHazards": []
+   },
+   "opponent": {
+    "playerId": 1,
+    "heroClass": "DRUID",
+    "mana": 3,
+    "maxMana": 5,
+    "current": false,
+    "playstate": "PLAYING",
+    "handCount": 5,
+    "deckCount": 32,
+    "board": [
+     {
+      "entityId": 93,
+      "cardId": "HERO_06g",
+      "name": "Storm's Rage Malfurion",
+      "baseHealth": 30,
+      "ATK": 0,
+      "HEALTH": 40,
+      "DAMAGE": 3,
+      "ARMOR": 1,
+      "CARDTYPE": "HERO"
+     },
+     {
+      "entityId": 94,
+      "cardId": "HERO_06fbp",
+      "name": "Shapeshift",
+      "text": "<b>Hero Power</b>\n+$a1 Attack this turn.\n+$d1 Armor.",
+      "baseCost": 2,
+      "COST": 2,
+      "CARDTYPE": "HERO_POWER",
+      "EXHAUSTED": 1
+     }
+    ]
+   },
+   "optionsId": 22,
+   "choice": {
+    "id": 4,
+    "playerId": 2,
+    "type": "GENERAL",
+    "min": 1,
+    "max": 1,
+    "entities": [
+     {
+      "entityId": 142,
+      "cardId": "RLK_534",
+      "name": "Soul Barrage",
+      "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+      "baseCost": 4,
+      "COST": 4,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 145,
+      "cardId": "TLC_451",
+      "name": "Cursed Catacombs",
+      "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+      "baseCost": 0,
+      "CARDTYPE": "SPELL"
+     },
+     {
+      "entityId": 148,
+      "cardId": "VAC_940",
+      "name": "Party Fiend",
+      "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+      "baseCost": 1,
+      "baseAttack": 1,
+      "baseHealth": 1,
+      "COST": 1,
+      "ATK": 1,
+      "HEALTH": 1,
+      "CARDTYPE": "MINION"
+     }
+    ],
+    "revision": 84080,
+    "sourceId": 68,
+    "source": {
+     "entityId": 68,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "LOCATION"
+    }
+   },
+   "fingerprint": "39183d76edab0f4622f8",
+   "decisionFingerprint": "3ede5f54d65c56b01c91"
+  },
+  "options": [
+   {
+    "id": "c4e142",
+    "type": "CHOICE",
+    "choiceId": 4,
+    "entityId": 142,
+    "label": "選 Soul Barrage",
+    "description": "Choose Soul Barrage (spell, 4 mana). Its text: \"When you play or discard this, deal $5 damage randomly split among all enemies.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\". This pick cannot be cast this turn with the current mana."
+   },
+   {
+    "id": "c4e145",
+    "type": "CHOICE",
+    "choiceId": 4,
+    "entityId": 145,
+    "label": "選 Cursed Catacombs",
+    "description": "Choose Cursed Catacombs (spell, 0 mana). Its text: \"Discover another card from your deck. Make it Temporary.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\"."
+   },
+   {
+    "id": "c4e148",
+    "type": "CHOICE",
+    "choiceId": 4,
+    "entityId": 148,
+    "label": "選 Party Fiend",
+    "description": "Choose Party Fiend (minion, 1 mana 1/1). Its text: \"Battlecry: Summon two 1/1 Felbeasts. Deal 3 damage to your hero.\". You have 0 mana left this turn. Choice source: Chamber of Viscidus — \"Look at 3 cards in your hand and choose one to discard. Draw two cards.\". This pick cannot be cast this turn with the current mana."
+   }
+  ],
+  "then": {
+   "choice": "c4e145",
+   "plan": null,
+   "confidence": 0.74,
+   "probabilities": {
+    "c4e148": 0.08,
+    "c4e145": 0.83,
+    "c4e142": 0.09
+   }
+  }
  }
 ]

@@ -7,7 +7,7 @@
 //                           every labelled position; costs one Jev call per position that is
 //                           not forced, and saves the run to eval/runs/
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {spendFirst} from './policy.mjs';
+import {spendFirst,constrainActions} from './policy.mjs';
 import {prepare,askJev,resolve} from './choose.mjs';
 import {deckFor} from './deck.mjs';
 
@@ -35,6 +35,23 @@ summary('Jev at the time',set.map(p=>({id:p.id,p,tags:p.tags,pick:p.then.choice,
 const blocked=set.filter(p=>{const kept=new Set(spendFirst(p.state,raw(p)).map(a=>a.id));return !labels[p.id].best.some(id=>kept.has(id))});
 console.log(`\nspendFirst removes every best action in ${blocked.length} position(s)${blocked.length?':':''}`);
 for(const p of blocked)console.log(`  ${p.id}  best: ${labels[p.id].best.map(id=>nameOf(p,id)).join(' / ')}${labels[p.id].note?`  -- ${labels[p.id].note}`:''}`);
+
+// Free: what the current hard rules and planner (bridge: constrainActions, then prepare) leave
+// Jev on each position. forced = the rules pick alone; settled = every option left is best or
+// acceptable; open = a best action is left but so is a wrong one; blocked = no best action left.
+const rules=set.map(p=>{
+ const l=labels[p.id],menu=constrainActions(p.state,raw(p));
+ const pr=prepare(p.state,menu);
+ if(pr.forced||pr.lethal){const pick=(pr.forced??pr.lethal).action.id,pts=points(l,pick);
+  return {p,status:pts===1?'forced':pts?'forced~':'forced-wrong',pick}}
+ const ids=pr.acts.map(a=>a.id);
+ if(!ids.some(id=>l.best.includes(id)))return {p,status:'blocked',ids};
+ return {p,status:ids.every(id=>points(l,id)>0)?'settled':'open',ids};
+});
+const tally=k=>rules.filter(r=>r.status===k).length;
+console.log(`\nCurrent rules (free): forced right ${tally('forced')}, settled ${tally('settled')}, open ${tally('open')}, forced acceptable ${tally('forced~')}, forced wrong ${tally('forced-wrong')}, blocked ${tally('blocked')}`);
+for(const r of rules.filter(r=>!['forced','settled'].includes(r.status)))
+ console.log(`  ${r.status.padEnd(12)} ${r.p.id}  ${r.pick?`rules play ${nameOf(r.p,r.pick)}`:`left: ${r.ids.map(id=>nameOf(r.p,id)).join(' / ')}`}  | best: ${labels[r.p.id].best.map(id=>nameOf(r.p,id)).join(' / ')}`);
 
 if(live){
  const rows=[];

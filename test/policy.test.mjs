@@ -486,7 +486,19 @@ test('a choose-to-discard pick on a low board takes the card that summons itself
  const s=n=>({me:{mana:0,board:Array.from({length:n},(_,i)=>({entityId:200+i,CARDTYPE:'MINION'}))},
   opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},choice:{type:'GENERAL',source,entities}});
  assert.deepEqual(constrainActions(s(1),actions).map(a=>a.id),['c3e85']);
- assert.equal(constrainActions(s(3),actions).length,3,'a full enough board leaves it to Jev');
+ assert.deepEqual(constrainActions(s(3),actions).map(a=>a.id),['c3e85','c3e88'],
+  'a full enough board leaves the paying picks to Jev');
+});
+test('a discard pick throws away the card that pays, not a 0-cost Discover (game 21, turn 9)',()=>{
+ const E=[
+  {entityId:142,name:'Soul Barrage',CARDTYPE:'SPELL',COST:4,text:'When you play\nor discard this, deal $5 damage randomly split among all enemies.'},
+  {entityId:145,name:'Cursed Catacombs',CARDTYPE:'SPELL',text:'<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.'},
+  {entityId:148,name:'Party Fiend',CARDTYPE:'MINION',COST:1,text:'<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.'}];
+ const source={name:'Chamber of Viscidus',text:'Look at 3 cards in your hand and choose one to discard. Draw two cards.'};
+ const actions=E.map(c=>({id:`c4e${c.entityId}`,type:'CHOICE',entityId:c.entityId}));
+ const st={me:{mana:0,deckCount:15,hand:[],board:[1,2,3].map(i=>({entityId:200+i,CARDTYPE:'MINION'}))},
+  opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},choice:{type:'GENERAL',source,entities:E}};
+ assert.deepEqual(constrainActions(st,actions).map(a=>a.id),['c4e142']);
 });
 test('a discard pick clears a swarm with Soul Barrage, else weighs bodies against the buff in hand',()=>{
  const E=[
@@ -552,6 +564,19 @@ test('a card that draws goes before the cards that do not (game 10, turn 8: the 
  const h=[soul,buff];
  const s=game10(h,4,[HERO10(),{entityId:86,CARDTYPE:'MINION',ATK:1,HEALTH:1}]);
  assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85}]).map(a=>a.id),['end','o84']);
+});
+const DUKE=id=>({entityId:id,name:'Duke of Below',CARDTYPE:'MINION',COST:4,text:"Rush. Has +2/+2 for each card you've discarded this game."});
+test('Duke of Below that Life Tap would price out stays beside it (game 19, turn 10)',()=>{
+ const h=[DUKE(81),c10(82,2),c10(83,3)];
+ const ids=constrainActions(game10(h,5),menu10(h)).map(a=>a.id);
+ assert.ok(ids.includes('o81')&&ids.includes('tap'));
+});
+test('Duke of Below that the Soularium would price out stays beside it (game 19, turn 8)',()=>{
+ const soul={entityId:84,name:'The Soularium',CARDTYPE:'SPELL',COST:2,text:'Draw 3 cards. At the end of turn, discard them.'};
+ const buff={entityId:85,name:'Buff',CARDTYPE:'SPELL',COST:2,text:'Give your minions +1/+1.'};
+ const h=[soul,buff,DUKE(81)];
+ const s=game10(h,4,[HERO10(),{entityId:86,CARDTYPE:'MINION',ATK:1,HEALTH:1}]);
+ assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85},{id:'o81',entityId:81}]).map(a=>a.id),['end','o84','o81']);
 });
 test('a draw that is sure to pull a Shred of Time into lethal waits; one that might is left to Jev',()=>{
  const h=[c10(81,5)];
@@ -627,4 +652,25 @@ test('a random discard waits while Duke of Below can be cast (game 13)',()=>{
  const acts=[{id:'end',type:'END_TURN'},{id:'duke',type:'POWER',entityId:44},{id:'fire',type:'POWER',entityId:63,targetId:99}];
  assert.deepEqual(constrainActions(s,acts).map(a=>a.id),['end','duke']);
  assert.deepEqual(constrainActions(s,[acts[0],acts[2]]).map(a=>a.id),['end','fire'],'Duke not castable: Soulfire is free');
+});
+test('a playable card the weapon would discard is played before the swing (game 16 turn 20)',()=>{
+ const occ={entityId:19,CARDTYPE:'MINION',name:'Ocular Occultist',COST:1,text:'Taunt Battlecry: Choose a card in your hand to discard.'};
+ const state={me:{mana:10,hand:[occ],board:[
+  {entityId:17,CARDTYPE:'WEAPON',text:'After your hero attacks, discard your highest Cost card.',ATK:4,HEALTH:3},
+  {entityId:37,CARDTYPE:'HERO',ATK:4,HEALTH:30}]},
+  opponent:{board:[{entityId:73,CARDTYPE:'HERO',HEALTH:30,DAMAGE:21}]}};
+ const acts=[{id:'o0',type:'END_TURN'},{id:'o1',type:'POWER',entityId:19},{id:'face',type:'POWER',entityId:37,targetId:73}];
+ assert.deepEqual(constrainActions(state,acts).map(a=>a.id).includes('face'),false);
+});
+test('a small minion pops a Divine Shield before the armed hero swings (game 16 turn 20)',()=>{
+ const state={me:{mana:10,hand:[],board:[
+  {entityId:17,CARDTYPE:'WEAPON',text:'After your hero attacks, discard your highest Cost card.',ATK:4,HEALTH:3,DAMAGE:2},
+  {entityId:37,CARDTYPE:'HERO',ATK:4,HEALTH:30,DAMAGE:21},
+  {entityId:16,CARDTYPE:'MINION',name:'Boneweb Egg',ATK:1,HEALTH:3},
+  {entityId:28,CARDTYPE:'MINION',ATK:15,HEALTH:15,RUSH:1}]},
+  opponent:{board:[{entityId:73,CARDTYPE:'HERO',HEALTH:30,DAMAGE:21},{entityId:191,CARDTYPE:'MINION',ATK:7,HEALTH:9,TAUNT:1,DIVINE_SHIELD:1}]}};
+ const acts=[{id:'o0',type:'END_TURN'},{id:'h',type:'POWER',entityId:37,targetId:191},{id:'egg',type:'POWER',entityId:16,targetId:191},{id:'duke',type:'POWER',entityId:28,targetId:191}];
+ const ids=constrainActions(state,acts).map(a=>a.id);
+ assert.ok(ids.includes('egg'));
+ assert.ok(!ids.includes('duke'));
 });

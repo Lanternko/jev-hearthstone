@@ -67,6 +67,11 @@ export function fromState(state,actions=[]){
     b.maxAttacks=b.windfury?2:1;
   }
   const plays=new Set(actions.filter(a=>a.targetId==null&&(state.me.hand??[]).some(c=>c.entityId===a.entityId)).map(a=>a.entityId));
+  // Game 19 (2026-09-29), turn 14: on a full board the game offers no minion from hand, so Duke of
+  // Below, 16/16 Rush, was never searched; a 1/1 popping Taelan's shield would have made the room.
+  // A minion the mana covers is playable once a death frees a slot (moves() checks the room).
+  if(mine.filter(b=>b.type==='MINION').length+locations>=7)
+    for(const c of state.me.hand??[])if(c.CARDTYPE==='MINION'&&cost(c)<=num(state.me.mana))plays.add(c.entityId);
   const hp=(state.me.board??[]).find(c=>heroAttackGain(c)>0&&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
   return {mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
       atk:num(c.ATK??c.baseAttack),hp:num(c.HEALTH??c.baseHealth),raw:c,playable:plays.has(c.entityId)})),
@@ -100,10 +105,14 @@ export function cardModel(c){
   // Kayn's continuous aura is recalculated from the surviving board after every swing.
   if(c.type==='MINION'&&/^charge\s+all friendly attacks ignore taunt\.?$/i.test(c.text))return {kind:'minion'};
   // Equip itself is deterministic; Scythe's generated card makes its later swing terminal.
-  if(c.type==='WEAPON'&&(!c.text||/^after your hero attacks, get a void soul\.?$/i.test(c.text)))return {kind:'weapon'};
+  // Game 16 (2026-09-29), turn 16: Chronoclaws in hand was left out of the search, which then
+  // missed ten damage of lethal. Its discard is simulated on the swing, like an equipped one.
+  if(c.type==='WEAPON'&&(!c.text||/^after your hero attacks, get a void soul\.?$/i.test(c.text)||DISCARD_HIGH.test(c.text)))return {kind:'weapon'};
   if(c.type==='MINION'){
     let summon=null,selfHit=0;
-    for(const p of c.text.split(/(?<=\.)\s+/).filter(Boolean)){
+    // Duke of Below: the growth is already in the tags, so it is a statline, not an effect.
+    const text=c.text.replace(/\bhas \+\d+\/\+\d+ for each card you'?ve discarded this game\.?/i,'');
+    for(const p of text.split(/(?<=\.)\s+/).filter(Boolean)){
       const m=/\b(?:for|each|if|random|opponent)\b/i.test(p)?null:SUMMON.exec(p);
       if(m&&!summon){summon={n:COUNT[m[1].toLowerCase()],atk:Number(m[2]),hp:Number(m[3]),with:(m[4]??'').toLowerCase()};continue}
       const h=SELF_HIT.exec(p);

@@ -454,6 +454,12 @@ function discardPick(state,actions){
   const clear=picks.filter(a=>PAYS_ON_DISCARD.test(flat(card(a)?.text))&&SPLITS_DAMAGE.test(flat(card(a)?.text)));
   if(clear.length)return clear;
  }
+ // User ruling (2026-09-29, game 21, turn 9): Chamber of Viscidus showed Soul Barrage, Cursed
+ // Catacombs and Party Fiend on 0 mana, and Jev threw away Catacombs -- a 0-cost Discover it could
+ // still cast. 「應該棄靈魂彈幕。然後 0 費繼續找牌」: while some pick pays out when discarded, a pick
+ // that does not is kept in hand.
+ {const pays=a=>a.type!=='CHOICE'||PAYS_ON_DISCARD.test(flat(card(a)?.text))||bodiesOnDiscard(card(a));
+  if(picks.some(pays))actions=actions.filter(pays);}
  if(myMinions(state)>LOW_BOARD||myMinions(state)>=7)return actions;
  const foe=enemyHero(state);
  if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
@@ -515,7 +521,13 @@ function drawFirst(state,actions){
   const pick=pool.filter((_,i)=>m>>i&1);
   if(pick.reduce((s,c)=>s+costOf(c),0)===mana)pick.forEach(c=>exact.add(c.entityId));
  }
- const out=actions.filter(a=>!plays.some(c=>c.entityId===a.entityId)||exact.has(a.entityId));
+ // User ruling (2026-09-29, game 19, turn 10): Duke of Below at 14/14 was hidden on 5 mana because
+ // Duke plus Life Tap is 6. A card that counts our discards and that the tap would price out does
+ // not wait for it; a plain 3-drop on 4 mana still does (game 10, turn 4).
+ const after=mana-costOf(hp);
+ const grows=c=>!!c&&COUNTS_DISCARDS.test(flat(c.text))&&costOf(c)>after;
+ const out=actions.filter(a=>!plays.some(c=>c.entityId===a.entityId)||exact.has(a.entityId)
+  ||grows(hand.find(c=>c.entityId===a.entityId)));
  return out.length?out:actions;
 }
 // 「應該先用收藏器」: a card that draws goes before the cards that do not -- the draw may be
@@ -526,7 +538,10 @@ function drawCardFirst(state,actions){
  const held=a=>hand.find(c=>c.entityId===a.entityId);
  const draws=a=>{const c=held(a);return !!c&&drawCount(c)>0&&!isFodder(c)};
  if(!actions.some(draws))return actions;
- return actions.filter(a=>draws(a)||!held(a)||isCoin(held(a)));
+ // Game 19 (2026-09-29), turn 8: The Soularium went first on 4 mana and left Duke of Below, 8/8,
+ // unaffordable. A card the cheapest draw would price out stays on the menu beside it.
+ const after=Number(state.me?.mana??0)-Math.min(...actions.filter(draws).map(a=>costOf(held(a))));
+ return actions.filter(a=>draws(a)||!held(a)||isCoin(held(a))||costOf(held(a))>after);
 }
 // 「這回合的地標還沒 CD 好，不能點」: a location that is exhausted or cooling down is never clicked.
 const locationResting=state=>{
@@ -544,7 +559,14 @@ function weaponFirst(state,out){
  if(!hero||!board.some(c=>c.CARDTYPE==='WEAPON'))return out;
  const swings=out.filter(a=>a.entityId===hero.entityId&&isAttackAction(state,a));
  if(!swings.length)return out;
- return out.filter(a=>!isAttackAction(state,a)||a.entityId===hero.entityId);
+ // User ruling (2026-09-29, game 16, turn 20): 「遇到聖盾手下，應該先讓低攻擊的人先破盾」. The hero
+ // at 9 Health popped a 7/9 Chronological Drake's shield itself while a 1-Attack Boneweb Egg could
+ // have. A Divine Shield is popped by the smallest attacker, so a minion with less Attack than
+ // the hero may still swing into one.
+ const foe=new Map((state.opponent?.board??[]).map(c=>[c.entityId,c]));
+ const heroAtk=Number(hero.ATK??0);
+ const pops=a=>on(foe.get(a.targetId),'DIVINE_SHIELD')&&Number(board.find(c=>c.entityId===a.entityId)?.ATK??0)<heroAtk;
+ return out.filter(a=>!isAttackAction(state,a)||a.entityId===hero.entityId||pops(a));
 }
 // User ruling (2026-09-26, game 13, turn 4): 「應該棄掉靈魂彈幕，因為 325 本來就會在鴨嘴龍死掉後棄置」.
 // Platysaur's deathrattle discards the card it drew, which power.mjs marks doomed. Choosing that
@@ -621,6 +643,18 @@ export function constrainActions(state,actions){
   });
   if(!out.length)out=actions;
  }
+ // Game 16 (2026-09-29), turn 20: a discovered 1-mana Ocular Occultist sat in hand while the
+ // hero swung Chronoclaws, which discarded it. A card we can play and that gains nothing from the
+ // discard goes onto the board before the swing.
+ {const w=(state.me?.board??[]).find(c=>c.CARDTYPE==='WEAPON'&&DISCARDS_HIGHEST.test(flat(c.text)));
+  const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
+  const hand=state.me?.hand??[];
+  const top=Math.max(-Infinity,...hand.map(costOf));
+  const lost=hand.filter(c=>costOf(c)===top);
+  if(w&&hero&&lost.length&&lost.every(c=>!isFodder(c)&&costOf(c)<=Number(state.me?.mana??0))&&out.some(a=>lost.some(c=>c.entityId===a.entityId))){
+   const kept=out.filter(a=>!(a.entityId===hero.entityId&&a.targetId!=null));
+   if(kept.length)out=kept;
+  }}
  const dies=suicide(state);
  out=out.filter(a=>!dies(a));
  if(!out.length)out=actions;

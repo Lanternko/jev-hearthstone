@@ -189,3 +189,27 @@ test('no swing is spent chipping a minion that a later attacker kills alone',()=
   assert.ok(plans.length);
   assert.ok(!plans.some(chips));
 });
+test('Chronoclaws in hand counts toward lethal (game 16 turn 16)',()=>{
+ const m=(id,name)=>({entityId:id,CARDTYPE:'MINION',name,ATK:2,HEALTH:1,COST:1});
+ const state={me:{mana:6,maxMana:6,hand:[{entityId:17,CARDTYPE:'WEAPON',name:'Chronoclaws',text:'After your hero attacks, discard your highest Cost card.',ATK:4,HEALTH:3,COST:4}],
+  board:[{entityId:37,CARDTYPE:'HERO',HEALTH:30,DAMAGE:13},m(140,'A'),m(144,'B'),m(15,'C'),m(143,'D'),m(156,'E')]},
+  opponent:{board:[{entityId:73,CARDTYPE:'HERO',HEALTH:30,DAMAGE:20},{entityId:64,CARDTYPE:'MINION',ATK:1,HEALTH:1,TAUNT:1,DIVINE_SHIELD:1,EXHAUSTED:1}]}};
+ const acts=[{id:'o0',type:'END_TURN'},{id:'w',type:'POWER',entityId:17},
+  ...[140,144,15,143,156].flatMap(id=>[{id:`${id}f`,type:'POWER',entityId:id,targetId:73},{id:`${id}t`,type:'POWER',entityId:id,targetId:64}])];
+ assert.equal(search(state,acts).plans[0].score,1e4);
+});
+test('on a full board a 1/1 pops the shield to make room for Duke of Below (game 19 turn 14)',()=>{
+ const body=(id,name,ATK,HEALTH,x={})=>({entityId:id,CARDTYPE:'MINION',name,ATK,HEALTH,...x});
+ const mine=[body(127,'Disarmed Zombie',1,1,{text:'Deathrattle: Summon a 1/1 Zombie.'}),body(114,'Walking Dead',2,5,{DAMAGE:1,TAUNT:1}),
+  body(10,'Boneweb Egg',0,2,{text:'Deathrattle: Summon two 2/1 Spiders.'}),body(14,'Silverware Golem',3,4),
+  body(30,'Ocular Occultist',3,6,{TAUNT:1}),body(129,'Walking Dead',2,5,{TAUNT:1}),body(9,'Party Fiend',1,1)];
+ const duke={entityId:23,CARDTYPE:'MINION',name:'Duke of Below',COST:4,ATK:16,HEALTH:16,
+  text:"[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game."};
+ const state={me:{mana:5,hand:[duke],board:[{entityId:64,CARDTYPE:'HERO',HEALTH:30,DAMAGE:18},...mine]},
+  opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30,DAMAGE:20},
+   body(37,'Taelan Fordring',3,5,{TAUNT:1,DIVINE_SHIELD:1,text:'Deathrattle: Draw your highest Cost minion.'})]}};
+ // The game offers no play from hand on a full board, only the attacks into the Taunt.
+ const acts=[{id:'o0',type:'END_TURN'},...[127,114,14,30,129,9].map(id=>({id:`a${id}`,type:'POWER',entityId:id,targetId:37}))];
+ const best=search(state,acts).plans[0].steps.map(s=>[s.kind,s.id]);
+ assert.deepEqual(best.slice(0,3),[['attack',9],['play',23],['attack',23]]);
+});

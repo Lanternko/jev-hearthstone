@@ -135,7 +135,12 @@ export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searc
     if(stats.nodeLimit)break;
   }
   stats.depthLimit=stats.depthReached>=depth&&frontier.some(n=>moves(n.s).length);
-  const all=[...done.values()].sort((a,b)=>b.score-a.score);
+  // User ruling (2026-10-05, game 1 of the fourth small batch, turn 5): 「全解然後用公爵打臉」. Equal
+  // outcomes by score, the line that trades with the smallest attackers keeps the big one for face.
+  const oppIds=new Set(start.opp.filter(b=>b.type!=='HERO').map(b=>b.id));
+  const tradeAtk=n=>n.steps.reduce((t,m)=>t+(m.kind==='attack'&&oppIds.has(m.targetId)
+    ?(start.me.find(b=>b.id===m.id)?.atk??0):0),0);
+  const all=[...done.values()].sort((a,b)=>b.score-a.score||tradeAtk(a)-tradeAtk(b));
   const clean=all.filter(n=>!wastedChip(start,n.steps));
   return {start,plans:clean.length?clean:all,stats};
 }

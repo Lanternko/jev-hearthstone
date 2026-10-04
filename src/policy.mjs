@@ -866,6 +866,46 @@ function weaponFirst(state,out){
  const pops=a=>on(foe.get(a.targetId),'DIVINE_SHIELD')&&Number(board.find(c=>c.entityId===a.entityId)?.ATK??0)<heroAtk;
  return out.filter(a=>!isAttackAction(state,a)||a.entityId===hero.entityId||pops(a));
 }
+const hpNow=c=>Number(c?.HEALTH??0)-Number(c?.DAMAGE??0);
+// User ruling (2026-10-05, game 1 of the fourth small batch, turn 5): 「對方都是低攻擊手下，我們應該全解
+// 然後用公爵打臉」, and 「面對對方這種鋪場腳本，我們確實應該用最貪婪的方式優勢交換，因為對面沒有法術直傷」.
+// Five ready attackers faced three 1/3 Taunt Swarmguards; Jev tapped (0.29), then ended the turn
+// (0.29) with every attack unused, while search had the full clear on the menu. A free trade --
+// our minion kills theirs and lives -- is never worse than not attacking.
+export function freeTrades(state,actions){
+ const board=state.me?.board??[];
+ const foe=new Map((state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION').map(c=>[c.entityId,c]));
+ return actions.filter(a=>{
+  if(!isAttackAction(state,a))return false;
+  const t=foe.get(a.targetId),me=board.find(c=>c.entityId===a.entityId);
+  if(!t||me?.CARDTYPE!=='MINION'||on(t,'DIVINE_SHIELD')||on(t,'POISONOUS'))return false;
+  const kills=Number(me.ATK??0)>=hpNow(t)||on(me,'POISONOUS');
+  return kills&&(hpNow(me)>Number(t.ATK??0)||on(me,'DIVINE_SHIELD'));
+ });
+}
+// User ruling (same game, turn 6): 「應該拔刀解場，包住手下血量」. Chronoclaws in hand, 6 mana, two 1/3
+// Taunts left; the minions traded into them and the hero equipped late and swung face. At high
+// Health the hero takes a 1-Attack hit for almost nothing where a minion loses board value, so a
+// castable weapon goes on before minions trade into what the hero could kill. Chronoclaws' swing
+// throws away the highest-Cost card: only when that card pays for being discarded.
+function weaponBeforeTrades(state,out){
+ const board=state.me?.board??[],hand=state.me?.hand??[];
+ const hero=board.find(c=>c.CARDTYPE==='HERO');
+ if(!hero||board.some(c=>c.CARDTYPE==='WEAPON')||!heroCanSwing(state)||myHeroHp(state)<=15)return out;
+ const mana=Number(state.me?.mana??0);
+ const soak=(w,t)=>t.CARDTYPE==='MINION'&&Number(t.ATK??0)<=2&&!on(t,'DIVINE_SHIELD')&&!on(t,'POISONOUS')
+  &&!on(t,'STEALTH')&&hpNow(t)<=Number(w.ATK??0);
+ const pays=w=>{
+  if(!/discard your highest cost/i.test(flat(w.text)))return true;
+  const rest=hand.filter(c=>c!==w),top=Math.max(...rest.map(costOf));
+  return rest.length>0&&rest.filter(c=>costOf(c)===top).every(c=>/discard this/i.test(flat(c.text)));
+ };
+ const w=hand.find(c=>c.CARDTYPE==='WEAPON'&&costOf(c)<=mana&&out.some(a=>a.entityId===c.entityId)&&pays(c)
+  &&(state.opponent?.board??[]).some(t=>soak(c,t)));
+ if(!w)return out;
+ const targets=new Set((state.opponent?.board??[]).filter(t=>soak(w,t)).map(t=>t.entityId));
+ return out.filter(a=>!(isAttackAction(state,a)&&a.entityId!==hero.entityId&&targets.has(a.targetId)));
+}
 // User ruling (2026-09-26, game 13, turn 4): 「應該棄掉靈魂彈幕，因為 325 本來就會在鴨嘴龍死掉後棄置」.
 // Platysaur's deathrattle discards the card it drew, which power.mjs marks doomed. Choosing that
 // card for a discard spends the pick on a discard that was coming for free, so while another card
@@ -1066,6 +1106,14 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  // Decide WHETHER to draw before ordering it. Availability alone is not a draw intent.
  if(!isDH(state))prefer('buffBeforeTap',buffBeforeTap(state,out));
  for(const [rule,holds] of Object.entries(buffHolds(state,out,{admission})))prefer(rule,out.filter(a=>!holds(a)));
+ // Removing END_TURN stays hard (see the doc); the tap only waits when it would leave no mana.
+ if(freeTrades(state,out).length){
+  const kept=out.filter(a=>a.type!=='END_TURN');
+  if(kept.length)took('freeTradesEnd',kept);
+  const hp=heroPowerOf(state);
+  if(hp&&Number(state.me?.mana??0)-costOf(hp)<1)prefer('freeTradesTap',out.filter(a=>a.entityId!==hp.entityId));
+ }
+ if(!isDH(state))prefer('weaponBeforeTrades',weaponBeforeTrades(state,out));
  if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,out);
   trace.fodderRelease=released;
   trace.ruleReleases=releases;

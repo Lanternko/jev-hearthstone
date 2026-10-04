@@ -621,9 +621,9 @@ test('the armed hero swings before the minions trade (game 11, turn 4)',()=>{
   opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30},{entityId:101,CARDTYPE:'MINION',ATK:1,HEALTH:3,TAUNT:1}]}});
  const acts=[{id:'end',type:'END_TURN'},{id:'occ',entityId:32,targetId:101},{id:'hero',entityId:70,targetId:101}];
  assert.deepEqual(constrainActions(s([HERO10(),claws,occ]),acts).map(a=>a.id),['end','hero']);
- assert.deepEqual(constrainActions(s([HERO10(),claws,occ]),acts.slice(0,2)).map(a=>a.id),['end','occ'],'hero already swung');
- assert.deepEqual(constrainActions(s([HERO10(),occ]),acts.slice(0,2)).map(a=>a.id),['end','occ'],'no weapon');
- assert.deepEqual(constrainActions(s([HERO10(1),claws,occ]),acts).map(a=>a.id),['end','occ'],'a swing that kills us does not hold the minions back');
+ assert.deepEqual(constrainActions(s([HERO10(),claws,occ]),acts.slice(0,2)).map(a=>a.id),['occ'],'hero already swung; a free trade keeps the turn going');
+ assert.deepEqual(constrainActions(s([HERO10(),occ]),acts.slice(0,2)).map(a=>a.id),['occ'],'no weapon');
+ assert.deepEqual(constrainActions(s([HERO10(1),claws,occ]),acts).map(a=>a.id),['occ'],'a swing that kills us does not hold the minions back');
 });
 // Game 12 ruling (2026-09-26), turn 4: 「在手上同時有低語和連鎖的情況下，應該打連鎖。因為打完連鎖，最低費變成魔像」.
 test('Whispers waits while the card it would eat can be cast instead (game 12, turn 4)',()=>{

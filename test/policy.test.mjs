@@ -409,14 +409,15 @@ test('with no board, the Occultist discards a card that makes bodies',()=>{
  assert.equal(constrainActions(close,acts).length,3);
 });
 
-// 2026-09-25, game 6, turn 1: Soulfire's only offered target was our own hero -- the enemy face was
-// cut as "wasted burn" on an empty board. User ruling: 「要攻擊選擇對手的臉」.
+// 2026-09-25, game 6, turn 1: Soulfire's only offered target was our own hero. User ruling: 「要攻擊選擇對手的臉」.
+// Overruled for the empty board (2026-10-05, ranked game 1): 「砸臉完全沒用」 -- a 30-hp face is wasted burn
+// either way, and our own face never was a target.
 const soulfire={entityId:10,name:'Soulfire',CARDTYPE:'SPELL',COST:1,text:'Deal $4 damage. Discard a random card.'};
 const burnMenu=[{id:'o0',type:'END_TURN'},{id:'o1t0',type:'POWER',entityId:10,targetId:66},{id:'o1t1',type:'POWER',entityId:10,targetId:68}];
 const burnState=theirs=>({me:{mana:1,hand:[soulfire,{entityId:11,CARDTYPE:'MINION',COST:3}],board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},
  opponent:{board:[{entityId:68,CARDTYPE:'HERO',HEALTH:30},...theirs]}});
-test('burn never goes to our own face, and goes to theirs on an empty board',()=>{
- assert.deepEqual(constrainActions(burnState([]),burnMenu).map(a=>a.id),['o0','o1t1']);
+test('burn never goes to our own face, nor to a 30-hp face on an empty board',()=>{
+ assert.deepEqual(constrainActions(burnState([]),burnMenu).map(a=>a.id),['o0']);
 });
 test('burn to a non-lethal face is still cut while they have minions',()=>{
  const m=[...burnMenu,{id:'o1t2',type:'POWER',entityId:10,targetId:70}];
@@ -666,8 +667,10 @@ test('a choose-discard does not pick the card a deathrattle already discards (ga
 test('a random discard waits while Duke of Below can be cast (game 13)',()=>{
  const duke=c10(44,4,{name:'Duke of Below',text:"<b>Rush</b>\nGains +2/+2 for each card you've discarded this game."});
  const fire=c10(63,1,{name:'Soulfire',CARDTYPE:'SPELL',text:'Deal $4 damage. Discard a random card.'});
- const s=game10([duke,fire,c10(5,2)],5,[HERO10(),TAP10]);
- const acts=[{id:'end',type:'END_TURN'},{id:'duke',type:'POWER',entityId:44},{id:'fire',type:'POWER',entityId:63,targetId:99}];
+ // A 3/3 to burn: Soulfire to an empty board's 30-hp face is wasted on its own (2026-10-05).
+ const g=game10([duke,fire,c10(5,2)],5,[HERO10(),TAP10]);
+ const s={...g,opponent:{board:[...g.opponent.board,{entityId:98,CARDTYPE:'MINION',ATK:3,HEALTH:3}]}};
+ const acts=[{id:'end',type:'END_TURN'},{id:'duke',type:'POWER',entityId:44},{id:'fire',type:'POWER',entityId:63,targetId:98}];
  assert.deepEqual(constrainActions(s,acts).map(a=>a.id),['end','duke']);
  assert.deepEqual(constrainActions(s,[acts[0],acts[2]]).map(a=>a.id),['end','fire'],'Duke not castable: Soulfire is free');
 });

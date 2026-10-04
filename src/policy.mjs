@@ -187,13 +187,19 @@ function wastedBurn(state,actions){
  const mine=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
  const hand=state.me?.hand??[];
  const room=faceDamage(state,actions);
- const minions=(state.opponent?.board??[]).some(c=>c.CARDTYPE==='MINION');
  return a=>{
   const card=hand.find(c=>c.entityId===a.entityId);
   const m=card?.CARDTYPE==='SPELL'&&BURN.exec(flat(card.text));
   if(!m)return false;
   if(mine&&a.targetId===mine.entityId)return true;
-  if(!hero||a.targetId!==hero.entityId||!minions)return false;
+  // Same game: with the face ruled out, the menu left was Soulfire into our own 1/1s. Burn on our
+  // own minion is wasted too, unless its Deathrattle is the point (Boneweb Egg).
+  const own=(state.me?.board??[]).find(c=>c.entityId===a.targetId&&c.CARDTYPE==='MINION');
+  if(own)return !(Number(own.DEATHRATTLE)>0||/deathrattle/i.test(flat(own.text)));
+  // User ruling (2026-10-05, ranked game 1, turn 2): Soulfire to the face of a 30-hp hero with no
+  // enemy minions, a third of the hand fodder. 「砸臉完全沒用，而且手上的素材機率是 1/3 很低」. An empty
+  // enemy board no longer excuses face burn outside burn range.
+  if(!hero||a.targetId!==hero.entityId)return false;
   // User ruling (2026-09-25): 「滿手素材的時候，不失為一個增加場面的方式」. When the rest of the hand
   // is all discard fodder, a discarding burn to the face still builds a board; leave it to Jev.
   const rest=hand.filter(c=>c.entityId!==card.entityId);
@@ -664,7 +670,10 @@ export const whispersEatsPlayable=(state,card,actions)=>{
  // 「+3+3的收益就大於派對了，因為三點傷害是立即生效，能打臉和解怪。後期通常棄掉 1 費牌不會可惜」.
  // With three or more minions the buff outweighs the card it eats -- unless that card is itself
  // a board buff (game 12's Continuity), which gives the same +1/+1 and keeps Whispers for later.
- if(myMinions(state)>=3&&!givesBoardBuff(cast))return false;
+ // User ruling (2026-10-05, ranked game 1, turn 4): three 1/1s out, 2 mana, Whispers would eat
+ // The Soularium. 「我們有兩個水晶，實際上我們丟了 2 張牌，+3+3 並不劃算」 -- the exemption is for a
+ // 1-Cost card; a 2-Cost card that fits the mana is cast instead.
+ if(myMinions(state)>=3&&costOf(cast)<=1&&!givesBoardBuff(cast))return false;
  // Only when casting it hands Whispers a card worth eating next.
  const after={...state,me:{...state.me,hand:state.me.hand.filter(c=>c.entityId!==cast.entityId)}};
  const next=wouldDiscard(after,card);

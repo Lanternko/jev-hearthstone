@@ -14,6 +14,9 @@ import {fileURLToPath} from 'node:url';
 // games at an unchanged 26% failure rate is two fixes aimed at guesses; this file is what
 // replaces the guessing. runtime/gesture-report.mjs reads it.
 const GESTURES=fileURLToPath(new URL('../runtime/gestures.jsonl',import.meta.url));
+// One row per mulligan attempt, with the exact time of every step: eval/mulligan-timing.mjs
+// brackets MULLIGAN_LIVE from it (latest dead click vs earliest landed one).
+const MULLIGAN_TIMING=fileURLToPath(new URL('../runtime/mulligan-timing.jsonl',import.meta.url));
 async function record(rows){
   if(!rows.length)return;
   try{await appendFile(GESTURES,rows.map(r=>JSON.stringify(r)).join('\n')+'\n')}
@@ -83,7 +86,10 @@ const MULLIGAN_INTRO=6000;
 // (confirms at +15.3s, +14.3s and +16.6s died; +18.3s, +19.3s and +22s landed). The toss clicks sent at
 // +9s all died, the confirm-only retry then kept the whole hand -- Soul Barrage included. So the
 // wait is also anchored on the log's own offer time, not only on when this loop first saw it.
-const MULLIGAN_LIVE=20000;
+// 2026-10-04/05, two ranked batches: the first toss went out at +20s with the hero intro still
+// speaking, no banner and no confirm button (mulligan-g1-before-1791136820562.jpg); it died, the later
+// tosses landed. 20s was the edge, not a margin.
+const MULLIGAN_LIVE=26000;
 
 let mullSeen=null;
 async function onScreen(turn,ms=20000){
@@ -176,7 +182,9 @@ try{
     if(!(await win.geometry()).focused)await win.focus();
     busy=true;
     let gestures;
+    const timing=[],tossIds=[...(d.action.replace??[])];
     try{({gestures}=await run(steps,win,{beforeStep:d.action.type==='MULLIGAN'?async s=>{
+      timing.push({what:s.what,entityId:s.what.startsWith('toss')?tossIds.shift()??null:null,at:Date.now()});
       if(s===steps[0]||s.what==='confirm mulligan'){
        await mkdir(SHOTS,{recursive:true});
        await win.shot(`${SHOTS}mulligan-g${d.state.gameNumber}-${s.what==='confirm mulligan'?'preconfirm':'before'}-${Date.now()}.jpg`)
@@ -185,6 +193,14 @@ try{
     }:undefined}))}finally{busy=false}
     // During mulligan, only confirmation is retried; card selection is never replayed.
     const after=await settled(d.state,d.action,d.action.type==='MULLIGAN'?3000:DEAD_MS);
+    if(d.action.type==='MULLIGAN'){
+      const hero=b=>(b??[]).find(c=>c.CARDTYPE==='HERO')?.cardId??null,offeredAt=d.state.choice?.offeredAt??null;
+      await appendFile(MULLIGAN_TIMING,JSON.stringify({createdAt:new Date().toISOString(),gameNumber:d.state.gameNumber,
+        offeredAt,offerMs:offeredAt?clockToday(offeredAt):null,steps:timing,verdict:after?.verdict??'dead',
+        kept:after?.s?.state?.mulliganResult?.kept??null,me:hero(d.state.me?.board),foe:hero(d.state.opponent?.board)})+'
+')
+        .catch(e=>console.log(`${stamp()} mulligan timing not recorded: ${e.message}`));
+    }
     await record(gestures.map((g,i)=>({
       createdAt:new Date().toISOString(),
       dead:!after,                         // verdict is per action; with one gesture it is exact

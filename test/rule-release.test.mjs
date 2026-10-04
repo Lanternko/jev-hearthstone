@@ -62,7 +62,7 @@ test('bodyBeforeBuff gives way when Party Fiend\'s 3 self-damage loses to their 
 
 test('fodder-hold engine is frozen; current version adds the rule releases',async()=>{
  const previous=await loadDecisionEngine('silverfish-v1-fodder-hold-v1'),current=await loadDecisionEngine();
- assert.equal(current.version,'silverfish-v1-rule-release-v1');assert.notEqual(previous.constrainActions,current.constrainActions);
+ assert.equal(current.version,'silverfish-v1-veto-audit-v1');assert.notEqual(previous.constrainActions,current.constrainActions);
  assert.deepEqual(run(previous,fiend()).ids,['o1']);
  assert.ok(!run(previous,egg()).ids.includes('o2t1'));
  assert.deepEqual(run(current,fiend()).ids,['o1','o2']);

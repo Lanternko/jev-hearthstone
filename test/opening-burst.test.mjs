@@ -70,7 +70,7 @@ test('Occultist candidate keeps the buff and targets known summoning material',(
 
 test('default strategy has a distinct version and old execution-v2 uses the frozen pre-change source',async()=>{
  const current=await loadDecisionEngine(),old=await loadDecisionEngine('silverfish-v1-execution-v2');
- assert.equal(current.version,'silverfish-v1-rule-release-v1');
+ assert.equal(current.version,'silverfish-v1-veto-audit-v1');
  const c=pairedCases()[0],p=current.prepare(c.state,c.options,{planner:false});
  assert.equal(p.forced.action.id,'end');
  const before=old.prepare(c.state,c.options,{planner:false});

@@ -111,7 +111,7 @@ test('replacement swing damage counts the equipped weapon once, keeping only the
 
 test('validated-turn-intents engine is frozen; current version adds the veto',async()=>{
  const previous=await loadDecisionEngine('silverfish-v1-validated-turn-intents-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-rule-release-v1');assert.notEqual(previous.prepare,now.prepare);
+ assert.equal(now.version,'silverfish-v1-veto-audit-v1');assert.notEqual(previous.prepare,now.prepare);
  const c=fixture(),old=previous.prepare(c.state,previous.constrainActions(c.state,c.options));
  assert.equal(old.weaponReplacement,undefined);
  assert.ok(old.acts.some(a=>a.id==='o2'),'historical engine still offers the equip');

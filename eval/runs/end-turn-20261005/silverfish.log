@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "baseline": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.5445999999997184,
+      "fixtureMaxMedianMs": 2616.2910999999986
+    },
+    "candidate": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.816499999997177,
+      "fixtureMaxMedianMs": 2628.8079
+    }
+  },
+  "regression": {
+    "lostTactics": [],
+    "lostCombat": [],
+    "lostRulingAvailability": [],
+    "worseFallback": []
+  },
+  "report": "D:\\Projects\\jev-hearthstone\\eval\\runs\\end-turn-20261005\\silverfish\\report.md"
+}

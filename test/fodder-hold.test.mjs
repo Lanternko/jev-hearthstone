@@ -78,7 +78,7 @@ test('the penalty charges a held card only when it left the hand without being d
 
 test('weapon-replacement engine is frozen; current version adds the release',async()=>{
  const previous=await loadDecisionEngine('silverfish-v1-weapon-replacement-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-rule-release-v1');assert.notEqual(previous.prepare,now.prepare);
+ assert.equal(now.version,'silverfish-v1-veto-audit-v1');assert.notEqual(previous.prepare,now.prepare);
  const c=tauntSaves(),old=previous.prepare(c.state,previous.constrainActions(c.state,c.options));
  assert.ok(!(old.acts??[]).some(a=>a.id==='o1')&&old.forced?.action?.id!=='o1','historical engine still deletes the cast');
  const {p}=pipeline(c);

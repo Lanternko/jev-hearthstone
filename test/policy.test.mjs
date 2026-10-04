@@ -684,3 +684,37 @@ test('a small minion pops a Divine Shield before the armed hero swings (game 16 
  assert.ok(ids.includes('egg'));
  assert.ok(!ids.includes('duke'));
 });
+
+// User (2026-10-05) on the END_TURN removals that stayed hard after the veto audit.
+// #1: 「手上有侍僧或派對可能會考慮扣到舖場時才丟 大部分時候三隻怪以上就值得丟」.
+test('three bodies make whispers worth casting unless a summoner waits for a later turn',()=>{
+  const board=[body(1),body(2),body(3)];
+  const acts=h=>[...h.map(c=>({id:`o${c.entityId}`,entityId:c.entityId})),{id:'end',type:'END_TURN'}];
+  // The summoner does not fit beside Whispers and is not what Whispers would eat (a cheaper card is).
+  for(const extra of [{...ACOLYTES,COST:2},{...FIEND,COST:2}]){
+    const h=[WHISPERS,extra,{...FILLER(1),COST:1}];
+    const tight=hand(h,board);tight.me.mana=costOf1(WHISPERS);
+    assert.equal(whispersWorthCasting(tight,WHISPERS),false);
+  }
+  // Whispers eating the Acolytes is the payoff itself, so ending the turn is still the error.
+  const eat=hand([WHISPERS,ACOLYTES],board);eat.me.mana=1;
+  assert.equal(whispersWorthCasting(eat,WHISPERS),true);
+  const plain=hand([WHISPERS,{...FILLER(1),COST:3}],board);plain.me.mana=1;
+  assert.equal(whispersWorthCasting(plain,WHISPERS),true);
+  assert.ok(!constrainActions(plain,acts([WHISPERS])).some(a=>a.id==='end'));
+});
+const costOf1=c=>c.COST;
+// #2: 「2有時候會扣直傷 或蛋等配合 但大部分都要盡量舖場」.
+test('mustSpend keeps END_TURN when only burn or an Egg is left to spend',()=>{
+  const BOLT={entityId:30,name:'Bolt',CARDTYPE:'SPELL',COST:1,text:'Deal $3 damage.'};
+  const st=h=>{const s=hand(h,[]);s.me.mana=3;s.opponent={board:[{entityId:90,CARDTYPE:'HERO',HEALTH:30}]};return s};
+  const menu=h=>[...h.map(c=>({id:`o${c.entityId}`,entityId:c.entityId,...(c===BOLT?{targetId:90}:{})})),{id:'end',type:'END_TURN'}];
+  assert.ok(spendFirst(st([BOLT]),menu([BOLT])).some(a=>a.id==='end'));
+  // The Egg is held only beside a discard outlet to pair it with; alone it is development.
+  assert.ok(!spendFirst(st([EGG]),menu([EGG])).some(a=>a.id==='end'));
+  const SOULFIRE={entityId:31,name:'Soulfire',CARDTYPE:'SPELL',COST:5,text:'Deal $4 damage. Discard a random card.'};
+  assert.ok(spendFirst(st([EGG,SOULFIRE]),menu([EGG])).some(a=>a.id==='end'));
+  // A body to develop is still spent first.
+  const dev=[BOLT,FILLER(1)];
+  assert.ok(!spendFirst(st(dev),menu(dev)).some(a=>a.id==='end'));
+});

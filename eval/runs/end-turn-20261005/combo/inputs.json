@@ -1,0 +1,4568 @@
+{
+  "cases": [
+    {
+      "id": "new50-game18-original-options",
+      "state": {
+        "gameNumber": 18,
+        "turn": 9,
+        "step": "MAIN_ACTION",
+        "status": "RUNNING",
+        "me": {
+          "playerId": 2,
+          "heroClass": "WARLOCK",
+          "mana": 5,
+          "maxMana": 5,
+          "current": true,
+          "playstate": "PLAYING",
+          "handCount": 4,
+          "deckCount": 22,
+          "board": [
+            {
+              "entityId": 70,
+              "cardId": "HERO_07",
+              "name": "Gul'dan",
+              "baseHealth": 30,
+              "HEALTH": 30,
+              "DAMAGE": 2,
+              "CARDTYPE": "HERO"
+            },
+            {
+              "entityId": 71,
+              "cardId": "HERO_07bp",
+              "name": "Life Tap",
+              "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+              "baseCost": 2,
+              "COST": 2,
+              "CARDTYPE": "HERO_POWER"
+            },
+            {
+              "entityId": 106,
+              "cardId": "RLK_532",
+              "name": "Walking Dead",
+              "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+              "baseCost": 3,
+              "baseAttack": 2,
+              "baseHealth": 5,
+              "COST": 3,
+              "ATK": 2,
+              "HEALTH": 5,
+              "DAMAGE": 4,
+              "ZONE_POSITION": 1,
+              "CARDTYPE": "MINION",
+              "TAUNT": 1,
+              "EXHAUSTED": 0,
+              "NUM_ATTACKS_THIS_TURN": 0
+            },
+            {
+              "entityId": 67,
+              "cardId": "CATA_493",
+              "name": "Duke of Below",
+              "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+              "baseCost": 4,
+              "baseAttack": 2,
+              "baseHealth": 2,
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 4,
+              "DAMAGE": 3,
+              "ZONE_POSITION": 2,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 0,
+              "NUM_ATTACKS_THIS_TURN": 0,
+              "RUSH": 1
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 59,
+              "cardId": "END_016",
+              "name": "Chronoclaws",
+              "text": "After your hero attacks, discard your highest Cost card.",
+              "baseCost": 4,
+              "baseAttack": 4,
+              "baseHealth": 3,
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "ZONE_POSITION": 1,
+              "CARDTYPE": "WEAPON"
+            },
+            {
+              "entityId": 52,
+              "cardId": "EX1_308",
+              "name": "Soulfire",
+              "text": "[x]Deal $4 damage.\nDiscard a random card.",
+              "baseCost": 1,
+              "COST": 1,
+              "ZONE_POSITION": 2,
+              "CARDTYPE": "SPELL"
+            },
+            {
+              "entityId": 48,
+              "cardId": "CATA_499",
+              "name": "Disposable Acolytes",
+              "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+              "baseCost": 2,
+              "COST": 2,
+              "ZONE_POSITION": 3,
+              "CARDTYPE": "SPELL"
+            },
+            {
+              "entityId": 57,
+              "cardId": "TIME_026",
+              "name": "Entropic Continuity",
+              "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+              "baseCost": 1,
+              "COST": 1,
+              "ZONE_POSITION": 4,
+              "CARDTYPE": "SPELL"
+            }
+          ],
+          "fatigue": 0,
+          "drawHazards": []
+        },
+        "opponent": {
+          "playerId": 1,
+          "heroClass": "PALADIN",
+          "mana": 0,
+          "maxMana": 4,
+          "current": false,
+          "playstate": "PLAYING",
+          "handCount": 3,
+          "deckCount": 32,
+          "board": [
+            {
+              "entityId": 68,
+              "cardId": "HERO_04",
+              "name": "Uther Lightbringer",
+              "baseHealth": 30,
+              "ATK": 0,
+              "HEALTH": 30,
+              "DAMAGE": 2,
+              "CARDTYPE": "HERO",
+              "EXHAUSTED": 1,
+              "NUM_ATTACKS_THIS_TURN": 1
+            },
+            {
+              "entityId": 83,
+              "cardId": "HERO_04bp2",
+              "name": "The Silver Hand",
+              "text": "<b>Hero Power</b>\nSummon two {0} Recruits.",
+              "baseCost": 2,
+              "COST": 2,
+              "CARDTYPE": "HERO_POWER",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 130,
+              "cardId": "CS2_091",
+              "name": "Light's Justice",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 4,
+              "COST": 1,
+              "ATK": 1,
+              "HEALTH": 4,
+              "DAMAGE": 1,
+              "CARDTYPE": "WEAPON",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 121,
+              "cardId": "CS2_101t5",
+              "name": "Silver Hand Recruit",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 1,
+              "COST": 1,
+              "ATK": 3,
+              "HEALTH": 1,
+              "ZONE_POSITION": 1,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 124,
+              "cardId": "CS2_101t5",
+              "name": "Silver Hand Recruit",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 1,
+              "COST": 1,
+              "ATK": 3,
+              "HEALTH": 1,
+              "ZONE_POSITION": 2,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 127,
+              "cardId": "CS2_101t8",
+              "name": "Silver Hand Recruit",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 1,
+              "COST": 1,
+              "ATK": 3,
+              "HEALTH": 1,
+              "ZONE_POSITION": 3,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 132,
+              "cardId": "CS2_101t8",
+              "name": "Silver Hand Recruit",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 1,
+              "COST": 1,
+              "ATK": 3,
+              "HEALTH": 1,
+              "ZONE_POSITION": 4,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 135,
+              "cardId": "CS2_101t",
+              "name": "Silver Hand Recruit",
+              "baseCost": 1,
+              "baseAttack": 1,
+              "baseHealth": 1,
+              "COST": 1,
+              "ATK": 3,
+              "HEALTH": 1,
+              "ZONE_POSITION": 5,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1
+            }
+          ],
+          "secretCount": 0,
+          "initialHealth": 30,
+          "publicPlays": [
+            {
+              "public": true,
+              "engineTurn": 2,
+              "entityId": 34,
+              "cardId": "SCH_312",
+              "name": "Tour Guide",
+              "CARDTYPE": "MINION",
+              "COST": 1,
+              "ATK": 1,
+              "HEALTH": 1,
+              "text": "<b>Battlecry:</b> Your next Hero Power costs (0)."
+            },
+            {
+              "public": true,
+              "engineTurn": 4,
+              "entityId": 79,
+              "cardId": "MEND_800",
+              "name": "Brash Battlemaster",
+              "CARDTYPE": "MINION",
+              "COST": 2,
+              "ATK": 2,
+              "HEALTH": 1,
+              "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+            },
+            {
+              "public": true,
+              "engineTurn": 6,
+              "entityId": 80,
+              "cardId": "MEND_800",
+              "name": "Brash Battlemaster",
+              "CARDTYPE": "MINION",
+              "COST": 2,
+              "ATK": 2,
+              "HEALTH": 1,
+              "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+            },
+            {
+              "public": true,
+              "engineTurn": 6,
+              "entityId": 6,
+              "cardId": "UNG_960",
+              "name": "Lost in the Jungle",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Summon two {0} Silver Hand Recruits."
+            },
+            {
+              "public": true,
+              "engineTurn": 8,
+              "entityId": 7,
+              "cardId": "CORE_GVG_061",
+              "name": "Muster for Battle",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "Summon three {0} Silver Hand Recruits. Equip a 1/4 Weapon."
+            },
+            {
+              "public": true,
+              "engineTurn": 8,
+              "entityId": 82,
+              "cardId": "GAME_005",
+              "name": "The Coin",
+              "CARDTYPE": "SPELL",
+              "COST": 0,
+              "text": "Gain 1 Mana Crystal this turn only."
+            }
+          ]
+        },
+        "optionsId": 30,
+        "mulliganResult": {
+          "choiceId": 2,
+          "kept": [
+            46
+          ],
+          "complete": true
+        },
+        "fingerprint": "e1eaa6c9a049a27b5233",
+        "decisionFingerprint": "55e1f0525e572f9e49f1"
+      },
+      "actions": [
+        {
+          "id": "o0",
+          "type": "END_TURN",
+          "option": 0
+        },
+        {
+          "option": 1,
+          "entityId": 59,
+          "type": "POWER",
+          "id": "o1"
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t0",
+          "targetId": 68
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t1",
+          "targetId": 70
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t2",
+          "targetId": 106
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t3",
+          "targetId": 67
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t4",
+          "targetId": 121
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t5",
+          "targetId": 124
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t6",
+          "targetId": 127
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t7",
+          "targetId": 132
+        },
+        {
+          "option": 2,
+          "entityId": 52,
+          "type": "POWER",
+          "id": "o2t8",
+          "targetId": 135
+        },
+        {
+          "option": 3,
+          "entityId": 48,
+          "type": "POWER",
+          "id": "o3"
+        },
+        {
+          "option": 4,
+          "entityId": 57,
+          "type": "POWER",
+          "id": "o4"
+        },
+        {
+          "option": 5,
+          "entityId": 71,
+          "type": "POWER",
+          "id": "o5"
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t0",
+          "targetId": 68
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t1",
+          "targetId": 121
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t2",
+          "targetId": 124
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t3",
+          "targetId": 127
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t4",
+          "targetId": 132
+        },
+        {
+          "option": 6,
+          "entityId": 106,
+          "type": "POWER",
+          "id": "o6t5",
+          "targetId": 135
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t0",
+          "targetId": 68
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t1",
+          "targetId": 121
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t2",
+          "targetId": 124
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t3",
+          "targetId": 127
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t4",
+          "targetId": 132
+        },
+        {
+          "option": 7,
+          "entityId": 67,
+          "type": "POWER",
+          "id": "o7t5",
+          "targetId": 135
+        }
+      ],
+      "source": {
+        "powerLog": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0018-Power.log",
+        "cutoffLocal": "04:07:06.1960000",
+        "method": "original log prefix; no synthetic action or future state"
+      },
+      "userRuling": {
+        "date": "2026-10-03",
+        "status": "user-confirmed",
+        "preferredLine": [
+          "Play Chronoclaws (4 mana)",
+          "Attack with hero; weapon discards the uniquely highest-cost Disposable Acolytes (2 mana card) without paying its cost",
+          "Observe two random 1-Cost summons and updated board",
+          "Play Entropic Continuity (1 mana)",
+          "Attack with eligible original minions after buff"
+        ],
+        "mana": {
+          "available": 5,
+          "weapon": 4,
+          "discardTrigger": 0,
+          "buff": 1,
+          "total": 5
+        },
+        "discardTargets": [
+          {
+            "entityId": 48,
+            "name": "Disposable Acolytes",
+            "cost": 2
+          }
+        ],
+        "alternatives": "Acolytes (2) then buff (1) is not the preferred user ruling for this position.",
+        "constraints": [
+          "Weapon triggers after hero attack, not merely after equip.",
+          "Recheck attack legality, damage to hero, board slots and any changed hand after weapon battlecry or attack effects.",
+          "Do not precompute random summoned identities or carry the original attack plan through the unknown summon.",
+          "Any highest-cost tie must be treated as random; this position has a unique 2-cost Acolytes above two 1-cost spells."
+        ],
+        "generalization": "Compare complete mana-feasible lines including free discard summons. Development can come from a weapon attack or discard activation, not just directly playing minions/spells."
+      },
+      "split": "observed-ruling",
+      "expectedFirst": 59,
+      "expectWeapon": true
+    },
+    {
+      "id": "direct/1/0/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/0/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/0/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/1/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/1/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/1/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/2/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/2/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/2/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/4/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/4/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/1/4/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 1 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/0/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/0/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/0/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/1/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/1/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/1/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/2/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/2/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/2/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/4/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/4/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/2/4/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 2 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/0/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/0/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/0/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/1/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/1/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/1/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/2/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/2/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/2/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/4/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 2,
+          "maxMana": 2,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/4/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 3,
+          "maxMana": 3,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "direct/3/4/3",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 4,
+          "maxMana": 4,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 3,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ],
+      "expectedFirst": 80
+    },
+    {
+      "id": "weapon/0",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 5,
+          "maxMana": 5,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 82,
+              "ZONE_POSITION": 3,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        },
+        {
+          "id": "c82",
+          "type": "POWER",
+          "entityId": 82
+        }
+      ],
+      "expectWeapon": true
+    },
+    {
+      "id": "weapon/1",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 5,
+          "maxMana": 5,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 82,
+              "ZONE_POSITION": 3,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        },
+        {
+          "id": "c82",
+          "type": "POWER",
+          "entityId": 82
+        }
+      ],
+      "expectWeapon": true
+    },
+    {
+      "id": "weapon/2",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 5,
+          "maxMana": 5,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 82,
+              "ZONE_POSITION": 3,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        },
+        {
+          "id": "c82",
+          "type": "POWER",
+          "entityId": 82
+        }
+      ],
+      "expectWeapon": true
+    },
+    {
+      "id": "weapon/4",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 5,
+          "maxMana": 5,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 10,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 11,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 12,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 13,
+              "CARDTYPE": "MINION",
+              "EXHAUSTED": 1,
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 82,
+              "ZONE_POSITION": 3,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        },
+        {
+          "id": "c82",
+          "type": "POWER",
+          "entityId": 82
+        }
+      ],
+      "expectWeapon": true
+    },
+    {
+      "id": "coin/future-body",
+      "split": "mechanics-grid",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0,
+              "EXHAUSTED": 0
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "The Coin",
+              "CARDTYPE": "SPELL",
+              "COST": 0,
+              "text": "Gain 1 Mana Crystal this turn only."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Plain body",
+              "CARDTYPE": "MINION",
+              "COST": 2,
+              "ATK": 2,
+              "HEALTH": 3,
+              "text": ""
+            },
+            {
+              "entityId": 82,
+              "ZONE_POSITION": 3,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 0,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "c80",
+          "type": "POWER",
+          "entityId": 80
+        },
+        {
+          "id": "c82",
+          "type": "POWER",
+          "entityId": 82
+        }
+      ],
+      "expectedFirst": 80
+    }
+  ],
+  "negatives": [
+    {
+      "id": "frozen",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0,
+              "FROZEN": 1
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "exhausted",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 1
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "tie",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            },
+            {
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions.",
+              "entityId": 999
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "secret",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ],
+          "secretCount": 1
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "clipped",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 902,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 903,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 904,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 905,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2
+            },
+            {
+              "entityId": 906,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "no-buff-mana",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 0,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    },
+    {
+      "id": "unmodelled-summon-engine",
+      "state": {
+        "turn": 9,
+        "me": {
+          "heroClass": "WARLOCK",
+          "mana": 1,
+          "maxMana": 1,
+          "current": true,
+          "deckCount": 20,
+          "board": [
+            {
+              "entityId": 1,
+              "name": "Hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 4,
+              "EXHAUSTED": 0
+            },
+            {
+              "entityId": 4,
+              "name": "Chronoclaws",
+              "CARDTYPE": "WEAPON",
+              "COST": 4,
+              "ATK": 4,
+              "HEALTH": 3,
+              "text": "After your hero attacks, discard your highest Cost card."
+            },
+            {
+              "entityId": 999,
+              "CARDTYPE": "MINION",
+              "ATK": 1,
+              "HEALTH": 2,
+              "text": "After you summon a minion, deal 1 damage to a random enemy."
+            }
+          ],
+          "hand": [
+            {
+              "entityId": 80,
+              "ZONE_POSITION": 1,
+              "name": "Alternate payoff",
+              "CARDTYPE": "SPELL",
+              "COST": 2,
+              "text": "When you play or discard this, summon 3 random 1-Cost minions."
+            },
+            {
+              "entityId": 81,
+              "ZONE_POSITION": 2,
+              "name": "Alternate buff",
+              "CARDTYPE": "SPELL",
+              "COST": 1,
+              "text": "Give your minions +1/+1."
+            }
+          ]
+        },
+        "opponent": {
+          "board": [
+            {
+              "entityId": 2,
+              "name": "Enemy hero",
+              "CARDTYPE": "HERO",
+              "HEALTH": 30,
+              "ATK": 0
+            }
+          ]
+        }
+      },
+      "actions": [
+        {
+          "id": "end",
+          "type": "END_TURN"
+        },
+        {
+          "id": "a1t2",
+          "type": "POWER",
+          "entityId": 1,
+          "targetId": 2
+        },
+        {
+          "id": "c81",
+          "type": "POWER",
+          "entityId": 81
+        }
+      ]
+    }
+  ]
+}

@@ -1093,3 +1093,8 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 ### 2026-10-04 順序型刪除規則改為可解除（規則分層第2b步）
 
 新預設silverfish-v1-rule-release-v1，fodder-hold-v1凍結到既有candidate。weaponFirst、overflowWaits、buffBeforeTap、bodyBeforeBuff仍預設刪除；搜尋可越過「只多抽未知牌」的步驟（含Platysaur類戰吼抽牌模型），被刪動作只在最佳計畫以它開頭、且嚴格高於「第一步禁用它」的最佳計畫與什麼都不做時放回一個；規則保留的動作若模擬器無法下或下完即中斷（Chronoclaws/Whispers棄未知牌、空手揮擊）則不解除，擋掉首輪重播中7個不公平解除。tempoBuffPick在選擇階段、模擬器不模擬挑牌與暫時牌，維持刪除。全歷史8524決策解除2次：09-25先讓Runic Egg交換而非揮刀棄Reliquary Prime；09-29六血時不下自傷3的Party Fiend改下Continuity並交換。game 4 Platysaur裁定不變。501/501測試通過（新增7項），組合與戰鬥對照與上一版相同；全歷史搜尋7.0s（舊2.9s），單次最長776ms。詳見docs/rule-release-20261004.md及eval/runs/rule-release-20261004/。未呼叫Jev、未開排位、未commit。
+
+### 2026-10-04 否決規則逐條檢查（規則分層第3步）
+
+新預設silverfish-v1-veto-audit-v1（規則分層第3步），rule-release-v1凍結到eval/runs/veto-audit-20261004/candidate。否決11條、最先執行且無任何還原：suicide、drawKills、lethalSelfDamage、boardLethalTap、tapExposesBoardLethal（後兩條為使用者類別、非嚴格證明）、locationResting、deadCoin、burnOwnHero、buffNobody、deadDraw、idleHeroAttack；舊安全閘與所有「刪光就還原」移除。其餘刪除改為偏好：只在刪後仍有剩時生效；順序型可由模擬器解除，保留型（HOLD_RULES：留到之後回合的規則與模擬器不模擬的棄牌選擇）不交給一回合模擬器——首輪全放開時game 46留硬幣、New50 game9 T2、buff/Tap搶水晶三個裁定都被「手牌0分」偏差推翻。三處刪END_TURN（whispersWorthCasting、mustSpend、只剩Tap）仍硬刪，待使用者確認。全歷史8524決策：否決76次、解除3次（新增setupFirst 1次：09-29 Gul'dan揮刀先於地標）、選單差異1且可解釋、錯誤0；合計4.2s（舊7.4s），單次最長87ms。504/504測試通過（新增test/veto-audit.test.mjs 3項）；42組合、192戰鬥、80斬殺、16裁定與上一版相同。詳見docs/veto-audit-20261004.md。未呼叫Jev、未開排位、未commit。
+使用者2026-10-05確認三處END_TURN硬刪：Tap那條維持；mustSpend在剩下的牌全是直傷，或是蛋類加手上有棄牌出口時，允許結束回合；whispersWorthCasting在手上有打出時召喚的牌（侍僧、派對）、本回合放不下兩張、而且Whispers不會吃掉它時，允許結束回合。全歷史多保留結束回合4次（都是mustSpend例外），506/506測試通過，組合/戰鬥/斬殺/裁定對照不變。結果在eval/runs/end-turn-20261005。未commit。

@@ -1,0 +1,221 @@
+{
+ "files": 90,
+ "rows": 8524,
+ "releases": 3,
+ "byRule": {
+  "weaponFirst": 1,
+  "setupFirst": 1,
+  "bodyBeforeBuff": 1
+ },
+ "vetoCount": {
+  "lethalSelfDamage": 7,
+  "burnOwnHero": 20,
+  "buffNobody": 12,
+  "boardLethalTap": 7,
+  "drawKills": 9,
+  "suicide": 15,
+  "tapExposesBoardLethal": 6
+ },
+ "diffWhy": {
+  "endKept": 4,
+  "release": 1
+ },
+ "menuDiffs": 5,
+ "unexplainedDiffs": 0,
+ "errors": [],
+ "ms": {
+  "total": 4117,
+  "old": 7279,
+  "max": 90
+ },
+ "hits": [
+  {
+   "file": "decisions.jsonl",
+   "createdAt": "2026-09-25T16:58:10.243Z",
+   "rule": "weaponFirst",
+   "action": "Runic Egg -> Necrotic Mortician",
+   "score": 5.6,
+   "rival": 4.4,
+   "idle": 0,
+   "steps": [
+    "Runic Egg -> Necrotic Mortician",
+    "Boneweb Spider -> The Lich King",
+    "Boneweb Spider -> The Lich King"
+   ],
+   "chosen": "o2t1"
+  },
+  {
+   "file": "decisions.jsonl",
+   "createdAt": "2026-09-29T18:08:11.897Z",
+   "rule": "setupFirst",
+   "action": "Gul'dan -> Tyrande Whisperwind",
+   "score": -41.54,
+   "rival": -47.64,
+   "idle": -50,
+   "steps": [
+    "Gul'dan -> Tyrande Whisperwind"
+   ],
+   "chosen": "o4"
+  },
+  {
+   "file": "decisions.jsonl",
+   "createdAt": "2026-09-29T19:04:05.701Z",
+   "rule": "bodyBeforeBuff",
+   "action": "Entropic Continuity",
+   "score": 4.5,
+   "rival": -35.73,
+   "idle": -50,
+   "steps": [
+    "Entropic Continuity",
+    "Boneweb Egg -> Silver Hand Recruit"
+   ],
+   "chosen": "o1"
+  }
+ ],
+ "diffs": [
+  {
+   "file": "ranked-2026-10-03T17-42-01-535Z/game-0002-decisions.jsonl",
+   "createdAt": "2026-10-03T17:51:32.524Z",
+   "chosen": "Soul Barrage",
+   "chosenEnd": false,
+   "hand": [
+    "Soul Barrage",
+    "Boneweb Egg",
+    "Party Fiend"
+   ],
+   "mana": 6,
+   "minions": 5,
+   "explained": true,
+   "why": "endKept",
+   "vetoes": [],
+   "releases": [],
+   "constrain": [
+    "o0,o1,o4,o5t0,o6t0,o7t0,o8t0,o9t0",
+    "o0,o1,o4,o5t0,o6t0,o7t0,o8t0,o9t0"
+   ],
+   "spend": [
+    "o1,o4,o5t0,o6t0,o7t0,o8t0,o9t0",
+    "o0,o1,o4,o5t0,o6t0,o7t0,o8t0,o9t0"
+   ],
+   "added": [],
+   "lost": []
+  },
+  {
+   "file": "ranked-2026-10-03T17-42-01-535Z/game-0004-decisions.jsonl",
+   "createdAt": "2026-10-03T18:08:33.073Z",
+   "chosen": "Life Tap",
+   "chosenEnd": false,
+   "hand": [
+    "Soul Barrage",
+    "Hand of Gul'dan",
+    "Soul Barrage"
+   ],
+   "mana": 8,
+   "minions": 1,
+   "explained": true,
+   "why": "endKept",
+   "vetoes": [],
+   "releases": [],
+   "constrain": [
+    "o0,o1,o2,o3,o4",
+    "o0,o1,o2,o3,o4"
+   ],
+   "spend": [
+    "o1,o2,o3,o4",
+    "o0,o1,o2,o3,o4"
+   ],
+   "added": [],
+   "lost": []
+  },
+  {
+   "file": "ranked-2026-10-03T21-59-42-214Z/game-0001-decisions.jsonl",
+   "createdAt": "2026-10-03T22:00:48.909Z",
+   "chosen": "Boneweb Egg",
+   "chosenEnd": false,
+   "hand": [
+    "Entropic Continuity",
+    "Wicked Whispers",
+    "Boneweb Egg"
+   ],
+   "mana": 2,
+   "minions": 0,
+   "explained": true,
+   "why": "endKept",
+   "vetoes": [
+    {
+     "rule": "buffNobody",
+     "actionId": "o1"
+    }
+   ],
+   "releases": [],
+   "constrain": [
+    "o0,o3,o4",
+    "o0,o3,o4"
+   ],
+   "spend": [
+    "o3",
+    "o0,o3"
+   ],
+   "added": [],
+   "lost": []
+  },
+  {
+   "file": "ranked-2026-10-03T21-59-42-214Z/game-0002-decisions.jsonl",
+   "createdAt": "2026-10-03T22:08:59.118Z",
+   "chosen": "Boneweb Egg",
+   "chosenEnd": false,
+   "hand": [
+    "Wicked Whispers",
+    "Ocular Occultist",
+    "Wicked Whispers",
+    "Walking Dead",
+    "Chamber of Viscidus",
+    "Duke of Below",
+    "Boneweb Egg"
+   ],
+   "mana": 2,
+   "minions": 0,
+   "explained": true,
+   "why": "endKept",
+   "vetoes": [],
+   "releases": [],
+   "constrain": [
+    "o0,o3,o4",
+    "o0,o3,o4"
+   ],
+   "spend": [
+    "o3",
+    "o0,o3"
+   ],
+   "added": [],
+   "lost": []
+  },
+  {
+   "file": "decisions.jsonl",
+   "createdAt": "2026-09-29T18:08:11.897Z",
+   "chosen": "Chamber of Viscidus",
+   "chosenEnd": false,
+   "hand": [
+    "Boneweb Egg"
+   ],
+   "mana": 10,
+   "minions": 1,
+   "explained": true,
+   "why": "release",
+   "vetoes": [],
+   "releases": [
+    "setupFirst"
+   ],
+   "constrain": [
+    "o0,o2t0,o4",
+    "o0,o2t0,o4"
+   ],
+   "spend": [
+    "o0,o4",
+    "o0,o4,o2t0"
+   ],
+   "added": [],
+   "lost": []
+  }
+ ]
+}

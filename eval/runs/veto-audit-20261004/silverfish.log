@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "baseline": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.957800000000134,
+      "fixtureMaxMedianMs": 2613.848399999999
+    },
+    "candidate": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 3.225299999998242,
+      "fixtureMaxMedianMs": 2651.9485999999997
+    }
+  },
+  "regression": {
+    "lostTactics": [],
+    "lostCombat": [],
+    "lostRulingAvailability": [],
+    "worseFallback": []
+  },
+  "report": "D:\\Projects\\jev-hearthstone\\eval\\runs\\veto-audit-20261004\\silverfish\\report.md"
+}

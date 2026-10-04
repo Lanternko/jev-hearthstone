@@ -620,8 +620,21 @@ export const deadWhispers=(state,card)=>{
  const eats=wouldDiscard(state,card);
  return eats.every(c=>!isFodder(c));        // an empty hand eats nothing, and buffs nobody
 };
-export const whispersWorthCasting=(state,card)=>
- isWhispers(card)&&myMinions(state)>=3&&costOf(card)<=Number(state?.me?.mana??0);
+// User (2026-10-05): 「手上有侍僧或派對可能會考慮扣到舖場時才丟 大部分時候三隻怪以上就值得丟」. Three
+// bodies is still the line, but a card that puts several bodies down when played (Disposable
+// Acolytes, Party Fiend) and does not fit beside Whispers this turn is a reason to keep it for the
+// turn they land together -- then ending the turn is Jev's call, not an error.
+const SUMMONS_ON_PLAY=/^summon|(?:battlecry|when you play)[^.]*\bsummon/i;
+export const whispersWorthCasting=(state,card)=>{
+ if(!isWhispers(card)||myMinions(state)<3)return false;
+ const mana=Number(state?.me?.mana??0);
+ if(costOf(card)>mana)return false;
+ // A summoner Whispers itself would eat is no reason to wait: the discard puts its bodies down now
+ // (validation10 game 3, Whispers eating Acolytes before the attacks).
+ const eats=new Set(wouldDiscard(state,card).filter(isFodder).map(c=>c.entityId));
+ return !(state?.me?.hand??[]).some(c=>c.entityId!==card.entityId&&!eats.has(c.entityId)
+  &&SUMMONS_ON_PLAY.test(flat(c.text))&&costOf(c)+costOf(card)>mana);
+};
 // User correction (2026-09-25): with 3 mana, Whispers, Disposable Acolytes and Party Fiend in
 // hand, Jev cast Whispers first -- the buff hit one minion, then ate the Fiend. Bodies first,
 // buff last: while a minion or summon card on the menu fits in the mana alongside Whispers,
@@ -858,59 +871,106 @@ export function dhTempoActions(state,actions){
  });
 }
 
+// Step 3 of the rule-tier plan (user, 2026-10-04): 「否決規則逐條檢查，只留下真正可證明的。」
+// A veto is a delete that rules or arithmetic prove wrong; it applies before everything else and
+// nothing brings the action back -- no "restore the menu if it emptied". Everything else in
+// constrainActions/spendFirst is a preference: still the default, but the simulator may hand one
+// removed action back (rule-release.mjs). Removing END_TURN stays hard; see the doc.
+//   suicide, drawKills, lethalSelfDamage -- the action itself takes our last Health;
+//   boardLethalTap, tapExposesBoardLethal -- a self-damaging hero power while their board is (or
+//     becomes) lethal. The user's 「天生技後被場攻斬殺」 category; not a strict proof, since a
+//     later clear could still save us, and named so in docs/veto-audit-20261004.md;
+//   locationResting -- the game refuses the click; deadCoin -- nothing to spend the crystal on;
+//   burnOwnHero -- user ruling, damage spells never aim at our own hero;
+//   buffNobody -- a pure board buff with no recipient; deadDraw -- a pure draw that can only
+//     burn or fatigue; idleHeroAttack -- hero attack gained with no swing to use it.
+export function vetoes(state){
+ const hand=state.me?.hand??[],board=state.me?.board??[];
+ const dies=suicide(state),drawDeath=drawKills(state),resting=locationResting(state);
+ const mine=board.find(c=>c.CARDTYPE==='HERO');
+ const coinDead=deadCoin(state),boardLethal=forbidsSelfDamage(state);
+ const held=a=>hand.find(c=>c.entityId===a.entityId);
+ const power=a=>board.find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
+ return a=>{
+  if(a.type==='END_TURN'||a.type==='CHOICE'||a.type==='MULLIGAN')return null;
+  const h=held(a),p=power(a),c=h??p;
+  if(dies(a))return 'suicide';
+  if(drawDeath(a))return 'drawKills';
+  if(lethalSelfDamage(state,a))return 'lethalSelfDamage';
+  if(p&&selfDamageCost(p)>0&&boardLethal)return 'boardLethalTap';
+  if(p&&tapExposesBoardLethal(state,p))return 'tapExposesBoardLethal';
+  if(resting(a))return 'locationResting';
+  if(h&&isCoin(h)&&coinDead)return 'deadCoin';
+  if(h?.CARDTYPE==='SPELL'&&mine&&a.targetId===mine.entityId&&BURN.test(flat(h.text)))return 'burnOwnHero';
+  if(h&&pureBoardBuff(h)&&buffImpact(state,h)?.recipients===0)return 'buffNobody';
+  const n=c?drawCount(c,state):0;
+  if(n&&(p||/^draw (?:a|one|two|three|\d+) cards?\./i.test(flat(h?.text)))
+   &&drawImpact(state,n,{played:!p}).usable===0)return 'deadDraw';
+  if(p&&heroAttackGain(p)&&!heroCanSwing(state))return 'idleHeroAttack';
+  return null;
+ };
+}
+// Game 16 (2026-09-29), turn 20: a discovered 1-mana Ocular Occultist sat in hand while the
+// hero swung Chronoclaws, which discarded it. A card we can play and that gains nothing from the
+// discard goes onto the board before the swing.
+function castBeforeSwing(state,out){
+ const w=(state.me?.board??[]).find(c=>c.CARDTYPE==='WEAPON'&&DISCARDS_HIGHEST.test(flat(c.text)));
+ const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
+ const hand=state.me?.hand??[];
+ const top=Math.max(-Infinity,...hand.map(costOf));
+ const lost=hand.filter(c=>costOf(c)===top);
+ if(!(w&&hero&&lost.length&&lost.every(c=>!isFodder(c)&&costOf(c)<=Number(state.me?.mana??0))
+  &&out.some(a=>lost.some(c=>c.entityId===a.entityId))))return out;
+ return out.filter(a=>!(a.entityId===hero.entityId&&a.targetId!=null));
+}
+// The former terminal safety gate, minus its two vetoes (lethalSelfDamage, buffNobody): each
+// remaining clause holds a pure board buff back and is now its own preference.
+function buffHolds(state,out,{admission}){
+ const hand=state.me.hand??[],board=state.me.board??[];
+ const tap=out.find(a=>board.some(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER'&&selfDamageCost(c)>0));
+ const hp=board.find(c=>c.entityId===tap?.entityId);
+ const weaponBuff=weaponBuffAssessment(state,out,{admission});
+ const foe=enemyHero(state),face=faceDamage(state,out);
+ const single=board.filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
+ const emptyEnemy=!(state.opponent?.board??[]).some(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
+ const ready=board.filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT')&&!on(x,'EXHAUSTED')&&!on(x,'FROZEN'));
+ const lethal=v=>foe&&face+ready.length*Number(v?.attack??0)>=heroHp(foe);
+ const holds=test=>a=>{const c=hand.find(c=>c.entityId===a.entityId);return pureBoardBuff(c)&&!!test(c,buffImpact(state,c))};
+ return {
+  // New50 game9 T2: spare mana is not a reason to spend a permanent buff on one newly summoned
+  // body against an empty board. No attack/trade payoff exists this turn; hold it for development.
+  newBodyBuffWaits:holds((c,v)=>v?.recipients===1&&single.length===1&&on(single[0],'EXHAUSTED')&&emptyEnemy
+   &&!c.temporary&&Number(state.me.maxMana)<=2),
+  weaponBuffFirst:holds((c,v)=>!lethal(v)&&weaponBuff?.preferred&&c.entityId===weaponBuff.buffId),
+  // General ordering invariant: keep lethal and immediate trade options; otherwise develop first.
+  developBeforeBuff:holds((c,v)=>!lethal(v)&&!singleBuffTradeGain(state,c,out)&&buffDevelopmentActions(state,out,c).length),
+  buffTapMana:holds((c,v)=>v?.recipients===1&&tap&&costOf(c)+costOf(hp)>Number(state.me.mana)
+   &&!singleBuffTradeGain(state,c,out)&&!(foe&&face+Number(v?.attack??0)>=heroHp(foe))),
+ };
+}
+
 export function constrainActions(state,actions,{trace,admission=combinationAdmission(state,actions)}={}){
  const comboFirst=admittedFirstIds(admission);
  if(state.choice?.type==='MULLIGAN')return mulliganConstraint(state,actions);
  if(state.choice)return discardPick(state,doomedPick(state,tempoBuffPick(state,temporaryPick(state,actions))));
- // Verified expiring self-summons pay out without spending their printed mana.
- // Keep attacks, safe draws and END_TURN; immediate-use exceptions remain.
- const deferred=new Set(temporaryDiscardAssessments(state,actions).filter(c=>c.deferHardCast).map(c=>c.playActionId));
- if(deferred.size)actions=actions.filter(a=>!deferred.has(a.id));
- const saferCopies=new Set(handRetentionAssessment(state,actions).copyPreferences.flatMap(p=>p.deferredEntityIds));
- actions=actions.filter(a=>a.targetId!=null||!saferCopies.has(a.entityId));
- let out=freezeThreatFirst(state,actions);
- if(deadCoin(state)||passiveEggCoin(state)){
-  const hand=state.me?.hand??[];
-  out=out.filter(a=>!hand.some(c=>c.entityId===a.entityId&&isCoin(c)));
-  if(!out.length)out=actions;
- }
- {
-  const board=state.me.board??[];
-  out=out.filter(a=>{
-   const e=board.find(c=>c.entityId===a.entityId);
-   return !(e?.CARDTYPE==='HERO_POWER'&&selfDamageCost(e)>0
-     &&(forbidsSelfDamage(state)||tapExposesBoardLethal(state,e)));
-  });
-  if(!out.length)out=actions;
- }
- // Game 16 (2026-09-29), turn 20: a discovered 1-mana Ocular Occultist sat in hand while the
- // hero swung Chronoclaws, which discarded it. A card we can play and that gains nothing from the
- // discard goes onto the board before the swing.
- {const w=(state.me?.board??[]).find(c=>c.CARDTYPE==='WEAPON'&&DISCARDS_HIGHEST.test(flat(c.text)));
-  const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
-  const hand=state.me?.hand??[];
-  const top=Math.max(-Infinity,...hand.map(costOf));
-  const lost=hand.filter(c=>costOf(c)===top);
-  if(w&&hero&&lost.length&&lost.every(c=>!isFodder(c)&&costOf(c)<=Number(state.me?.mana??0))&&out.some(a=>lost.some(c=>c.entityId===a.entityId))){
-   const kept=out.filter(a=>!(a.entityId===hero.entityId&&a.targetId!=null));
-   if(kept.length)out=kept;
-  }}
- const dies=suicide(state);
- out=out.filter(a=>!dies(a));
- if(!out.length)out=actions;
- const burn=wastedBurn(state,actions);
- out=out.filter(a=>!burn(a));
- if(!out.length)out=actions;
- const split=splitToFace(state);
- out=out.filter(a=>!split(a));
- if(!out.some(a=>a.type!=='END_TURN'))out=out.length?out:actions;
- {const od=overdrawWaits(state);const kept=out.filter(a=>!od(a));if(kept.length)out=kept;}
- {const dk=drawKills(state);const kept=out.filter(a=>!dk(a));if(kept.length)out=kept;}
- {const rest=locationResting(state);const kept=out.filter(a=>!rest(a));if(kept.length)out=kept;}
+ const veto=vetoes(state),vetoed=[];
+ let out=actions.filter(a=>{const r=veto(a);if(r)vetoed.push({rule:r,actionId:a.id});return !r;});
  const wasted=wastedFodder(state);
- // Ordering deletes the simulator may overturn (rule-release.mjs); the delete is the default.
  const releases=[],hold={fodderHold:[...wasted]};
- if(!isDH(state))out=releasing(state,out,weaponFirst(state,out),'weaponFirst',releases,hold);
+ // A preference only narrows a menu it leaves something on, and the simulator may undo it.
+ const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)out=releasing(state,out,kept,rule,releases,hold);};
+ // Verified expiring self-summons pay out without spending their printed mana.
+ const deferred=new Set(temporaryDiscardAssessments(state,out).filter(c=>c.deferHardCast).map(c=>c.playActionId));
+ prefer('deferHardCast',out.filter(a=>!deferred.has(a.id)));
+ const saferCopies=new Set(handRetentionAssessment(state,out).copyPreferences.flatMap(p=>p.deferredEntityIds));
+ prefer('saferCopies',out.filter(a=>a.targetId!=null||!saferCopies.has(a.entityId)));
+ prefer('freezeThreatFirst',freezeThreatFirst(state,out));
+ if(passiveEggCoin(state))prefer('passiveEggCoin',out.filter(a=>!(state.me?.hand??[]).some(c=>c.entityId===a.entityId&&isCoin(c))));
+ prefer('castBeforeSwing',castBeforeSwing(state,out));
+ {const burn=wastedBurn(state,actions);prefer('wastedBurn',out.filter(a=>!burn(a)));}
+ {const split=splitToFace(state);prefer('splitToFace',out.filter(a=>!split(a)));}
+ {const od=overdrawWaits(state);prefer('overdrawWaits',out.filter(a=>!od(a)));}
+ if(!isDH(state))prefer('weaponFirst',weaponFirst(state,out));
  let released=null;
  if(wasted.size){
   // Development may make a buff valuable even when the current board is thin.
@@ -918,79 +978,34 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
    .flatMap(b=>buffDevelopmentActions(state,out,b)).map(a=>a.entityId));
   const kept=a=>!wasted.has(a.entityId)||setups.has(a.entityId)||comboFirst.has(a.id);
   if(out.some(a=>!kept(a)))released=fodderRelease(state,out,wasted);
-  out=out.filter(a=>kept(a)||a.id===released?.actionId);
-  if(!out.length)out=actions;
+  // Like every preference, it never empties the menu (no restore: it simply does not apply).
+  const next=out.filter(a=>kept(a)||a.id===released?.actionId);
+  if(next.length)out=next;
  }
- out=occultistPick(state,boardFirstDiscard(state,doomedPick(state,out)));
- out=counterFirst(state,out);
- {const kept=out.filter(a=>!overflowWaits(state,out)(a));if(kept.length)out=releasing(state,out,kept,'overflowWaits',releases,hold);}
+ prefer('doomedPick',doomedPick(state,out));
+ prefer('boardFirstDiscard',boardFirstDiscard(state,out));
+ prefer('occultistPick',occultistPick(state,out));
+ prefer('counterFirst',counterFirst(state,out));
+ {const ow=overflowWaits(state,out);prefer('overflowWaits',out.filter(a=>!ow(a)));}
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);
- out=out.filter(a=>!deadWhispers(state,held(a.entityId)));
- if(!out.length)out=actions;
- {const menu=out;out=out.filter(a=>!whispersWaits(state,held(a.entityId),menu));}
- {const menu=out;const kept=out.filter(a=>!whispersEatsPlayable(state,held(a.entityId),menu));if(kept.length)out=kept;}
+ prefer('deadWhispers',out.filter(a=>!deadWhispers(state,held(a.entityId))));
+ {const menu=out;prefer('whispersWaits',out.filter(a=>!whispersWaits(state,held(a.entityId),menu)));}
+ {const menu=out;prefer('whispersEatsPlayable',out.filter(a=>!whispersEatsPlayable(state,held(a.entityId),menu)));}
  // Only while the buff is still on the table to be played: if the option went for some other
- // reason there is nothing to stay for.
+ // reason there is nothing to stay for. An END_TURN removal, so it stays hard (see the doc).
  if(out.some(a=>whispersWorthCasting(state,held(a.entityId)))){
   const trimmed=out.filter(a=>a.type!=='END_TURN');
   if(trimmed.length)out=trimmed;
  }
- // Warlock's historical rulings must not hide DH's Outcast enablers, attacks before weapon
- // replacement, or attacks before a generated card buries the rightmost Outcast.
  // Decide WHETHER to draw before ordering it. Availability alone is not a draw intent.
- if(!isDH(state))out=releasing(state,out,buffBeforeTap(state,out),'buffBeforeTap',releases,hold);
- else out=out.filter(a=>{
-  const hp=(state.me.board??[]).find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
-  return !heroAttackGain(hp)||heroCanSwing(state);
- });
- // An earlier fallback must never resurrect a tap that exposes certain lethal.
- out=out.filter(a=>!tapExposesBoardLethal(state,(state.me?.board??[]).find(c=>c.entityId===a.entityId)));
- // No fallback may resurrect a lethal draw or a pure resource draw with no resources left.
- const fatalDraw=drawKills(state);
- out=out.filter(a=>{
-  if(fatalDraw(a))return false;
-  const c=[...(state.me?.hand??[]),...(state.me?.board??[])].find(c=>c.entityId===a.entityId);
-  const n=drawCount(c,state);
-  if(!n)return true;
-  const pure=c?.CARDTYPE==='HERO_POWER'||/^draw (?:a|one|two|three|\d+) cards?\./i.test(flat(c?.text));
-  return !pure||drawImpact(state,n,{played:c.CARDTYPE!=='HERO_POWER'}).usable!==0;
- });
- if(passiveEggCoin(state))out=out.filter(a=>!(state.me?.hand??[]).some(c=>c.entityId===a.entityId&&isCoin(c)));
- const hand=state.me.hand??[];
- const tap=out.find(a=>(state.me.board??[]).some(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER'&&selfDamageCost(c)>0));
- const weaponBuff=weaponBuffAssessment(state,out,{admission});
- const safe=out.filter(a=>{
-  // Terminal safety gate: earlier fallback filters must not resurrect Party
-  // Fiend at 3 Health, nor allow forced_spend to pick a known fatal play.
-  if(lethalSelfDamage(state,a))return false;
-  const c=hand.find(c=>c.entityId===a.entityId);
-  if(!pureBoardBuff(c))return true;
-  const v=buffImpact(state,c);
-  if(v?.recipients===0)return false;
-  // New50 game9 T2: spare mana is not a reason to spend a permanent buff
-  // on one newly summoned body against an empty board. No attack/trade payoff
-  // exists this turn; hold it for development. Temporary buffs remain choices.
-  const single=(state.me.board??[]).filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
-  const emptyEnemy=!(state.opponent?.board??[]).some(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
-  if(v?.recipients===1&&single.length===1&&on(single[0],'EXHAUSTED')&&emptyEnemy
-   &&!c.temporary&&Number(state.me.maxMana)<=2)return false;
-  const hp=(state.me.board??[]).find(c=>c.entityId===tap?.entityId);
-  const foe=enemyHero(state);
-  const canFinish=foe&&faceDamage(state,out)+Number(v?.attack??0)>=heroHp(foe);
-  const ready=(state.me.board??[]).filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT')&&!on(x,'EXHAUSTED')&&!on(x,'FROZEN'));
-  const buffLethalPossible=foe&&faceDamage(state,out)+ready.length*Number(v?.attack??0)>=heroHp(foe);
-  if(!buffLethalPossible&&weaponBuff?.preferred&&c.entityId===weaponBuff.buffId)return false;
-  // General ordering invariant, independent of current board size/card names.
-  // Keep lethal and immediate trade options; otherwise develop before this buff.
-  if(!buffLethalPossible&&!singleBuffTradeGain(state,c,out)&&buffDevelopmentActions(state,out,c).length)return false;
-  return !(v?.recipients===1&&tap&&costOf(c)+costOf(hp)>Number(state.me.mana)
-   &&!singleBuffTradeGain(state,c,out)&&!canFinish);
- });
- if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,safe);
+ if(!isDH(state))prefer('buffBeforeTap',buffBeforeTap(state,out));
+ for(const [rule,holds] of Object.entries(buffHolds(state,out,{admission})))prefer(rule,out.filter(a=>!holds(a)));
+ if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,out);
   trace.fodderRelease=released;
   trace.ruleReleases=releases;
-  trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&safe.some(x=>x.id===a.id)).map(a=>a.id);}
- return safe;
+  trace.vetoes=vetoed;
+  trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&out.some(x=>x.id===a.id)).map(a=>a.id);}
+ return out;
 }
 
 // User ruling (2026-09-24, after game 3): "先 buff 再攻擊" and "打滿水晶，不是用天生技不打牌".
@@ -1027,6 +1042,11 @@ export function boardRecoveryActions(state,actions){
    &&Math.min(room,c.resummons?.length??0)>=3;
  });
 }
+// Cards the user may hold on purpose: burn (direct damage spells), and an Egg-type minion -- its
+// Deathrattle fires on a discard -- while a discard outlet in hand is there to pair it with.
+export const holdForLater=(state,c)=>!!c&&((c.CARDTYPE==='SPELL'&&BURN.test(flat(c.text)))
+ ||(c.CARDTYPE==='MINION'&&/deathrattle/i.test(flat(c.text))&&isFodder(c)
+  &&(state?.me?.hand??[]).some(x=>x.entityId!==c.entityId&&roles(x).includes('discard outlet'))));
 export function mustSpend(state,actions){
  const hand=state?.me?.hand??[];
  const hp=heroPowerOf(state);
@@ -1078,7 +1098,9 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  const {cards,pricedOut}=mustSpend(state,actions);
  const hp=heroPowerOf(state);
  let out=actions;
- if(pricedOut)out=out.filter(a=>a.entityId!==hp.entityId);
+ const own=['pricedOut','mustSpend','setupFirst','bodyBeforeBuff'],log=[],hold={fodderHold:[...wastedFodder(state)]};
+ const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)out=releasing(state,out,kept,rule,log,hold);};
+ if(pricedOut)prefer('pricedOut',out.filter(a=>a.entityId!==hp.entityId));
  // Drawing is an optional intent, including Life Tap. It must not suppress
  // attacks or END_TURN merely because there is spare mana to pay for it.
  // Except the trades that free a slot the hand needs (game 58 turn 5, see landing()).
@@ -1086,16 +1108,22 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  const minion=new Set((state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION').map(c=>c.entityId));
  const crowded=pendingBodies(state)>boardRoom(state);
  const trade=a=>crowded&&isAttackAction(state,a)&&a.entityId!==hero?.entityId&&minion.has(a.targetId);
- if(cards.length)out=out.filter(a=>a.type!=='END_TURN'&&(!isAttackAction(state,a)||trade(a)));
+ // The END_TURN half stays hard (「打滿水晶」); the attack half is a preference.
+ // User (2026-10-05): 「2有時候會扣直傷 或蛋等配合 但大部分都要盡量舖場」. Develop is the rule, but a
+ // burn spell or an Egg kept for a discard is a deliberate hold: when those are all that is left,
+ // ending the turn is Jev's call. The attack half below still applies.
+ const keepable=a=>{const c=(state?.me?.hand??[]).find(x=>x.entityId===a.entityId);return holdForLater(state,c);};
+ if(cards.length){if(!cards.every(keepable))out=out.filter(a=>a.type!=='END_TURN');prefer('mustSpend',out.filter(a=>!isAttackAction(state,a)||trade(a)));}
  // User ruling (2026-09-30, game 58, turn 3): 「地標也沒有先抽卡，所以最後損失了 buff 的傷害」. Five
  // minions swung, then Chamber of Viscidus, the Coin and Wicked Whispers went down -- the +1/+1
  // landed on minions that had already attacked. A ready location and a whole-board buff (or the
  // Coin that pays for one) come before the swings; only the crowded trades above stay beside them.
- if(setupFirst(state,out).length)out=out.filter(a=>!isAttackAction(state,a)||trade(a));
+ if(setupFirst(state,out).length)prefer('setupFirst',out.filter(a=>!isAttackAction(state,a)||trade(a)));
  // User ruling (2026-09-30, game 55, turn 5): 「為什麼剩 2 費不抽牌？又沒事做」. 27 Health, two
- // cards in hand, a full deck, and the menu was END_TURN or Life Tap; Jev ended at 0.58. When
- // the tap is the only other thing left and has survived every safety filter (constrainActions
- // already dropped overdraws, fatigue and taps that expose lethal), unspent mana is just waste.
+ // cards in hand, a full deck, and the menu was END_TURN or Life Tap; Jev ended at 0.58.
+ // When the tap is the only other thing left and has survived every veto (constrainActions already
+ // dropped fatal draws, dead draws and taps that expose lethal), unspent mana is just waste.
+ // User (2026-10-05) confirmed: 「3通常都是對的 尤其是前四回合沒有血量壓力又缺牌」.
  // Same game, turn 7: 4 mana, empty hand, the menu END_TURN / Life Tap / one hero swing, and
  // END_TURN again at 0.30 -- attacks left on the menu must not keep the turn-ender in. So the
  // rule is "no card left to play from hand", and the swings stay for Jev to order.
@@ -1104,8 +1132,8 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  if(tapOn&&!fromHand&&drawCount(hp)>0&&!pricedOut
   &&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state))out=out.filter(a=>a.type!=='END_TURN');
  // Here, not in constrainActions: a lethal that needs the buff now is found on the full menu first.
- {const log=[];out=releasing(state,out,bodyBeforeBuff(state,out),'bodyBeforeBuff',log,{fodderHold:[...wastedFodder(state)]});
-  if(trace)trace.ruleReleases=[...(trace.ruleReleases??[]).filter(r=>r.rule!=='bodyBeforeBuff'),...log];}
+ prefer('bodyBeforeBuff',bodyBeforeBuff(state,out));
+ if(trace)trace.ruleReleases=[...(trace.ruleReleases??[]).filter(r=>!own.includes(r.rule)),...log];
  // An attack that triggers the proved development is setup, not premature
  // combat. Restore only that game's offered first step, never arbitrary attacks.
  const first=admittedFirstIds({lines:admittedLines(admission,actions)});

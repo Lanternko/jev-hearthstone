@@ -1,0 +1,4 @@
+{"files":90,"rows":8524,"releases":3,"byRule":{"weaponFirst":1,"setupFirst":1,"bodyBeforeBuff":1},"vetoCount":{"lethalSelfDamage":7,"burnOwnHero":20,"buffNobody":12,"boardLethalTap":7,"drawKills":9,"suicide":15,"tapExposesBoardLethal":6},"diffWhy":{"endKept":4,"release":1},"menuDiffs":5,"unexplainedDiffs":0,"errors":[],"ms":{"total":4117,"old":7279,"max":90}}
+weaponFirst decisions.jsonl Tundefined Runic Egg -> Necrotic Mortician | 5.6 vs 4.4 idle 0 | Runic Egg -> Necrotic Mortician ; Boneweb Spider -> The Lich King ; Boneweb Spider -> The Lich King
+setupFirst decisions.jsonl Tundefined Gul'dan -> Tyrande Whisperwind | -41.54 vs -47.64 idle -50 | Gul'dan -> Tyrande Whisperwind
+bodyBeforeBuff decisions.jsonl Tundefined Entropic Continuity | 4.5 vs -35.73 idle -50 | Entropic Continuity ; Boneweb Egg -> Silver Hand Recruit

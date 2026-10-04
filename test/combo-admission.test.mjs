@@ -125,7 +125,7 @@ test('fatal direct development and an absent legal first option are never admitt
 
 test('new version is distinct; requesting class-prior replays frozen pre-change policy and simulator',async()=>{
  const old=await loadDecisionEngine('silverfish-v1-class-prior-v1'),current=await loadDecisionEngine();
- assert.equal(current.version,'silverfish-v1-rule-release-v1');
+ assert.equal(current.version,'silverfish-v1-veto-audit-v1');
  assert.notEqual(current.prepare,old.prepare);assert.notEqual(current.constrainActions,old.constrainActions);
  const c=JSON.parse(readFileSync(new URL('./fixtures/user-rulings/new50-game18-combo-input.json',import.meta.url)));
  assert.ok(!old.constrainActions(c.state,c.actions).some(a=>a.entityId===48));

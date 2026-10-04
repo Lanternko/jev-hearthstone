@@ -89,7 +89,7 @@ test('visible lethal retains priority over low-Attack alternatives',()=>{
 
 test('previous turn-order engine remains frozen while current adds both alternatives',async()=>{
  const old=await loadDecisionEngine('silverfish-v1-turn-order-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-rule-release-v1');
+ assert.equal(now.version,'silverfish-v1-veto-audit-v1');
  const c=fixture(),p=old.prepare(c.state,old.constrainActions(c.state,c.options));
  assert.ok(!Object.keys(p.plans??{}).some(id=>id.startsWith('shield')));
  assert.ok(!Object.keys(p.crit).some(id=>old.resolve(p,id).action.entityId===80));

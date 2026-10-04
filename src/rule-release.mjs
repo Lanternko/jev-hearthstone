@@ -15,24 +15,39 @@
 // (game 11: an unarmed hero swing), or one whose outcome ends the plan -- a Chronoclaws swing or
 // Wicked Whispers discards an unknown card. The rule's own line, "that first, then the rest", is
 // then cut off after its first step and would lose to any longer plan for that reason alone.
+// Step 3 (veto audit) makes every non-choice preference delete go through here, so the cheap
+// test comes first: the searches run only when the kept side is fully playable. A removed
+// END_TURN is never released -- no plan starts with it -- and alone it triggers no search.
 import {search,score,actionFor,additiveStep} from './plan.mjs';
-import {moves,apply} from './sim.mjs';
-export const RULE_RELEASE_VERSION='rule-release-v1';
+import {moves,apply,fromState} from './sim.mjs';
+export const RULE_RELEASE_VERSION='rule-release-v2';
+
+// Hold rules keep a card for a later turn rather than reorder this one. The search scores one
+// turn and gives a card left in hand no value, so any play beats holding it -- game 46 (Coin kept
+// over a lone Egg), New50 game9 T2 (buff held on one sleeping body) and the draw-over-buff ruling
+// were all released on that bias alone. They stay the default with no simulator release, as do
+// the discard picks the simulator does not model (doomed draws, Occultist, board-first).
+export const HOLD_RULES=new Set(['deferHardCast','saferCopies','passiveEggCoin','wastedBurn','splitToFace',
+  'overdrawWaits','deadWhispers','whispersWaits','whispersEatsPlayable','newBodyBuffWaits','buffTapMana',
+  'pricedOut','doomedPick','boardFirstDiscard','occultistPick']);
 
 export function ruleRelease(state,before,after,rule,{fodderHold}={}){
-  if(state?.choice)return null;
+  if(state?.choice||HOLD_RULES.has(rule))return null;
   const kept=new Set(after.map(a=>a.id));
-  const removed=before.filter(a=>!kept.has(a.id));
+  const removed=before.filter(a=>!kept.has(a.id)&&a.type!=='END_TURN');
   if(!removed.length||!after.length)return null;
   const opts={pastAdditive:true,...(fodderHold?.length?{fodderHold}:{})};
-  const {start,plans}=search(state,before,opts);
+  const s0=fromState(state,before);
+  if(fodderHold?.length)s0.fodderHold=fodderHold;
+  s0.additive=true;
   const open=new Map();
-  for(const m of moves(start)){
+  for(const m of moves(s0)){
     const x=actionFor(before,m);if(!x)continue;
-    const r=apply(start,m);
-    open.set(x.id,(open.get(x.id)??false)||r.exact||additiveStep(start,r));
+    const r=apply(s0,m);
+    open.set(x.id,(open.get(x.id)??false)||r.exact||additiveStep(s0,r));
   }
   if(after.some(a=>a.type!=='END_TURN'&&!open.get(a.id)))return null;
+  const {start,plans}=search(state,before,opts);
   const best=plans[0],a=best&&actionFor(before,best.steps[0]);
   if(!a||kept.has(a.id))return null;
   const barred=new Set(removed.map(x=>x.id));

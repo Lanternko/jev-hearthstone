@@ -1,0 +1,560 @@
+{
+  "id": "validation10-game3-temporary-free-325",
+  "source": "runtime/ranked-2026-10-03T17-42-01-535Z/game-0003-decisions.jsonl",
+  "batchGame": 3,
+  "ownTurn": 3,
+  "row": 8389,
+  "plannerVersion": "silverfish-v1-combo-admission-v2",
+  "createdAt": "2026-10-03T17:57:25.153Z",
+  "state": {
+    "gameNumber": 3,
+    "turn": 5,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 3,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 1,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 80,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 3,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 81,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 29,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 3,
+          "HEALTH": 3,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 100,
+          "cardId": "VAC_940t",
+          "name": "Felbeast",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 3,
+          "HEALTH": 3,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 116,
+          "cardId": "EX1_004",
+          "name": "Young Priestess",
+          "text": "At the end of your turn, give another random friendly minion +1 Health.",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 3,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 18,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "temporary": {
+            "expires": "end_of_own_turn",
+            "enchantmentId": 132,
+            "sourceEntityId": 6,
+            "confidence": 1
+          }
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": [
+        3,
+        3
+      ]
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "HUNTER",
+      "mana": 0,
+      "maxMana": 2,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 34,
+      "board": [
+        {
+          "entityId": 82,
+          "cardId": "HERO_05bq",
+          "name": "Stormpike Expedition Tavish",
+          "baseHealth": 30,
+          "HEALTH": 40,
+          "DAMAGE": 9,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 83,
+          "cardId": "HERO_05dbp",
+          "name": "Steady Shot",
+          "text": "<b>Hero Power</b>\nDeal $2 damage to the enemy hero.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 40,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 2,
+          "entityId": 43,
+          "cardId": "WW_806",
+          "name": "Sneaky Snakes",
+          "CARDTYPE": "SPELL",
+          "COST": 1,
+          "text": "Summon two 1/1 Snakes with <b>Stealth</b>."
+        },
+        {
+          "public": true,
+          "engineTurn": 4,
+          "entityId": 84,
+          "cardId": "GAME_005",
+          "name": "The Coin",
+          "CARDTYPE": "SPELL",
+          "COST": 0,
+          "text": "Gain 1 Mana Crystal this turn only."
+        },
+        {
+          "public": true,
+          "engineTurn": 4,
+          "entityId": 62,
+          "cardId": "AT_063",
+          "name": "Acidmaw",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 4,
+          "HEALTH": 2,
+          "text": "Whenever an enemy minion takes damage, destroy it."
+        },
+        {
+          "public": true,
+          "engineTurn": 4,
+          "entityId": 49,
+          "cardId": "SW_460",
+          "name": "Devouring Swarm",
+          "CARDTYPE": "SPELL",
+          "COST": 0,
+          "text": "[x]Choose an enemy minion.\nYour minions attack it,\nthen return any that die\n to your hand."
+        }
+      ]
+    },
+    "optionsId": 20,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        5,
+        29
+      ],
+      "complete": true
+    },
+    "fingerprint": "6bc2099e7545630a53fe",
+    "decisionFingerprint": "0b3afb297dc161eeb645"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 18,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 81,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 29,
+      "type": "POWER",
+      "id": "o3t0",
+      "targetId": 82
+    },
+    {
+      "option": 4,
+      "entityId": 100,
+      "type": "POWER",
+      "id": "o4t0",
+      "targetId": 82
+    },
+    {
+      "option": 5,
+      "entityId": 116,
+      "type": "POWER",
+      "id": "o5t0",
+      "targetId": 82
+    }
+  ],
+  "recordedPlan": {
+    "id": "p1",
+    "steps": [
+      {
+        "kind": "play",
+        "id": 18,
+        "exact": true,
+        "note": "",
+        "before": "[[[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,31,0,false,false,false,false]],[18],3,null]",
+        "after": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,31,0,false,false,false,false]],[],0,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 29,
+        "targetId": 82,
+        "exact": true,
+        "note": "",
+        "before": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,31,0,false,false,false,false]],[],0,null]",
+        "after": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,28,0,false,false,false,false]],[],0,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 100,
+        "targetId": 82,
+        "exact": true,
+        "note": "",
+        "before": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,28,0,false,false,false,false]],[],0,null]",
+        "after": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,25,0,false,false,false,false]],[],0,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 116,
+        "targetId": 82,
+        "exact": true,
+        "note": "",
+        "before": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,25,0,false,false,false,false]],[],0,null]",
+        "after": "[[[18,2,5,0,false,true,false,false,false],[29,3,3,0,false,false,false,false,false],[80,0,27,0,false,false,false,false,false],[100,3,3,0,false,false,false,false,false],[116,3,2,0,false,false,false,false,false]],[[82,0,22,0,false,false,false,false]],[],0,null]"
+      }
+    ],
+    "text": "Plan of 4 step(s), carried out in this order: 1) Play Walking Dead (3 mana) as a 2/5. 2) Party Fiend 3/3 attacks the enemy hero: 3 damage, leaving 28. 3) Felbeast 3/3 attacks the enemy hero: 3 damage, leaving 25. 4) Young Priestess 3/2 attacks the enemy hero: 3 damage, leaving 22. Result: enemy hero 31 -> 22 Health. Enemy minions killed: none. Persistent enemy effects removed: none. Persistent enemy effects remaining: none. Effect evidence for killed targets: none. Unknown remaining effects (not assumed blank): none. Your minions lost: none. Their board can then attack for 0 next turn, against your 27 Health behind 5 Health of Taunt; before this plan it was 0. No attacker is left unused. Cards and mana not used by this plan stay available afterwards (0 mana left)."
+  },
+  "actual": {
+    "option": 1,
+    "entityId": 18,
+    "type": "POWER",
+    "id": "o1"
+  },
+  "discover": {
+    "row": 8388,
+    "createdAt": "2026-10-03T17:57:18.823Z",
+    "state": {
+      "gameNumber": 3,
+      "turn": 5,
+      "step": "MAIN_ACTION",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 1,
+        "heroClass": "WARLOCK",
+        "mana": 3,
+        "maxMana": 3,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 0,
+        "deckCount": 25,
+        "board": [
+          {
+            "entityId": 80,
+            "cardId": "HERO_07",
+            "name": "Gul'dan",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "DAMAGE": 3,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 81,
+            "cardId": "HERO_07bp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          },
+          {
+            "entityId": 29,
+            "cardId": "VAC_940",
+            "name": "Party Fiend",
+            "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 3,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 0,
+            "NUM_ATTACKS_THIS_TURN": 0
+          },
+          {
+            "entityId": 100,
+            "cardId": "VAC_940t",
+            "name": "Felbeast",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 3,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 0,
+            "NUM_ATTACKS_THIS_TURN": 0
+          },
+          {
+            "entityId": 116,
+            "cardId": "EX1_004",
+            "name": "Young Priestess",
+            "text": "At the end of your turn, give another random friendly minion +1 Health.",
+            "baseCost": 1,
+            "baseAttack": 2,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 2,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 0
+          }
+        ],
+        "hand": [],
+        "fatigue": 0,
+        "drawHazards": [
+          3,
+          3
+        ]
+      },
+      "opponent": {
+        "playerId": 2,
+        "heroClass": "HUNTER",
+        "mana": 0,
+        "maxMana": 2,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 4,
+        "deckCount": 34,
+        "board": [
+          {
+            "entityId": 82,
+            "cardId": "HERO_05bq",
+            "name": "Stormpike Expedition Tavish",
+            "baseHealth": 30,
+            "HEALTH": 40,
+            "DAMAGE": 9,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 83,
+            "cardId": "HERO_05dbp",
+            "name": "Steady Shot",
+            "text": "<b>Hero Power</b>\nDeal $2 damage to the enemy hero.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ],
+        "secretCount": 0,
+        "initialHealth": 40,
+        "publicPlays": [
+          {
+            "public": true,
+            "engineTurn": 2,
+            "entityId": 43,
+            "cardId": "WW_806",
+            "name": "Sneaky Snakes",
+            "CARDTYPE": "SPELL",
+            "COST": 1,
+            "text": "Summon two 1/1 Snakes with <b>Stealth</b>."
+          },
+          {
+            "public": true,
+            "engineTurn": 4,
+            "entityId": 84,
+            "cardId": "GAME_005",
+            "name": "The Coin",
+            "CARDTYPE": "SPELL",
+            "COST": 0,
+            "text": "Gain 1 Mana Crystal this turn only."
+          },
+          {
+            "public": true,
+            "engineTurn": 4,
+            "entityId": 62,
+            "cardId": "AT_063",
+            "name": "Acidmaw",
+            "CARDTYPE": "MINION",
+            "COST": 3,
+            "ATK": 4,
+            "HEALTH": 2,
+            "text": "Whenever an enemy minion takes damage, destroy it."
+          },
+          {
+            "public": true,
+            "engineTurn": 4,
+            "entityId": 49,
+            "cardId": "SW_460",
+            "name": "Devouring Swarm",
+            "CARDTYPE": "SPELL",
+            "COST": 0,
+            "text": "[x]Choose an enemy minion.\nYour minions attack it,\nthen return any that die\n to your hand."
+          }
+        ]
+      },
+      "optionsId": 19,
+      "mulliganResult": {
+        "choiceId": 1,
+        "kept": [
+          5,
+          29
+        ],
+        "complete": true
+      },
+      "choice": {
+        "id": 4,
+        "playerId": 1,
+        "type": "GENERAL",
+        "min": 1,
+        "max": 1,
+        "entities": [
+          {
+            "entityId": 131,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 2,
+            "baseHealth": 5,
+            "COST": 3,
+            "ATK": 2,
+            "HEALTH": 5,
+            "CARDTYPE": "MINION",
+            "TAUNT": 1
+          },
+          {
+            "entityId": 129,
+            "cardId": "TLC_603",
+            "name": "Platysaur",
+            "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 2,
+            "COST": 1,
+            "ATK": 1,
+            "HEALTH": 2,
+            "CARDTYPE": "MINION"
+          },
+          {
+            "entityId": 130,
+            "cardId": "DMF_119",
+            "name": "Wicked Whispers",
+            "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+            "baseCost": 1,
+            "COST": 1,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "revision": 38195,
+        "offeredAt": "01:57:16.4228011",
+        "sourceId": 6,
+        "source": {
+          "entityId": 6,
+          "cardId": "TLC_451",
+          "name": "Cursed Catacombs",
+          "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+          "baseCost": 0,
+          "ZONE_POSITION": 0,
+          "CARDTYPE": "SPELL"
+        }
+      },
+      "fingerprint": "b6bfe14c7914312a32eb",
+      "decisionFingerprint": "b97e177a01e0b399004c"
+    },
+    "options": [
+      {
+        "id": "c4e131",
+        "type": "CHOICE",
+        "choiceId": 4,
+        "entityId": 131
+      },
+      {
+        "id": "c4e129",
+        "type": "CHOICE",
+        "choiceId": 4,
+        "entityId": 129
+      },
+      {
+        "id": "c4e130",
+        "type": "CHOICE",
+        "choiceId": 4,
+        "entityId": 130
+      }
+    ],
+    "actual": {
+      "id": "c4e131",
+      "type": "CHOICE",
+      "choiceId": 4,
+      "entityId": 131
+    }
+  },
+  "ruling": {
+    "reviewStatus": "implemented-offline-verified",
+    "implementationVersion": "silverfish-v1-temporary-discard-v1",
+    "reason": "Verified Temporary Walking Dead self-summons on turn-end discard. Avoid paying 3 mana only to summon the same sleeping body; preserve mana for safe Life Tap or other useful plays."
+  }
+}

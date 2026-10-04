@@ -53,6 +53,8 @@ export function plan(box,state,action){
     const after=inHand&&src.where==='hand'
       ?{...state,me:{...state.me,hand:state.me.hand.filter(c=>c.entityId!==action.entityId)}}:state;
     push(X.locate(box,after,action.targetId),`${verb} ${t}`);
+    // A minion or hero attacking: run() flings this pair as one gesture instead of two clicks.
+    if(verb==='target'&&['board','hero'].includes(src.where))steps[0].attack=true;
   }
   return steps;
 }
@@ -65,11 +67,21 @@ const isDrop=s=>/^(drop into slot|play onto the board)/.test(s.what);
 // The returned gestures carry the worker's trace of what Windows actually did, so a gesture
 // that changed nothing can be told apart from one that was never injected. Nothing depends on
 // the return value except the dead-gesture log.
-export async function run(steps,win,{gap=260,dry=false}={}){
+// 2026-09-30, user: players click-hover-drag-hover only when unsure; an attack is flung. The
+// hover-click pair was also half of our metronomic 2.7s between attacks. JEV_FLING=0 restores
+// the two clicks, should flings turn out to die (gestures.jsonl, kind 'fling').
+const FLING=process.env.JEV_FLING!=='0';
+const pause=()=>180+Math.random()*240;
+export async function run(steps,win,{gap=pause,dry=false,beforeStep}={}){
   const done=[],gestures=[];
   for(let i=0;i<steps.length;i++){
     const s=steps[i],nxt=steps[i+1];
-    if(nxt&&isDrop(nxt)){
+    if(beforeStep)await beforeStep(s);
+    if(nxt&&s.attack&&FLING){
+      if(dry){await win.move(s.x,s.y);await win.move(nxt.x,nxt.y)}
+      else gestures.push({what:[s.what,nxt.what],...(await win.fling(s.x,s.y,nxt.x,nxt.y)).trace??{}});
+      done.push(s,nxt);i++;
+    }else if(nxt&&isDrop(nxt)){
       if(dry){await win.move(s.x,s.y);await win.move(nxt.x,nxt.y)}
       else gestures.push({what:[s.what,nxt.what],...(await win.drag(s.x,s.y,nxt.x,nxt.y)).trace??{}});
       done.push(s,nxt);i++;
@@ -78,7 +90,7 @@ export async function run(steps,win,{gap=260,dry=false}={}){
       else gestures.push({what:[s.what],...(await win.click(s.x,s.y)).trace??{}});
       done.push(s);
     }
-    if(done.at(-1)!==steps.at(-1))await new Promise(r=>setTimeout(r,gap));
+    if(done.at(-1)!==steps.at(-1))await new Promise(r=>setTimeout(r,typeof gap==='function'?gap():gap));
   }
   return {steps:done,gestures};
 }

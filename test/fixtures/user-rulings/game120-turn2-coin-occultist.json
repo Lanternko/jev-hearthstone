@@ -1,0 +1,394 @@
+{
+  "caseId": "game120-turn2-coin-occultist-over-bare-egg",
+  "source": {
+    "batchGame": 120,
+    "ownTurn": 2,
+    "engineTurn": 4,
+    "start": "2026-10-01T04:33:54.296156+08:00",
+    "replay": "https://hsreplay.net/uploads/upload/REDACTED/",
+    "replaySHA256": "99e145c5e3d4bee03cafe11d25b573c9171db9cbdfee4abe0ee36de48b326887",
+    "scope": "Public replay-derived state before recorded play; not a full bot decision snapshot.",
+    "reconstruction": "Player/hero/hero-power IDs synthetic; hand IDs and before-state from replay. Options reconstructed for offline regression, not recorded live options. Card text from local card database."
+  },
+  "screenshot": {
+    "status": "conversation-only",
+    "localFile": null,
+    "note": "Turn-two image visible in conversation; no local attachment path available. The saved opening image is a different frame."
+  },
+  "before": {
+    "own": {
+      "mana": 2,
+      "maxMana": 2,
+      "health": 30,
+      "armor": 0,
+      "board": [],
+      "hand": [
+        {
+          "entityId": 5,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "type": "MINION",
+          "cost": 3,
+          "attack": 3,
+          "health": 4,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 7,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "type": "MINION",
+          "cost": 3,
+          "attack": 3,
+          "health": 6,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "type": "MINION",
+          "cost": 3,
+          "attack": 2,
+          "health": 5,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 21,
+          "cardId": "SCH_147",
+          "name": "Boneweb Egg",
+          "type": "MINION",
+          "cost": 2,
+          "attack": 0,
+          "health": 2,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 22,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "type": "MINION",
+          "cost": 4,
+          "attack": 2,
+          "health": 2,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 23,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "type": "WEAPON",
+          "cost": 4,
+          "attack": 4,
+          "health": 3,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "type": "SPELL",
+          "cost": 0,
+          "attack": 0,
+          "health": 0,
+          "aoe": false,
+          "draw": false,
+          "ramp": false
+        }
+      ]
+    },
+    "opponent": {
+      "mana": 1,
+      "maxMana": 2,
+      "health": 30,
+      "armor": 0,
+      "board": []
+    }
+  },
+  "recordedAction": {
+    "kind": "PLAY",
+    "engineTurn": 4,
+    "turn": 2,
+    "side": "own",
+    "depth": 0,
+    "entityId": 21,
+    "card": {
+      "entityId": 21,
+      "cardId": "SCH_147",
+      "name": "Boneweb Egg",
+      "type": "MINION",
+      "cost": 2,
+      "attack": 0,
+      "health": 2,
+      "aoe": false,
+      "draw": false,
+      "ramp": false
+    },
+    "originZone": "HAND",
+    "targetId": null,
+    "targetLabel": null,
+    "before": {
+      "own": {
+        "mana": 2,
+        "maxMana": 2,
+        "health": 30,
+        "armor": 0,
+        "board": [],
+        "hand": [
+          {
+            "entityId": 5,
+            "cardId": "KAR_205",
+            "name": "Silverware Golem",
+            "type": "MINION",
+            "cost": 3,
+            "attack": 3,
+            "health": 4,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 7,
+            "cardId": "CATA_490",
+            "name": "Ocular Occultist",
+            "type": "MINION",
+            "cost": 3,
+            "attack": 3,
+            "health": 6,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 15,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "type": "MINION",
+            "cost": 3,
+            "attack": 2,
+            "health": 5,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 21,
+            "cardId": "SCH_147",
+            "name": "Boneweb Egg",
+            "type": "MINION",
+            "cost": 2,
+            "attack": 0,
+            "health": 2,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 22,
+            "cardId": "CATA_493",
+            "name": "Duke of Below",
+            "type": "MINION",
+            "cost": 4,
+            "attack": 2,
+            "health": 2,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 23,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "type": "WEAPON",
+            "cost": 4,
+            "attack": 4,
+            "health": 3,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          },
+          {
+            "entityId": 68,
+            "cardId": "JAIL_COIN3",
+            "name": "The Coin",
+            "type": "SPELL",
+            "cost": 0,
+            "attack": 0,
+            "health": 0,
+            "aoe": false,
+            "draw": false,
+            "ramp": false
+          }
+        ]
+      },
+      "opponent": {
+        "mana": 1,
+        "maxMana": 2,
+        "health": 30,
+        "armor": 0,
+        "board": []
+      }
+    }
+  },
+  "expected": {
+    "sequence": [
+      "The Coin",
+      "Ocular Occultist",
+      "discard Walking Dead or Silverware Golem"
+    ],
+    "reason": "Coin develops two attacking bodies now; the other three-cost minion provides a known next-turn play. Bare Egg has zero attack and no immediate activation.",
+    "payoffPreference": "Not resolved between Walking Dead and Silverware Golem for this control matchup."
+  },
+  "verification": {
+    "status": "automated_regression",
+    "automatedRegressionTest": true,
+    "policyChanged": true,
+    "test": "test/early-coin.test.mjs"
+  },
+  "state": {
+    "status": "RUNNING",
+    "turn": 4,
+    "me": {
+      "current": true,
+      "heroClass": "WARLOCK",
+      "mana": 2,
+      "maxMana": 2,
+      "hand": [
+        {
+          "entityId": 5,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 4,
+          "text": "If you discard this minion, summon it.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 7,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 21,
+          "cardId": "SCH_147",
+          "name": "Boneweb Egg",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 0,
+          "HEALTH": 2,
+          "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 22,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "CARDTYPE": "MINION",
+          "COST": 4,
+          "ATK": 2,
+          "HEALTH": 2,
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 23,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "CARDTYPE": "WEAPON",
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "ZONE": "HAND"
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "CARDTYPE": "SPELL",
+          "COST": 0,
+          "ATK": 0,
+          "HEALTH": 0,
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "ZONE": "HAND"
+        }
+      ],
+      "board": [
+        {
+          "entityId": 90001,
+          "CARDTYPE": "HERO",
+          "HEALTH": 30
+        },
+        {
+          "entityId": 90002,
+          "CARDTYPE": "HERO_POWER",
+          "COST": 2,
+          "text": "Draw a card and take 2 damage."
+        }
+      ],
+      "deckCount": 24
+    },
+    "opponent": {
+      "board": [
+        {
+          "entityId": 90003,
+          "CARDTYPE": "HERO",
+          "HEALTH": 30
+        }
+      ],
+      "deckCount": 25
+    }
+  },
+  "options": [
+    {
+      "id": "end",
+      "type": "END_TURN"
+    },
+    {
+      "id": "coin",
+      "type": "POWER",
+      "entityId": 68
+    },
+    {
+      "id": "egg",
+      "type": "POWER",
+      "entityId": 21
+    },
+    {
+      "id": "tap",
+      "type": "POWER",
+      "entityId": 90002
+    }
+  ]
+}

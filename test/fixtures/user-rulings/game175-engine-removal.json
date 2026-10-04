@@ -1,0 +1,338 @@
+{
+  "source": {
+    "batchGame": 175,
+    "ownTurn": 2,
+    "engineTurn": 3,
+    "time": "2026-10-01T10:35:57.361Z",
+    "note": "Original recorded visible state and policy-filtered decision options"
+  },
+  "state": {
+    "gameNumber": 26,
+    "turn": 3,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 2,
+      "maxMana": 2,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 25,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 3,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 80,
+          "cardId": "VAC_940t",
+          "name": "Felbeast",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 17,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 79,
+          "cardId": "VAC_940t",
+          "name": "Felbeast",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 11,
+          "cardId": "EX1_308",
+          "name": "Soulfire",
+          "text": "[x]Deal $4 damage.\nDiscard a random card.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 13,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 24,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 30,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "PRIEST",
+      "mana": 0,
+      "maxMana": 1,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_09a",
+          "name": "Tyrande Whisperwind",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 69,
+          "cardId": "EX1_625t",
+          "name": "Mind Spike",
+          "text": "Deal $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 47,
+          "cardId": "WON_065",
+          "name": "Ship's Chirurgeon",
+          "text": "After you summon a minion, give it +1 Health.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 37,
+          "cardId": "CFM_637",
+          "name": "Patches the Pirate",
+          "text": "[x]After you play a Pirate,\nsummon this minion\nfrom your deck.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ]
+    },
+    "optionsId": 5,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        17
+      ],
+      "complete": true
+    },
+    "fingerprint": "782e5c92a5434e61a30a",
+    "decisionFingerprint": "4987068ca1ed532d35eb"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 11,
+      "type": "POWER",
+      "id": "o1t2",
+      "targetId": 17
+    },
+    {
+      "option": 1,
+      "entityId": 11,
+      "type": "POWER",
+      "id": "o1t3",
+      "targetId": 79
+    },
+    {
+      "option": 1,
+      "entityId": 11,
+      "type": "POWER",
+      "id": "o1t4",
+      "targetId": 80
+    },
+    {
+      "option": 1,
+      "entityId": 11,
+      "type": "POWER",
+      "id": "o1t5",
+      "targetId": 47
+    },
+    {
+      "option": 1,
+      "entityId": 11,
+      "type": "POWER",
+      "id": "o1t6",
+      "targetId": 37
+    },
+    {
+      "option": 2,
+      "entityId": 13,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 65,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 17,
+      "type": "POWER",
+      "id": "o4t0",
+      "targetId": 66
+    },
+    {
+      "option": 4,
+      "entityId": 17,
+      "type": "POWER",
+      "id": "o4t1",
+      "targetId": 47
+    },
+    {
+      "option": 4,
+      "entityId": 17,
+      "type": "POWER",
+      "id": "o4t2",
+      "targetId": 37
+    },
+    {
+      "option": 5,
+      "entityId": 79,
+      "type": "POWER",
+      "id": "o5t0",
+      "targetId": 66
+    },
+    {
+      "option": 5,
+      "entityId": 79,
+      "type": "POWER",
+      "id": "o5t1",
+      "targetId": 47
+    },
+    {
+      "option": 5,
+      "entityId": 79,
+      "type": "POWER",
+      "id": "o5t2",
+      "targetId": 37
+    },
+    {
+      "option": 6,
+      "entityId": 80,
+      "type": "POWER",
+      "id": "o6t0",
+      "targetId": 66
+    },
+    {
+      "option": 6,
+      "entityId": 80,
+      "type": "POWER",
+      "id": "o6t1",
+      "targetId": 47
+    },
+    {
+      "option": 6,
+      "entityId": 80,
+      "type": "POWER",
+      "id": "o6t2",
+      "targetId": 37
+    }
+  ],
+  "recordedAction": {
+    "option": 6,
+    "entityId": 80,
+    "type": "POWER",
+    "id": "o6t2",
+    "targetId": 37
+  },
+  "expected": {
+    "inactive": 37,
+    "active": 47
+  }
+}

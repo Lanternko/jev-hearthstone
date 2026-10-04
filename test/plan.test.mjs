@@ -122,7 +122,7 @@ test('summons for the opponent or per-something stay unmodelled',async()=>{
   assert.deepEqual(m('Battlecry: Summon two 1/2 Mechs with Taunt and Divine Shield.').summon,{n:2,atk:1,hp:2,with:'taunt and divine shield'});
 });
 
-test('a buff that discards a draw-only payoff still plans the swings after it',()=>{
+test('a buff-first candidate that discards a draw-only payoff stops to observe draw effects',()=>{
   // Live 2026-09-24: Whispers would discard Hand of Gul'dan, so it could only be a last step and
   // the minions attacked unbuffed.
   const {state,actions}=board({mana:5,
@@ -130,8 +130,10 @@ test('a buff that discards a draw-only payoff still plans the swings after it',(
     hand:[{name:'Wicked Whispers',CARDTYPE:'SPELL',COST:1,text:'Discard your lowest Cost card. Give your minions +1/+1.'},
           {name:"Hand of Gul'dan",CARDTYPE:'SPELL',COST:6,text:'When you play\nor discard this,\ndraw 3 cards.'}]});
   const {plans}=search(state,actions);
-  assert.equal(plans[0].steps[0].kind,'play');
-  assert.ok(plans[0].steps.slice(1).some(m=>m.kind==='attack'));
+  const first=plans.find(p=>p.steps[0].kind==='play');
+  assert.ok(first,'buff-first remains a candidate');
+  assert.equal(first.steps.length,1,'unknown draws can include damaging auto-casts and fatigue; replan before attacking');
+  assert.equal(first.s.drawnUnknown,3);
 });
 
 test('a buff plan names the minions it would miss',async()=>{

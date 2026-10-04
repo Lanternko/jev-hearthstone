@@ -1,0 +1,216 @@
+{
+  "source": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0010-decisions.jsonl",
+  "gameId": "5f4365e3-1bd6-4126-b633-9a06c0407d29",
+  "batchGame": 10,
+  "ownTurn": 1,
+  "startedAt": "2026-10-02T07:30:50+08:00",
+  "state": {
+    "gameNumber": 10,
+    "turn": 2,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 1,
+      "maxMana": 1,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 6,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 36,
+          "cardId": "CATA_499",
+          "name": "Disposable Acolytes",
+          "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+          "baseCost": 2,
+          "COST": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 45,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 44,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 35,
+          "cardId": "BT_300",
+          "name": "Hand of Gul'dan",
+          "text": "When you play\nor discard this,\ndraw 3 cards.",
+          "baseCost": 6,
+          "COST": 6,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 40,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 6,
+          "CARDTYPE": "MINION",
+          "temporary": {
+            "expires": "end_of_own_turn",
+            "enchantmentId": 82,
+            "sourceEntityId": 53,
+            "confidence": 1
+          }
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "DEMONHUNTER",
+      "mana": 0,
+      "maxMana": 1,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_10",
+          "name": "Illidan Stormrage",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_10bp",
+          "name": "Demon Claws",
+          "text": "[x]<b>Hero Power</b>\n+$a1 Attack this turn.",
+          "baseCost": 1,
+          "COST": 1,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 29,
+          "cardId": "CORE_BT_351",
+          "name": "Battlefiend",
+          "text": "After your hero attacks, gain +1 Attack.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": []
+    },
+    "optionsId": 4,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        36,
+        44
+      ],
+      "complete": true
+    },
+    "fingerprint": "76a43e57504ce60fd45b",
+    "decisionFingerprint": "fd6f2a95d6d31158a21d"
+  },
+  "options": [
+    {
+      "option": 1,
+      "entityId": 44,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 68,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 40,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "observedAction": {
+    "option": 2,
+    "entityId": 68,
+    "type": "POWER",
+    "id": "o2"
+  },
+  "expectedEntityId": 40,
+  "ruling": "Play Temporary Party Fiend for 1 mana; do not Coin into Acolytes and lose the Party at end of turn.",
+  "temporaryEvidence": {
+    "enchantment": "GBL_999e",
+    "attached": 40,
+    "creator": 53,
+    "observedDiscardAt": "07:31:54.4145675"
+  }
+}

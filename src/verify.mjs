@@ -22,14 +22,31 @@ function wasHit(before,after,id){
   const b=byId(all(before),id),a=byId(all(after),id);
   if(!b)return null;                                   // not something we can see: no opinion
   if(!a)return true;
-  return (a.DAMAGE??0)!==(b.DAMAGE??0)||(a.ARMOR??0)!==(b.ARMOR??0)||on(a,'DIVINE_SHIELD')!==on(b,'DIVINE_SHIELD');
+  if((a.DAMAGE??0)!==(b.DAMAGE??0)||(a.ARMOR??0)!==(b.ARMOR??0)||on(a,'DIVINE_SHIELD')!==on(b,'DIVINE_SHIELD'))return true;
+  // 2026-09-30 ladder: four "misfires" were attacks on a Demon Hunter behind Bulwark of Azzinoth,
+  // which takes the hero's damage itself. A hero whose weapon lost durability was hit too.
+  if(b.CARDTYPE==='HERO'){
+    const mine=(before.me.board??[]).some(c=>c.entityId===id);
+    const side=(mine?before.me.board:before.opponent.board)??[];
+    return side.some(w=>w.CARDTYPE==='WEAPON'&&wasHit(before,after,w.entityId));
+  }
+  return false;
 }
 
 export function verdict(before,action,after){
   if(!after)return 'pending';
   if(action.type==='END_TURN')
     return !after.me.current||after.turn!==before.turn?'ok':'pending';
-  if(action.type==='MULLIGAN'||action.type==='CHOICE')
+  if(action.type==='MULLIGAN'){
+    const receipt=after.mulliganResult;
+    if(receipt?.choiceId!==action.choiceId||!receipt.complete)return 'pending';
+    const cards=(before.choice?.entities??before.me.hand??[]).filter(c=>c.cardId
+      &&c.name!=='The Coin'&&!/COIN/i.test(c.cardId));
+    const expected=cards.filter(c=>!action.replace.includes(c.entityId)).map(c=>c.entityId).sort((a,b)=>a-b);
+    const actual=[...receipt.kept].sort((a,b)=>a-b);
+    return JSON.stringify(expected)===JSON.stringify(actual)?'ok':'misfire';
+  }
+  if(action.type==='CHOICE')
     return after.choice?.id!==action.choiceId?'ok':'pending';
 
   const hand0=before.me.hand??[],hand1=after.me.hand??[];
@@ -59,7 +76,9 @@ export function verdict(before,action,after){
     if(!swung)return other||gone.length?'misfire':'pending';
     // It swung. A 0-Attack swing marks nothing on the target, so only judge real hits.
     if((src0.ATK??0)>0&&wasHit(before,after,action.targetId)===false){
-      const struck=(before.opponent.board??[]).some(c=>c.entityId!==action.targetId&&wasHit(before,after,c.entityId));
+      // Only another minion taking the hit proves a wrong target: weapons and heroes also move
+      // from side effects (the weapon soaking damage, a concede blowing up the hero).
+      const struck=(before.opponent.board??[]).some(c=>c.CARDTYPE==='MINION'&&c.entityId!==action.targetId&&wasHit(before,after,c.entityId));
       return struck?'misfire':'pending';
     }
     return 'ok';

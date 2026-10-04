@@ -1,0 +1,889 @@
+{
+  "source": {
+    "batchGame": 46,
+    "time": "2026-09-30T02:45:50+08:00"
+  },
+  "state": {
+    "gameNumber": 31,
+    "turn": 14,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 6,
+      "maxMana": 7,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 9,
+      "deckCount": 2,
+      "board": [
+        {
+          "entityId": 62,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "baseCost": 4,
+          "baseAttack": 4,
+          "baseHealth": 3,
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 0,
+          "CARDTYPE": "WEAPON",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 92,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "ATK": 4,
+          "HEALTH": 30,
+          "DAMAGE": 11,
+          "CARDTYPE": "HERO",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 93,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 72,
+          "cardId": "SCH_147",
+          "name": "Boneweb Egg",
+          "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+          "baseCost": 2,
+          "baseAttack": 0,
+          "baseHealth": 2,
+          "COST": 2,
+          "ATK": 3,
+          "HEALTH": 5,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "FROZEN": 0,
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 85,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 20,
+          "HEALTH": 20,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "FROZEN": 0,
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0,
+          "RUSH": 1
+        },
+        {
+          "entityId": 142,
+          "cardId": "CORE_YOD_026",
+          "name": "Fiendish Servant",
+          "text": "[x]<b>Deathrattle:</b> Give this\nminion's Attack to a random\nfriendly minion.",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "FROZEN": 0,
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 143,
+          "cardId": "RLK_921",
+          "name": "Sanguine Soldier",
+          "text": "<b>Divine Shield</b>\n <b>Battlecry:</b> Deal 2 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "DIVINE_SHIELD": 1,
+          "FROZEN": 0,
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 159,
+          "cardId": "SCH_147t",
+          "name": "Boneweb Spider",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION",
+          "FROZEN": 0,
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 160,
+          "cardId": "SCH_147t",
+          "name": "Boneweb Spider",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 6,
+          "CARDTYPE": "MINION",
+          "FROZEN": 0,
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 66,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 4,
+          "HEALTH": 7,
+          "ZONE_POSITION": 7,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 86,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "text": "If you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 4,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 4,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 88,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 81,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 63,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 69,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 65,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 18,
+          "HEALTH": 18,
+          "ZONE_POSITION": 6,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 74,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 7,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 80,
+          "cardId": "BOT_568",
+          "name": "The Soularium",
+          "text": "Draw 3 cards.\nThey are <b>Temporary</b>.",
+          "baseCost": 2,
+          "COST": 2,
+          "ZONE_POSITION": 8,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 76,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 9,
+          "CARDTYPE": "MINION"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": [
+        3,
+        3
+      ]
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "DRUID",
+      "mana": 0,
+      "maxMana": 8,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 7,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 90,
+          "cardId": "HERO_06ar",
+          "name": "Orgrimmar Faelin",
+          "baseHealth": 30,
+          "ATK": 0,
+          "HEALTH": 40,
+          "DAMAGE": 34,
+          "ARMOR": 0,
+          "CARDTYPE": "HERO",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 91,
+          "cardId": "HERO_06ebp",
+          "name": "Shapeshift",
+          "text": "<b>Hero Power</b>\n+$a1 Attack this turn.\n+$d1 Armor.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 197,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 198,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 199,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 200,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 201,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 202,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 6,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 203,
+          "cardId": "ICC_832t4",
+          "name": "Scarab Beetle",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 1,
+          "baseHealth": 5,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 5,
+          "ZONE_POSITION": 7,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        }
+      ]
+    },
+    "optionsId": 53,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        62,
+        72,
+        64
+      ],
+      "complete": true
+    },
+    "fingerprint": "8f2848a8fb4c3405fdfb",
+    "decisionFingerprint": "ec67de9eba3a30d4f82c"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 80,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t0",
+      "targetId": 197
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t1",
+      "targetId": 198
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t2",
+      "targetId": 199
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t3",
+      "targetId": 200
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t4",
+      "targetId": 201
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t5",
+      "targetId": 202
+    },
+    {
+      "option": 2,
+      "entityId": 92,
+      "type": "POWER",
+      "id": "o2t6",
+      "targetId": 203
+    },
+    {
+      "option": 3,
+      "entityId": 93,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t0",
+      "targetId": 197
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t1",
+      "targetId": 198
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t2",
+      "targetId": 199
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t3",
+      "targetId": 200
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t4",
+      "targetId": 201
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t5",
+      "targetId": 202
+    },
+    {
+      "option": 4,
+      "entityId": 72,
+      "type": "POWER",
+      "id": "o4t6",
+      "targetId": 203
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t0",
+      "targetId": 197
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t1",
+      "targetId": 198
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t2",
+      "targetId": 199
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t3",
+      "targetId": 200
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t4",
+      "targetId": 201
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t5",
+      "targetId": 202
+    },
+    {
+      "option": 5,
+      "entityId": 85,
+      "type": "POWER",
+      "id": "o5t6",
+      "targetId": 203
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t0",
+      "targetId": 197
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t1",
+      "targetId": 198
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t2",
+      "targetId": 199
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t3",
+      "targetId": 200
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t4",
+      "targetId": 201
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t5",
+      "targetId": 202
+    },
+    {
+      "option": 6,
+      "entityId": 142,
+      "type": "POWER",
+      "id": "o6t6",
+      "targetId": 203
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t0",
+      "targetId": 197
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t1",
+      "targetId": 198
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t2",
+      "targetId": 199
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t3",
+      "targetId": 200
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t4",
+      "targetId": 201
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t5",
+      "targetId": 202
+    },
+    {
+      "option": 7,
+      "entityId": 143,
+      "type": "POWER",
+      "id": "o7t6",
+      "targetId": 203
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t0",
+      "targetId": 197
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t1",
+      "targetId": 198
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t2",
+      "targetId": 199
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t3",
+      "targetId": 200
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t4",
+      "targetId": 201
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t5",
+      "targetId": 202
+    },
+    {
+      "option": 8,
+      "entityId": 159,
+      "type": "POWER",
+      "id": "o8t6",
+      "targetId": 203
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t0",
+      "targetId": 197
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t1",
+      "targetId": 198
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t2",
+      "targetId": 199
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t3",
+      "targetId": 200
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t4",
+      "targetId": 201
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t5",
+      "targetId": 202
+    },
+    {
+      "option": 9,
+      "entityId": 160,
+      "type": "POWER",
+      "id": "o9t6",
+      "targetId": 203
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t0",
+      "targetId": 197
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t1",
+      "targetId": 198
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t2",
+      "targetId": 199
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t3",
+      "targetId": 200
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t4",
+      "targetId": 201
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t5",
+      "targetId": 202
+    },
+    {
+      "option": 10,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o10t6",
+      "targetId": 203
+    }
+  ],
+  "expected": {
+    "forbiddenCardNames": [
+      "Life Tap"
+    ],
+    "drawDamage": 7,
+    "selfDamage": 2,
+    "usableCards": 0
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "source": {
+    "batchGame": 179,
+    "ownTurn": 1,
+    "engineTurn": 1,
+    "log": "D:/遊戲/Hearthstone/Logs/Hearthstone_2026_10_01_14_25_31/Power.log",
+    "playLine": "D 18:56:02.3286097 GameState.DebugPrintPower() - BLOCK_START BlockType=PLAY Entity=[entityName=派對惡魔 id=47 zone=HAND zonePos=3 cardId=VAC_940 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 ",
+    "replayUrl": "https://hsreplay.net/uploads/upload/REDACTED/",
+    "opponentClass": "WARLOCK"
+  },
+  "state": {
+    "gameNumber": 30,
+    "turn": 1,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 1,
+      "maxMana": 1,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 76,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 77,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 70,
+          "cardId": "TLC_451",
+          "name": "Cursed Catacombs",
+          "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+          "baseCost": 0,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 46,
+          "cardId": "CATA_499",
+          "name": "Disposable Acolytes",
+          "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+          "baseCost": 2,
+          "COST": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 47,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 60,
+          "cardId": "DMF_119",
+          "name": "Wicked Whispers",
+          "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 0,
+      "maxMana": 0,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 36,
+      "board": [
+        {
+          "entityId": 74,
+          "cardId": "HERO_07ap_MalGanis_hls",
+          "name": "Bobble Mal'Ganis",
+          "baseHealth": 30,
+          "HEALTH": 40,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 75,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ]
+    },
+    "optionsId": 1,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        70,
+        46
+      ],
+      "complete": true
+    },
+    "fingerprint": "e4c8ff5c860f6091bb46",
+    "decisionFingerprint": "34efd466f6a7b4ea8c49"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 70,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 47,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 60,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "originalAction": {
+    "option": 2,
+    "entityId": 47,
+    "type": "POWER",
+    "id": "o2"
+  },
+  "expectedAction": {
+    "option": 1,
+    "entityId": 70,
+    "type": "POWER",
+    "id": "o1"
+  }
+}

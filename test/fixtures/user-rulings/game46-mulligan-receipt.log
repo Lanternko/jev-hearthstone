@@ -1,0 +1,4 @@
+D 02:40:38.2971898 GameState.DebugPrintEntitiesChosen() - id=2 Player=Local EntitiesCount=3
+D 02:40:38.2971898 GameState.DebugPrintEntitiesChosen() -   Entities[0]=[entityName=card id=62 zone=HAND zonePos=1 cardId=END_016 player=2]
+D 02:40:38.2971898 GameState.DebugPrintEntitiesChosen() -   Entities[1]=[entityName=card id=72 zone=HAND zonePos=2 cardId=SCH_147 player=2]
+D 02:40:38.2971898 GameState.DebugPrintEntitiesChosen() -   Entities[2]=[entityName=card id=64 zone=HAND zonePos=3 cardId=TIME_026 player=2]

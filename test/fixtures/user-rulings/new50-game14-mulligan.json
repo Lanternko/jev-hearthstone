@@ -1,0 +1,220 @@
+{
+  "source": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0014-decisions.jsonl",
+  "gameId": "30960305-a16f-442d-b5e1-df737785c198",
+  "replay": "https://hsreplay.net/uploads/upload/REDACTED/",
+  "state": {
+    "gameNumber": 14,
+    "turn": 1,
+    "step": "BEGIN_MULLIGAN",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 0,
+      "maxMana": 0,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 78,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 79,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 24,
+          "cardId": "DMF_119",
+          "name": "Wicked Whispers",
+          "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 13,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 8,
+          "cardId": "TLC_451",
+          "name": "Cursed Catacombs",
+          "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+          "baseCost": 0,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 23,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 82,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "MAGE",
+      "mana": 0,
+      "maxMana": 0,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 37,
+      "board": [
+        {
+          "entityId": 80,
+          "cardId": "HERO_08as_Jaina",
+          "name": "Justice Jaina",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 81,
+          "cardId": "HERO_08ashp",
+          "name": "Fireblast",
+          "text": "<b>Hero Power</b>\nDeal $1 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": null,
+      "publicPlays": []
+    },
+    "choice": {
+      "id": 1,
+      "playerId": 1,
+      "type": "MULLIGAN",
+      "min": 0,
+      "max": 5,
+      "entities": [
+        {
+          "entityId": 24,
+          "cardId": "DMF_119",
+          "name": "Wicked Whispers",
+          "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 13,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 8,
+          "cardId": "TLC_451",
+          "name": "Cursed Catacombs",
+          "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+          "baseCost": 0,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 23,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 82,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "revision": 223214,
+      "offeredAt": "07:55:25.8604761"
+    },
+    "fingerprint": "4894aaefadd520f603a3",
+    "decisionFingerprint": "2dd15c80ddaed1881ea4"
+  },
+  "observedAction": {
+    "id": "m1",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+      24
+    ]
+  },
+  "actualKept": [
+    24,
+    13,
+    8,
+    23
+  ],
+  "ruling": "Toss both Walking Dead when tossing Whispers; one retained outlet supports at most one material. Keep Catacombs; Whispers is optional on the Coin."
+}

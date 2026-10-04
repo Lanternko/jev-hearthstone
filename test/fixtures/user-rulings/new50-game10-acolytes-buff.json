@@ -1,0 +1,252 @@
+{
+  "source": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0010-decisions.jsonl",
+  "gameId": "5f4365e3-1bd6-4126-b633-9a06c0407d29",
+  "batchGame": 10,
+  "ownTurn": 4,
+  "state": {
+    "gameNumber": 10,
+    "turn": 8,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 4,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 17,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 44,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 45,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 95,
+          "cardId": "SCH_147t",
+          "name": "Boneweb Spider",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 2,
+          "HEALTH": 1,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 96,
+          "cardId": "SCH_147t",
+          "name": "Boneweb Spider",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 2,
+          "HEALTH": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 63,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL",
+          "doomed": true
+        },
+        {
+          "entityId": 58,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "text": "If you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 4,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 4,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 34,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "baseCost": 4,
+          "baseAttack": 4,
+          "baseHealth": 3,
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "WEAPON"
+        },
+        {
+          "entityId": 39,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 38,
+          "cardId": "CATA_499",
+          "name": "Disposable Acolytes",
+          "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+          "baseCost": 2,
+          "COST": 2,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "DEMONHUNTER",
+      "mana": 0,
+      "maxMana": 4,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 1,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_10",
+          "name": "Illidan Stormrage",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 1,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 89,
+          "cardId": "JAIL_EVENT_101hp",
+          "name": "Collapsing Star",
+          "text": "[x]Deal 2 damage to\na random enemy.\nWhenever you summon\na Demon, refresh this.",
+          "baseCost": 1,
+          "COST": 1,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 25,
+          "cardId": "JAIL_719",
+          "name": "Irida Sinseeker",
+          "text": "[x]<b>Lifesteal</b>. <b>Battlecry:</b> Send your\ndeck to the Void, except 1 card.\nAt the start of your turns, get\ntwo cards from the Void.",
+          "baseCost": 4,
+          "baseAttack": 7,
+          "baseHealth": 7,
+          "COST": 4,
+          "ATK": 7,
+          "HEALTH": 7,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": []
+    },
+    "optionsId": 21,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        36,
+        44
+      ],
+      "complete": true
+    },
+    "fingerprint": "8d7dc276713a793a5726",
+    "decisionFingerprint": "258046b21e7a8bed8f42"
+  },
+  "options": [
+    {
+      "option": 1,
+      "entityId": 58,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 39,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 38,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "observedAction": {
+    "option": 2,
+    "entityId": 39,
+    "type": "POWER",
+    "id": "o2"
+  },
+  "observedPlan": "p1",
+  "expectedFirst": 38,
+  "expectedFollowup": 39,
+  "ruling": "After Soulfire, play 2-mana Disposable Acolytes, reobserve the random summons, then use the reserved 1 mana for Entropic Continuity; buff need not wait for all seven slots."
+}

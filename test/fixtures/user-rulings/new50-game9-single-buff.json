@@ -1,0 +1,189 @@
+{
+  "source": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0009-decisions.jsonl",
+  "batchGame": 9,
+  "ownTurn": 2,
+  "state": {
+    "gameNumber": 9,
+    "turn": 3,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 1,
+      "maxMana": 2,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 69,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 70,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 40,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 48,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 59,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 61,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 44,
+          "cardId": "WON_103",
+          "name": "Chamber of Viscidus",
+          "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+          "baseCost": 3,
+          "baseHealth": 2,
+          "COST": 3,
+          "HEALTH": 2,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "LOCATION"
+        },
+        {
+          "entityId": 38,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "doomed": true
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "SHAMAN",
+      "mana": 0,
+      "maxMana": 1,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 25,
+      "board": [
+        {
+          "entityId": 67,
+          "cardId": "HERO_02bb",
+          "name": "Thor Thorim",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 68,
+          "cardId": "HERO_02fbp",
+          "name": "Totemic Call",
+          "text": "<b>Hero Power</b>\nSummon a random basic Totem.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "secretCount": 1,
+      "initialHealth": 30,
+      "publicPlays": []
+    },
+    "optionsId": 5,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        61
+      ],
+      "complete": true
+    },
+    "fingerprint": "b29acdad24f5808e40b9",
+    "decisionFingerprint": "6ad0f763e96d20fba068"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 48,
+      "type": "POWER",
+      "id": "o1"
+    }
+  ],
+  "observedAction": {
+    "option": 1,
+    "entityId": 48,
+    "type": "POWER",
+    "id": "o1"
+  },
+  "ruling": "Hold permanent Continuity on one sleeping Platysaur versus empty board; spare 1 mana does not make the buff worth spending."
+}

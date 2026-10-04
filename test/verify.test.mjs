@@ -62,3 +62,15 @@ test('an attack that played a hand card instead is a misfire',()=>{
   const b=base(),a=clone(b);a.me.hand=a.me.hand.filter(c=>c.entityId!==2);
   assert.equal(verdict(b,{type:'POWER',entityId:20,targetId:91},a),'misfire');
 });
+test('an attack on a hero whose weapon soaks the damage still hit',()=>{
+  const b=base();b.opponent.board.push({entityId:95,CARDTYPE:'WEAPON',ATK:0,DURABILITY:5,DAMAGE:0});
+  const a=clone(b);a.me.board[2].NUM_ATTACKS_THIS_TURN=1;a.opponent.board[3].DAMAGE=1;
+  assert.equal(verdict(b,{type:'POWER',entityId:20,targetId:90},a),'ok');
+});
+test('a moving weapon or hero is no proof of a wrong target',()=>{
+  const b=base();b.opponent.board.push({entityId:95,CARDTYPE:'WEAPON',ATK:0,DURABILITY:5,DAMAGE:0});
+  const a=clone(b);a.me.board[2].NUM_ATTACKS_THIS_TURN=1;a.opponent.board[3].DAMAGE=1;a.opponent.board[0].DAMAGE=5;
+  assert.equal(verdict(b,{type:'POWER',entityId:20,targetId:91},a),'pending');
+  const c=clone(b);c.me.board[2].NUM_ATTACKS_THIS_TURN=1;c.opponent.board[2].DAMAGE=3;
+  assert.equal(verdict(b,{type:'POWER',entityId:20,targetId:91},c),'misfire');
+});

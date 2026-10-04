@@ -1,0 +1,353 @@
+{
+  "caseId": "ranked22-confirmed-mulligan-misfire",
+  "sourceHash": "e2c617db5729384209fe72bf645fa7b0b722e0b2181ce40629d49789e396bc6e",
+  "sourcePath": "runtime/ranked-2026-10-01T12-42-04-012Z/game-0022-full-Power.log",
+  "receiptBoundaryOffset": 98914,
+  "requestedReplacement": 15,
+  "actualKept": [
+    4,
+    21,
+    15,
+    14
+  ],
+  "before": {
+    "gameNumber": 1,
+    "turn": 1,
+    "step": "BEGIN_MULLIGAN",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 0,
+      "maxMana": 0,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 4,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 21,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 14,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "PALADIN",
+      "mana": 0,
+      "maxMana": 0,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 27,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_04w",
+          "name": "Sir Finley Mrrgglton",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_04wbp",
+          "name": "Reinforce",
+          "text": "<b>Hero Power</b>\nSummon a {0} Silver Hand Recruit.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ]
+    },
+    "choice": {
+      "id": 1,
+      "playerId": 1,
+      "type": "MULLIGAN",
+      "min": 0,
+      "max": 5,
+      "entities": [
+        {
+          "entityId": 4,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 21,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 14,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "revision": 841,
+      "offeredAt": "23:23:48.3588275"
+    },
+    "fingerprint": "1258c252fa1fd2d555de",
+    "decisionFingerprint": "8c8c2b8fb4673f7814c0"
+  },
+  "action": {
+    "id": "m4",
+    "type": "MULLIGAN",
+    "choiceId": 1,
+    "replace": [
+      15
+    ]
+  },
+  "after": {
+    "gameNumber": 1,
+    "turn": 1,
+    "step": "BEGIN_MULLIGAN",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 0,
+      "maxMana": 0,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 26,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 4,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 21,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 14,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION"
+        },
+        {
+          "entityId": 68,
+          "cardId": "JAIL_COIN3",
+          "name": "The Coin",
+          "text": "Gain 1 Mana Crystal this turn only.",
+          "baseCost": 0,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "PALADIN",
+      "mana": 0,
+      "maxMana": 0,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 27,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_04w",
+          "name": "Sir Finley Mrrgglton",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_04wbp",
+          "name": "Reinforce",
+          "text": "<b>Hero Power</b>\nSummon a {0} Silver Hand Recruit.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ]
+    },
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        4,
+        21,
+        15,
+        14
+      ],
+      "complete": true
+    },
+    "fingerprint": "14d28ef6757355e0904b",
+    "decisionFingerprint": "0b1908df28a89d39281a"
+  }
+}

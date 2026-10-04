@@ -1,0 +1,413 @@
+[
+  {
+    "id": "game46-opening",
+    "source": {
+      "batchGame": 46,
+      "createdAt": "2026-09-29T18:40:22.192Z"
+    },
+    "state": {
+      "gameNumber": 31,
+      "turn": 1,
+      "step": "BEGIN_MULLIGAN",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 2,
+        "heroClass": "WARLOCK",
+        "mana": 0,
+        "maxMana": 0,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 5,
+        "deckCount": 26,
+        "board": [
+          {
+            "entityId": 92,
+            "cardId": "HERO_07f",
+            "name": "Nemesis Gul'dan",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 93,
+            "cardId": "HERO_07ebp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ],
+        "hand": [
+          {
+            "entityId": 62,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "text": "After your hero attacks, discard your highest Cost card.",
+            "baseCost": 4,
+            "baseAttack": 4,
+            "baseHealth": 3,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 3,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "WEAPON"
+          },
+          {
+            "entityId": 72,
+            "cardId": "SCH_147",
+            "name": "Boneweb Egg",
+            "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+            "baseCost": 2,
+            "baseAttack": 0,
+            "baseHealth": 2,
+            "COST": 2,
+            "HEALTH": 2,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION"
+          },
+          {
+            "entityId": 64,
+            "cardId": "TIME_026",
+            "name": "Entropic Continuity",
+            "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 60,
+            "cardId": "RLK_534",
+            "name": "Soul Barrage",
+            "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+            "baseCost": 4,
+            "COST": 4,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 94,
+            "cardId": "JAIL_COIN3",
+            "name": "The Coin",
+            "text": "Gain 1 Mana Crystal this turn only.",
+            "baseCost": 0,
+            "ZONE_POSITION": 5,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "drawHazards": []
+      },
+      "opponent": {
+        "playerId": 1,
+        "heroClass": "DRUID",
+        "mana": 0,
+        "maxMana": 0,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 3,
+        "deckCount": 37,
+        "board": [
+          {
+            "entityId": 90,
+            "cardId": "HERO_06ar",
+            "name": "Orgrimmar Faelin",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 91,
+            "cardId": "HERO_06ebp",
+            "name": "Shapeshift",
+            "text": "<b>Hero Power</b>\n+$a1 Attack this turn.\n+$d1 Armor.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ]
+      },
+      "choice": {
+        "id": 2,
+        "playerId": 2,
+        "type": "MULLIGAN",
+        "min": 0,
+        "max": 5,
+        "entities": [
+          {
+            "entityId": 62,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "text": "After your hero attacks, discard your highest Cost card.",
+            "baseCost": 4,
+            "baseAttack": 4,
+            "baseHealth": 3,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 3,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "WEAPON"
+          },
+          {
+            "entityId": 72,
+            "cardId": "SCH_147",
+            "name": "Boneweb Egg",
+            "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+            "baseCost": 2,
+            "baseAttack": 0,
+            "baseHealth": 2,
+            "COST": 2,
+            "HEALTH": 2,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION"
+          },
+          {
+            "entityId": 64,
+            "cardId": "TIME_026",
+            "name": "Entropic Continuity",
+            "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 60,
+            "cardId": "RLK_534",
+            "name": "Soul Barrage",
+            "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+            "baseCost": 4,
+            "COST": 4,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 94,
+            "cardId": "JAIL_COIN3",
+            "name": "The Coin",
+            "text": "Gain 1 Mana Crystal this turn only.",
+            "baseCost": 0,
+            "ZONE_POSITION": 5,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "revision": 460506
+      },
+      "fingerprint": "4fc545c95b194a44e098",
+      "decisionFingerprint": "d5d6c1913b4d751baedf"
+    },
+    "recordedOptions": [
+      {
+        "id": "m13",
+        "type": "MULLIGAN",
+        "choiceId": 2,
+        "replace": [
+          62,
+          64,
+          60
+        ]
+      },
+      {
+        "id": "m15",
+        "type": "MULLIGAN",
+        "choiceId": 2,
+        "replace": [
+          62,
+          72,
+          64,
+          60
+        ]
+      }
+    ],
+    "recordedAction": {
+      "id": "m13",
+      "type": "MULLIGAN",
+      "choiceId": 2,
+      "replace": [
+        62,
+        64,
+        60
+      ]
+    },
+    "expected": {
+      "replaceNames": [
+        "Chronoclaws",
+        "Boneweb Egg",
+        "Entropic Continuity",
+        "Soul Barrage"
+      ]
+    },
+    "observation": "Replay screenshot marks Soul Barrage only; the logged action requests replacing weapon, buff and barrage. Execution discrepancy remains unverified."
+  },
+  {
+    "id": "game46-turn1-coin",
+    "source": {
+      "batchGame": 46,
+      "createdAt": "2026-09-29T18:40:58.253Z"
+    },
+    "state": {
+      "gameNumber": 31,
+      "turn": 2,
+      "step": "MAIN_ACTION",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 2,
+        "heroClass": "WARLOCK",
+        "mana": 1,
+        "maxMana": 1,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 6,
+        "deckCount": 25,
+        "board": [
+          {
+            "entityId": 92,
+            "cardId": "HERO_07f",
+            "name": "Nemesis Gul'dan",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 93,
+            "cardId": "HERO_07ebp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ],
+        "hand": [
+          {
+            "entityId": 62,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "text": "After your hero attacks, discard your highest Cost card.",
+            "baseCost": 4,
+            "baseAttack": 4,
+            "baseHealth": 3,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 3,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "WEAPON"
+          },
+          {
+            "entityId": 72,
+            "cardId": "SCH_147",
+            "name": "Boneweb Egg",
+            "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+            "baseCost": 2,
+            "baseAttack": 0,
+            "baseHealth": 2,
+            "COST": 2,
+            "HEALTH": 2,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION"
+          },
+          {
+            "entityId": 64,
+            "cardId": "TIME_026",
+            "name": "Entropic Continuity",
+            "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 86,
+            "cardId": "KAR_205",
+            "name": "Silverware Golem",
+            "text": "If you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 3,
+            "baseHealth": 4,
+            "COST": 3,
+            "ATK": 3,
+            "HEALTH": 4,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "MINION"
+          },
+          {
+            "entityId": 94,
+            "cardId": "JAIL_COIN3",
+            "name": "The Coin",
+            "text": "Gain 1 Mana Crystal this turn only.",
+            "baseCost": 0,
+            "ZONE_POSITION": 5,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 82,
+            "cardId": "RLK_534",
+            "name": "Soul Barrage",
+            "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+            "baseCost": 4,
+            "COST": 4,
+            "ZONE_POSITION": 6,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "drawHazards": []
+      },
+      "opponent": {
+        "playerId": 1,
+        "heroClass": "DRUID",
+        "mana": 1,
+        "maxMana": 1,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 4,
+        "deckCount": 36,
+        "board": [
+          {
+            "entityId": 90,
+            "cardId": "HERO_06ar",
+            "name": "Orgrimmar Faelin",
+            "baseHealth": 30,
+            "HEALTH": 40,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 91,
+            "cardId": "HERO_06ebp",
+            "name": "Shapeshift",
+            "text": "<b>Hero Power</b>\n+$a1 Attack this turn.\n+$d1 Armor.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ]
+      },
+      "optionsId": 2,
+      "fingerprint": "63e04fbd050774ec3612",
+      "decisionFingerprint": "89646244fcecc59c7fdc"
+    },
+    "recordedOptions": [
+      {
+        "id": "o0",
+        "type": "END_TURN",
+        "option": 0
+      },
+      {
+        "option": 2,
+        "entityId": 94,
+        "type": "POWER",
+        "id": "o2"
+      }
+    ],
+    "recordedAction": {
+      "option": 2,
+      "entityId": 94,
+      "type": "POWER",
+      "id": "o2"
+    },
+    "expected": {
+      "forbiddenCardNames": [
+        "The Coin"
+      ]
+    }
+  }
+]

@@ -1,0 +1,787 @@
+{
+  "source": "runtime/ranked-2026-10-02T18-07-53-110Z",
+  "ordinal": 18,
+  "ownTurn": 5,
+  "engineTurn": 9,
+  "decision": {
+    "createdAt": "2026-10-02T20:07:06.196Z",
+    "plannerVersion": "silverfish-v1-class-prior-v1",
+    "state": {
+      "gameNumber": 18,
+      "turn": 9,
+      "step": "MAIN_ACTION",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 2,
+        "heroClass": "WARLOCK",
+        "mana": 5,
+        "maxMana": 5,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 4,
+        "deckCount": 22,
+        "board": [
+          {
+            "entityId": 70,
+            "cardId": "HERO_07",
+            "name": "Gul'dan",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "DAMAGE": 2,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 71,
+            "cardId": "HERO_07bp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          },
+          {
+            "entityId": 106,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 2,
+            "baseHealth": 5,
+            "COST": 3,
+            "ATK": 2,
+            "HEALTH": 5,
+            "DAMAGE": 4,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "MINION",
+            "TAUNT": 1,
+            "EXHAUSTED": 0,
+            "NUM_ATTACKS_THIS_TURN": 0
+          },
+          {
+            "entityId": 67,
+            "cardId": "CATA_493",
+            "name": "Duke of Below",
+            "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+            "baseCost": 4,
+            "baseAttack": 2,
+            "baseHealth": 2,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 4,
+            "DAMAGE": 3,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 0,
+            "NUM_ATTACKS_THIS_TURN": 0,
+            "RUSH": 1
+          }
+        ],
+        "hand": [
+          {
+            "entityId": 59,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "text": "After your hero attacks, discard your highest Cost card.",
+            "baseCost": 4,
+            "baseAttack": 4,
+            "baseHealth": 3,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 3,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "WEAPON"
+          },
+          {
+            "entityId": 52,
+            "cardId": "EX1_308",
+            "name": "Soulfire",
+            "text": "[x]Deal $4 damage.\nDiscard a random card.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 48,
+            "cardId": "CATA_499",
+            "name": "Disposable Acolytes",
+            "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+            "baseCost": 2,
+            "COST": 2,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 57,
+            "cardId": "TIME_026",
+            "name": "Entropic Continuity",
+            "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "fatigue": 0,
+        "drawHazards": []
+      },
+      "opponent": {
+        "playerId": 1,
+        "heroClass": "PALADIN",
+        "mana": 0,
+        "maxMana": 4,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 3,
+        "deckCount": 32,
+        "board": [
+          {
+            "entityId": 68,
+            "cardId": "HERO_04",
+            "name": "Uther Lightbringer",
+            "baseHealth": 30,
+            "ATK": 0,
+            "HEALTH": 30,
+            "DAMAGE": 2,
+            "CARDTYPE": "HERO",
+            "EXHAUSTED": 1,
+            "NUM_ATTACKS_THIS_TURN": 1
+          },
+          {
+            "entityId": 83,
+            "cardId": "HERO_04bp2",
+            "name": "The Silver Hand",
+            "text": "<b>Hero Power</b>\nSummon two {0} Recruits.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 130,
+            "cardId": "CS2_091",
+            "name": "Light's Justice",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 4,
+            "COST": 1,
+            "ATK": 1,
+            "HEALTH": 4,
+            "DAMAGE": 1,
+            "CARDTYPE": "WEAPON",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 121,
+            "cardId": "CS2_101t5",
+            "name": "Silver Hand Recruit",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 1,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 124,
+            "cardId": "CS2_101t5",
+            "name": "Silver Hand Recruit",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 1,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 127,
+            "cardId": "CS2_101t8",
+            "name": "Silver Hand Recruit",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 132,
+            "cardId": "CS2_101t8",
+            "name": "Silver Hand Recruit",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 1,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1
+          },
+          {
+            "entityId": 135,
+            "cardId": "CS2_101t",
+            "name": "Silver Hand Recruit",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 3,
+            "HEALTH": 1,
+            "ZONE_POSITION": 5,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1
+          }
+        ],
+        "secretCount": 0,
+        "initialHealth": 30,
+        "publicPlays": [
+          {
+            "public": true,
+            "engineTurn": 2,
+            "entityId": 34,
+            "cardId": "SCH_312",
+            "name": "Tour Guide",
+            "CARDTYPE": "MINION",
+            "COST": 1,
+            "ATK": 1,
+            "HEALTH": 1,
+            "text": "<b>Battlecry:</b> Your next Hero Power costs (0)."
+          },
+          {
+            "public": true,
+            "engineTurn": 4,
+            "entityId": 79,
+            "cardId": "MEND_800",
+            "name": "Brash Battlemaster",
+            "CARDTYPE": "MINION",
+            "COST": 2,
+            "ATK": 2,
+            "HEALTH": 1,
+            "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+          },
+          {
+            "public": true,
+            "engineTurn": 6,
+            "entityId": 80,
+            "cardId": "MEND_800",
+            "name": "Brash Battlemaster",
+            "CARDTYPE": "MINION",
+            "COST": 2,
+            "ATK": 2,
+            "HEALTH": 1,
+            "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+          },
+          {
+            "public": true,
+            "engineTurn": 6,
+            "entityId": 6,
+            "cardId": "UNG_960",
+            "name": "Lost in the Jungle",
+            "CARDTYPE": "SPELL",
+            "COST": 1,
+            "text": "Summon two {0} Silver Hand Recruits."
+          },
+          {
+            "public": true,
+            "engineTurn": 8,
+            "entityId": 7,
+            "cardId": "CORE_GVG_061",
+            "name": "Muster for Battle",
+            "CARDTYPE": "SPELL",
+            "COST": 3,
+            "text": "Summon three {0} Silver Hand Recruits. Equip a 1/4 Weapon."
+          },
+          {
+            "public": true,
+            "engineTurn": 8,
+            "entityId": 82,
+            "cardId": "GAME_005",
+            "name": "The Coin",
+            "CARDTYPE": "SPELL",
+            "COST": 0,
+            "text": "Gain 1 Mana Crystal this turn only."
+          }
+        ]
+      },
+      "optionsId": 30,
+      "mulliganResult": {
+        "choiceId": 2,
+        "kept": [
+          46
+        ],
+        "complete": true
+      },
+      "fingerprint": "e1eaa6c9a049a27b5233",
+      "decisionFingerprint": "55e1f0525e572f9e49f1"
+    },
+    "options": [
+      {
+        "option": 1,
+        "entityId": 59,
+        "type": "POWER",
+        "id": "o1"
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t2",
+        "targetId": 106
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t3",
+        "targetId": 67
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t4",
+        "targetId": 121
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t5",
+        "targetId": 124
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t6",
+        "targetId": 127
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t7",
+        "targetId": 132
+      },
+      {
+        "option": 2,
+        "entityId": 52,
+        "type": "POWER",
+        "id": "o2t8",
+        "targetId": 135
+      },
+      {
+        "option": 4,
+        "entityId": 57,
+        "type": "POWER",
+        "id": "o4"
+      },
+      {
+        "option": 5,
+        "entityId": 71,
+        "type": "POWER",
+        "id": "o5"
+      }
+    ],
+    "matchupObjective": {
+      "version": "matchup-objective-v2-class-prior",
+      "mode": "board_resource",
+      "support": "public early minion pressure",
+      "evidence": [],
+      "weights": {
+        "face": 0.3,
+        "finishFace": 0.75,
+        "draw": 3,
+        "mana": 0.5,
+        "coin": 0.3
+      },
+      "deadlineTurn": null,
+      "prior": {
+        "version": "local-class-prior-v1",
+        "source": "audited history-quadrants-2026-10-01T19-17-42-331Z; user/analyst public replay rulings",
+        "window": {
+          "start": "2026-09-24T17:31:28.715Z",
+          "end": "2026-10-01T17:31:28.715Z"
+        },
+        "trainedThrough": "2026-10-01T17:31:28.715Z",
+        "probabilities": {
+          "control": 0.15285451197053407,
+          "tempo": 0.6179952644041042,
+          "combo": 0.02315180215732702,
+          "unknown": 0.20599842146803474
+        },
+        "counts": {
+          "control": 1,
+          "tempo": 9,
+          "combo": 0,
+          "unknown": 3
+        },
+        "sampleSize": 13,
+        "classSampleSize": 13,
+        "mulliganProbabilities": {
+          "pressure": 0.17600631412786108,
+          "board": 0.6179952644041042,
+          "unknown": 0.20599842146803474
+        },
+        "mulliganGrouping": {
+          "pressure": [
+            "control",
+            "combo"
+          ],
+          "board": [
+            "tempo"
+          ],
+          "unknown": [
+            "unknown"
+          ],
+          "guidance": "Control and combo share one opening strategy: establish attacking bodies and a reliable curve/discard payoff. Do not invent different mulligan rules from the diagnostic subtype. Preserve subtype only for review; observed quests, clears and recovery guide later turns."
+        },
+        "confidence": 0.4,
+        "decisionWeight": 0.06,
+        "highProbability": null,
+        "evidence": [
+          "opponent class: PALADIN"
+        ],
+        "publicCards": [
+          "SCH_312",
+          "MEND_800",
+          "UNG_960",
+          "CORE_GVG_061",
+          "GAME_005"
+        ],
+        "interpretation": "Local smoothed frequency estimates; unknown mass is unresolved classification. Confidence reflects sample support, not effect strength or validated forecast accuracy. Class is a soft prior; public evidence overrides it. No fixed lethal deadline."
+      },
+      "mulligan": null,
+      "guidance": "Protect initiative with efficient trades, persistent bodies and resources. A controlled refill can beat maximizing immediate face damage or buff count. Chamber supplies bodies only through a suitable observed discard; Duke uses current tags and Rush for a trade, without assuming the opponent lacks hard removal."
+    },
+    "resourceTools": {
+      "refillWindow": false,
+      "ownCards": 4,
+      "opponentCards": 3,
+      "chamber": null,
+      "duke": null
+    },
+    "searchStats": {
+      "expanded": 274,
+      "generated": 1594,
+      "deduplicated": 347,
+      "beamPruned": 0,
+      "depthReached": 5,
+      "nodeLimit": false,
+      "depthLimit": false
+    },
+    "plan": {
+      "id": "p1",
+      "steps": [
+        {
+          "kind": "play",
+          "id": 57,
+          "exact": true,
+          "note": "",
+          "before": "[[[67,4,1,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,2,1,0,false,true,false,false,false]],[[68,0,28,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48,57],5,null]",
+          "after": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,28,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]"
+        },
+        {
+          "kind": "attack",
+          "id": 67,
+          "targetId": 68,
+          "exact": true,
+          "note": "",
+          "before": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,28,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]",
+          "after": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,23,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]"
+        },
+        {
+          "kind": "attack",
+          "id": 106,
+          "targetId": 68,
+          "exact": true,
+          "note": "",
+          "before": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,23,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]",
+          "after": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,20,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]"
+        },
+        {
+          "kind": "play",
+          "id": 59,
+          "exact": true,
+          "note": "",
+          "before": "[[[67,5,2,0,false,false,false,false,false],[70,0,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,20,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[59,52,48],4,null]",
+          "after": "[[[67,5,2,0,false,false,false,false,false],[70,4,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,20,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[52,48],0,[59,4,3]]"
+        },
+        {
+          "kind": "attack",
+          "id": 70,
+          "targetId": 121,
+          "exact": false,
+          "note": "discarding Disposable Acolytes triggers an unmodelled effect; observe and replan",
+          "before": "[[[67,5,2,0,false,false,false,false,false],[70,4,28,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,20,0,false,false,false,false],[121,3,1,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[52,48],0,[59,4,3]]",
+          "after": "[[[67,7,4,0,false,false,false,false,false],[70,4,25,0,false,false,false,false,false],[106,3,2,0,false,true,false,false,false]],[[68,0,20,0,false,false,false,false],[124,3,1,0,false,false,false,false],[127,3,1,0,false,false,false,false],[132,3,1,0,false,false,false,false],[135,3,1,0,false,false,false,false]],[52],0,[59,4,2]]"
+        }
+      ],
+      "text": "Plan of 5 step(s), carried out in this order: 1) Play Entropic Continuity (1 mana): your minions get +1/+1. 2) Duke of Below 5/2 attacks the enemy hero: 5 damage, leaving 23. 3) Walking Dead 3/2 attacks the enemy hero: 3 damage, leaving 20. 4) Play Chronoclaws (4 mana): equip 4 Attack; your hero has 4 Attack. 5) Your hero 28 Health attacks Silver Hand Recruit 3/1: Silver Hand Recruit dies; your Gul'dan survives at 25 Health.    After this step the result is not predictable (discarding Disposable Acolytes triggers an unmodelled effect; observe and replan), so the turn is re-planned from the real board. Known partial result; unmodelled effects remain: enemy hero 28 -> 20 Health. Enemy minions killed: Silver Hand Recruit (3 Attack). Persistent enemy effects removed: none. Persistent enemy effects remaining: none. Effect evidence for killed targets: Silver Hand Recruit: effect none, classification confidence 0.9 (rule evidence, not trigger probability), strength unknown; No visible effect text; no ongoing effect premium.. Unknown remaining effects (not assumed blank): none. Your minions lost: none. Their board can then attack for 12 next turn, against your 25 Health behind 2 Health of Taunt; before this plan it was 15. No attacker is left unused. Cards and mana not used by this plan stay available afterwards (0 mana left)."
+    },
+    "action": {
+      "option": 4,
+      "entityId": 57,
+      "type": "POWER",
+      "id": "o4"
+    },
+    "model": "typesafe-ai/jev",
+    "latencyMs": 1244,
+    "answers": {
+      "move": {
+        "type": "choice",
+        "choice": "p1",
+        "probabilities": {
+          "p4": 0.09,
+          "p1": 0.31,
+          "o2t4": 0.05,
+          "o2t5": 0.02,
+          "o2t2": 0.02,
+          "o2t3": 0.02,
+          "o2t7": 0.02,
+          "p6": 0.18,
+          "o5": 0.02,
+          "o2t6": 0.02,
+          "p7": 0.05,
+          "o2t8": 0.02,
+          "o4": 0.07,
+          "o1": 0.11
+        }
+      }
+    },
+    "usage": {
+      "inputTokens": 14331,
+      "outputTokens": 144,
+      "totalTokens": 14475
+    },
+    "metadata": {
+      "typesafe": {
+        "confidence": {
+          "move": 0.26
+        }
+      },
+      "gateway": {
+        "routing": {
+          "originalModelId": "typesafe-ai/jev",
+          "resolvedProvider": "typesafe-ai",
+          "fallbacksAvailable": [
+            "digitalocean"
+          ],
+          "planningReasoning": "System credentials planned for: typesafe-ai, digitalocean. Total execution order: typesafe-ai(system) → digitalocean(system)",
+          "canonicalSlug": "typesafe-ai/jev",
+          "finalProvider": "typesafe-ai",
+          "modelAttemptCount": 1,
+          "modelAttempts": [
+            {
+              "canonicalSlug": "typesafe-ai/jev",
+              "success": true,
+              "providerAttemptCount": 1,
+              "providerAttempts": [
+                {
+                  "provider": "typesafe-ai",
+                  "credentialType": "system",
+                  "success": true,
+                  "startTime": 1790971626058,
+                  "endTime": 1790971626402,
+                  "statusCode": 200
+                }
+              ]
+            }
+          ],
+          "totalProviderAttemptCount": 1
+        },
+        "cost": "0.000601902",
+        "marketCost": "0.000601902",
+        "surchargeCost": "0",
+        "gatewayCost": "0.000601902",
+        "inferenceCost": "0.000601902",
+        "inputInferenceCost": "0.000601902",
+        "outputInferenceCost": "0",
+        "generationId": "gen_01M3Z3MGGAN03S0BS8H4NJQ5HK"
+      }
+    },
+    "effectAssessments": {
+      "version": "2026-10-01-v1",
+      "confidenceMeaning": "uncalibrated classification evidence, not trigger probability",
+      "cards": [
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 106,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "observedZone": "PLAY",
+          "text": "Taunt If you discard this minion, summon it.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 67,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "observedZone": "PLAY",
+          "text": "Rush Has +2/+2 for each card you've discarded this game.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "opponent",
+          "version": "2026-10-01-v1",
+          "entityId": 121,
+          "cardId": "CS2_101t5",
+          "name": "Silver Hand Recruit",
+          "observedZone": "PLAY",
+          "text": "",
+          "status": "none",
+          "confidence": 0.9,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "no_visible_text",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No visible effect text; no ongoing effect premium."
+        },
+        {
+          "side": "opponent",
+          "version": "2026-10-01-v1",
+          "entityId": 124,
+          "cardId": "CS2_101t5",
+          "name": "Silver Hand Recruit",
+          "observedZone": "PLAY",
+          "text": "",
+          "status": "none",
+          "confidence": 0.9,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "no_visible_text",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No visible effect text; no ongoing effect premium."
+        },
+        {
+          "side": "opponent",
+          "version": "2026-10-01-v1",
+          "entityId": 127,
+          "cardId": "CS2_101t8",
+          "name": "Silver Hand Recruit",
+          "observedZone": "PLAY",
+          "text": "",
+          "status": "none",
+          "confidence": 0.9,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "no_visible_text",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No visible effect text; no ongoing effect premium."
+        },
+        {
+          "side": "opponent",
+          "version": "2026-10-01-v1",
+          "entityId": 132,
+          "cardId": "CS2_101t8",
+          "name": "Silver Hand Recruit",
+          "observedZone": "PLAY",
+          "text": "",
+          "status": "none",
+          "confidence": 0.9,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "no_visible_text",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No visible effect text; no ongoing effect premium."
+        },
+        {
+          "side": "opponent",
+          "version": "2026-10-01-v1",
+          "entityId": 135,
+          "cardId": "CS2_101t",
+          "name": "Silver Hand Recruit",
+          "observedZone": "PLAY",
+          "text": "",
+          "status": "none",
+          "confidence": 0.9,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "no_visible_text",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No visible effect text; no ongoing effect premium."
+        }
+      ]
+    }
+  },
+  "review": "Acolytes 2 mana + buff 1 mana fit within 5 mana; existing two minions. Candidate removed upstream; wastedFodder exemption uses buffSetupActions with valuableBuff requiring existing>=3. Pending fix and regression test; not proof of whole-game win.",
+  "userRuling": {
+    "date": "2026-10-03",
+    "status": "user-confirmed",
+    "preferredLine": [
+      "Play Chronoclaws (4 mana)",
+      "Attack with hero; weapon discards the uniquely highest-cost Disposable Acolytes (2 mana card) without paying its cost",
+      "Observe two random 1-Cost summons and updated board",
+      "Play Entropic Continuity (1 mana)",
+      "Attack with eligible original minions after buff"
+    ],
+    "mana": {
+      "available": 5,
+      "weapon": 4,
+      "discardTrigger": 0,
+      "buff": 1,
+      "total": 5
+    },
+    "discardTargets": [
+      {
+        "entityId": 48,
+        "name": "Disposable Acolytes",
+        "cost": 2
+      }
+    ],
+    "alternatives": "Acolytes (2) then buff (1) is not the preferred user ruling for this position.",
+    "constraints": [
+      "Weapon triggers after hero attack, not merely after equip.",
+      "Recheck attack legality, damage to hero, board slots and any changed hand after weapon battlecry or attack effects.",
+      "Do not precompute random summoned identities or carry the original attack plan through the unknown summon.",
+      "Any highest-cost tie must be treated as random; this position has a unique 2-cost Acolytes above two 1-cost spells."
+    ],
+    "generalization": "Compare complete mana-feasible lines including free discard summons. Development can come from a weapon attack or discard activation, not just directly playing minions/spells."
+  }
+}

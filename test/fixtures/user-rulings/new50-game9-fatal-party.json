@@ -1,0 +1,320 @@
+{
+  "source": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0009-Power.log",
+  "cutoff": "07:29:13",
+  "batchGame": 9,
+  "ownTurn": 11,
+  "state": {
+    "gameNumber": 1,
+    "turn": 21,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 11,
+      "maxMana": 11,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 1,
+      "deckCount": 6,
+      "board": [
+        {
+          "entityId": 58,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "baseCost": 4,
+          "baseAttack": 4,
+          "baseHealth": 3,
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 0,
+          "CARDTYPE": "WEAPON",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 69,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "ATK": 4,
+          "HEALTH": 30,
+          "DAMAGE": 27,
+          "CARDTYPE": "HERO",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 70,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 51,
+          "cardId": "VAC_940",
+          "name": "Party Fiend",
+          "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "NEUTRAL",
+      "mana": 2,
+      "maxMana": 10,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 6,
+      "deckCount": 12,
+      "board": [
+        {
+          "entityId": 25,
+          "cardId": "WW_0700",
+          "name": "Reno, Lone Ranger",
+          "text": "[x]<b>Battlecry:</b> If your deck\nstarted with no duplicates,\nremove all enemy minions\nfrom the game.",
+          "baseCost": 8,
+          "baseHealth": 30,
+          "COST": 8,
+          "HEALTH": 30,
+          "DAMAGE": 19,
+          "ARMOR": 5,
+          "ZONE_POSITION": 0,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 178,
+          "cardId": "ULD_291p",
+          "name": "Heart of Vir'naal",
+          "text": "Your <b>Battlecries</b> trigger twice this turn.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 101,
+          "cardId": "SC_999t",
+          "name": "Battlecruiser",
+          "text": "<b>Starship</b>\n<i>(Costs (5) Mana to launch.)</i>",
+          "baseCost": 0,
+          "baseAttack": 0,
+          "baseHealth": 0,
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 3,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION"
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 2,
+          "entityId": 17,
+          "cardId": "ULD_291",
+          "name": "Corrupt the Waters",
+          "CARDTYPE": "SPELL",
+          "COST": 1,
+          "text": "[x]<b>Quest:</b> Play 6 <b>Battlecry</b>\ncards.\n<b>Reward:</b> Heart of Vir'naal."
+        },
+        {
+          "public": true,
+          "engineTurn": 6,
+          "entityId": 32,
+          "cardId": "CFM_696",
+          "name": "Devolve",
+          "CARDTYPE": "SPELL",
+          "COST": 2,
+          "text": "Transform all enemy minions into random ones that cost (1) less."
+        },
+        {
+          "public": true,
+          "engineTurn": 6,
+          "entityId": 71,
+          "cardId": "DFT_ALEX_COIN1",
+          "name": "The Coin",
+          "CARDTYPE": "SPELL",
+          "COST": 0,
+          "text": "Gain 1 Mana Crystal this turn only."
+        },
+        {
+          "public": true,
+          "engineTurn": 6,
+          "entityId": 7,
+          "cardId": "SC_409",
+          "name": "Missile Pod",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 1,
+          "HEALTH": 3,
+          "text": "[x]<b>Starship Piece</b>\n<b>Battlecry:</b> Deal 1 damage\nto all enemies. Also\ntriggers on launch."
+        },
+        {
+          "public": true,
+          "engineTurn": 8,
+          "entityId": 10,
+          "cardId": "DEEP_010",
+          "name": "Aftershocks",
+          "CARDTYPE": "SPELL",
+          "COST": 4,
+          "text": "Deal $1 damage to all minions, three times. Costs (2) less if you cast a spell last turn."
+        },
+        {
+          "public": true,
+          "engineTurn": 8,
+          "entityId": 26,
+          "cardId": "DEEP_008",
+          "name": "Needlerock Totem",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 0,
+          "HEALTH": 2,
+          "text": "At the end of your turn, gain 2 Armor and\ndraw a card."
+        },
+        {
+          "public": true,
+          "engineTurn": 10,
+          "entityId": 20,
+          "cardId": "TSC_960",
+          "name": "Twin-fin Fin Twin",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 1,
+          "text": "<b>Rush</b>. <b>Battlecry:</b> Summon a copy of this."
+        },
+        {
+          "public": true,
+          "engineTurn": 12,
+          "entityId": 31,
+          "cardId": "JAM_014",
+          "name": "Backstage Bouncer",
+          "CARDTYPE": "MINION",
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 5,
+          "text": "<b>Taunt</b>\n<b>Battlecry:</b> Transform a friendly minion into a copy of this."
+        },
+        {
+          "public": true,
+          "engineTurn": 14,
+          "entityId": 11,
+          "cardId": "EDR_856",
+          "name": "Nightmare Lord Xavius",
+          "CARDTYPE": "MINION",
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 4,
+          "text": "<b>Battlecry:</b> <b>Discover</b> a minion from your deck. Give it a <b>Dark Gift</b>."
+        },
+        {
+          "public": true,
+          "engineTurn": 14,
+          "entityId": 24,
+          "cardId": "VAC_444",
+          "name": "Overplanner",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 3,
+          "text": "<b>Battlecry:</b> Choose three\ncards from your deck to put on top in that order."
+        },
+        {
+          "public": true,
+          "engineTurn": 16,
+          "entityId": 27,
+          "cardId": "VAC_328",
+          "name": "Meltemental",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 8,
+          "text": "[x]<b>Taunt</b>\nThis is permanently <b>Frozen</b>."
+        },
+        {
+          "public": true,
+          "engineTurn": 18,
+          "entityId": 9,
+          "cardId": "TLC_222",
+          "name": "Flight of the Firehawk",
+          "CARDTYPE": "SPELL",
+          "COST": 3,
+          "text": "Draw two minions of different minion types. Give them +1/+1."
+        },
+        {
+          "public": true,
+          "engineTurn": 20,
+          "entityId": 25,
+          "cardId": "WW_0700",
+          "name": "Reno, Lone Ranger",
+          "CARDTYPE": "HERO",
+          "COST": 8,
+          "HEALTH": 30,
+          "text": "[x]<b>Battlecry:</b> If your deck\nstarted with no duplicates,\nremove all enemy minions\nfrom the game."
+        }
+      ]
+    },
+    "optionsId": 85,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        61
+      ],
+      "complete": true
+    },
+    "fingerprint": "9ef68f0c5e573bc99db5",
+    "decisionFingerprint": "358dc60e1f9ffa1aa4d2"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 51,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 69,
+      "type": "POWER",
+      "id": "o2t0",
+      "targetId": 25
+    },
+    {
+      "option": 3,
+      "entityId": 70,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "observedAction": {
+    "entityId": 51,
+    "type": "POWER",
+    "source": "forced_spend"
+  },
+  "ruling": "3 Health and zero Armor: never play Party Fiend; direct 3 self-damage is immediately fatal."
+}

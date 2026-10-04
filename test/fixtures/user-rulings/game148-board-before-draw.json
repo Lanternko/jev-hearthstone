@@ -1,0 +1,250 @@
+{
+  "source": {
+    "batchGame": 148,
+    "ownTurn": 3,
+    "engineTurn": 6,
+    "time": "2026-09-30T23:53:17.530Z",
+    "replayUrl": "https://hsreplay.net/uploads/upload/REDACTED/"
+  },
+  "state": {
+    "gameNumber": 45,
+    "turn": 6,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 3,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 76,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 5,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 77,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 91,
+          "cardId": "EDR_469",
+          "name": "Slumbering Sprite",
+          "text": "[x]Starts <b>Dormant</b>.\nAfter you use your Hero\nPower, this awakens.",
+          "baseCost": 1,
+          "baseAttack": 3,
+          "baseHealth": 3,
+          "COST": 1,
+          "ATK": 3,
+          "HEALTH": 3,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1,
+          "DORMANT": 1
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 44,
+          "cardId": "BT_300",
+          "name": "Hand of Gul'dan",
+          "text": "When you play\nor discard this,\ndraw 3 cards.",
+          "baseCost": 6,
+          "COST": 6,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 66,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 50,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 51,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 68,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": [
+        3
+      ]
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "MAGE",
+      "mana": 0,
+      "maxMana": 3,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 7,
+      "deckCount": 31,
+      "board": [
+        {
+          "entityId": 74,
+          "cardId": "HERO_08af",
+          "name": "Witch Jaina",
+          "baseHealth": 30,
+          "HEALTH": 40,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 75,
+          "cardId": "HERO_08fbp",
+          "name": "Fireblast",
+          "text": "<b>Hero Power</b>\nDeal $1 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 37,
+          "cardId": "JAM_001",
+          "name": "Costumed Singer",
+          "text": "At the end of your turn,\ndraw a <b>Secret</b>.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 0
+        }
+      ]
+    },
+    "optionsId": 14,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        63,
+        50
+      ],
+      "complete": true
+    },
+    "fingerprint": "0cc555fc4bff314b0963",
+    "decisionFingerprint": "2ea7d8b9b7be0a9b4e1b"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 50,
+      "type": "POWER",
+      "id": "o1t0",
+      "targetId": 44
+    },
+    {
+      "option": 1,
+      "entityId": 50,
+      "type": "POWER",
+      "id": "o1t1",
+      "targetId": 66
+    },
+    {
+      "option": 1,
+      "entityId": 50,
+      "type": "POWER",
+      "id": "o1t2",
+      "targetId": 51
+    },
+    {
+      "option": 1,
+      "entityId": 50,
+      "type": "POWER",
+      "id": "o1t3",
+      "targetId": 68
+    },
+    {
+      "option": 3,
+      "entityId": 68,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 77,
+      "type": "POWER",
+      "id": "o4"
+    }
+  ],
+  "recordedAction": {
+    "option": 1,
+    "entityId": 50,
+    "type": "POWER",
+    "id": "o1t0",
+    "targetId": 44
+  },
+  "expected": {
+    "discard": "Walking Dead"
+  }
+}

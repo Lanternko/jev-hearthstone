@@ -83,6 +83,7 @@ test('a targeted spell selects the card then the target, with no drop step', () 
   const steps=plan(HD,state(),{id:'o2t0',type:'POWER',option:2,entityId:11,targetId:30});
   assert.deepEqual(steps.map(s=>s.what),['select Bolt','target Yeti']);
   near(steps[1].y,board(HD,0,1,'you').y);
+  assert.ok(!steps[0].attack);   // a spell is not flung
 });
 
 test('an attack is source then target, both on the board', () => {
@@ -90,6 +91,7 @@ test('an attack is source then target, both on the board', () => {
   assert.deepEqual(steps.map(s=>s.what),['select Imp','target 3']);
   near(steps[0].y,board(HD,0,1,'me').y);
   near(steps[1].y,hero(HD,'you').y);
+  assert.equal(steps[0].attack,true);   // run() flings it
 });
 
 test('hero power resolves to the hero power slot, not the hero', () => {

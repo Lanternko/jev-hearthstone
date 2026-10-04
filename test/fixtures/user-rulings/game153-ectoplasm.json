@@ -1,0 +1,180 @@
+{
+  "source": {
+    "batchGame": 153,
+    "ownTurn": 5,
+    "engineTurn": 9,
+    "opponent": "LeslieWillia",
+    "time": "2026-10-01T00:26:53.508Z",
+    "note": "Actual legal decision after clear; opponent conceded before chosen location click changed state. Screenshot shows preceding opponent turn."
+  },
+  "state": {
+    "gameNumber": 50,
+    "turn": 9,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 5,
+      "maxMana": 5,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 22,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 5,
+          "cardId": "BT_300",
+          "name": "Hand of Gul'dan",
+          "text": "When you play\nor discard this,\ndraw 3 cards.",
+          "baseCost": 6,
+          "COST": 6,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 113,
+          "cardId": "CAP_805t",
+          "name": "Ectoplasm",
+          "text": "Resummon all\nfriendly minions that were slimed.",
+          "baseCost": 3,
+          "COST": 3,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL",
+          "resummons": [
+            {
+              "cardId": "KAR_205",
+              "name": "Silverware Golem",
+              "sourceEntityId": 84
+            },
+            {
+              "cardId": "RLK_532",
+              "name": "Walking Dead",
+              "sourceEntityId": 101
+            },
+            {
+              "cardId": "CATA_490",
+              "name": "Ocular Occultist",
+              "sourceEntityId": 11
+            },
+            {
+              "cardId": "SCH_147t",
+              "name": "Boneweb Spider",
+              "sourceEntityId": 104
+            },
+            {
+              "cardId": "SCH_147t",
+              "name": "Boneweb Spider",
+              "sourceEntityId": 105
+            }
+          ]
+        },
+        {
+          "entityId": 30,
+          "cardId": "WON_103",
+          "name": "Chamber of Viscidus",
+          "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+          "baseCost": 3,
+          "baseHealth": 2,
+          "COST": 3,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "LOCATION"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": [
+        3,
+        3
+      ]
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "PRIEST",
+      "mana": 0,
+      "maxMana": 4,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 6,
+      "deckCount": 20,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_09aa",
+          "name": "Champion Tyrande",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 26,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_09dbp",
+          "name": "Lesser Heal",
+          "text": "<b>Hero Power</b>\nRestore #2 Health.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        }
+      ]
+    },
+    "optionsId": 31,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        14
+      ],
+      "complete": true
+    },
+    "fingerprint": "64dd32cabf5f499b3f11",
+    "decisionFingerprint": "aa301dc47c71c47d890b"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 113,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 30,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 65,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "expected": {
+    "play": "Ectoplasm"
+  },
+  "parserLog": "GameState.DebugPrintPower() - CREATE_GAME\nGameState.DebugPrintPower() - GameEntity EntityID=1\nGameState.DebugPrintPower() - tag=10 value=85\nGameState.DebugPrintPower() - tag=937 value=2\nGameState.DebugPrintPower() - tag=1323 value=22\nGameState.DebugPrintPower() - tag=1710 value=0\nGameState.DebugPrintPower() - tag=1882 value=8\nGameState.DebugPrintPower() - tag=CARDTYPE value=GAME\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=1\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=GAME_SEED value=165537449\nGameState.DebugPrintPower() - tag=STATE value=RUNNING\nGameState.DebugPrintPower() - tag=TURN value=9\nGameState.DebugPrintPower() - tag=NEXT_STEP value=MAIN_END\nGameState.DebugPrintPower() - tag=STEP value=MAIN_ACTION\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - tag=PROPOSED_ATTACKER value=0\nGameState.DebugPrintPower() - tag=PROPOSED_DEFENDER value=0\nGameState.DebugPrintPower() - tag=NUM_MINIONS_KILLED_THIS_TURN value=0\nGameState.DebugPrintPower() - Player EntityID=2 PlayerID=1\nGameState.DebugPrintPower() - tag=430 value=0\nGameState.DebugPrintPower() - tag=467 value=0\nGameState.DebugPrintPower() - tag=995 value=7\nGameState.DebugPrintPower() - tag=1292 value=1\nGameState.DebugPrintPower() - tag=1420 value=0\nGameState.DebugPrintPower() - tag=1854 value=1\nGameState.DebugPrintPower() - tag=2166 value=30\nGameState.DebugPrintPower() - tag=2245 value=9\nGameState.DebugPrintPower() - tag=3242 value=0\nGameState.DebugPrintPower() - tag=4103 value=1\nGameState.DebugPrintPower() - tag=4307 value=1\nGameState.DebugPrintPower() - tag=4587 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=PLAYER\nGameState.DebugPrintPower() - tag=PLAYER_ID value=1\nGameState.DebugPrintPower() - tag=HERO_ENTITY value=64\nGameState.DebugPrintPower() - tag=MAXHANDSIZE value=10\nGameState.DebugPrintPower() - tag=STARTHANDSIZE value=4\nGameState.DebugPrintPower() - tag=TEAM_ID value=1\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=2\nGameState.DebugPrintPower() - tag=MAXRESOURCES value=10\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=MAX_EXCAVATE_TIER value=3\nGameState.DebugPrintPower() - tag=PLAYSTATE value=PLAYING\nGameState.DebugPrintPower() - tag=CURRENT_PLAYER value=1\nGameState.DebugPrintPower() - tag=FIRST_PLAYER value=1\nGameState.DebugPrintPower() - tag=NUM_TURNS_LEFT value=1\nGameState.DebugPrintPower() - tag=TIMEOUT value=75\nGameState.DebugPrintPower() - tag=MULLIGAN_STATE value=DONE\nGameState.DebugPrintPower() - tag=TURN value=5\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - tag=RESOURCES value=5\nGameState.DebugPrintPower() - tag=NUM_CARDS_DRAWN_THIS_TURN value=1\nGameState.DebugPrintPower() - tag=RESOURCES_USED value=0\nGameState.DebugPrintPower() - tag=NUM_RESOURCES_SPENT_THIS_GAME value=9\nGameState.DebugPrintPower() - tag=NUM_CARDS_PLAYED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=NUM_MINIONS_PLAYED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=COMBO_ACTIVE value=0\nGameState.DebugPrintPower() - tag=NUM_OPTIONS_PLAYED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=NUM_SPELLS_PLAYED_THIS_GAME value=3\nGameState.DebugPrintPower() - tag=NUM_FRIENDLY_MINIONS_THAT_ATTACKED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=NUM_MINIONS_PLAYER_KILLED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=NUM_FRIENDLY_MINIONS_THAT_DIED_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=NUM_FRIENDLY_MINIONS_THAT_DIED_THIS_GAME value=6\nGameState.DebugPrintPower() - tag=CORPSES value=6\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=55\nGameState.DebugPrintPower() - Player EntityID=3 PlayerID=2\nGameState.DebugPrintPower() - tag=430 value=1\nGameState.DebugPrintPower() - tag=464 value=0\nGameState.DebugPrintPower() - tag=467 value=0\nGameState.DebugPrintPower() - tag=780 value=1\nGameState.DebugPrintPower() - tag=821 value=0\nGameState.DebugPrintPower() - tag=835 value=0\nGameState.DebugPrintPower() - tag=995 value=7\nGameState.DebugPrintPower() - tag=1292 value=0\nGameState.DebugPrintPower() - tag=1573 value=1\nGameState.DebugPrintPower() - tag=1575 value=0\nGameState.DebugPrintPower() - tag=1853 value=29\nGameState.DebugPrintPower() - tag=2024 value=0\nGameState.DebugPrintPower() - tag=2166 value=63\nGameState.DebugPrintPower() - tag=2245 value=11\nGameState.DebugPrintPower() - tag=3242 value=1\nGameState.DebugPrintPower() - tag=3449 value=0\nGameState.DebugPrintPower() - tag=4453 value=0\nGameState.DebugPrintPower() - tag=4587 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=CONTROLLER value=2\nGameState.DebugPrintPower() - tag=CARDTYPE value=PLAYER\nGameState.DebugPrintPower() - tag=PLAYER_ID value=2\nGameState.DebugPrintPower() - tag=HERO_ENTITY value=66\nGameState.DebugPrintPower() - tag=MAXHANDSIZE value=10\nGameState.DebugPrintPower() - tag=STARTHANDSIZE value=4\nGameState.DebugPrintPower() - tag=TEAM_ID value=2\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=3\nGameState.DebugPrintPower() - tag=MAXRESOURCES value=10\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=MAX_EXCAVATE_TIER value=2\nGameState.DebugPrintPower() - tag=PLAYSTATE value=PLAYING\nGameState.DebugPrintPower() - tag=NUM_TURNS_LEFT value=1\nGameState.DebugPrintPower() - tag=TIMEOUT value=75\nGameState.DebugPrintPower() - tag=MULLIGAN_STATE value=DONE\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - tag=CURRENT_PLAYER value=0\nGameState.DebugPrintPower() - tag=TURN value=4\nGameState.DebugPrintPower() - tag=RESOURCES value=4\nGameState.DebugPrintPower() - tag=NUM_CARDS_DRAWN_THIS_TURN value=0\nGameState.DebugPrintPower() - tag=RESOURCES_USED value=4\nGameState.DebugPrintPower() - tag=NUM_RESOURCES_SPENT_THIS_GAME value=11\nGameState.DebugPrintPower() - tag=NUM_CARDS_PLAYED_THIS_TURN value=1\nGameState.DebugPrintPower() - tag=NUM_SPELLS_PLAYED_THIS_GAME value=7\nGameState.DebugPrintPower() - tag=COMBO_ACTIVE value=0\nGameState.DebugPrintPower() - tag=NUM_OPTIONS_PLAYED_THIS_TURN value=1\nGameState.DebugPrintPower() - tag=DAMAGE_DEALT_TO_HERO_LAST_TURN value=0\nGameState.DebugPrintPower() - tag=AMOUNT_HEALED_THIS_GAME value=3\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=55\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=5 CardID=BT_300\nGameState.DebugPrintPower() - tag=335 value=1\nGameState.DebugPrintPower() - tag=478 value=1\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=1043 value=1\nGameState.DebugPrintPower() - tag=1068 value=0\nGameState.DebugPrintPower() - tag=ZONE value=HAND\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=ENTITY_ID value=5\nGameState.DebugPrintPower() - tag=CARDTYPE value=SPELL\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=6\nGameState.DebugPrintPower() - tag=COST value=6\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=COMMON\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=SPELL_SCHOOL value=6\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_HAND value=9\nGameState.DebugPrintPower() - tag=ZONE_POSITION value=1\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=30 CardID=WON_103\nGameState.DebugPrintPower() - tag=478 value=1\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=1043 value=1\nGameState.DebugPrintPower() - tag=1068 value=0\nGameState.DebugPrintPower() - tag=1570 value=9\nGameState.DebugPrintPower() - tag=3085 value=2\nGameState.DebugPrintPower() - tag=4997 value=2\nGameState.DebugPrintPower() - tag=ZONE value=HAND\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=ENTITY_ID value=30\nGameState.DebugPrintPower() - tag=CARDTYPE value=LOCATION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=3\nGameState.DebugPrintPower() - tag=COST value=3\nGameState.DebugPrintPower() - tag=HEALTH value=2\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=RARE\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_HAND value=1\nGameState.DebugPrintPower() - tag=ZONE_POSITION value=3\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=64 CardID=HERO_07f\nGameState.DebugPrintPower() - tag=3085 value=30\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=HERO\nGameState.DebugPrintPower() - tag=HEALTH value=30\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=64\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=FACTION value=NEUTRAL\nGameState.DebugPrintPower() - tag=RARITY value=FREE\nGameState.DebugPrintPower() - tag=HERO_POWER value=66935\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=EMOTECHARACTER value=22\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=EMOTECLASS value=7\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=65 CardID=HERO_07ebp\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=1086 value=66936\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=HERO_POWER\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=2\nGameState.DebugPrintPower() - tag=COST value=2\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=65\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=FACTION value=NEUTRAL\nGameState.DebugPrintPower() - tag=RARITY value=FREE\nGameState.DebugPrintPower() - tag=CREATOR value=64\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=71069\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=66 CardID=HERO_09aa\nGameState.DebugPrintPower() - tag=1173 value=0\nGameState.DebugPrintPower() - tag=1715 value=105\nGameState.DebugPrintPower() - tag=2187 value=0\nGameState.DebugPrintPower() - tag=3085 value=30\nGameState.DebugPrintPower() - tag=4741 value=14\nGameState.DebugPrintPower() - tag=CONTROLLER value=2\nGameState.DebugPrintPower() - tag=CARDTYPE value=HERO\nGameState.DebugPrintPower() - tag=HEALTH value=30\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=66\nGameState.DebugPrintPower() - tag=CLASS value=PRIEST\nGameState.DebugPrintPower() - tag=FACTION value=NEUTRAL\nGameState.DebugPrintPower() - tag=RARITY value=FREE\nGameState.DebugPrintPower() - tag=HERO_POWER value=66929\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=EMOTECHARACTER value=32\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=EMOTECLASS value=9\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - tag=DEFENDING value=0\nGameState.DebugPrintPower() - tag=PREDAMAGE value=0\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=33\nGameState.DebugPrintPower() - tag=DAMAGE value=26\nGameState.DebugPrintPower() - tag=PREHEALING value=0\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=67 CardID=HERO_09dbp\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=1086 value=66930\nGameState.DebugPrintPower() - tag=CONTROLLER value=2\nGameState.DebugPrintPower() - tag=CARDTYPE value=HERO_POWER\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=2\nGameState.DebugPrintPower() - tag=COST value=2\nGameState.DebugPrintPower() - tag=ZONE value=PLAY\nGameState.DebugPrintPower() - tag=ENTITY_ID value=67\nGameState.DebugPrintPower() - tag=CLASS value=PRIEST\nGameState.DebugPrintPower() - tag=FACTION value=NEUTRAL\nGameState.DebugPrintPower() - tag=RARITY value=FREE\nGameState.DebugPrintPower() - tag=CREATOR value=66\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=98369\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_PLAY value=9\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=80 CardID=BT_300\nGameState.DebugPrintPower() - tag=335 value=1\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=SPELL\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=6\nGameState.DebugPrintPower() - tag=COST value=6\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=80\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=COMMON\nGameState.DebugPrintPower() - tag=CREATOR value=29\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=117892\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=SPELL_SCHOOL value=6\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=32\nGameState.DebugPrintPower() - tag=LINKED_ENTITY value=32\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=82 CardID=DMF_119\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=SPELL\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=1\nGameState.DebugPrintPower() - tag=COST value=1\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=82\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=RARE\nGameState.DebugPrintPower() - tag=CREATOR value=29\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=117892\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=SPELL_SCHOOL value=6\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=27\nGameState.DebugPrintPower() - tag=LINKED_ENTITY value=27\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=103 CardID=SCH_147\nGameState.DebugPrintPower() - tag=335 value=1\nGameState.DebugPrintPower() - tag=1037 value=1\nGameState.DebugPrintPower() - tag=1570 value=5\nGameState.DebugPrintPower() - tag=3085 value=2\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=2\nGameState.DebugPrintPower() - tag=COST value=2\nGameState.DebugPrintPower() - tag=HEALTH value=2\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=103\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=RARE\nGameState.DebugPrintPower() - tag=DEATHRATTLE value=1\nGameState.DebugPrintPower() - tag=CREATOR value=16\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=59605\nGameState.DebugPrintPower() - tag=COLLECTION_RELATED_CARD_DATABASE_ID value=60256\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=11\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=16\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=113 CardID=CAP_805t\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=1068 value=0\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=SPELL\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=3\nGameState.DebugPrintPower() - tag=COST value=3\nGameState.DebugPrintPower() - tag=ZONE value=HAND\nGameState.DebugPrintPower() - tag=ENTITY_ID value=113\nGameState.DebugPrintPower() - tag=CLASS value=PRIEST\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=SPELL_SCHOOL value=6\nGameState.DebugPrintPower() - tag=DISPLAYED_CREATOR value=55\nGameState.DebugPrintPower() - tag=TAG_SCRIPT_DATA_NUM_2 value=113\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=55\nGameState.DebugPrintPower() - tag=NUM_TURNS_IN_HAND value=2\nGameState.DebugPrintPower() - tag=ZONE_POSITION value=2\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=115 CardID=KAR_205\nGameState.DebugPrintPower() - tag=335 value=0\nGameState.DebugPrintPower() - tag=479 value=3\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=1570 value=1\nGameState.DebugPrintPower() - tag=3085 value=4\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4163 value=3\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=3\nGameState.DebugPrintPower() - tag=COST value=3\nGameState.DebugPrintPower() - tag=ATK value=3\nGameState.DebugPrintPower() - tag=HEALTH value=4\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=115\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=RARITY value=RARE\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=SILENCED value=1\nGameState.DebugPrintPower() - tag=DAMAGE value=3\nGameState.DebugPrintPower() - tag=EXHAUSTED value=1\nGameState.DebugPrintPower() - tag=LAST_AFFECTED_BY value=51\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=84\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=116 CardID=RLK_532\nGameState.DebugPrintPower() - tag=335 value=0\nGameState.DebugPrintPower() - tag=479 value=2\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=1570 value=1\nGameState.DebugPrintPower() - tag=3085 value=5\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4163 value=2\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=3\nGameState.DebugPrintPower() - tag=COST value=3\nGameState.DebugPrintPower() - tag=ATK value=2\nGameState.DebugPrintPower() - tag=HEALTH value=5\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=116\nGameState.DebugPrintPower() - tag=TAUNT value=0\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=CARDRACE value=UNDEAD\nGameState.DebugPrintPower() - tag=RARITY value=COMMON\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=SILENCED value=1\nGameState.DebugPrintPower() - tag=EXHAUSTED value=1\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=101\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=117 CardID=CATA_490\nGameState.DebugPrintPower() - tag=479 value=3\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=3085 value=6\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4163 value=1\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=3\nGameState.DebugPrintPower() - tag=COST value=3\nGameState.DebugPrintPower() - tag=ATK value=3\nGameState.DebugPrintPower() - tag=HEALTH value=6\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=117\nGameState.DebugPrintPower() - tag=TAUNT value=0\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=CARDRACE value=DEMON\nGameState.DebugPrintPower() - tag=RARITY value=COMMON\nGameState.DebugPrintPower() - tag=BATTLECRY value=0\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=CAN_TARGET_CARDS_IN_HAND value=1\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=SILENCED value=1\nGameState.DebugPrintPower() - tag=EXHAUSTED value=1\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=11\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=118 CardID=SCH_147t\nGameState.DebugPrintPower() - tag=479 value=2\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=3085 value=1\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4163 value=1\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=1\nGameState.DebugPrintPower() - tag=COST value=1\nGameState.DebugPrintPower() - tag=ATK value=2\nGameState.DebugPrintPower() - tag=HEALTH value=1\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=118\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=CARDRACE value=BEAST\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=SILENCED value=1\nGameState.DebugPrintPower() - tag=EXHAUSTED value=1\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=104\nGameState.DebugPrintPower() - FULL_ENTITY - Creating ID=119 CardID=SCH_147t\nGameState.DebugPrintPower() - tag=479 value=2\nGameState.DebugPrintPower() - tag=1037 value=2\nGameState.DebugPrintPower() - tag=3085 value=1\nGameState.DebugPrintPower() - tag=3669 value=0\nGameState.DebugPrintPower() - tag=4163 value=1\nGameState.DebugPrintPower() - tag=4741 value=1\nGameState.DebugPrintPower() - tag=4901 value=0\nGameState.DebugPrintPower() - tag=CONTROLLER value=1\nGameState.DebugPrintPower() - tag=CARDTYPE value=MINION\nGameState.DebugPrintPower() - tag=TAG_LAST_KNOWN_COST_IN_HAND value=1\nGameState.DebugPrintPower() - tag=COST value=1\nGameState.DebugPrintPower() - tag=ATK value=2\nGameState.DebugPrintPower() - tag=HEALTH value=1\nGameState.DebugPrintPower() - tag=ZONE value=SETASIDE\nGameState.DebugPrintPower() - tag=ENTITY_ID value=119\nGameState.DebugPrintPower() - tag=CLASS value=WARLOCK\nGameState.DebugPrintPower() - tag=CARDRACE value=BEAST\nGameState.DebugPrintPower() - tag=CREATOR value=55\nGameState.DebugPrintPower() - tag=CREATOR_DBID value=127092\nGameState.DebugPrintPower() - tag=SPAWN_TIME_COUNT value=1\nGameState.DebugPrintPower() - tag=HAS_ACTIVATE_POWER value=1\nGameState.DebugPrintPower() - tag=SILENCED value=1\nGameState.DebugPrintPower() - tag=EXHAUSTED value=1\nGameState.DebugPrintPower() - tag=COPIED_FROM_ENTITY_ID value=105"
+}

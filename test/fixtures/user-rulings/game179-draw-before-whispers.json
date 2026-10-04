@@ -1,0 +1,237 @@
+{
+  "source": {
+    "batchGame": 179,
+    "ownTurn": 3,
+    "engineTurn": 5,
+    "log": "D:/遊戲/Hearthstone/Logs/Hearthstone_2026_10_01_14_25_31/Power.log",
+    "playLine": "D 18:57:18.0420980 GameState.DebugPrintPower() - BLOCK_START BlockType=PLAY Entity=[entityName=惡毒低語 id=60 zone=HAND zonePos=1 cardId=DMF_119 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 ",
+    "replayUrl": "https://hsreplay.net/uploads/upload/REDACTED/",
+    "opponentClass": "WARLOCK"
+  },
+  "state": {
+    "gameNumber": 30,
+    "turn": 5,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 3,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 2,
+      "deckCount": 22,
+      "board": [
+        {
+          "entityId": 76,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 3,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 77,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 101,
+          "cardId": "TSC_657",
+          "name": "Dozing Kelpkeeper",
+          "text": "[x]<b>Rush</b>. Starts <b>Dormant</b>.\nAfter you've cast 5 Mana\n worth of spells, awaken.",
+          "baseCost": 1,
+          "baseAttack": 4,
+          "baseHealth": 4,
+          "COST": 1,
+          "ATK": 4,
+          "HEALTH": 4,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "RUSH": 0,
+          "DORMANT": 1
+        },
+        {
+          "entityId": 103,
+          "cardId": "SCH_350",
+          "name": "Wand Thief",
+          "text": "<b>Combo:</b> <b>Discover</b> a Mage spell.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 109,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "text": "If you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 4,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 60,
+          "cardId": "DMF_119",
+          "name": "Wicked Whispers",
+          "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 61,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "baseCost": 4,
+          "baseAttack": 4,
+          "baseHealth": 3,
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "WEAPON"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 0,
+      "maxMana": 2,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 33,
+      "board": [
+        {
+          "entityId": 74,
+          "cardId": "HERO_07ap_MalGanis_hls",
+          "name": "Bobble Mal'Ganis",
+          "baseHealth": 30,
+          "HEALTH": 40,
+          "DAMAGE": 7,
+          "ARMOR": 5,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 75,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 18,
+          "cardId": "BOT_447",
+          "name": "Crystallizer",
+          "text": "[x]<b>Battlecry:</b> Deal 5 damage\nto your hero. Gain 5 Armor.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 3,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 3,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ]
+    },
+    "optionsId": 14,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        70,
+        46
+      ],
+      "complete": true
+    },
+    "fingerprint": "09d09ba59083372d1981",
+    "decisionFingerprint": "d2d8c3a161770d2985a7"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 60,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 77,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 103,
+      "type": "POWER",
+      "id": "o3t0",
+      "targetId": 74
+    },
+    {
+      "option": 3,
+      "entityId": 103,
+      "type": "POWER",
+      "id": "o3t1",
+      "targetId": 18
+    },
+    {
+      "option": 4,
+      "entityId": 109,
+      "type": "POWER",
+      "id": "o4t0",
+      "targetId": 74
+    },
+    {
+      "option": 4,
+      "entityId": 109,
+      "type": "POWER",
+      "id": "o4t1",
+      "targetId": 18
+    }
+  ],
+  "originalAction": {
+    "option": 1,
+    "entityId": 60,
+    "type": "POWER",
+    "id": "o1"
+  },
+  "expectedAction": {
+    "option": 2,
+    "entityId": 77,
+    "type": "POWER",
+    "id": "o2"
+  }
+}

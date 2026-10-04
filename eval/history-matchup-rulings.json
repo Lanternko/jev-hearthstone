@@ -1,0 +1,24 @@
+{
+  "version": "user-criteria-review-v2-copy-priest-control",
+  "inputRun": "history-quadrants-2026-10-01T19-17-42-331Z",
+  "scope": "196 tracked Warlock Wild Ranked games; numbers are chronological inventory ordinals, not original batch numbers",
+  "criteria": "User: first three turns strong bodies indicate non-control. Control signals: 40 health, AOE spells, many draw spells, weak minions, ramp, idle first two turns. Conflicts require user clarification.",
+  "groups": [
+    {"key":"clear_control","type":"control","source":"analyst-public-replay-user-criteria","ordinals":[5,11,15,16,17,22,23,27,39,43,45,51,52,56,64,66,69,73,74,75,78,85,94,97,100,103,105,112,130,135,136,137,139,142,145,146,149,151,159,162,163,166,167,177,178,181,188,196],"reason":"以公開的40血、解場／續航／跳費／抽牌及低壓力前期判控制；Dirty Rat 是拉怪干擾，沒有因裸2/6就判為進攻節奏。"},
+    {"key":"unholy_curve","type":"other","source":"user-corpse-dk-criterion-20261002","ordinals":[1,9,28,31,32,47,54,55,61,68,70,80,81,88,193],"reason":"使用者提供Corpse Death Knight並確認中速偏快、依手下強度；按公開Body Bagger／Battlefield Necromancer／Army／Grave Strength等主動屍體鋪場路線歸非控制。不宣稱所有對局是同一份30張牌表；47為40血但公開牌仍為場面鋪場路線。"},
+    {"key":"pirate_and_shadow_pressure","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[4,24,35,37,38,42,57,71,79,82,90,93,101,106,109,117,118,123,127,128,129,134,138,140,150,152,153,154,161,173,175,180,184,187,192,195],"reason":"前期持續主動海盜／暗牧鋪場及搶血、buff或武器壓力；抽牌或單張小AOE不改變主要進攻路線。"},
+    {"key":"totem_pressure","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[131,170,176,183],"reason":"圖騰鋪場配Totemic Surge／Might、Flametongue／Windfury等前期場攻壓力；零攻圖騰不等於控制。"},
+    {"key":"secret_mage","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[99,110,114,144,165],"reason":"秘密配減費手下／Medivh's Valet／Chatty Bartender的節奏路線；早期低攻引擎不是控制證據。"},
+    {"key":"elemental_or_board_mage","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[2,8,19,20,25,111,115,121,126,141,190],"reason":"前期連續主動下怪、元素接續與場面／直傷壓力。"},
+    {"key":"paladin_board_buff","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[46,65,72,92,124,143,179,189,194],"reason":"主動鋪場搭配buff、Call to Arms／Crusader Aura／libram／機械等進攻路線；個別AOE不判為控制。"},
+    {"key":"discard_tempo","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[21,59,133,147,148],"reason":"公開低費進攻與棄牌召喚／武器直傷路線，不以抽牌或傷害法術誤判控制。"},
+    {"key":"druid_board","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[50,53,77],"reason":"前期主動鋪場／buff進攻；法術抽牌或暫時水晶支援場面。"},
+    {"key":"shaman_board","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[3,84,102],"reason":"前期低費手下及主動場面／搶血壓力。"},
+    {"key":"warrior_board","type":"other","source":"analyst-public-replay-user-criteria","ordinals":[48,62,172,186,191],"reason":"公開龍／自傷／海盜等手下buff及主動武器場面壓力；AOE兼作自傷引擎。"},
+    {"key":"combo_deadline","type":"other","source":"user-deadline-criterion-20261002","pressure":"delayed_deadline","ordinals":[18,30,41,49,98,132,155,156,157,158,185],"reason":"使用者指出任務／OTK有不可忽略的發力期限，需要先鋪場搶血並在爆發前後收掉；按此判準歸非控制，另標延遲爆發。不是從本場敗局推定固定第六回合。"},
+    {"key":"forty_pressure_boundary","type":null,"source":"pending-user","ordinals":[95,96,107,113,116,119,125,168],"reason":"40血但公開秘密／弒君／海盜或魚人鋪場路線，等待40血與主動搶節奏的優先序。"},
+    {"key":"copy_priest_control","type":"control","source":"user-ruling-20261002","ordinals":[26,108,160,164,169,182],"reason":"使用者裁定『算控制吧 有 AOE』，六場複製棄牌術牧師統一歸控制，即使部分前三回合有魔眼／棄牌召喚。這是使用者對牌型的裁定，不宣稱每場都實際打出AOE。"},
+    {"key":"mixed_weak_curve","type":null,"source":"pending-user","ordinals":[6,7,12,13,29,33,34,40,44,58,60,67,76,83,86,87,89,104,120,122],"reason":"僅普通身材或混合解場、buff、任務、抽牌訊號；先列具體牌序供使用者裁定。"},
+    {"key":"insufficient_public_evidence","type":null,"source":"pending-user","ordinals":[10,14,36,63,91,171,174],"reason":"公開牌太少或早早結束；不能從勝負或職業強行推斷。174有40血但沒有出牌。"}
+  ]
+}

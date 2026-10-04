@@ -15,9 +15,14 @@
     "gestures": "node src/gesture-report.mjs",
     "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
     "eval-pick": "node src/eval-pick.mjs",
+    "eval-silverfish": "node src/eval-silverfish.mjs",
+    "eval-strength": "node src/eval-strength.mjs",
+    "eval-model-pair": "node --env-file-if-exists=.env.local src/eval-model-pair.mjs",
+    "eval-mulligan-cohorts": "node src/eval-mulligan-cohorts.mjs",
     "eval-rulings": "node src/eval-rulings.mjs",
     "label": "node src/eval-label.mjs",
-    "eval": "node --env-file-if-exists=.env.local src/eval-score.mjs"
+    "eval": "node --env-file-if-exists=.env.local src/eval-score.mjs",
+    "eval-combo-admission": "node src/eval-combo-admission.mjs"
   },
   "dependencies": {
     "ai": "7.0.107"

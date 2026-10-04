@@ -1,8 +1,15 @@
-import {isCurse,roles,mulliganWR,mulliganKept,mulliganRelative,bodies,summoned} from './describe.mjs';
+import {isCurse,roles,mulliganWR,mulliganKept,mulliganRelative,bodies,summoned,buffImpact,valuableBuff,buffManaReserve} from './describe.mjs';
 import {lethalStrike,enemyHero,heroHp,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
 import {deckFor} from './deck.mjs';
 import {immediateDraws,heroAttackGain,heroCanSwing} from './mechanics.mjs';
+import {drawImpact} from './draw-risk.mjs';
+import {resourceDrawWindow} from './matchup-objective.mjs';
+import {combinationAdmission,admittedFirstIds,admittedLines,admissionEvidence,comparisonFirstIds} from './combo-admission.mjs';
+import {weaponBuffAssessment} from './weapon-buff.mjs';
+import {divineShieldAssessment} from './divine-shield.mjs';
+import {temporaryDiscardAssessments} from './temporary-discard.mjs';
+import {handRetentionAssessment} from './hand-retention.mjs';
 const isDH=state=>deckFor(state).name==='dh-void';
 
 // Explicit user correction: early tempo takes precedence over speculative combos.
@@ -31,7 +38,33 @@ export function keepInOpening(c){
 // Not a new win-rate line -- "可能有少數場合可以留" -- but when both the win rate and the keep
 // rate are low there is nothing to think about, so a middle-band card almost nobody keeps goes.
 export const MULL_KEEP=70,MULL_TOSS=62.5,MULL_RARELY_KEPT=25;
+const passiveEgg=c=>c?.name==='Boneweb Egg'&&Number(c.ATK??c.baseAttack??0)===0;
+// Opening tempo means bodies now, not a Deathrattle that needs another card to activate.
+const openingBody=c=>costOf(c)<=2&&(c.CARDTYPE==='MINION'
+ ?Number(c.ATK??c.baseAttack??0)>0||/battlecry:.*summon/i.test(flat(c.text))
+ :c.CARDTYPE==='SPELL'&&/^when you play or discard this, summon/i.test(flat(c.text)));
+function earlyEggOutlet(cards,egg,mana=3){
+ const hand=cards.filter(c=>!isCoin(c)).sort((a,b)=>costOf(a)-costOf(b));
+ const outlet=reliableOutletFor({me:{hand,board:[],mana}},egg);
+ return outlet&&costOf(outlet)<=mana?outlet:null;
+}
 export function mulliganVerdict(c,state){
+ if(!isDH(state)){
+  const cards=(state?.choice?.entities??state?.me?.hand??[]).filter(c=>!isCoin(c));
+  // User ruling, game 120: one Occultist activates one payoff. Cheap board
+  // development does not create an extra discard activation.
+  // Prefer Walking Dead by default; no postgame control label reaches mulligan.
+  if(cards.filter(x=>x.name==='Ocular Occultist').length===1){
+   const payoffs=cards.filter(x=>['Walking Dead','Silverware Golem'].includes(x.name));
+   const preferred=payoffs.find(x=>x.name==='Walking Dead')??payoffs[0];
+   if(payoffs.some(x=>x.entityId===c.entityId)&&c.entityId!==preferred?.entityId)return 'toss';
+  }
+  if(passiveEgg(c)&&!earlyEggOutlet(cards,c))return 'toss';
+  const whispersSetup=c.name==='Wicked Whispers'&&(cards.some(x=>['Walking Dead','Silverware Golem'].includes(x.name))
+   ||(state.choice?.entities??[]).some(isCoin)&&cards.some(x=>x.name==='Cursed Catacombs'));
+  if(roles(c).includes('buff')&&!whispersSetup&&!cards.some(openingBody)
+    &&!cards.some(egg=>passiveEgg(egg)&&earlyEggOutlet(cards,egg)?.entityId===c.entityId))return 'toss';
+ }
  const wr=mulliganWR(c,state);
  if(wr==null)return keepInOpening(c)?'free':'toss';
  const kept=mulliganKept(c,state);
@@ -55,9 +88,9 @@ export function mulliganVerdict(c,state){
 // Same ruling: "4 費牌要很後面才會用到，手上沒有低費牌時不可能留". A 4+ cost card may stay only
 // beside a kept card of 2 or less.
 const MULL_LATE=4,MULL_EARLY=2;
-const keepsLateAlone=(cards,a)=>{
+const keepsLateAlone=(cards,a,state)=>{
  const kept=cards.filter(c=>!a.replace?.includes(c.entityId));
- return kept.some(c=>costOf(c)>=MULL_LATE)&&!kept.some(c=>costOf(c)<=MULL_EARLY);
+ return kept.some(c=>costOf(c)>=MULL_LATE)&&!kept.some(c=>isDH(state)?costOf(c)<=MULL_EARLY:openingBody(c));
 };
 // User ruling (2026-09-25, after game 6): 「可以高機率留的組合是：低語+侍僧；魔眼+殭屍；派對+buff」.
 // With both halves in the opening hand, both stay, over the win-rate bands (Continuity's 62.1
@@ -81,7 +114,18 @@ function mulliganConstraint(state,actions){
  const keep=cards.filter(c=>mulliganVerdict(c,state)==='keep'||combo.has(c.entityId)).map(c=>c.entityId);
  let out=actions.filter(a=>toss.every(id=>a.replace?.includes(id))&&!keep.some(id=>a.replace?.includes(id)));
  if(!out.length)out=actions;
- const early=out.filter(a=>!keepsLateAlone(cards,a));
+ // Game 14: offered outlets do not count if the action redraws them. One
+ // retained early discard activation supports at most one 3-cost summon payoff.
+ // Whispers is an outlet as well as a buff; Coin/Catacombs can be spent first.
+ if(!isDH(state)){
+  const supported=out.filter(a=>{
+   const retained=cards.filter(c=>!a.replace?.includes(c.entityId));
+   const activations=retained.filter(c=>['Ocular Occultist','Wicked Whispers','Chamber of Viscidus'].includes(c.name)).length;
+   return retained.filter(c=>['Walking Dead','Silverware Golem'].includes(c.name)).length<=activations;
+  });
+  if(supported.length)out=supported;
+ }
+ const early=out.filter(a=>!keepsLateAlone(cards,a,state));
  return early.length?early:out;
 }
 
@@ -113,12 +157,8 @@ function suicide(state){
 // counts: 「這邊我們本來就劣勢，所以要靠古爾丹被棄牌抽牌，想辦法拿公爵才能逆轉」 (game 10) -- a
 // draw that only might hit a Shred is a gamble Jev may take when behind; it sees the hazards
 // and the deck size in the state. Forced hits are the smallest ones.
-export function worstDraw(state,n){
- const hits=[...(state?.me?.drawHazards??[])].sort((a,b)=>a-b);
- const deck=Number(state?.me?.deckCount);
- if(!Number.isFinite(deck))return 0;
- const forced=Math.max(0,Math.min(n,deck)-(deck-hits.length));
- return hits.slice(0,forced).reduce((s,x)=>s+x,0);
+export function worstDraw(state,n,options){
+ return drawImpact(state,n,options).damageMin;
 }
 const DRAWS_ON_DISCARD=/\bdiscard this\b/i;
 function afterSwingDraws(state){
@@ -126,7 +166,7 @@ function afterSwingDraws(state){
  if(!weapon||!DISCARDS_HIGHEST.test(flat(weapon.text)))return 0;
  const hand=state.me?.hand??[];
  const top=Math.max(-Infinity,...hand.map(costOf));
- return Math.max(0,...hand.filter(c=>costOf(c)===top&&DRAWS_ON_DISCARD.test(flat(c.text))).map(c=>worstDraw(state,drawCount(c))));
+ return Math.max(0,...hand.filter(c=>costOf(c)===top&&DRAWS_ON_DISCARD.test(flat(c.text))).map(c=>worstDraw(state,drawCount(c),{played:true})));
 }
 // A draw that can kill us through a known Shred of Time waits, like a draw that overdraws.
 function drawKills(state){
@@ -135,7 +175,7 @@ function drawKills(state){
  if(!board.some(c=>c.CARDTYPE==='HERO'))return ()=>false;
  return a=>{
   const c=hand.find(x=>x.entityId===a.entityId)??board.find(x=>x.entityId===a.entityId&&x.CARDTYPE==='HERO_POWER');
-  const n=drawCount(c,state),dmg=n?selfDamageCost(c)+worstDraw(state,n):0;
+  const n=drawCount(c,state),dmg=n?selfDamageCost(c)+worstDraw(state,n,{played:hand.includes(c)}):0;
   return dmg>0&&dmg>=hp;
  };
 }
@@ -182,12 +222,38 @@ function overflowWaits(state,actions){
  const board=state.me?.board??[];
  const attacking=actions.some(a=>a.targetId!=null&&board.some(c=>c.entityId===a.entityId&&['MINION','HERO'].includes(c.CARDTYPE)));
  if(!attacking)return ()=>false;
- const room=7-board.filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
- const hand=state.me?.hand??[];
+ const room=boardRoom(state);
+ const hero=board.find(c=>c.CARDTYPE==='HERO');
+ const trades=actions.some(a=>isAttackAction(state,a)&&a.entityId!==hero?.entityId);
  return a=>{
-  const card=hand.find(c=>c.entityId===a.entityId);
-  return !!card&&bodies(card)>1&&bodies(card)>room;
+  // The swing itself is an attack; it waits only for the minions' swings.
+  if(hero&&a.entityId===hero.entityId&&!trades)return false;
+  const n=landing(state,a);
+  return n>1&&n>room;
  };
+}
+const boardRoom=state=>7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+// User ruling (2026-09-30, game 58 turn 5): 「第五回合沒有空間了。應該自殺一些怪清出空間，才能下新的」.
+// Five minions down, Occultist discarded Boneweb Egg (1 + two Spiders into two slots), then the
+// Chronoclaws swing discarded Walking Dead onto a full board. Bodies from a discard count too.
+const discardBodies=c=>/if you discard this minion, summon it/i.test(flat(c?.text))?1:bodiesOnDiscard(c)?summoned(c):0;
+function landing(state,a){
+ const hand=state.me?.hand??[];
+ const board=state.me?.board??[];
+ const card=hand.find(c=>c.entityId===a.entityId);
+ if(card)return bodies(card)+discardBodies(hand.find(c=>c.entityId===a.targetId));
+ const w=board.find(c=>c.CARDTYPE==='WEAPON'&&DISCARDS_HIGHEST.test(flat(c.text)));
+ const hero=board.find(c=>c.CARDTYPE==='HERO');
+ if(!w||!hero||a.entityId!==hero.entityId||a.targetId==null)return 0;
+ const top=Math.max(-Infinity,...hand.map(costOf));
+ return Math.max(0,...hand.filter(c=>costOf(c)===top).map(discardBodies));
+}
+// What the hand could still land this turn if played at its best, discards included.
+function pendingBodies(state){
+ const hand=state.me?.hand??[],mana=Number(state.me?.mana??0);
+ const chooses=c=>/choose a card in\s*your hand to discard/i.test(flat(c.text));
+ return Math.max(0,...hand.filter(c=>costOf(c)<=mana).map(c=>bodies(c)
+  +(chooses(c)?Math.max(0,...hand.filter(x=>x!==c).map(discardBodies)):0)));
 }
 
 // Explicit user correction: a board-wide +1/+1 with an empty board buffs nothing.
@@ -201,6 +267,18 @@ export const pureBoardBuff=card=>{
  return BUFFS_WHOLE_BOARD.test(t)&&!/discard|destroy/i.test(t);
 };
 export const myMinions=state=>(state.me.board??[]).filter(c=>c.CARDTYPE==='MINION').length;
+export function singleBuffTradeGain(state,card,actions){
+ const v=buffImpact(state,card);
+ if(v?.existing!==1||v.recipients!==1)return false;
+ const b=(state.me?.board??[]).find(c=>c.CARDTYPE==='MINION'&&!on(c,'DORMANT'));
+ if(!b)return false;
+ const attack=Number(b.ATK??b.baseAttack??0),hp=hpOf(b);
+ return actions.some(a=>a.entityId===b.entityId&&a.targetId!=null
+  &&(state.opponent?.board??[]).some(t=>t.entityId===a.targetId&&t.CARDTYPE==='MINION'
+   &&!on(t,'DORMANT')&&!on(t,'DIVINE_SHIELD')&&!on(t,'POISONOUS')&&!on(t,'IMMUNE')
+   &&attack+v.attack>=hpOf(t)&&hp+v.health>Number(t.ATK??0)
+   &&!(attack>=hpOf(t)&&hp>Number(t.ATK??0))));
+}
 
 // Explicit user correction, second live game: the hero power was tapped for a card on a turn
 // the opponent already had lethal on board. Life Tap's two health is not a cost to weigh
@@ -208,7 +286,25 @@ export const myMinions=state=>(state.me.board??[]).filter(c=>c.CARDTYPE==='MINIO
 // says it damages us. Board damage is arithmetic over a fully observed state, so like lethal
 // it is taken away from Jev rather than explained to it.
 const SELF_DAMAGE=/take \$?(\d+) damage/i;
-export const selfDamageCost=card=>{const m=SELF_DAMAGE.exec(flat(card?.text));return m?Number(m[1]):0};
+export const selfDamageCost=card=>{
+ let t=flat(card?.text);
+ // A minion's future Deathrattle/trigger is not an immediate play cost.
+ if(card?.CARDTYPE==='MINION'){
+  if(!/battlecry:/i.test(t))return 0;
+  t=t.split(/battlecry:/i)[1].split(/deathrattle:|at the (?:start|end)|after /i)[0];
+ }
+ const take=SELF_DAMAGE.exec(t),deal=/deal \$?(\d+) damage to your hero/i.exec(t);
+ return Number(take?.[1]??0)+Number(deal?.[1]??0);
+};
+export function lethalSelfDamage(state,a){
+ if(a.type==='CHOICE'||a.type==='MULLIGAN'||a.type==='END_TURN')return false;
+ const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
+ if(!hero||hero.IMMUNE===1||hero.IMMUNE==='1')return false;
+ const c=(state.me?.hand??[]).find(c=>c.entityId===a.entityId)
+  ??(state.me?.board??[]).find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
+ const hit=selfDamageCost(c);
+ return hit>0&&hit>=myHeroHp(state);
+}
 export const myHeroHp=state=>{const h=(state?.me?.board??[]).find(c=>c.CARDTYPE==='HERO');return h?(h.HEALTH??0)-(h.DAMAGE??0)+(h.ARMOR??0):0};
 // Everything they control can swing next turn, summoning sickness included, so nothing is
 // discounted. Their weapon rides on the hero's own attack value.
@@ -231,6 +327,15 @@ export function forbidsSelfDamage(state){
  const hp=myHeroHp(state);
  return hp>0&&incomingDamage(state)>=hp+taunted(state);
 }
+// Game 51: 6 Health, two enemy 2-Attack bodies, no Taunt. A tap makes
+// their existing board lethal (4 >= 6-2), even though it was not lethal before.
+export function tapExposesBoardLethal(state,card){
+ if(card?.CARDTYPE!=='HERO_POWER'||selfDamageCost(card)<=0)return false;
+ const hp=myHeroHp(state);
+ if(hp<=0||taunted(state)>0)return false; // preserve the existing Taunt handling
+ const after=hp-selfDamageCost(card)-worstDraw(state,drawCount(card,state));
+ return incomingDamage(state)>=after;
+}
 
 // User ruling: the Coin is a hard constraint, not a preference. After spending it there has to
 // be something to spend the crystal on -- a card in hand that can then be cast, or a hero power
@@ -251,6 +356,14 @@ export const spendableAt=(state,mana)=>{
   return hand.some(c=>(c.COST??c.baseCost??0)<=mana)||!!hpReady;
 };
 export const deadCoin=state=>!spendableAt(state,(state?.me?.mana??0)+1);
+// User ruling, game 46: turn-one Coin -> a lone 0/2 Egg is not productive tempo.
+export function passiveEggCoin(state){
+ if(isDH(state)||Number(state?.me?.mana)!==1||myMinions(state)>0)return false;
+ const hand=(state?.me?.hand??[]).filter(c=>!isCoin(c));
+ const unlocked=hand.filter(c=>costOf(c)>1&&costOf(c)<=2);
+ return unlocked.length>0&&unlocked.every(passiveEgg)
+  &&!unlocked.some(egg=>earlyEggOutlet(hand,egg,2));
+}
 
 // User ruling, after the third game in a row that hard-cast a card which pays out when it is
 // discarded while a discard outlet sat in hand. describe.mjs already tells Jev which outlets it
@@ -325,6 +438,55 @@ export function reliableOutletFor(state,fodder){
 // swing this turn is no outlet today.
 const outletUsable=(state,o)=>o.CARDTYPE==='WEAPON'?heroCanSwing(state):costOf(o)<=Number(state?.me?.mana??0);
 const without=(state,c)=>({...state,me:{...state.me,hand:(state.me?.hand??[]).filter(x=>x.entityId!==c.entityId)}});
+// User screenshot ruling: five bodies + Acolytes + Continuity on five mana.
+// Fill the two slots directly, then buff seven; an Occultist would occupy one
+// of those slots before discarding Acolytes and lose one of its summoned bodies.
+// User ruling 2026-10-01: one-body +1/+1 loses to Occultist -> Walking Dead.
+// This is a known targeted discard, not a forecast of random summons.
+export function lowBoardDiscardActions(state,actions){
+ if(isDH(state)||state.choice)return [];
+ const hand=state.me?.hand??[],board=state.me?.board??[],mana=Number(state.me?.mana??0);
+ if(myMinions(state)!==1||hand.some(isCurse)||incomingDamage(state)>=myHeroHp(state)+taunted(state))return [];
+ const room=7-board.filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+ if(room<2)return [];
+ const buffs=hand.filter(c=>pureBoardBuff(c)&&buffImpact(state,c)?.recipients===1);
+ if(!buffs.length)return [];
+ return actions.filter(a=>{
+  const source=hand.find(c=>c.entityId===a.entityId),target=hand.find(c=>c.entityId===a.targetId);
+  return source?.name==='Ocular Occultist'&&target?.name==='Walking Dead'
+   &&costOf(source)<=mana&&buffs.some(b=>costOf(b)+costOf(source)>mana);
+ });
+}
+export function buffDevelopmentActions(state,actions,buff){
+ if(isDH(state)||state.choice)return [];
+ const hp=myHeroHp(state);
+ if(hp>0&&incomingDamage(state)>=hp+taunted(state))return [];
+ const hand=state.me?.hand??[],board=state.me?.board??[];
+ const slots=7-board.filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+ if(slots<=0||!pureBoardBuff(buff))return [];
+ const mana=Number(state.me?.mana??0);
+ return actions.filter(a=>{
+  const c=hand.find(c=>c.entityId===a.entityId),t=flat(c?.text).trim();
+  if(!c||c===buff||a.targetId!=null||lethalSelfDamage(state,a)
+   ||costOf(c)+buffManaReserve(state,buff)>mana)return false;
+  const spell=c.CARDTYPE==='SPELL'&&/^(?:when you play or discard this, )?summon\b/i.test(t)
+   &&!/\bif\b|next turn|end of|dormant/i.test(t);
+  // Ordinary bodies and simple summon/draw/self-hit Battlecries add buff targets.
+  // Complex destructive/conditional Battlecries require planning, not this rule.
+  const battlecry=t.match(/battlecry:([\s\S]*?)(?:deathrattle:|$)/i)?.[1]?.trim();
+  const simple=!battlecry||battlecry.split(/\.\s*/).filter(Boolean).every(p=>
+   /^(?:summon (?:a|an|one|two|three|\d+) |draw (?:a|one|two|three|\d+) cards?\b|deal \$?\d+ damage to your hero\b)/i.test(p)
+   &&!/\bif\b|destroy|discard|next turn|end of|dormant/i.test(p));
+  const minion=c.CARDTYPE==='MINION'&&!on(c,'DORMANT')&&!/dormant/i.test(t)&&simple;
+  const n=spell?summoned(c):1+summoned({text:battlecry??''});
+  return (spell||minion)&&n>0&&n<=slots;
+ });
+}
+export function buffSetupActions(state,actions){
+ // Whether a buff is worthwhile remains distinct from ordering its setup.
+ const buffs=(state.me?.hand??[]).filter(c=>valuableBuff(state,c)&&pureBoardBuff(c));
+ return actions.filter(a=>buffs.some(b=>buffDevelopmentActions(state,actions,b).includes(a)));
+}
 function protectedFodder(state,c){
  const o=reliableOutletFor(state,c);
  if(!o)return false;
@@ -343,14 +505,68 @@ export const wastedFodder=state=>new Set(
 const bodiesOnDiscard=c=>isFodder(c)&&/\bsummon/i.test(flat(c?.text));
 const BURN_RANGE=12;
 export function boardFirstDiscard(state,actions){
- if(myMinions(state)>0)return actions;
+ const count=myMinions(state);
+ if(count>2)return actions;
  const foe=enemyHero(state);
  if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
  const hand=state?.me?.hand??[];
  const inHand=id=>hand.find(c=>c.entityId===id);
  const picks=a=>CHOOSES_DISCARD.test(flat(inHand(a.entityId)?.text))&&inHand(a.targetId);
- if(!actions.some(a=>picks(a)&&bodiesOnDiscard(inHand(a.targetId))))return actions;
- return actions.filter(a=>!picks(a)||bodiesOnDiscard(inHand(a.targetId)));
+ const room=7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+ const fits=a=>discardBodies(inHand(a.targetId))>0&&discardBodies(inHand(a.targetId))<=room-(inHand(a.entityId)?.CARDTYPE==='MINION'?1:0);
+ if(!actions.some(a=>picks(a)&&bodiesOnDiscard(inHand(a.targetId))&&fits(a)))return actions;
+ if(count===0)return actions.filter(a=>!picks(a)||bodiesOnDiscard(inHand(a.targetId)));
+ // User ruling, game 148 turn 3: after spending all mana on Occultist,
+ // a draw-three payoff cannot develop this turn. Prefer a summon payoff on a low board.
+ return actions.filter(a=>!picks(a)||isCurse(inHand(a.targetId))
+  ||bodiesOnDiscard(inHand(a.targetId))&&fits(a)
+  ||Number(state.me?.mana??0)>costOf(inHand(a.entityId))
+  ||!actions.some(b=>b.entityId===a.entityId&&picks(b)&&bodiesOnDiscard(inHand(b.targetId))&&fits(b)));
+}
+
+// User ruling (2026-09-30, game 4, turn 8): Ocular Occultist discarded Soul Barrage with Walking
+// Dead in hand and a lone 3/3 across. 「彈幕打5，對面一只怪，期望值會受到2.5點傷害」: split
+// among hero and one minion, the 3/3 dies only half the time, and even the kill is worth about
+// 2.5 mana -- less than the 2/5 Taunt the Walking Dead discard summons. The split damage stays a
+// pick only against a swarm (boardFirstDiscard's SWARM), small minions with 5+ Attack between them,
+// or with their hero in burn range.
+// `card(a)` names the card a discard option throws away.
+const SMALL_PUNCH=5;
+function splitBurnWaits(state,actions,card){
+ const foe=enemyHero(state);
+ if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
+ // The user's addition: 「或是對面2血以下的怪 的攻擊力合 >= 5」 -- small minions hitting that hard
+ // together are worth the gamble even when there are fewer than three.
+ const small=(state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION'&&hpOf(c)<=SMALL);
+ if(small.length>=SWARM||small.reduce((n,c)=>n+Number(c.ATK??c.baseAttack??0),0)>=SMALL_PUNCH)return actions;
+ const split=a=>{const c=card(a);return !!c&&PAYS_ON_DISCARD.test(flat(c.text))&&SPLITS_DAMAGE.test(flat(c.text))};
+ if(!actions.some(a=>card(a)&&bodiesOnDiscard(card(a))))return actions;
+ const kept=actions.filter(a=>!split(a));
+ return kept.length?kept:actions;
+}
+function occultistPick(state,actions){
+ const hand=state?.me?.hand??[],inHand=id=>hand.find(c=>c.entityId===id);
+ const picks=a=>CHOOSES_DISCARD.test(flat(inHand(a.entityId)?.text))&&inHand(a.targetId);
+ return splitBurnWaits(state,actions,a=>picks(a)?inHand(a.targetId):null);
+}
+
+// User ruling (2026-09-30, game 4, turn 4): 「這邊 先鴨嘴龍再buff」. Two mana, Entropic
+// Continuity and Platysaur in hand; Jev buffed first, and Platysaur came down after as a bare
+// 1/2. strategy.md already said bodies before buffs and the plan text even named Platysaur as
+// still affordable, but a minion whose battlecry draws cannot be planned past, so every full
+// plan on the menu started with the buff. While a minion from hand fits beside the buff and
+// there is a slot for it, the buff waits until the minion is down.
+function bodyBeforeBuff(state,actions){
+ if(isDH(state)||state.choice||boardRoom(state)<=0)return actions;
+ const hand=state.me?.hand??[],mana=Number(state.me?.mana??0);
+ const held=a=>hand.find(c=>c.entityId===a.entityId);
+ const buffs=actions.filter(a=>{const c=held(a);return c?.CARDTYPE==='SPELL'&&pureBoardBuff(c)});
+ // Discard fodder is worth more thrown away than cast (Cards, strategy.md); whether to cast
+ // it at all stays Jev's call, so it does not hold the buff back.
+ const bodies=actions.filter(a=>held(a)?.CARDTYPE==='MINION'&&!isFodder(held(a)));
+ const early=b=>bodies.some(m=>costOf(held(m))+costOf(held(b))<=mana);
+ const kept=actions.filter(a=>!(buffs.includes(a)&&early(a)));
+ return kept.length?kept:actions;
 }
 
 
@@ -426,6 +642,25 @@ function temporaryPick(state,actions){
  return paying.length?paying:actions;
 }
 
+// Game 51 T2: five bodies, Continuity, Egg, two mana; Catacombs offers
+// Egg / Whispers / unaffordable Occultist. Pick the buff, not more passive fodder.
+function tempoBuffPick(state,actions){
+ if(isDH(state)||!/discover/i.test(flat(state.choice?.source?.text))
+   ||!/temporary/i.test(flat(state.choice?.source?.text)))return actions;
+ const cards=state.choice.entities??[],card=a=>cards.find(c=>c.entityId===a.entityId);
+ const view=c=>({...state,me:{...state.me,hand:[...(state.me.hand??[]),c]}});
+ const buffs=actions.filter(a=>{
+  const c=card(a),v=buffImpact(view(c),c);
+  return valuableBuff(view(c),c)&&v.recipients>=5;
+ });
+ if(!buffs.length)return actions;
+ const passive=c=>c?.CARDTYPE==='MINION'&&Number(c.ATK??c.baseAttack??0)===0
+   &&isFodder(c)&&!roles(c).includes('rush')&&!roles(c).includes('taunt');
+ // Keep removal, active bodies, draw payoffs and other meaningful alternatives available.
+ return actions.filter(a=>buffs.includes(a)||!passive(card(a))
+   &&!(costOf(card(a))>Number(state.me?.mana??0)&&!isFodder(card(a))));
+}
+
 // User ruling (2026-09-25, game 7, turn 3): Chamber of Viscidus showed Walking Dead, Soul Barrage
 // and Platysaur with only Party Fiend on our board, and Jev discarded Soul Barrage. 「應該是要棄掉
 // 行尸（因為場面低）」: while the board is low (two minions or fewer) and there is a slot, a
@@ -460,6 +695,7 @@ function discardPick(state,actions){
  // that does not is kept in hand.
  {const pays=a=>a.type!=='CHOICE'||PAYS_ON_DISCARD.test(flat(card(a)?.text))||bodiesOnDiscard(card(a));
   if(picks.some(pays))actions=actions.filter(pays);}
+ actions=splitBurnWaits(state,actions,a=>a.type==='CHOICE'?card(a):null);
  if(myMinions(state)>LOW_BOARD||myMinions(state)>=7)return actions;
  const foe=enemyHero(state);
  if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
@@ -486,9 +722,8 @@ export function drawCount(card,state){
 export function overdraws(state,card,played=true){
  const n=played?drawCount(card,state):drawCount(card);
  if(!n)return false;
- const deck=state.me?.deckCount;
- const hand=(state.me?.hand??[]).length-(played?1:0);
- return (deck!=null&&deck<n)||hand+n>10;
+ const r=drawImpact(state,n,{played});
+ return r.fatigueDraws>0||r.burnMax>0;
 }
 function overdrawWaits(state){
  const hand=state.me?.hand??[],board=state.me?.board??[];
@@ -500,48 +735,20 @@ function overdrawWaits(state){
  };
 }
 
-// User ruling (2026-09-26, game 10), three turns of the same mistake: 「應該先抽牌再出牌 or 打 1+3 費」,
-// 「先抽牌才對。白白浪費一個魔眼」, 「一樣要先抽牌再打 buff」. Turn 7 cast Silverware Golem and
-// Entropic Continuity and only then Life Tap; turn 8 equipped Chronoclaws before tapping, the tap
-// found The Soularium with no mana left, and the hero's swing discarded it. While Life Tap is
-// affordable and safe, a card waits for it -- unless the hand spends every crystal exactly
-// without it (the 1+3 the user also accepts), in which case the cards of that exact spend stay.
-function drawFirst(state,actions){
- const hp=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO_POWER');
- const mana=Number(state.me?.mana??0);
- if(!hp||!drawCount(hp)||costOf(hp)>mana||!actions.some(a=>a.entityId===hp.entityId))return actions;
- if(myHeroHp(state)-selfDamageCost(hp)<=incomingDamage(state))return actions;
- const hand=state.me?.hand??[];
- const plays=[...new Set(actions.map(a=>hand.find(c=>c.entityId===a.entityId)).filter(c=>c&&!isCoin(c)&&costOf(c)>0))];
- // The line may run through a card an earlier rule is holding back for now (Whispers waits for
- // the body that goes first), so the exact spend is searched over the whole affordable hand.
- const pool=hand.filter(c=>!isCoin(c)&&costOf(c)>0&&costOf(c)<=mana).slice(0,12);
- const exact=new Set();
- for(let m=1;m<1<<pool.length;m++){
-  const pick=pool.filter((_,i)=>m>>i&1);
-  if(pick.reduce((s,c)=>s+costOf(c),0)===mana)pick.forEach(c=>exact.add(c.entityId));
- }
- // User ruling (2026-09-29, game 19, turn 10): Duke of Below at 14/14 was hidden on 5 mana because
- // Duke plus Life Tap is 6. A card that counts our discards and that the tap would price out does
- // not wait for it; a plain 3-drop on 4 mana still does (game 10, turn 4).
- const after=mana-costOf(hp);
- const grows=c=>!!c&&COUNTS_DISCARDS.test(flat(c.text))&&costOf(c)>after;
- const out=actions.filter(a=>!plays.some(c=>c.entityId===a.entityId)||exact.has(a.entityId)
-  ||grows(hand.find(c=>c.entityId===a.entityId)));
- return out.length?out:actions;
-}
-// 「應該先用收藏器」: a card that draws goes before the cards that do not -- the draw may be
-// the better play, and a card drawn after the mana is gone is one Chronoclaws throws away.
-// Discard fodder that draws (Hand of Gul'dan) is worth more discarded, so it does not count.
-function drawCardFirst(state,actions){
- const hand=state.me?.hand??[];
- const held=a=>hand.find(c=>c.entityId===a.entityId);
- const draws=a=>{const c=held(a);return !!c&&drawCount(c)>0&&!isFodder(c)};
- if(!actions.some(draws))return actions;
- // Game 19 (2026-09-29), turn 8: The Soularium went first on 4 mana and left Duke of Below, 8/8,
- // unaffordable. A card the cheapest draw would price out stays on the menu beside it.
- const after=Number(state.me?.mana??0)-Math.min(...actions.filter(draws).map(a=>costOf(held(a))));
- return actions.filter(a=>draws(a)||!held(a)||isCoin(held(a))||costOf(held(a))>after);
+function buffBeforeTap(state,actions){
+ const hand=state.me?.hand??[],board=state.me?.board??[];
+ const buffs=actions.map(a=>hand.find(c=>c.entityId===a.entityId)).filter(c=>valuableBuff(state,c));
+ if(!buffs.length)return actions;
+ const room=Number(state.me?.mana??0)-Math.max(...buffs.map(c=>buffManaReserve(state,c)));
+ const refill=resourceDrawWindow(state);
+ return actions.filter(a=>{
+  if(board.some(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER'&&drawCount(c)>0))return refill;
+  const c=hand.find(c=>c.entityId===a.entityId);
+  // A passive egg that consumes the buff's mana is weaker than buffing the existing board.
+  // If both fit, keep the body-first line available; active/Rush/Taunt plays remain choices.
+  return !(c?.CARDTYPE==='MINION'&&Number(c.ATK??c.baseAttack??0)===0&&isFodder(c)
+    &&!roles(c).includes('rush')&&!roles(c).includes('taunt')&&costOf(c)>room);
+ });
 }
 // 「這回合的地標還沒 CD 好，不能點」: a location that is exhausted or cooling down is never clicked.
 const locationResting=state=>{
@@ -626,20 +833,28 @@ export function dhTempoActions(state,actions){
  });
 }
 
-export function constrainActions(state,actions){
+export function constrainActions(state,actions,{trace,admission=combinationAdmission(state,actions)}={}){
+ const comboFirst=admittedFirstIds(admission);
  if(state.choice?.type==='MULLIGAN')return mulliganConstraint(state,actions);
- if(state.choice)return discardPick(state,doomedPick(state,temporaryPick(state,actions)));
+ if(state.choice)return discardPick(state,doomedPick(state,tempoBuffPick(state,temporaryPick(state,actions))));
+ // Verified expiring self-summons pay out without spending their printed mana.
+ // Keep attacks, safe draws and END_TURN; immediate-use exceptions remain.
+ const deferred=new Set(temporaryDiscardAssessments(state,actions).filter(c=>c.deferHardCast).map(c=>c.playActionId));
+ if(deferred.size)actions=actions.filter(a=>!deferred.has(a.id));
+ const saferCopies=new Set(handRetentionAssessment(state,actions).copyPreferences.flatMap(p=>p.deferredEntityIds));
+ actions=actions.filter(a=>a.targetId!=null||!saferCopies.has(a.entityId));
  let out=freezeThreatFirst(state,actions);
- if(deadCoin(state)){
+ if(deadCoin(state)||passiveEggCoin(state)){
   const hand=state.me?.hand??[];
   out=out.filter(a=>!hand.some(c=>c.entityId===a.entityId&&isCoin(c)));
   if(!out.length)out=actions;
  }
- if(forbidsSelfDamage(state)){
+ {
   const board=state.me.board??[];
   out=out.filter(a=>{
    const e=board.find(c=>c.entityId===a.entityId);
-   return !(e?.CARDTYPE==='HERO_POWER'&&selfDamageCost(e)>0);
+   return !(e?.CARDTYPE==='HERO_POWER'&&selfDamageCost(e)>0
+     &&(forbidsSelfDamage(state)||tapExposesBoardLethal(state,e)));
   });
   if(!out.length)out=actions;
  }
@@ -670,10 +885,13 @@ export function constrainActions(state,actions){
  if(!isDH(state))out=weaponFirst(state,out);
  const wasted=wastedFodder(state);
  if(wasted.size){
-  out=out.filter(a=>!wasted.has(a.entityId));
+  // Development may make a buff valuable even when the current board is thin.
+  const setups=new Set((state.me.hand??[]).filter(pureBoardBuff)
+   .flatMap(b=>buffDevelopmentActions(state,out,b)).map(a=>a.entityId));
+  out=out.filter(a=>!wasted.has(a.entityId)||setups.has(a.entityId)||comboFirst.has(a.id));
   if(!out.length)out=actions;
  }
- out=boardFirstDiscard(state,doomedPick(state,out));
+ out=occultistPick(state,boardFirstDiscard(state,doomedPick(state,out)));
  out=counterFirst(state,out);
  {const kept=out.filter(a=>!overflowWaits(state,out)(a));if(kept.length)out=kept;}
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);
@@ -689,14 +907,58 @@ export function constrainActions(state,actions){
  }
  // Warlock's historical rulings must not hide DH's Outcast enablers, attacks before weapon
  // replacement, or attacks before a generated card buries the rightmost Outcast.
- if(!isDH(state))out=drawCardFirst(state,drawFirst(state,out));
+ // Decide WHETHER to draw before ordering it. Availability alone is not a draw intent.
+ if(!isDH(state))out=buffBeforeTap(state,out);
  else out=out.filter(a=>{
   const hp=(state.me.board??[]).find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
   return !heroAttackGain(hp)||heroCanSwing(state);
  });
- if(myMinions(state)>0)return out;
+ // An earlier fallback must never resurrect a tap that exposes certain lethal.
+ out=out.filter(a=>!tapExposesBoardLethal(state,(state.me?.board??[]).find(c=>c.entityId===a.entityId)));
+ // No fallback may resurrect a lethal draw or a pure resource draw with no resources left.
+ const fatalDraw=drawKills(state);
+ out=out.filter(a=>{
+  if(fatalDraw(a))return false;
+  const c=[...(state.me?.hand??[]),...(state.me?.board??[])].find(c=>c.entityId===a.entityId);
+  const n=drawCount(c,state);
+  if(!n)return true;
+  const pure=c?.CARDTYPE==='HERO_POWER'||/^draw (?:a|one|two|three|\d+) cards?\./i.test(flat(c?.text));
+  return !pure||drawImpact(state,n,{played:c.CARDTYPE!=='HERO_POWER'}).usable!==0;
+ });
+ if(passiveEggCoin(state))out=out.filter(a=>!(state.me?.hand??[]).some(c=>c.entityId===a.entityId&&isCoin(c)));
  const hand=state.me.hand??[];
- return out.filter(a=>!pureBoardBuff(hand.find(c=>c.entityId===a.entityId)));
+ const tap=out.find(a=>(state.me.board??[]).some(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER'&&selfDamageCost(c)>0));
+ const weaponBuff=weaponBuffAssessment(state,out,{admission});
+ const safe=out.filter(a=>{
+  // Terminal safety gate: earlier fallback filters must not resurrect Party
+  // Fiend at 3 Health, nor allow forced_spend to pick a known fatal play.
+  if(lethalSelfDamage(state,a))return false;
+  const c=hand.find(c=>c.entityId===a.entityId);
+  if(!pureBoardBuff(c))return true;
+  const v=buffImpact(state,c);
+  if(v?.recipients===0)return false;
+  // New50 game9 T2: spare mana is not a reason to spend a permanent buff
+  // on one newly summoned body against an empty board. No attack/trade payoff
+  // exists this turn; hold it for development. Temporary buffs remain choices.
+  const single=(state.me.board??[]).filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
+  const emptyEnemy=!(state.opponent?.board??[]).some(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT'));
+  if(v?.recipients===1&&single.length===1&&on(single[0],'EXHAUSTED')&&emptyEnemy
+   &&!c.temporary&&Number(state.me.maxMana)<=2)return false;
+  const hp=(state.me.board??[]).find(c=>c.entityId===tap?.entityId);
+  const foe=enemyHero(state);
+  const canFinish=foe&&faceDamage(state,out)+Number(v?.attack??0)>=heroHp(foe);
+  const ready=(state.me.board??[]).filter(x=>x.CARDTYPE==='MINION'&&!on(x,'DORMANT')&&!on(x,'EXHAUSTED')&&!on(x,'FROZEN'));
+  const buffLethalPossible=foe&&faceDamage(state,out)+ready.length*Number(v?.attack??0)>=heroHp(foe);
+  if(!buffLethalPossible&&weaponBuff?.preferred&&c.entityId===weaponBuff.buffId)return false;
+  // General ordering invariant, independent of current board size/card names.
+  // Keep lethal and immediate trade options; otherwise develop before this buff.
+  if(!buffLethalPossible&&!singleBuffTradeGain(state,c,out)&&buffDevelopmentActions(state,out,c).length)return false;
+  return !(v?.recipients===1&&tap&&costOf(c)+costOf(hp)>Number(state.me.mana)
+   &&!singleBuffTradeGain(state,c,out)&&!canFinish);
+ });
+ if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,safe);
+  trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&safe.some(x=>x.id===a.id)).map(a=>a.id);}
+ return safe;
 }
 
 // User ruling (2026-09-24, after game 3): "先 buff 再攻擊" and "打滿水晶，不是用天生技不打牌".
@@ -713,8 +975,8 @@ export function constrainActions(state,actions){
 //   * the Coin -- tempo, not mana (deadCoin already drops the useless one);
 //   * discard outlets -- Soulfire and Whispers throw a card away, and whether that is worth it
 //     is the call strategy.md gives Jev; a reliable outlet already blocks hard-casting its fodder.
-// The hero power counts as spend only while it cannot walk us into their board, and it waits
-// while its 2 mana would price out a card we must spend.
+// Drawing and the hero power are optional turn intents. The power still waits while
+// its mana would price out a card we must spend.
 // A kill on the board is settled before this runs (bridge.mjs), so it never hides a lethal swing.
 const heroPowerOf=state=>(state?.me?.board??[]).find(c=>c.CARDTYPE==='HERO_POWER');
 // A target in our own hand is a battlecry picking a card (Ocular Occultist), never a swing --
@@ -722,25 +984,56 @@ const heroPowerOf=state=>(state?.me?.board??[]).find(c=>c.CARDTYPE==='HERO_POWER
 const isAttackAction=(state,a)=>a?.targetId!=null
  &&!(state?.me?.hand??[]).some(c=>c.entityId===a.targetId)
  &&(state?.me?.board??[]).some(c=>c.entityId===a.entityId&&['MINION','HERO'].includes(c.CARDTYPE));
+// Known multi-body recovery beats developing a location after a full clear.
+// The real engine resolves the summon; do not promise immediate attacks or stats.
+export function boardRecoveryActions(state,actions){
+ if(state.choice||state.status!=='RUNNING'||!state.me?.current||myMinions(state)>0)return [];
+ const room=7-(state.me.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
+ return actions.filter(a=>{
+  const c=(state.me.hand??[]).find(c=>c.entityId===a.entityId);
+  return a.type==='POWER'&&c?.cardId==='CAP_805t'&&costOf(c)<=Number(state.me.mana)
+   &&Math.min(room,c.resummons?.length??0)>=3;
+ });
+}
 export function mustSpend(state,actions){
  const hand=state?.me?.hand??[];
  const hp=heroPowerOf(state);
  const mana=Number(state?.me?.mana??0);
+ const develop=lowBoardDiscardActions(state,actions).length>0;
  const cards=actions.filter(a=>{
   const c=hand.find(x=>x.entityId===a.entityId);
-  return c&&!isCoin(c)&&!roles(c).includes('discard outlet');
+  if(pureBoardBuff(c)&&buffImpact(state,c)?.recipients<=1&&!singleBuffTradeGain(state,c,actions))return false;
+  return c&&!isCoin(c)&&!roles(c).includes('discard outlet')&&!roles(c).includes('draw')
+   &&!(develop&&pureBoardBuff(c));
  });
  const hpCost=Number(hp?.COST??hp?.baseCost??2);
  // A body-then-Whispers line that is waiting to be played counts as one card of its whole cost.
  const w=hand.find(isWhispers);
  const line=w&&whispersWaits(state,w,actions)
   ?costOf(w)+Math.min(...actions.map(a=>hand.find(x=>x.entityId===a.entityId)).filter(makesBodies).map(costOf)):0;
- const pricedOut=!!hp&&(cards.some(a=>costOf(hand.find(x=>x.entityId===a.entityId))>mana-hpCost)||line>mana-hpCost);
+ const refill=resourceDrawWindow(state);
+ const pricedOut=!!hp&&(cards.some(a=>{
+  const c=hand.find(x=>x.entityId===a.entityId);
+  return !(refill&&pureBoardBuff(c))&&costOf(c)>mana-hpCost;
+ })||line>mana-hpCost);
  const safeTap=!!hp&&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state);
  const power=actions.filter(a=>hp&&a.entityId===hp.entityId&&!pricedOut&&safeTap);
  return {cards,power,pricedOut};
 }
-export function spendFirst(state,actions){
+export function setupFirst(state,actions){
+ const hand=state.me?.hand??[],board=state.me?.board??[];
+ const mana=Number(state.me?.mana??0);
+ const resting=locationResting(state);
+ const buff=c=>c?.CARDTYPE==='SPELL'&&givesBoardBuff(c)&&!deadWhispers(state,c)
+  &&(buffImpact(state,c)?.recipients>1||singleBuffTradeGain(state,c,actions));
+ const coinBuys=hand.some(c=>buff(c)&&costOf(c)===mana+1);
+ return actions.filter(a=>{
+  if(board.some(c=>c.entityId===a.entityId&&c.CARDTYPE==='LOCATION'))return !resting(a);
+  const c=hand.find(c=>c.entityId===a.entityId);
+  return !!c&&(buff(c)&&costOf(c)<=mana||(isCoin(c)&&coinBuys));
+ });
+}
+export function spendFirst(state,actions,{admission=combinationAdmission(state,actions)}={}){
  if(state?.choice)return actions;
  // DH has damage spells, delayed Sigils and generated cards whose order is a real choice.
  // Keep those alternatives (including saving a removal spell) available to the planner/Jev.
@@ -750,11 +1043,52 @@ export function spendFirst(state,actions){
   const hp=heroPowerOf(state);
   return actions.filter(a=>a.type!=='END_TURN'&&a.entityId!==hp?.entityId);
  }
- const {cards,power,pricedOut}=mustSpend(state,actions);
+ const {cards,pricedOut}=mustSpend(state,actions);
  const hp=heroPowerOf(state);
  let out=actions;
  if(pricedOut)out=out.filter(a=>a.entityId!==hp.entityId);
- if(cards.length||power.length)out=out.filter(a=>a.type!=='END_TURN'&&!isAttackAction(state,a));
+ // Drawing is an optional intent, including Life Tap. It must not suppress
+ // attacks or END_TURN merely because there is spare mana to pay for it.
+ // Except the trades that free a slot the hand needs (game 58 turn 5, see landing()).
+ const hero=(state.me?.board??[]).find(c=>c.CARDTYPE==='HERO');
+ const minion=new Set((state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION').map(c=>c.entityId));
+ const crowded=pendingBodies(state)>boardRoom(state);
+ const trade=a=>crowded&&isAttackAction(state,a)&&a.entityId!==hero?.entityId&&minion.has(a.targetId);
+ if(cards.length)out=out.filter(a=>a.type!=='END_TURN'&&(!isAttackAction(state,a)||trade(a)));
+ // User ruling (2026-09-30, game 58, turn 3): 「地標也沒有先抽卡，所以最後損失了 buff 的傷害」. Five
+ // minions swung, then Chamber of Viscidus, the Coin and Wicked Whispers went down -- the +1/+1
+ // landed on minions that had already attacked. A ready location and a whole-board buff (or the
+ // Coin that pays for one) come before the swings; only the crowded trades above stay beside them.
+ if(setupFirst(state,out).length)out=out.filter(a=>!isAttackAction(state,a)||trade(a));
+ // User ruling (2026-09-30, game 55, turn 5): 「為什麼剩 2 費不抽牌？又沒事做」. 27 Health, two
+ // cards in hand, a full deck, and the menu was END_TURN or Life Tap; Jev ended at 0.58. When
+ // the tap is the only other thing left and has survived every safety filter (constrainActions
+ // already dropped overdraws, fatigue and taps that expose lethal), unspent mana is just waste.
+ // Same game, turn 7: 4 mana, empty hand, the menu END_TURN / Life Tap / one hero swing, and
+ // END_TURN again at 0.30 -- attacks left on the menu must not keep the turn-ender in. So the
+ // rule is "no card left to play from hand", and the swings stay for Jev to order.
+ const fromHand=out.some(a=>(state?.me?.hand??[]).some(c=>c.entityId===a.entityId));
+ const tapOn=hp&&out.some(a=>a.entityId===hp.entityId);
+ if(tapOn&&!fromHand&&drawCount(hp)>0&&!pricedOut
+  &&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state))out=out.filter(a=>a.type!=='END_TURN');
+ // Here, not in constrainActions: a lethal that needs the buff now is found on the full menu first.
+ out=bodyBeforeBuff(state,out);
+ // An attack that triggers the proved development is setup, not premature
+ // combat. Restore only that game's offered first step, never arbitrary attacks.
+ const first=admittedFirstIds({lines:admittedLines(admission,actions)});
+ for(const id of comparisonFirstIds(admission))first.add(id);
+ for(const a of actions)if(first.has(a.id)&&isAttackAction(state,a)&&!out.includes(a))out.push(a);
+ // A shield pop may have an unknown Deathrattle. Keep the one-step
+ // information boundary as an alternative to committing mana/high damage.
+ // Never restore it ahead of a beneficial buff that is already waiting.
+ const buffWaiting=setupFirst(state,actions).some(a=>{
+  const c=(state.me?.hand??[]).find(c=>c.entityId===a.entityId);
+  return !!c&&(buffImpact(state,c)||isCoin(c));
+ });
+ if(!buffWaiting){
+  const pops=new Set(divineShieldAssessment(state,actions).flatMap(i=>i.lowAttackIds));
+  for(const a of actions)if(pops.has(a.id)&&!out.includes(a))out.push(a);
+ }
  return out.length?out:actions;
 }
 

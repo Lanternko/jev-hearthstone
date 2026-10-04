@@ -127,6 +127,9 @@ test('a dormant or frozen body is not incoming damage (game 4, turn 15)',()=>{
   assert.equal(myHeroHp(state),19);
   assert.equal(incomingDamage(state),17);
   assert.equal(forbidsSelfDamage(state),false);
+  // Post-tap 19-2 = 17 is exactly lethal even after excluding dormant bodies.
+  assert.deepEqual(constrainActions(state,[{id:'o1',entityId:2},{id:'o2',entityId:3}]).map(a=>a.id),['o2']);
+  state.me.board[0].DAMAGE=10;
   assert.deepEqual(constrainActions(state,[{id:'o1',entityId:2},{id:'o2',entityId:3}]).map(a=>a.id),['o1','o2']);
   // Wake them and it is lethal after all.
   const awake=structuredClone(state);
@@ -171,9 +174,10 @@ test('a look-at-3 outlet blocks only while at most two cards in hand are not fod
   assert.equal(reliableOutletFor(hand(tight),GULDAN)?.entityId,4);
   const loose=[...tight,FILLER(2)];
   assert.equal(reliableOutletFor(hand(loose),GULDAN),null);
-  // Game-10 ruling on top: the cards that draw go first either way, so the menu is those two.
-  assert.deepEqual(ids(hand(tight),tight),['o4','o6']);
-  assert.deepEqual(ids(hand(loose),loose),['o4','o6']);
+  // Draw availability no longer hides unrelated plays. Fodder protection itself stays intact.
+  assert.ok(!ids(hand(tight),tight).includes('o1'));
+  assert.ok(ids(hand(tight),tight).includes('o101'));
+  assert.ok(ids(hand(loose),loose).includes('o101'));
 });
 
 test('a highest-cost outlet blocks only while the fodder is the dearest thing in hand',()=>{
@@ -349,9 +353,11 @@ test('cards and a safe hero power come before any attack or END_TURN',()=>{
 test('the hero power waits while its mana would price out a card',()=>{
  assert.deepEqual(idsOf(spendFirst(spendBoard({mana:2}),turnMenu)),['o1t0']);
 });
-test('with the hand spent, a safe tap still comes before attacks and END_TURN',()=>{
+// User ruling 2026-09-30 (game 55): with the hand spent, a safe tap is no longer optional --
+// END_TURN leaves the menu, the attacks stay.
+test('with the hand spent, a safe tap drops END_TURN but keeps the attacks',()=>{
  const m=turnMenu.filter(a=>a.entityId!==85);
- assert.deepEqual(idsOf(spendFirst(spendBoard({hand:[]}),m)),['o2']);
+ assert.deepEqual(idsOf(spendFirst(spendBoard({hand:[]}),m)),idsOf(m.filter(a=>a.type!=='END_TURN')));
 });
 test('a tap into their board is never forced: attacks and END_TURN stay',()=>{
  const m=turnMenu.filter(a=>a.entityId!==85);
@@ -397,7 +403,7 @@ test('with no board, the Occultist discards a card that makes bodies',()=>{
  const acts=[5,6,32].map(t=>({id:'t'+t,entityId:9,targetId:t}));
  assert.deepEqual(constrainActions(state,acts).map(a=>a.id),['t6','t32']);
  const held={...state,me:{...state.me,board:[...board,{entityId:70,CARDTYPE:'MINION',ATK:2,HEALTH:2}]}};
- assert.equal(constrainActions(held,acts).length,3);
+ assert.equal(constrainActions(held,acts).length,2,'one body and no mana after the outlet: prefer immediate summons over draw-three');
  // Their hero in burn range: drawing for the kill is back on the table.
  const close={...state,opponent:{board:[{entityId:80,CARDTYPE:'HERO',HEALTH:30,DAMAGE:20}]}};
  assert.equal(constrainActions(close,acts).length,3);
@@ -457,8 +463,8 @@ test('opening combos stay together, over the win-rate bands',()=>{
  const fiend=card(6,'Party Fiend','MINION',1,'Battlecry: Summon two 1/1 Felbeasts. Deal 2 damage to your hero.');
  const cont=card(7,'Entropic Continuity','SPELL',2,'Give your minions +1/+1.');
  assert.ok(run([fiend,cont,soulfire]).every(a=>!a.replace.includes(7)&&a.replace.includes(3)));
- // Without its partner, a middle-band card is still Jev's call.
- assert.deepEqual(run([whispers,soulfire]).map(a=>a.replace.includes(1)).sort(),[false,true]);
+ // User ruling 2026-09-30: without bodies or discard payoff, a conditional buff goes back.
+ assert.deepEqual(run([whispers,soulfire]).map(a=>a.replace.includes(1)).sort(),[true]);
 });
 
 // Game 7 rulings: Soul Barrage (65.2%) is tossed; with a low board, Chamber of Viscidus discards Walking Dead.
@@ -486,8 +492,12 @@ test('a choose-to-discard pick on a low board takes the card that summons itself
  const s=n=>({me:{mana:0,board:Array.from({length:n},(_,i)=>({entityId:200+i,CARDTYPE:'MINION'}))},
   opponent:{board:[{entityId:66,CARDTYPE:'HERO',HEALTH:30}]},choice:{type:'GENERAL',source,entities}});
  assert.deepEqual(constrainActions(s(1),actions).map(a=>a.id),['c3e85']);
- assert.deepEqual(constrainActions(s(3),actions).map(a=>a.id),['c3e85','c3e88'],
-  'a full enough board leaves the paying picks to Jev');
+ // Game 4 turn 8 ruling (2026-09-30): outside burn range and against no swarm, the split damage
+ // is worth less than the 2/5 body whatever our board -- so a fuller board changes nothing here.
+ assert.deepEqual(constrainActions(s(3),actions).map(a=>a.id),['c3e85']);
+ const near=s(3);near.opponent.board[0].HEALTH=10;
+ assert.deepEqual(constrainActions(near,actions).map(a=>a.id),['c3e85','c3e88'],
+  'in burn range the paying picks go back to Jev');
 });
 test('a discard pick throws away the card that pays, not a 0-cost Discover (game 21, turn 9)',()=>{
  const E=[
@@ -550,20 +560,20 @@ const TAP10={entityId:71,CARDTYPE:'HERO_POWER',COST:2,text:'Draw a card and take
 const c10=(id,cost,extra={})=>({entityId:id,CARDTYPE:'MINION',COST:cost,text:'',...extra});
 const menu10=cards=>[{id:'end',type:'END_TURN'},{id:'tap',entityId:71},...cards.map(c=>({id:`o${c.entityId}`,entityId:c.entityId}))];
 const game10=(cards,mana,board=[HERO10(),TAP10],hazards=[])=>({me:{mana,hand:cards,board,deckCount:20,drawHazards:hazards},opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30}]}});
-test('with mana left over, Life Tap goes before the plays (game 10, turn 4)',()=>{
+test('Life Tap availability leaves plays visible so the turn intent can decline drawing',()=>{
  const h=[c10(81,3),c10(82,2)];
- assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap']);
+ assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap','o81','o82']);
 });
 test('a play that spends the mana exactly stays beside Life Tap (the 1+3 line)',()=>{
  const h=[c10(81,3),c10(82,2),c10(83,1)];
- assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap','o81','o83']);
+ assert.deepEqual(constrainActions(game10(h,4),menu10(h)).map(a=>a.id),['end','tap','o81','o82','o83']);
 });
-test('a card that draws goes before the cards that do not (game 10, turn 8: the Soularium)',()=>{
+test('a draw spell is an alternative to the board play, not a forced prerequisite',()=>{
  const soul={entityId:84,name:'The Soularium',CARDTYPE:'SPELL',COST:2,text:'Draw 3 cards. At the end of turn, discard them.'};
  const buff={entityId:85,name:'Buff',CARDTYPE:'SPELL',COST:2,text:'Give your minions +1/+1.'};
  const h=[soul,buff];
  const s=game10(h,4,[HERO10(),{entityId:86,CARDTYPE:'MINION',ATK:1,HEALTH:1}]);
- assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85}]).map(a=>a.id),['end','o84']);
+ assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85}]).map(a=>a.id),['end','o84','o85']);
 });
 const DUKE=id=>({entityId:id,name:'Duke of Below',CARDTYPE:'MINION',COST:4,text:"Rush. Has +2/+2 for each card you've discarded this game."});
 test('Duke of Below that Life Tap would price out stays beside it (game 19, turn 10)',()=>{
@@ -576,13 +586,13 @@ test('Duke of Below that the Soularium would price out stays beside it (game 19,
  const buff={entityId:85,name:'Buff',CARDTYPE:'SPELL',COST:2,text:'Give your minions +1/+1.'};
  const h=[soul,buff,DUKE(81)];
  const s=game10(h,4,[HERO10(),{entityId:86,CARDTYPE:'MINION',ATK:1,HEALTH:1}]);
- assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85},{id:'o81',entityId:81}]).map(a=>a.id),['end','o84','o81']);
+ assert.deepEqual(constrainActions(s,[{id:'end',type:'END_TURN'},{id:'o84',entityId:84},{id:'o85',entityId:85},{id:'o81',entityId:81}]).map(a=>a.id),['end','o84','o85','o81']);
 });
 test('a draw that is sure to pull a Shred of Time into lethal waits; one that might is left to Jev',()=>{
  const h=[c10(81,5)];
  const s=(hp,deck)=>{const st=game10(h,4,[HERO10(hp),TAP10],[3]);st.me.deckCount=deck;return st};
  assert.ok(!constrainActions(s(5,1),menu10(h)).some(a=>a.id==='tap'));
- assert.ok(constrainActions(s(6,1),menu10(h)).some(a=>a.id==='tap'));
+ assert.ok(!constrainActions(s(6,1),menu10(h)).some(a=>a.id==='tap'),'3 from the Shred, 1 fatigue and 2 self-damage kills six');
  assert.ok(constrainActions(s(5,20),menu10(h)).some(a=>a.id==='tap'));
 });
 // The game-10 swing itself (7 HP, 5-attack Muncher, two Shreds in ten cards) was the user's
@@ -594,7 +604,7 @@ test('a Chronoclaws swing that discards Hand of Gul\'dan counts the Shreds it mu
   opponent:{board:[{entityId:99,CARDTYPE:'HERO',HEALTH:30},{entityId:98,CARDTYPE:'MINION',ATK:5,HEALTH:3}]}});
  const acts=[{id:'end',type:'END_TURN'},{id:'hit',entityId:70,targetId:98},{id:'face',entityId:70,targetId:99}];
  assert.ok(constrainActions(s([3,3]),acts).some(a=>a.id==='hit'),'game 10: a gamble, left to Jev');
- assert.deepEqual(constrainActions(s([3,3],4),acts).map(a=>a.id),['end','face'],'four cards left, two Shreds: one is certain');
+ assert.deepEqual(constrainActions(s([3,3],4),acts).map(a=>a.id),['end'],'three ordinary draws force both Shreds and first fatigue: seven damage');
  assert.ok(constrainActions(s([]),acts).some(a=>a.id==='hit'));
 });
 test('a location still cooling down is never clicked (game 10, turn 4)',()=>{

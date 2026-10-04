@@ -1,0 +1,221 @@
+import {readdir,open,stat} from 'node:fs/promises';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+export const LOG_ROOT='D:/遊戲/Hearthstone/Logs';
+export async function latestLog(root=LOG_ROOT){
+  const dirs=await readdir(root,{withFileTypes:true});
+  const files=await Promise.all(dirs.filter(d=>d.isDirectory()).map(async d=>{const p=join(root,d.name,'Power.log');try{return {path:p,stat:await stat(p)}}catch{return null}}));
+  const f=files.filter(Boolean).sort((a,b)=>b.stat.mtimeMs-a.stat.mtimeMs)[0];
+  if(!f)throw Error('No Power.log found');return f;
+}
+// The parser keeps its state between calls so a growing Power.log is parsed once, not once per
+// poll. The loop, the bridge and settled() used to re-read the whole file several times per
+// action, and one file carries every game of a session, so each read got slower as the night
+// went on. feed() takes complete lines only; snapshot() holds back a trailing partial line.
+export function createParser(){
+  let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,revision=0,gameNumber=0,optionsOpen=false;
+  let choices=new Map(),shownTurn=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
+  let publicPlays=[],initialHeroHealth=new Map();
+  const ensure=id=>{if(!entities.has(id))entities.set(id,{id,cardId:'',tags:{}});return entities.get(id)};
+  function resolve(s){
+    const id=s.match(/\bid=(\d+)/)?.[1]??(/^\d+$/.test(s)?s:null);
+    if(id)return Number(id);if(s==='GameEntity')return game;
+    if(!aliases.has(s)&&/#\d+$/.test(s)&&aliases.has('UNKNOWN HUMAN PLAYER')){const unknown=aliases.get('UNKNOWN HUMAN PLAYER');aliases.delete('UNKNOWN HUMAN PLAYER');aliases.set(s,unknown);}
+    return aliases.get(s);
+  }
+  function feed(text){
+  // A chunk that ends in a newline would otherwise yield one phantom empty line per call and
+  // make `revision` depend on how the file happened to be read.
+  const lines=text.split(/\r?\n/);if(lines.length>1&&lines.at(-1)==='')lines.pop();
+  for(const line of lines){
+    revision++;optionsOpen=false;
+    let m=line.match(/GameState\.DebugPrintGame\(\) - PlayerID=(\d+), PlayerName=(.+)/);
+    if(m){const p=[...entities.values()].find(e=>e.playerId===Number(m[1]));if(p){aliases.set(m[2].trim(),p.id);if(m[2].trim()!=='UNKNOWN HUMAN PLAYER'&&localPlayer==null)localPlayer=p.playerId;}continue}
+    // GameState is the server's view and runs up to 8.5s ahead of the screen: it hands us our
+    // turn while the opponent's is still being animated, and clicks then are dropped. The
+    // PowerTaskList copy of the same line is written as the client plays it back.
+    m=line.match(/PowerTaskList\.DebugPrintPower\(\) -\s*TAG_CHANGE Entity=GameEntity tag=TURN value=(\d+)/);
+    if(m){shownTurn=Number(m[1]);continue}
+    m=line.match(/GameState\.DebugPrintPower\(\) -\s*(.*)/);
+    if(m){const s=m[1];
+      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();gameNumber++;continue}
+      if(s.startsWith('BLOCK_START')){
+        effectStack.push(s.match(/\bcardId=(\S*)/)?.[1]??'');
+        const play=s.match(/^BLOCK_START BlockType=PLAY Entity=\[(.*?)\](?:\s+EffectCardId=|\s*$)/);
+        if(play){const id=resolve(play[1]),e=entities.get(id),playerId=Number(play[1].match(/\bplayer=(\d+)/)?.[1]??e?.tags.CONTROLLER);
+          if(e?.tags.ZONE==='HAND'&&[1,2].includes(playerId))publicPlays.push({entityId:id,playerId,
+            engineTurn:Number(entities.get(game)?.tags.TURN??0),cardId:play[1].match(/\bcardId=(\S*)/)?.[1]??'',originZone:'HAND'});
+        }
+        block=null;continue;
+      }
+      if(s==='BLOCK_END'){effectStack.pop();block=null;continue}
+      let a=s.match(/GameEntity EntityID=(\d+)/);if(a){game=Number(a[1]);block=ensure(game);continue}
+      a=s.match(/Player EntityID=(\d+) PlayerID=(\d+)/);if(a){block=ensure(Number(a[1]));block.playerId=Number(a[2]);continue}
+      a=s.match(/FULL_ENTITY - Creating ID=(\d+) CardID=(\S*)/);if(a){block=ensure(Number(a[1]));block.cardId=a[2];if(effectStack.includes('TIME_026'))block.generatedByContinuity=true;continue}
+      a=s.match(/(?:SHOW_ENTITY|CHANGE_ENTITY) - Updating Entity=(.+) CardID=(\S*)/);if(a){const id=resolve(a[1]);block=id==null?null:ensure(id);if(block)block.cardId=a[2];
+        // Only a reveal of a card with a preceding public PLAY fills its record.
+        // Hidden hand/deck cards never create public-play evidence.
+        const played=publicPlays.findLast(p=>p.entityId===id&&!p.cardId&&p.engineTurn===Number(entities.get(game)?.tags.TURN??0));if(played&&a[2])played.cardId=a[2];continue}
+      // A new turn voids the last menu. The server prints this turn's options ~120ms after the
+      // TURN change; a read in that gap used to find last turn's leftover END-only menu, take it
+      // as forced, and end our turn with Whispers and two minions castable (2026-09-25).
+      a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];if(id===game&&a[2]==='TURN')options=null;
+        if(id===game&&a[2]==='STEP'&&a[3]==='MAIN_READY'&&Number(entities.get(game)?.tags.TURN)===1&&initialHeroHealth.size===0)
+          for(const e of entities.values())if(e.tags.CARDTYPE==='HERO'&&e.tags.ZONE==='PLAY'&&e.tags.HEALTH)
+            initialHeroHealth.set(Number(e.tags.CONTROLLER),Number(e.tags.HEALTH));
+      }block=null;continue}
+      a=s.match(/^tag=(\S+) value=(\S+)/);if(a&&block){block.tags[a[1]]=a[2];continue}
+      a=s.match(/HIDE_ENTITY - Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];ensure(id).cardId='';}block=null;continue}
+      block=null;continue;
+    }
+    m=line.match(/GameState\.DebugPrintOptions\(\) -\s*(.*)/);
+    if(m){optionsOpen=true;const s=m[1];let a=s.match(/^id=(\d+)/);if(a){options={id:Number(a[1]),revision,items:[]};option=null;continue}
+      a=s.match(/^option (\d+) type=(\S+) mainEntity=(.*?) error=(\S+)/);if(a&&options){option={index:Number(a[1]),type:a[2],entityId:resolve(a[3]),error:a[4],targets:[],unsupported:false};options.items.push(option);continue}
+      a=s.match(/^target (\d+) entity=(.*?) error=(\S+)/);if(a&&option){option.targets.push({index:Number(a[1]),entityId:resolve(a[2]),error:a[3]});continue}
+      if(/^subOption/.test(s)&&option)option.unsupported=true;
+    }
+    m=line.match(/GameState\.SendChoices\(\) - id=(\d+)/);if(m){const id=Number(m[1]);submitted.set(id,choices.get(id));choices.delete(id);continue}
+    m=line.match(/GameState\.DebugPrintEntitiesChosen\(\) -\s*(.*)/);
+    if(m){
+      const header=m[1].match(/^id=(\d+) Player=(.*?) EntitiesCount=(\d+)/);
+      if(header){const id=Number(header[1]),offer=submitted.get(id)??choices.get(id);
+        chosenPacket={choiceId:id,playerId:offer?.playerId,type:offer?.type,count:Number(header[3]),kept:[]};chosenResults.set(id,chosenPacket);continue}
+      const entry=m[1].match(/^Entities\[\d+\]=(.+)/);
+      if(entry&&chosenPacket){const id=resolve(entry[1]);if(id!=null)chosenPacket.kept.push(id)}
+      continue;
+    }
+    m=line.match(/GameState\.DebugPrintEntityChoices\(\) -\s*(.*)/);
+    if(m){let a=m[1].match(/^id=(\d+) Player=(.*?) TaskList=.*?ChoiceType=(\S+) CountMin=(\d+) CountMax=(\d+)/);
+      if(a){const player=entities.get(aliases.get(a[2]));choice={id:Number(a[1]),playerId:player?.playerId,type:a[3],min:Number(a[4]),max:Number(a[5]),entities:[],revision,offeredAt:line.match(/^D (\d\d:\d\d:\d\d\.\d+)/)?.[1]};choices.set(choice.id,choice);continue}
+      // The card that opened the choice. Cursed Catacombs makes its pick Temporary, which changes
+      // what the pick is worth, and nothing on the offered cards themselves says so.
+      a=m[1].match(/^Source=(.+)/);if(a&&choice){const id=resolve(a[1]);if(id!=null&&id!==game)choice.sourceId=id;continue}
+      a=m[1].match(/^Entities\[\d+\]=(.+)/);if(a&&choice){const id=resolve(a[1]);if(id!=null)choice.entities.push(id)}
+    }
+  }
+  return api;
+  }
+  function ownHand(){const n=new Map();for(const e of entities.values())if(e.tags?.ZONE==='HAND'&&e.cardId){const c=Number(e.tags.CONTROLLER);n.set(c,(n.get(c)||0)+1)}const r=[...n].sort((a,b)=>b[1]-a[1]);return r.length&&(r.length===1||r[0][1]>r[1][1])?r[0][0]:null}
+  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,localPlayer:ownHand()??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
+  return api;
+}
+export const parsePower=text=>createParser().feed(text).result();
+const visibleTags=['COST','ATK','HEALTH','DAMAGE','ARMOR','DURABILITY','ZONE_POSITION','CARDTYPE','TAUNT','DIVINE_SHIELD','STEALTH','WINDFURY','FROZEN','EXHAUSTED','NUM_ATTACKS_THIS_TURN','SILENCED','CHARGE','RUSH','DORMANT','COOLDOWN','LOCATION_ACTION_COOLDOWN','UNTARGETABLE_BY_SPELLS','IMMUNE'];
+// Only what can change the decision. The full fingerprint also covers optionsId, step, status and playstate, which churn on every options print and animation and were discarding correct decisions.
+function material(s){
+  return {turn:s.turn,
+    me:{playerId:s.me.playerId,mana:s.me.mana,maxMana:s.me.maxMana,current:s.me.current,hand:s.me.hand,board:s.me.board,deckCount:s.me.deckCount,fatigue:s.me.fatigue,drawHazards:s.me.drawHazards},
+    opponent:{mana:s.opponent.mana,board:s.opponent.board,handCount:s.opponent.handCount,secretCount:s.opponent.secretCount,initialHealth:s.opponent.initialHealth,publicPlays:s.opponent.publicPlays},
+    choice:s.choice&&{id:s.choice.id,type:s.choice.type,min:s.choice.min,max:s.choice.max,entities:s.choice.entities,source:s.choice.source}};
+}
+export function publicState(parsed,playerId,cards={}){
+  if(![1,2].includes(playerId))throw Error('Explicit local player ID 1 or 2 required');
+  const all=[...parsed.entities.values()];
+  // Temporary is a visible attached enchantment, not a trait of the base card.
+  // Do not confuse it with Platysaur's future Deathrattle discard link.
+  const temporary=new Map(all.filter(e=>e.tags.CARDTYPE==='ENCHANTMENT'&&e.tags.ZONE==='PLAY'
+   &&/discarded at the end of your turn/i.test(cards[e.cardId]?.text??''))
+   .map(e=>[Number(e.tags.ATTACHED),{expires:'end_of_own_turn',enchantmentId:e.id,
+    sourceEntityId:Number(e.tags.CREATOR)||null,confidence:1}]));
+  // User ruling (2026-09-26, game 13, turn 4): Platysaur drew Walking Dead, and its "Deathrattle:
+  // Discard it" was going to throw that card away anyway; Occultist discarded it a second time. The
+  // link is an enchantment on the minion whose TAG_SCRIPT_DATA_NUM_1 names the drawn card.
+  const doomed=new Map(all.filter(e=>e.tags.CARDTYPE==='ENCHANTMENT'&&e.tags.ZONE==='PLAY'&&e.tags.TAG_SCRIPT_DATA_NUM_1).filter(e=>{
+   const m=parsed.entities.get(Number(e.tags.ATTACHED));
+    return m?.tags.ZONE==='PLAY'&&m.tags.SILENCED!=='1'&&Number(m.tags.CONTROLLER)===playerId&&/deathrattle:[^.]*discard it/i.test((cards[m.cardId]?.text??'').replace(/<[^>]+>/g,''));
+  }).map(e=>[Number(e.tags.TAG_SCRIPT_DATA_NUM_1),{sourceEntityId:Number(e.tags.ATTACHED),enchantmentId:e.id,condition:'source_minion_death',confidence:1}]));
+  function card(e){const def=cards[e.cardId]??{};return {entityId:e.id,cardId:e.cardId,name:def.name,text:def.text,baseCost:def.cost,baseAttack:def.attack,baseHealth:def.health,...Object.fromEntries(visibleTags.filter(t=>t in e.tags).map(t=>[t,/^\d+$/.test(e.tags[t])?Number(e.tags[t]):e.tags[t]])),
+    ...(Number(e.tags.CONTROLLER)===playerId&&e.tags.ZONE==='HAND'&&temporary.has(e.id)?{temporary:temporary.get(e.id)}:{}),
+    // Slime 'em! stores visible copies in SETASIDE, grouped by the clear's creator.
+    // Only expose our own pool; copied tags are storage metadata, not a prediction
+    // that the resummoned minions retain damage, buffs or silence.
+    ...(e.cardId==='CAP_805t'&&Number(e.tags.CONTROLLER)===playerId&&e.tags.CREATOR?{
+      resummons:all.filter(m=>m.tags.ZONE==='SETASIDE'&&m.tags.CARDTYPE==='MINION'
+        &&Number(m.tags.CONTROLLER)===playerId&&m.tags.CREATOR===e.tags.CREATOR
+        &&m.tags.COPIED_FROM_ENTITY_ID&&m.cardId)
+        .map(m=>({cardId:m.cardId,name:cards[m.cardId]?.name,sourceEntityId:Number(m.tags.COPIED_FROM_ENTITY_ID)}))}: {})}}
+  // heroClass picks the deck folder (deck.mjs); it is read off the hero card on the board.
+  function side(id){const es=all.filter(e=>Number(e.tags.CONTROLLER)===id),p=es.find(e=>e.playerId===id);return {playerId:id,heroClass:cards[es.find(e=>e.tags.ZONE==='PLAY'&&e.tags.CARDTYPE==='HERO')?.cardId]?.cardClass,mana:p?Number(p.tags.RESOURCES??0)+Number(p.tags.TEMP_RESOURCES??0)-Number(p.tags.RESOURCES_USED??0):null,maxMana:Number(p?.tags.RESOURCES??0),current:p?.tags.CURRENT_PLAYER==='1',playstate:p?.tags.PLAYSTATE,handCount:es.filter(e=>e.tags.ZONE==='HAND').length,deckCount:es.filter(e=>e.tags.ZONE==='DECK').length,board:es.filter(e=>e.tags.ZONE==='PLAY'&&['MINION','HERO','HERO_POWER','WEAPON','LOCATION'].includes(e.tags.CARDTYPE)).map(card).sort((a,b)=>(a.ZONE_POSITION??0)-(b.ZONE_POSITION??0)),...(id===playerId?{hand:es.filter(e=>e.tags.ZONE==='HAND').map(e=>doomed.has(e.id)?{...card(e),doomed:true,discardLink:doomed.get(e.id)}:card(e)).sort((a,b)=>a.ZONE_POSITION-b.ZONE_POSITION),fatigue:Number(p?.tags.FATIGUE??0),drawHazards:es.filter(e=>e.tags.ZONE==='DECK').map(e=>drawnSelfDamage(cards[e.cardId])||(!e.cardId&&e.generatedByContinuity?3:0)).filter(Boolean)}:{})}}
+  const state={gameNumber:parsed.gameNumber,turn:Number(parsed.game?.tags.TURN??0),step:parsed.game?.tags.STEP,status:parsed.game?.tags.STATE,me:side(playerId),opponent:side(3-playerId),optionsId:parsed.options?.id};
+  // Public occupied secret slots only; never export the hidden card identity.
+  state.opponent.secretCount=all.filter(e=>Number(e.tags.CONTROLLER)===3-playerId&&e.tags.ZONE==='SECRET').length;
+  state.opponent.initialHealth=parsed.initialHeroHealth?.get(3-playerId)??null;
+  state.opponent.publicPlays=(parsed.publicPlays??[]).filter(p=>p.playerId===3-playerId&&p.engineTurn<=state.turn)
+    .flatMap(p=>{
+      const c=cards[p.cardId];
+      // A played Secret is still private; counting its slot above is sufficient.
+      if(!c||c.mechanics?.includes('SECRET')||c.type==='HERO_POWER')return [];
+      return [{public:true,engineTurn:p.engineTurn,entityId:p.entityId,cardId:p.cardId,name:c.name,
+        CARDTYPE:c.type,COST:c.cost,ATK:c.attack,HEALTH:c.health,text:c.text}];
+    });
+  const receipt=[...(parsed.chosenResults?.values()??[])].filter(r=>r.type==='MULLIGAN'&&r.playerId===playerId).at(-1);
+  if(receipt?.type==='MULLIGAN'&&receipt.playerId===playerId)
+    state.mulliganResult={choiceId:receipt.choiceId,kept:[...receipt.kept],complete:receipt.kept.length===receipt.count};
+  const activeChoice=[...parsed.choices.values()].filter(c=>c.playerId===playerId).at(-1);
+  if(activeChoice&&(activeChoice.type!=='MULLIGAN'||state.step==='BEGIN_MULLIGAN')){const src=parsed.entities.get(activeChoice.sourceId);state.choice={...activeChoice,entities:activeChoice.entities.map(id=>parsed.entities.get(id)).filter(Boolean).map(card),...(src?{source:card(src)}:{})};}
+  state.fingerprint=createHash('sha256').update(JSON.stringify(state)).digest('hex').slice(0,20);
+  state.decisionFingerprint=createHash('sha256').update(JSON.stringify(material(state))).digest('hex').slice(0,20);return state;
+}
+// A card we put into our own deck (Shred of Time) is revealed to us; what it deals when drawn is
+// the only thing about it the state carries.
+const DRAWN_HURTS=/casts when drawn[^.]*?deal \$?(\d+) damage to\s+your hero/i;
+export const drawnSelfDamage=def=>{const m=DRAWN_HURTS.exec((def?.text??'').replace(/<[^>]+>/g,'').replace(/\s+/g,' '));return m?Number(m[1]):0};
+// GAME_005, the classic coin, is the one variant whose id lacks "COIN", so match the name first.
+export const isCoin=c=>c.name==='The Coin'||/COIN/i.test(c.cardId||'');
+// The mulligan row shows only the replaceable cards. The Coin sits in hand and is not on that row,
+// so it must not count towards either the candidate masks or the on-screen positions.
+export const mulliganCards=entities=>(entities??[]).filter(e=>e.cardId&&!isCoin(e));
+export function candidates(parsed,state){
+  if(state.status!=='RUNNING')return [];
+  if(state.choice){
+    const c=state.choice;
+    if(c.type==='GENERAL'&&c.min===1&&c.max===1)return c.entities.map(e=>({id:`c${c.id}e${e.entityId}`,type:'CHOICE',choiceId:c.id,entityId:e.entityId}));
+    if(c.type==='MULLIGAN'){const es=mulliganCards(c.entities);if(es.length>5)return [];return Array.from({length:2**es.length},(_,mask)=>({id:`m${mask}`,type:'MULLIGAN',choiceId:c.id,replace:es.filter((e,i)=>mask&(1<<i)).map(e=>e.entityId)})).filter(a=>a.replace.length>=c.min&&a.replace.length<=c.max);}
+    return [];
+  }
+  if(!state.me.current||state.step!=='MAIN_ACTION')return [];
+  const result=[];
+  for(const o of parsed.options?.items??[]){
+    if(o.unsupported)continue;
+    if(o.type==='END_TURN'){result.push({id:`o${o.index}`,type:'END_TURN',option:o.index});continue}
+    if(o.error!=='NONE')continue;
+    const e=parsed.entities.get(o.entityId);
+    if(!e||Number(e.tags.CONTROLLER)!==state.me.playerId||!['HAND','PLAY'].includes(e.tags.ZONE))continue;
+    const base={option:o.index,entityId:o.entityId,type:o.type};
+    if(o.targets.length){for(const t of o.targets.filter(t=>t.error==='NONE'))result.push({...base,id:`o${o.index}t${t.index}`,targetId:t.entityId})}
+    else result.push({...base,id:`o${o.index}`});
+  }
+  return result;
+}
+// One incremental reader per log file. A new session folder or a file that shrank starts over.
+let tail=null;
+async function readLog(f){
+  if(!tail||tail.path!==f.path||f.stat.size<tail.offset)tail={path:f.path,offset:0,rest:Buffer.alloc(0),parser:createParser()};
+  if(f.stat.size>tail.offset){
+    const h=await open(f.path,'r');
+    try{
+      const buf=Buffer.alloc(f.stat.size-tail.offset);
+      const {bytesRead}=await h.read(buf,0,buf.length,tail.offset);
+      tail.offset+=bytesRead;
+      const all=Buffer.concat([tail.rest,buf.subarray(0,bytesRead)]);
+      // Cut at the last newline: 0x0A never occurs inside a multi-byte UTF-8 sequence.
+      const cut=all.lastIndexOf(0x0a)+1;
+      tail.rest=all.subarray(cut);
+      if(cut)tail.parser.feed(all.subarray(0,cut).toString('utf8'));
+    }finally{await h.close()}
+  }
+  return tail.parser.result();
+}
+// The client writes an options block in one burst, but a read can still land mid-burst and see
+// only its first few options -- game 58 turn 3 lost Occultist>Egg that way. When the last line
+// read belongs to an options block, wait for the file to stop growing before trusting it.
+async function settledRead(){
+  let f=await latestLog(),parsed=await readLog(f);
+  for(let i=0;i<6&&parsed.optionsOpen;i++){
+    await new Promise(r=>setTimeout(r,120));
+    const g=await latestLog();if(g.path===f.path&&g.stat.size===f.stat.size)break;
+    f=g;parsed=await readLog(f);
+  }
+  return {f,parsed};
+}
+export async function snapshot(playerId,cards={}){const {f,parsed}=await settledRead();const state=publicState(parsed,playerId??parsed.localPlayer,cards);return {source:f.path,mtime:f.stat.mtimeMs,parsed,state,actions:candidates(parsed,state)}};

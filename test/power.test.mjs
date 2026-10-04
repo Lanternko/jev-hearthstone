@@ -30,6 +30,15 @@ tag=CARDTYPE value=HERO`);
 test('no opponent hand identity or deck order is exported',()=>{
  const s=publicState(parsePower(fixture),1);assert.equal(s.me.mana,2);assert.equal(s.opponent.handCount,1);assert.equal(s.me.deckCount,1);assert.doesNotMatch(JSON.stringify(s),/OP_SECRET|DECK_SECRET/);
 });
+
+test('public secret count blocks optimistic setup without leaking identity and changes the decision fingerprint',()=>{
+ const plain=publicState(parsePower(fixture),1);
+ const text=fixture+'\n'+power('FULL_ENTITY - Creating ID=8 CardID=HIDDEN_SECRET\ntag=CONTROLLER value=2\ntag=ZONE value=SECRET\ntag=CARDTYPE value=SPELL');
+ const secret=publicState(parsePower(text),1,{HIDDEN_SECRET:{name:'Private secret identity'}});
+ assert.equal(secret.opponent.secretCount,1);assert.equal(plain.opponent.secretCount,0);
+ assert.doesNotMatch(JSON.stringify(secret),/HIDDEN_SECRET|Private secret identity/);
+ assert.notEqual(secret.decisionFingerprint,plain.decisionFingerprint);
+});
 test('only supported valid options and targets survive',()=>{
  const options=['id=4','option 0 type=END_TURN mainEntity= error=INVALID','option 1 type=POWER mainEntity=4 error=NONE','target 0 entity=7 error=NONE','target 1 entity=5 error=REQ_ENEMY_TARGET','option 2 type=POWER mainEntity=4 error=REQ_ENOUGH_MANA','option 3 type=POWER mainEntity=6 error=NONE'].map(s=>`GameState.DebugPrintOptions() - ${s}`).join('\n');
  const p=parsePower(fixture+'\n'+options),s=publicState(p,1);assert.deepEqual(candidates(p,s).map(a=>a.id),['o0','o1t0']);
@@ -110,6 +119,9 @@ tag=ZONE value=PLAY
 TAG_CHANGE Entity=22 tag=TAG_SCRIPT_DATA_NUM_1 value=21`);
  const hand=s=>s.me.hand.map(c=>[c.entityId,!!c.doomed]);
  assert.deepEqual(hand(publicState(parsePower(log),1,cards)),[[4,false],[21,true]]);
+ assert.deepEqual(publicState(parsePower(log),1,cards).me.hand.find(c=>c.entityId===21).discardLink,
+  {sourceEntityId:20,enchantmentId:22,condition:'source_minion_death',confidence:1});
+ assert.deepEqual(hand(publicState(parsePower(log+'\n'+power('TAG_CHANGE Entity=20 tag=SILENCED value=1')),1,cards)),[[4,false],[21,false]]);
  // Once Platysaur has died, the discard has happened (or can no longer happen).
  assert.deepEqual(hand(publicState(parsePower(log+'\n'+power('TAG_CHANGE Entity=20 tag=ZONE value=GRAVEYARD')),1,cards)),[[4,false],[21,false]]);
 });

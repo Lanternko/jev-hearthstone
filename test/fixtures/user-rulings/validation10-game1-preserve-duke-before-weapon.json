@@ -1,0 +1,721 @@
+{
+  "id": "validation10-game1-preserve-duke-before-weapon",
+  "source": "runtime/ranked-2026-10-03T17-42-01-535Z/game-0001-decisions.jsonl",
+  "batchGame": 1,
+  "ownTurn": 4,
+  "row": 8328,
+  "createdAt": "2026-10-03T17:44:33.246Z",
+  "plannerVersion": "silverfish-v1-combo-admission-v2",
+  "state": {
+    "gameNumber": 1,
+    "turn": 8,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 4,
+      "maxMana": 4,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 20,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 2,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 19,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 8,
+          "HEALTH": 8,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 29,
+          "cardId": "END_016",
+          "name": "Chronoclaws",
+          "text": "After your hero attacks, discard your highest Cost card.",
+          "baseCost": 4,
+          "baseAttack": 4,
+          "baseHealth": 3,
+          "COST": 4,
+          "ATK": 4,
+          "HEALTH": 3,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "WEAPON"
+        },
+        {
+          "entityId": 31,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "MAGE",
+      "mana": 0,
+      "maxMana": 4,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 23,
+      "board": [
+        {
+          "entityId": 68,
+          "cardId": "HERO_08de",
+          "name": "Yogg-Ramen",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 12,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 69,
+          "cardId": "HERO_08fbp",
+          "name": "Fireblast",
+          "text": "<b>Hero Power</b>\nDeal $1 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 3,
+          "entityId": 59,
+          "cardId": "AV_212",
+          "name": "Siphon Mana",
+          "CARDTYPE": "SPELL",
+          "COST": 2,
+          "text": "Deal $2 damage.\n<b>Honorable Kill</b>: Reduce the Cost of spells in your hand by (1)."
+        },
+        {
+          "public": true,
+          "engineTurn": 7,
+          "entityId": 38,
+          "cardId": "JAM_002",
+          "name": "Star Power",
+          "CARDTYPE": "SPELL",
+          "COST": 5,
+          "text": "[x]Deal $5 damage to a\nrandom enemy minion.\nRepeat this with 1\nless damage."
+        }
+      ]
+    },
+    "optionsId": 20,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        10,
+        17,
+        24
+      ],
+      "complete": true
+    },
+    "fingerprint": "b8a1f590c67bf79ecf6d",
+    "decisionFingerprint": "b388b1bfebf17d1d0c1c"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 19,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 15,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 29,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 31,
+      "type": "POWER",
+      "id": "o4"
+    },
+    {
+      "option": 5,
+      "entityId": 67,
+      "type": "POWER",
+      "id": "o5"
+    }
+  ],
+  "constrainedOptions": [
+    {
+      "option": 1,
+      "entityId": 19,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 15,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 29,
+      "type": "POWER",
+      "id": "o3"
+    }
+  ],
+  "actual": {
+    "option": 3,
+    "entityId": 29,
+    "type": "POWER",
+    "id": "o3"
+  },
+  "ruling": {
+    "reviewStatus": "implemented_weapon-preservation-v1",
+    "expectedEntityId": 19,
+    "expectedSource": "weapon_preservation",
+    "reason": "Play the observed 4-cost 8/8 before equipping: equipment spends all mana and the nonlethal swing discards this highest-cost nonpayoff. After playing it and equipping, current remaining highest card is Walking Dead; recheck next turn draw."
+  },
+  "afterEquip": {
+    "createdAt": "2026-10-03T17:44:44.345Z",
+    "plannerVersion": "silverfish-v1-combo-admission-v2",
+    "state": {
+      "gameNumber": 1,
+      "turn": 8,
+      "step": "MAIN_ACTION",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 1,
+        "heroClass": "WARLOCK",
+        "mana": 0,
+        "maxMana": 4,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 3,
+        "deckCount": 20,
+        "board": [
+          {
+            "entityId": 29,
+            "cardId": "END_016",
+            "name": "Chronoclaws",
+            "text": "After your hero attacks, discard your highest Cost card.",
+            "baseCost": 4,
+            "baseAttack": 4,
+            "baseHealth": 3,
+            "COST": 4,
+            "ATK": 4,
+            "HEALTH": 3,
+            "ZONE_POSITION": 0,
+            "CARDTYPE": "WEAPON"
+          },
+          {
+            "entityId": 66,
+            "cardId": "HERO_07",
+            "name": "Gul'dan",
+            "baseHealth": 30,
+            "ATK": 4,
+            "HEALTH": 30,
+            "DAMAGE": 2,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 67,
+            "cardId": "HERO_07bp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER",
+            "EXHAUSTED": 0
+          }
+        ],
+        "hand": [
+          {
+            "entityId": 19,
+            "cardId": "CATA_493",
+            "name": "Duke of Below",
+            "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+            "baseCost": 4,
+            "baseAttack": 2,
+            "baseHealth": 2,
+            "COST": 4,
+            "ATK": 8,
+            "HEALTH": 8,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "MINION",
+            "RUSH": 1
+          },
+          {
+            "entityId": 15,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 2,
+            "baseHealth": 5,
+            "COST": 3,
+            "ATK": 2,
+            "HEALTH": 5,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION",
+            "TAUNT": 1
+          },
+          {
+            "entityId": 31,
+            "cardId": "TIME_026",
+            "name": "Entropic Continuity",
+            "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          }
+        ],
+        "fatigue": 0,
+        "drawHazards": []
+      },
+      "opponent": {
+        "playerId": 2,
+        "heroClass": "MAGE",
+        "mana": 0,
+        "maxMana": 4,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 5,
+        "deckCount": 23,
+        "board": [
+          {
+            "entityId": 68,
+            "cardId": "HERO_08de",
+            "name": "Yogg-Ramen",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "DAMAGE": 12,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 69,
+            "cardId": "HERO_08fbp",
+            "name": "Fireblast",
+            "text": "<b>Hero Power</b>\nDeal $1 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER",
+            "EXHAUSTED": 0
+          }
+        ],
+        "secretCount": 0,
+        "initialHealth": 30,
+        "publicPlays": [
+          {
+            "public": true,
+            "engineTurn": 3,
+            "entityId": 59,
+            "cardId": "AV_212",
+            "name": "Siphon Mana",
+            "CARDTYPE": "SPELL",
+            "COST": 2,
+            "text": "Deal $2 damage.\n<b>Honorable Kill</b>: Reduce the Cost of spells in your hand by (1)."
+          },
+          {
+            "public": true,
+            "engineTurn": 7,
+            "entityId": 38,
+            "cardId": "JAM_002",
+            "name": "Star Power",
+            "CARDTYPE": "SPELL",
+            "COST": 5,
+            "text": "[x]Deal $5 damage to a\nrandom enemy minion.\nRepeat this with 1\nless damage."
+          }
+        ]
+      },
+      "optionsId": 21,
+      "mulliganResult": {
+        "choiceId": 1,
+        "kept": [
+          10,
+          17,
+          24
+        ],
+        "complete": true
+      },
+      "fingerprint": "07903fc87920f2ca058e",
+      "decisionFingerprint": "6f62dcc8ca73e43809ee"
+    },
+    "options": [
+      {
+        "id": "o0",
+        "type": "END_TURN",
+        "option": 0
+      },
+      {
+        "option": 1,
+        "entityId": 66,
+        "type": "POWER",
+        "id": "o1t0",
+        "targetId": 68
+      }
+    ],
+    "rawOptions": [
+      {
+        "id": "o0",
+        "type": "END_TURN",
+        "option": 0
+      },
+      {
+        "option": 1,
+        "entityId": 66,
+        "type": "POWER",
+        "id": "o1t0",
+        "targetId": 68
+      }
+    ],
+    "combinationEvidence": {
+      "version": "combo-admission-v2",
+      "stats": {
+        "generated": 1,
+        "nodeLimit": false,
+        "depthLimit": false,
+        "maxNodes": 256,
+        "depth": 4
+      },
+      "lineCount": 0,
+      "truncated": false,
+      "lines": [],
+      "comparisonCount": 1,
+      "comparisonTruncated": false,
+      "comparisonRoutes": [
+        {
+          "key": "[[\"attack\",66,68]]",
+          "weaponId": 29,
+          "firstActionId": "o1t0",
+          "steps": [
+            {
+              "kind": "attack",
+              "id": 66,
+              "targetId": 68,
+              "exact": true
+            }
+          ],
+          "targets": [
+            {
+              "entityId": 19,
+              "name": "Duke of Below",
+              "cost": 4
+            }
+          ],
+          "manaAfter": 0,
+          "knownCombat": true,
+          "knownDevelopment": true,
+          "safeContinuation": true,
+          "uncertainSecrets": false
+        }
+      ],
+      "blockedFirstIds": [],
+      "blockedComparisonFirstIds": []
+    },
+    "decisionPolicy": {
+      "version": "turn-intent-v2",
+      "source": "compare_intents",
+      "weaponProofKey": null,
+      "priority": [
+        "legal/survival gates",
+        "visible lethal",
+        "expiring development",
+        "chosen information preserving setup mana",
+        "proved user weapon ruling",
+        "opening/tactical/recovery rulings",
+        "compare feasible development and buff intents"
+      ]
+    },
+    "candidateTrace": {
+      "version": "combo-admission-v2",
+      "stats": {
+        "generated": 1,
+        "nodeLimit": false,
+        "depthLimit": false,
+        "maxNodes": 256,
+        "depth": 4
+      },
+      "lineCount": 0,
+      "truncated": false,
+      "lines": [],
+      "comparisonCount": 1,
+      "comparisonTruncated": false,
+      "comparisonRoutes": [
+        {
+          "key": "[[\"attack\",66,68]]",
+          "weaponId": 29,
+          "firstActionId": "o1t0",
+          "steps": [
+            {
+              "kind": "attack",
+              "id": 66,
+              "targetId": 68,
+              "exact": true
+            }
+          ],
+          "targets": [
+            {
+              "entityId": 19,
+              "name": "Duke of Below",
+              "cost": 4
+            }
+          ],
+          "manaAfter": 0,
+          "knownCombat": true,
+          "knownDevelopment": true,
+          "safeContinuation": true,
+          "uncertainSecrets": false
+        }
+      ],
+      "blockedFirstIds": [],
+      "blockedComparisonFirstIds": [],
+      "softHoldExemptions": []
+    },
+    "matchupObjective": {
+      "version": "matchup-objective-v2-class-prior",
+      "mode": "unknown",
+      "support": "insufficient public evidence",
+      "evidence": [],
+      "weights": {
+        "face": 0.5979175333116672,
+        "finishFace": 1.2739089616509587,
+        "draw": 2.4872720994475137,
+        "mana": 0.5072894052648683,
+        "coin": 0.03366988950276242
+      },
+      "deadlineTurn": null,
+      "prior": {
+        "version": "local-class-prior-v2",
+        "source": "audited history-quadrants-2026-10-01T19-17-42-331Z; user/analyst public replay rulings",
+        "window": {
+          "start": "2026-09-24T17:31:28.715Z",
+          "end": "2026-10-01T17:31:28.715Z"
+        },
+        "trainedThrough": "2026-10-01T17:31:28.715Z",
+        "probabilities": {
+          "control": 0.20699815837937383,
+          "tempo": 0.5659300184162063,
+          "combo": 0.08287292817679558,
+          "unknown": 0.1441988950276243
+        },
+        "counts": {
+          "control": 4,
+          "tempo": 13,
+          "combo": 2,
+          "unknown": 3
+        },
+        "sampleSize": 22,
+        "classSampleSize": 22,
+        "mulliganProbabilities": {
+          "pressure": 0.2898710865561694,
+          "board": 0.5659300184162063,
+          "unknown": 0.1441988950276243
+        },
+        "mulliganGrouping": {
+          "pressure": [
+            "control",
+            "combo"
+          ],
+          "board": [
+            "tempo"
+          ],
+          "unknown": [
+            "unknown"
+          ],
+          "guidance": "Control and combo share one opening strategy: establish attacking bodies and a reliable curve/discard payoff. Do not invent different mulligan rules from the diagnostic subtype. Preserve subtype only for review; observed quests, clears and recovery guide later turns."
+        },
+        "confidence": 0.5588235294117647,
+        "decisionWeight": 0.0838235294117647,
+        "highProbability": null,
+        "evidence": [
+          "opponent class: MAGE"
+        ],
+        "publicCards": [
+          "AV_212",
+          "JAM_002"
+        ],
+        "interpretation": "Local smoothed frequency estimates; unknown mass is unresolved classification. Confidence reflects sample support, not effect strength or validated forecast accuracy. Class is a soft prior; public evidence overrides it. No fixed lethal deadline."
+      },
+      "mulligan": null,
+      "guidance": "Use the logged class/opening prior as a soft preference when comparing pressure and board/resource plans, including mulligan. Its confidence is sample support, not a known deck label. Unknown classification remains possible. Retain efficient early development and one retained discard activation per material; do not keep unsupported materials based on a matchup guess. Empty early turns do not identify a deck."
+    },
+    "weaponBuff": null,
+    "resourceTools": {
+      "refillWindow": false,
+      "ownCards": 3,
+      "opponentCards": 5,
+      "chamber": null,
+      "duke": {
+        "entityId": 19,
+        "attack": 8,
+        "health": 8,
+        "cost": 4,
+        "affordable": false,
+        "boardRoom": 7,
+        "limitation": "Use observed tags, not an invented discard count. Rush can trade on the summoning turn; it does not grant a face attack. Large size does not prove the opponent lacks removal."
+      }
+    },
+    "searchStats": {
+      "expanded": 2,
+      "generated": 1,
+      "deduplicated": 0,
+      "beamPruned": 0,
+      "depthReached": 2,
+      "nodeLimit": false,
+      "depthLimit": false
+    },
+    "plan": {
+      "id": "p1",
+      "steps": [
+        {
+          "kind": "attack",
+          "id": 66,
+          "targetId": 68,
+          "exact": true,
+          "note": "",
+          "before": "[[[66,4,28,0,false,false,false,false,false]],[[68,0,18,0,false,false,false,false]],[19,15,31],0,[29,4,3]]",
+          "after": "[[[66,4,28,0,false,false,false,false,false]],[[68,0,14,0,false,false,false,false]],[15,31],0,[29,4,2]]"
+        }
+      ],
+      "text": "Plan of 1 step(s), carried out in this order: 1) Your hero 28 Health attacks the enemy hero: 4 damage, leaving 14. Result: enemy hero 18 -> 14 Health. Enemy minions killed: none. Persistent enemy effects removed: none. Persistent enemy effects remaining: none. Effect evidence for killed targets: none. Unknown remaining effects (not assumed blank): none. Your minions lost: none. Their board can then attack for 0 next turn, against your 28 Health; before this plan it was 0. No attacker is left unused. Cards and mana not used by this plan stay available afterwards (0 mana left)."
+    },
+    "action": {
+      "option": 1,
+      "entityId": 66,
+      "type": "POWER",
+      "id": "o1t0",
+      "targetId": 68
+    },
+    "model": "typesafe-ai/jev",
+    "latencyMs": 826,
+    "answers": {
+      "move": {
+        "type": "choice",
+        "choice": "p1",
+        "probabilities": {
+          "o0": 0.14,
+          "p1": 0.86
+        }
+      }
+    },
+    "usage": {
+      "inputTokens": 6008,
+      "outputTokens": 34,
+      "totalTokens": 6042
+    },
+    "metadata": {
+      "typesafe": {
+        "confidence": {
+          "move": 0.73
+        }
+      },
+      "gateway": {
+        "routing": {
+          "originalModelId": "typesafe-ai/jev",
+          "resolvedProvider": "typesafe-ai",
+          "fallbacksAvailable": [
+            "digitalocean"
+          ],
+          "planningReasoning": "System credentials planned for: typesafe-ai, digitalocean. Total execution order: typesafe-ai(system) → digitalocean(system)",
+          "canonicalSlug": "typesafe-ai/jev",
+          "finalProvider": "typesafe-ai",
+          "modelAttemptCount": 1,
+          "modelAttempts": [
+            {
+              "canonicalSlug": "typesafe-ai/jev",
+              "success": true,
+              "providerAttemptCount": 1,
+              "providerAttempts": [
+                {
+                  "provider": "typesafe-ai",
+                  "credentialType": "system",
+                  "success": true,
+                  "startTime": 1791049485689,
+                  "endTime": 1791049485944,
+                  "statusCode": 200
+                }
+              ]
+            }
+          ],
+          "totalProviderAttemptCount": 1
+        },
+        "cost": "0.000252336",
+        "marketCost": "0.000252336",
+        "surchargeCost": "0",
+        "gatewayCost": "0.000252336",
+        "inferenceCost": "0.000252336",
+        "inputInferenceCost": "0.000252336",
+        "outputInferenceCost": "0",
+        "generationId": "gen_01M41DWKADMBSNNPZCBWWC9NTA"
+      }
+    },
+    "effectAssessments": {
+      "version": "2026-10-01-v1",
+      "confidenceMeaning": "uncalibrated classification evidence, not trigger probability",
+      "cards": []
+    }
+  }
+}

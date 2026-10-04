@@ -1,0 +1,61 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {assessEffect,boardEffectAssessments,effectNote} from '../src/effect-state.mjs';
+import {search,ongoingEffectValue,menu,ongoingTradePlans} from '../src/plan.mjs';
+import {fromState} from '../src/sim.mjs';
+import {describe} from '../src/describe.mjs';
+import {INSTRUCTIONS} from '../src/choose.mjs';
+const f=JSON.parse(readFileSync(new URL('./fixtures/user-rulings/game175-engine-removal.json',import.meta.url)));
+const byId=id=>f.state.opponent.board.find(c=>c.entityId===id);
+test('game175 turn2: Patches is inactive on board; Chirurgeon remains repeatable after buffing Patches',()=>{
+ const patches=assessEffect(byId(37)),engine=assessEffect(byId(47));
+ assert.equal(patches.status,'inactive');assert.equal(patches.requiredZone,'DECK');
+ assert.equal(engine.status,'active');assert.equal(engine.repeatability,'repeatable');
+ assert.ok(engine.confidence>=.9);assert.ok(patches.confidence>=.9);
+ const {start,plans}=search(f.state,f.options);
+ const kill=id=>plans.find(p=>p.steps.filter(s=>s.kind==='attack').length===3&&!p.s.opp.some(b=>b.id===id));
+ const good=kill(47),bad=kill(37);assert.ok(good&&bad);assert.ok(good.score>bad.score);
+ assert.equal(ongoingEffectValue(start.opp.find(c=>c.id===37)),0);
+ const m=menu(f.state,f.options,{});
+ assert.ok(Object.values(m.criteria).some(c=>/classification confidence/.test(c.description)));
+ assert.match(describe(f.state,f.options.find(a=>a.targetId===47)),/effect active/);
+ const records=boardEffectAssessments(f.state);
+ assert.equal(records.find(r=>r.entityId===37).status,'inactive');
+ assert.ok(records.every(r=>r.reason&&Number.isFinite(r.confidence)&&r.version));
+});
+test('zone, silence, dormancy and changed full text invalidate a known active rule',()=>{
+ const c=byId(47);
+ assert.equal(assessEffect(c,{zone:'HAND'}).status,'inactive');
+ assert.equal(assessEffect({...c,SILENCED:1}).status,'inactive');
+ assert.equal(assessEffect({...c,DORMANT:1}).status,'inactive_now');
+ assert.equal(assessEffect({...c,text:'After you summon a minion, draw a card.'}).status,'unknown');
+ const s=structuredClone(f.state);s.opponent.board.find(c=>c.entityId===47).SILENCED=1;
+ assert.equal(ongoingEffectValue(fromState(s,f.options).opp.find(c=>c.id===47)),0);
+});
+test('from your deck is not a blanket exclusion; unverified and mixed effects stay unknown',()=>{
+ const other={CARDTYPE:'MINION',cardId:'unverified',name:'Deck recruiter',text:'At the end of your turn, summon a minion from your deck.'};
+ const e=assessEffect(other);assert.equal(e.status,'unknown');assert.ok(e.confidence<.5);
+ assert.match(effectNote(other),/summon a minion from your deck/);
+ assert.equal(ongoingEffectValue({type:'MINION',...other}),0);
+ assert.equal(assessEffect({...other,text:'Battlecry: Deal 1 damage. Deathrattle: Draw a card.'}).status,'unknown');
+ assert.equal(assessEffect({...other,text:'After you cast a spell, do something once per turn.'}).status,'unknown');
+ assert.equal(assessEffect({...other,text:'Battlecry: Draw a card.'}).status,'inactive');
+});
+test('strong verified engines permit cost comparisons; confidence is separate from strength',()=>{
+ const cannon={CARDTYPE:'MINION',cardId:'GVG_075',text:'After you summon a Pirate, deal 2 damage to a random enemy.'};
+ const e=assessEffect(cannon);assert.equal(e.status,'active');assert.equal(e.strength,'strong');
+ assert.ok(e.removalPremium>assessEffect(byId(47)).removalPremium);
+ assert.equal(e.confidence,assessEffect(byId(47)).confidence);
+ assert.match(INSTRUCTIONS,/strong engine can justify spending several resources/);
+ assert.match(INSTRUCTIONS,/Lethal and survival take priority/);
+});
+test('unknown competing effect is not pruned as a confirmed blank at equal combat cost',()=>{
+ const s=structuredClone(f.state);
+ const c=s.opponent.board.find(c=>c.entityId===37);
+ c.cardId='unverified';c.text='After you summon a minion, summon a copy of it.';
+ const {start,plans}=search(s,f.options);
+ const a=plans.find(p=>p.steps.length===3&&!p.s.opp.some(b=>b.id===37));
+ const b=plans.find(p=>p.steps.length===3&&!p.s.opp.some(b=>b.id===47));
+ assert.ok(a&&b);assert.equal(ongoingTradePlans(start,[a,b]).length,2);
+});

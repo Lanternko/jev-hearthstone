@@ -13,6 +13,7 @@ public class Hs {
  [DllImport("user32.dll",SetLastError=true)] public static extern uint SendInput(uint n,INPUT[] p,int cb);
  [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
  [DllImport("user32.dll")] public static extern bool GetCursorPos(out POINT p);
+ [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h,IntPtr dc,uint flags);
  [StructLayout(LayoutKind.Sequential)] public struct RECT{public int L,T,R,B;}
  [StructLayout(LayoutKind.Sequential)] public struct POINT{public int X,Y;}
  [StructLayout(LayoutKind.Sequential)] public struct MOUSEINPUT{public int dx;public int dy;public uint mouseData;public uint dwFlags;public uint time;public IntPtr dwExtraInfo;}
@@ -39,6 +40,7 @@ public class Hs {
 }
 "@
 [void][Hs]::SetProcessDPIAware()
+Add-Type -AssemblyName System.Drawing
 
 $script:Geo = $null
 $script:GeoAt = [datetime]::MinValue
@@ -170,6 +172,68 @@ while ($null -ne ($line = [Console]::In.ReadLine())) {
         [void]$tr.Add((Probe $g 'up' $bx $by))
         Reply @{ok=$true;trace=@{kind='drag';target=@{x=$c.x;y=$c.y;x2=$c.x2;y2=$c.y2};handle=$g.handle;refocused=$arm.refocused;
           badMoves=$badMoves;rc=@{arm=$arm.moveRc;down=[int]$rcD;up=[int]$rcU};err=@{down=[int]$errD;up=[int]$errU};probes=$tr.ToArray()}}
+      }
+      # An attack flung the way a player flings it: press on the attacker after only a brief
+      # settle, hold a beat for the grab, then sweep to the target in a few fast, uneven steps
+      # along a slight curve (bend = sideways bulge as a share of the distance), rest just long
+      # enough for the client to see the pointer on the target, and release.
+      'fling' {
+        $script:T0 = Get-Date
+        $tr = New-Object System.Collections.ArrayList
+        $ax = $g.originX + $c.x;  $ay = $g.originY + $c.y
+        $bx = $g.originX + $c.x2; $by = $g.originY + $c.y2
+        [void]$tr.Add((Probe $g 'enter' $null $null))
+        $arm = Arm $g $ax $ay $c.settle $tr
+        $rcD = [Hs]::Down(); $errD = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        [void]$tr.Add((Probe $g 'down' $ax $ay))
+        Start-Sleep -Milliseconds $c.hold
+        $badMoves = 0
+        # The grab: the client only takes the card once the pointer moves while still on it.
+        for ($i = 1; $i -le 2; $i++) {
+          if ([Hs]::Move([int]($ax + ($bx-$ax)*$i/50), [int]($ay + ($by-$ay)*$i/50)) -eq 0) { $badMoves++ }
+          Start-Sleep -Milliseconds (Get-Random -Minimum 10 -Maximum 22)
+        }
+        [void]$tr.Add((Probe $g 'crept' $null $null))
+        # Ease-out along a quadratic curve: fast off the card, slowing onto the target.
+        $cx = ($ax+$bx)/2 - ($by-$ay)*$c.bend; $cy = ($ay+$by)/2 + ($bx-$ax)*$c.bend
+        $n = [int]$c.steps
+        for ($i = 1; $i -le $n; $i++) {
+          $t = 1 - [math]::Pow(1 - $i/$n, 2)
+          $px = (1-$t)*(1-$t)*$ax + 2*(1-$t)*$t*$cx + $t*$t*$bx
+          $py = (1-$t)*(1-$t)*$ay + 2*(1-$t)*$t*$cy + $t*$t*$by
+          if ([Hs]::Move([int]$px, [int]$py) -eq 0) { $badMoves++ }
+          Start-Sleep -Milliseconds ([math]::Max(3, $c.stepMs + (Get-Random -Minimum -3 -Maximum 4)))
+        }
+        [void][Hs]::Move($bx,$by)
+        [void]$tr.Add((Probe $g 'travelled' $bx $by))
+        Start-Sleep -Milliseconds $c.rest
+        [void]$tr.Add((Probe $g 'rested' $bx $by))
+        $rcU = [Hs]::Up(); $errU = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        [void]$tr.Add((Probe $g 'up' $bx $by))
+        Reply @{ok=$true;trace=@{kind='fling';target=@{x=$c.x;y=$c.y;x2=$c.x2;y2=$c.y2};handle=$g.handle;refocused=$arm.refocused;
+          timing=@{settle=$c.settle;hold=$c.hold;steps=$c.steps;stepMs=$c.stepMs;rest=$c.rest};
+          badMoves=$badMoves;rc=@{arm=$arm.moveRc;down=[int]$rcD;up=[int]$rcU};err=@{down=[int]$errD;up=[int]$errU};probes=$tr.ToArray()}}
+      }
+      # A picture of the client area, for the user to point at a position. PrintWindow asks the
+      # window itself to draw (PW_CLIENTONLY|PW_RENDERFULLCONTENT), so a window lying on top of
+      # Hearthstone does not end up in the picture the way it would with a screen copy.
+      'shot' {
+        $bmp = New-Object System.Drawing.Bitmap $g.width, $g.height
+        $gr = [System.Drawing.Graphics]::FromImage($bmp); $dc = $gr.GetHdc()
+        $okp = [Hs]::PrintWindow([intptr]$g.handle, $dc, 3)
+        $gr.ReleaseHdc($dc); $gr.Dispose()
+        # Full 1440p is ~290 KB a picture and no easier to read than 1600 wide.
+        if ($c.width -and $c.width -lt $g.width) {
+          $small = New-Object System.Drawing.Bitmap ([int]$c.width), ([int]($g.height * $c.width / $g.width))
+          $gs = [System.Drawing.Graphics]::FromImage($small)
+          $gs.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+          $gs.DrawImage($bmp, 0, 0, $small.Width, $small.Height); $gs.Dispose(); $bmp.Dispose(); $bmp = $small
+        }
+        $jpg = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq 'image/jpeg' }
+        $ep = New-Object System.Drawing.Imaging.EncoderParameters 1
+        $ep.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter ([System.Drawing.Imaging.Encoder]::Quality), ([int64]$c.quality)
+        $bmp.Save($c.path, $jpg, $ep); $bmp.Dispose()
+        if ($okp) { Reply @{ok=$true;path=$c.path} } else { Reply @{ok=$false;error='printwindow_failed'} }
       }
       default { Reply @{ok=$false;error='unknown_op'} }
     }

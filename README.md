@@ -31,6 +31,8 @@ Node.js 22，執行 `npm ci`。將 Gateway key 放入本目錄 `.env.local`，�
 
 ## 限制
 
+Silverfish 研究與可複驗的新舊比較見 [docs/silverfish-research.md](docs/silverfish-research.md)。`npm run eval-silverfish` 離線比较保存基準與目前的搜尋／候選，不呼叫模型或啟動遊戲。`npm run eval-strength -- results.json` 分析預登記 A/B 對局結果。預設使用 `silverfish-v1-combo-admission-v2`；`JEV_SEARCH_VERSION=silverfish-v1-combo-admission-v1` 使用整併前固定快照，`baseline-20261001` 使用更早基準。基準目錄必須保留。共用組合證據與決策優先順序見 [整併報告](docs/combo-consolidation-20261003.md)。單步 `decide` 與自動對局 `bridge` 使用同一決策引擎；單步命令只保存第一個動作，自動接續由 bridge 觀察及驗證。
+
 尚待現場驗證：Mulligan/Discover 選牌、subOption 類行動、召喚擺位、特殊地點、暫時牌及新增機制。遇到不支援的 subOption 不產生候選。不能把解析成功視為已完成遊戲控制。
 
 API 僅傳送過濾盤面、策略與候選，不含 BattleTag、GameAccountId、原始日誌、對手手牌或牌堆順序。Vercel 官方 Jev 免費優惠標示至 2026-09-25；效期後應重查計價。

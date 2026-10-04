@@ -1,0 +1,101 @@
+{
+  "provenance": "Public count-only opening rows from the stopped new50 batch; one per timestamp cluster, no hidden cards or account identifiers",
+  "rows": [
+    {
+      "createdAt": "2026-10-02T18:50:04.906Z",
+      "state": {
+        "turn": 1,
+        "choice": {
+          "type": "MULLIGAN"
+        },
+        "me": {
+          "heroClass": "WARLOCK"
+        },
+        "opponent": {
+          "heroClass": "WARRIOR",
+          "deckCount": 36,
+          "handCount": 5,
+          "initialHealth": null,
+          "board": [
+            {
+              "CARDTYPE": "HERO",
+              "HEALTH": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "createdAt": "2026-10-02T20:04:35.098Z",
+      "state": {
+        "turn": 1,
+        "choice": {
+          "type": "MULLIGAN"
+        },
+        "me": {
+          "heroClass": "WARLOCK"
+        },
+        "opponent": {
+          "heroClass": "PALADIN",
+          "deckCount": 36,
+          "handCount": 5,
+          "initialHealth": null,
+          "board": [
+            {
+              "CARDTYPE": "HERO",
+              "HEALTH": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "createdAt": "2026-10-02T20:21:42.411Z",
+      "state": {
+        "turn": 1,
+        "choice": {
+          "type": "MULLIGAN"
+        },
+        "me": {
+          "heroClass": "WARLOCK"
+        },
+        "opponent": {
+          "heroClass": "PRIEST",
+          "deckCount": 36,
+          "handCount": 5,
+          "initialHealth": null,
+          "board": [
+            {
+              "CARDTYPE": "HERO",
+              "HEALTH": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "createdAt": "2026-10-02T20:48:15.964Z",
+      "state": {
+        "turn": 1,
+        "choice": {
+          "type": "MULLIGAN"
+        },
+        "me": {
+          "heroClass": "WARLOCK"
+        },
+        "opponent": {
+          "heroClass": "MAGE",
+          "deckCount": 36,
+          "handCount": 5,
+          "initialHealth": null,
+          "board": [
+            {
+              "CARDTYPE": "HERO",
+              "HEALTH": 30
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

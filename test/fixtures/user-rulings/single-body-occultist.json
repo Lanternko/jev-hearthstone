@@ -1,0 +1,261 @@
+{
+  "source": {
+    "time": "2026-10-01T07:59:49+08:00",
+    "batchGame": 149,
+    "ownTurn": 3,
+    "engineTurn": 5,
+    "opponent": "Dizzy",
+    "replayUrl": "https://hsreplay.net/uploads/upload/REDACTED/"
+  },
+  "state": {
+    "gameNumber": 46,
+    "turn": 5,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 3,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 67,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 68,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 86,
+          "cardId": "SCH_147t",
+          "name": "Boneweb Spider",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 2,
+          "HEALTH": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 34,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 40,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 36,
+          "cardId": "WON_103",
+          "name": "Chamber of Viscidus",
+          "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+          "baseCost": 3,
+          "baseHealth": 2,
+          "COST": 3,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "LOCATION"
+        },
+        {
+          "entityId": 49,
+          "cardId": "TIME_026",
+          "name": "Entropic Continuity",
+          "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "MAGE",
+      "mana": 1,
+      "maxMana": 2,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 3,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 65,
+          "cardId": "HERO_08bw",
+          "name": "Twilight Hammer Cho'gall",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 66,
+          "cardId": "HERO_08bwhp",
+          "name": "Fireblast",
+          "text": "<b>Hero Power</b>\nDeal $1 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 82,
+          "cardId": "UNG_809t1",
+          "name": "Flame Elemental",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 11,
+          "cardId": "BAR_854",
+          "name": "Kindling Elemental",
+          "text": "[x]<b>Battlecry:</b> The next\n Elemental you play\ncosts (1) less.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1
+        }
+      ]
+    },
+    "optionsId": 12,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [
+        34,
+        40
+      ],
+      "complete": true
+    },
+    "fingerprint": "87863db478d256290ceb",
+    "decisionFingerprint": "3c101dbec1224fad8b90"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 34,
+      "type": "POWER",
+      "id": "o1t0",
+      "targetId": 40
+    },
+    {
+      "option": 1,
+      "entityId": 34,
+      "type": "POWER",
+      "id": "o1t1",
+      "targetId": 36
+    },
+    {
+      "option": 1,
+      "entityId": 34,
+      "type": "POWER",
+      "id": "o1t2",
+      "targetId": 49
+    },
+    {
+      "option": 2,
+      "entityId": 40,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 36,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 49,
+      "type": "POWER",
+      "id": "o4"
+    },
+    {
+      "option": 5,
+      "entityId": 68,
+      "type": "POWER",
+      "id": "o5"
+    },
+    {
+      "option": 6,
+      "entityId": 86,
+      "type": "POWER",
+      "id": "o6t0",
+      "targetId": 65
+    },
+    {
+      "option": 6,
+      "entityId": 86,
+      "type": "POWER",
+      "id": "o6t1",
+      "targetId": 11
+    },
+    {
+      "option": 6,
+      "entityId": 86,
+      "type": "POWER",
+      "id": "o6t2",
+      "targetId": 82
+    }
+  ],
+  "expected": {
+    "card": "Ocular Occultist",
+    "discard": "Walking Dead"
+  }
+}

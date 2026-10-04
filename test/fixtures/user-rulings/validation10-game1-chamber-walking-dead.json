@@ -1,0 +1,362 @@
+{
+  "id": "validation10-game1-chamber-walking-dead",
+  "source": "runtime/ranked-2026-10-03T17-42-01-535Z/game-0001-decisions.jsonl",
+  "batchGame": 1,
+  "ownTurn": 3,
+  "row": 8326,
+  "createdAt": "2026-10-03T17:44:13.192Z",
+  "plannerVersion": "silverfish-v1-combo-admission-v2",
+  "state": {
+    "gameNumber": 1,
+    "turn": 6,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 3,
+      "maxMana": 3,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 4,
+      "deckCount": 22,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 86,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 1
+        },
+        {
+          "entityId": 22,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+          "baseCost": 3,
+          "baseAttack": 3,
+          "baseHealth": 6,
+          "COST": 3,
+          "ATK": 3,
+          "HEALTH": 6,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 1
+        },
+        {
+          "entityId": 89,
+          "cardId": "DAL_077",
+          "name": "Toxfin",
+          "text": "<b>Battlecry:</b> Give a friendly Murloc <b>Poisonous</b>.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 1
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 19,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 6,
+          "HEALTH": 6,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 24,
+          "cardId": "WON_103",
+          "name": "Chamber of Viscidus",
+          "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+          "baseCost": 3,
+          "baseHealth": 2,
+          "COST": 3,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "LOCATION"
+        },
+        {
+          "entityId": 15,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        },
+        {
+          "entityId": 28,
+          "cardId": "EX1_308",
+          "name": "Soulfire",
+          "text": "[x]Deal $4 damage.\nDiscard a random card.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "MAGE",
+      "mana": 1,
+      "maxMana": 3,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 24,
+      "board": [
+        {
+          "entityId": 68,
+          "cardId": "HERO_08de",
+          "name": "Yogg-Ramen",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 8,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 69,
+          "cardId": "HERO_08fbp",
+          "name": "Fireblast",
+          "text": "<b>Hero Power</b>\nDeal $1 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 1
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 3,
+          "entityId": 59,
+          "cardId": "AV_212",
+          "name": "Siphon Mana",
+          "CARDTYPE": "SPELL",
+          "COST": 2,
+          "text": "Deal $2 damage.\n<b>Honorable Kill</b>: Reduce the Cost of spells in your hand by (1)."
+        }
+      ]
+    },
+    "optionsId": 15,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        10,
+        17,
+        24
+      ],
+      "complete": true
+    },
+    "fingerprint": "8c2bb130f8a591fe01c4",
+    "decisionFingerprint": "7be4a8bd588337cbe87c"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 24,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 15,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t0",
+      "targetId": 66
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t1",
+      "targetId": 68
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t2",
+      "targetId": 86
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t3",
+      "targetId": 22
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t4",
+      "targetId": 89
+    },
+    {
+      "option": 4,
+      "entityId": 67,
+      "type": "POWER",
+      "id": "o4"
+    }
+  ],
+  "constrainedOptions": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 24,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t1",
+      "targetId": 68
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t2",
+      "targetId": 86
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t3",
+      "targetId": 22
+    },
+    {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t4",
+      "targetId": 89
+    },
+    {
+      "option": 4,
+      "entityId": 67,
+      "type": "POWER",
+      "id": "o4"
+    }
+  ],
+  "actual": {
+    "action": {
+      "option": 3,
+      "entityId": 28,
+      "type": "POWER",
+      "id": "o3t1",
+      "targetId": 68
+    },
+    "answers": {
+      "move": {
+        "type": "choice",
+        "choice": "o3t1",
+        "probabilities": {
+          "o3t4": 0.05,
+          "o3t1": 0.33,
+          "o3t2": 0.07,
+          "o0": 0.16,
+          "p1": 0.12,
+          "o4": 0.04,
+          "o3t3": 0.06,
+          "o1": 0.17
+        }
+      }
+    },
+    "following": [
+      "Duke of Below",
+      "Walking Dead"
+    ]
+  },
+  "ruling": {
+    "user": "這邊為什麼不打地標 棄325？",
+    "preferredFirst": "o1",
+    "preferredIntent": "Install Chamber of Viscidus; reobserve the legal activation; activate; select Walking Dead if offered; reobserve after the two unknown draws.",
+    "reviewStatus": "implemented_chamber-intent-v1",
+    "reason": "3 mana, enemy hero at 22, enemy board empty, three friendly minions. Installing Chamber removes it from the four-card hand, leaving exactly Duke of Below, Walking Dead, Soulfire, so the three-card offer includes Walking Dead. There is room for the location and the summoned 2/5. Compare summon plus draw two and one remaining charge against nonlethal Soulfire random discard plus Life Tap. Never queue across the unknown draw boundary."
+  },
+  "evidence": {
+    "landPresentInJevMenu": true,
+    "combinationCount": 0,
+    "soulfireScore": 0.33,
+    "chamberScore": 0.17,
+    "scoresMeaning": "Model choice weights, not calibrated correctness probabilities."
+  },
+  "expected": {
+    "firstEntityId": 24,
+    "firstActionId": "o1",
+    "source": "chamber_development"
+  }
+}

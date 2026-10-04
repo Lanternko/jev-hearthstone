@@ -1,0 +1,66 @@
+{
+  "caseId": "game120-redundant-opening-payoff",
+  "source": {
+    "batchGame": 120,
+    "reviewOrdinal": 97,
+    "start": "2026-10-01T04:33:54.296156+08:00",
+    "replay": "https://hsreplay.net/uploads/upload/REDACTED/",
+    "replaySHA256": "99e145c5e3d4bee03cafe11d25b573c9171db9cbdfee4abe0ee36de48b326887",
+    "initiative": "second",
+    "opponentClassification": "control (postgame only)",
+    "scope": "Recorded offered cards and keep receipt; state below is a minimal mulligan reconstruction, not full live snapshot."
+  },
+  "state": {
+    "deck": "warlock-discard",
+    "choice": {
+      "type": "MULLIGAN",
+      "entities": [
+        {
+          "entityId": 15,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 2,
+          "text": "Taunt If you discard this minion, summon it."
+        },
+        {
+          "entityId": 7,
+          "cardId": "CATA_490",
+          "name": "Ocular Occultist",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "text": "[x]Taunt Battlecry: Choose a card in your hand to discard."
+        },
+        {
+          "entityId": 5,
+          "cardId": "KAR_205",
+          "name": "Silverware Golem",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 3,
+          "text": "If you discard this minion, summon it."
+        },
+        {
+          "entityId": 33,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "CARDTYPE": "SPELL",
+          "COST": 4,
+          "ATK": null,
+          "text": "When you play or discard this, deal $5 damage randomly split among all enemies."
+        }
+      ]
+    }
+  },
+  "recordedKept": [
+    15,
+    7,
+    5
+  ],
+  "expectedReplace": [
+    5,
+    33
+  ]
+}

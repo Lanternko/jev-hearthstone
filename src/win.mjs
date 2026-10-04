@@ -42,7 +42,21 @@ export async function cursor(){return call({op:'cursor'})}
 export async function move(x,y){return call({op:'move',x:Math.round(x),y:Math.round(y)})}
 // Keeps the pointer from going motionless; see the 'nudge' op in the worker for why.
 export async function nudge(){return call({op:'nudge'})}
-export async function click(x,y,{settle=200,hold=70}={}){return call({op:'click',x:Math.round(x),y:Math.round(y),settle,hold})}
-export async function drag(x,y,x2,y2,{settle=200,hold=110}={}){return call({op:'drag',x:Math.round(x),y:Math.round(y),x2:Math.round(x2),y2:Math.round(y2),settle,hold})}
+// 2026-09-30: every one of our attacks came 2.68-2.70s after the last, a tell no human has
+// (they chain at 0.7-1.5s, and vary). So every wait and every gesture timing is drawn from a
+// range, and the pointer lands a few pixels off the centre, as a hand would.
+export const between=(lo,hi)=>Math.round(lo+Math.random()*(hi-lo));
+const off=()=>between(-3,3);
+export async function click(x,y,{settle=between(140,260),hold=between(50,95)}={}){return call({op:'click',x:Math.round(x)+off(),y:Math.round(y)+off(),settle,hold})}
+export async function drag(x,y,x2,y2,{settle=between(150,250),hold=between(90,140)}={}){return call({op:'drag',x:Math.round(x)+off(),y:Math.round(y)+off(),x2:Math.round(x2)+off(),y2:Math.round(y2)+off(),settle,hold})}
+// An attack as a player makes it: grab the attacker, barely pause, swing the arrow onto the
+// target along a slight curve and let go. No hover on either card. See the 'fling' op.
+// JEV_FLING_SCALE stretches the whole fling (hold, travel, rest) for timing sweeps; 1 = as measured.
+const FS=Number(process.env.JEV_FLING_SCALE)||1,fs=n=>Math.round(n*FS);
+export async function fling(x,y,x2,y2,{settle=fs(between(30,90)),hold=fs(between(40,100)),steps=between(9,15),stepMs=fs(between(6,12)),bend=(Math.random()*2-1)*0.08,rest=fs(between(25,60))}={}){
+  return call({op:'fling',x:Math.round(x)+off(),y:Math.round(y)+off(),x2:Math.round(x2)+off(),y2:Math.round(y2)+off(),settle,hold,steps,stepMs,bend,rest});
+}
+// Saves the Hearthstone client area as a JPEG at an absolute path.
+export async function shot(path,{quality=80,width=1600}={}){return call({op:'shot',path,quality,width})}
 export async function cancel(){return call({op:'cancel'})}
 export function stop(){if(proc){proc.stdin.end();proc=null;ready=null}}

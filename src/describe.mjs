@@ -2,6 +2,8 @@ import {atkOf,enemyHero,heroHp,attackOptions,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
 import {deckFor} from './deck.mjs';
 import {immediateDraws,heroAttackGain,heroCanSwing,textOf} from './mechanics.mjs';
+import {drawRiskText} from './draw-risk.mjs';
+import {effectNote} from './effect-state.mjs';
 // Public stats for this list: how often games were won when the card stayed in the opening hand.
 // Only that column is passed on. Played win rate is confounded by *when* a card gets played --
 // Hand of Gul'dan shows 31.7% because it is hard-cast once the discard plan has failed -- and
@@ -57,9 +59,10 @@ function discardTargets(state,src){
   // to a scorer a discard reads as a cost, and nothing said these two pay out when discarded.
   // So each named candidate carries its own discard text, and the option says plainly whether
   // the discard is a loss or a payoff.
-  const label=c=>DISCARD_PAYOFF.test(flat(c.text))
+  const label=c=>(DISCARD_PAYOFF.test(flat(c.text))
     ?`${name(c)} (discarding it: "${flat(c.text)}")`
-    :`${name(c)} (nothing happens when it is discarded; the card is simply lost)`;
+    :`${name(c)} (nothing happens when it is discarded; the card is simply lost)`)
+    +(immediateDraws(c,state)?drawRiskText({...state,me:{...state.me,hand:(state.me.hand??[]).filter(x=>x.entityId!==c.entityId&&x.entityId!==src.entityId)}},immediateDraws(c,state)):'');
   const every=tied.every(c=>DISCARD_PAYOFF.test(flat(c.text)));
   const verdict=every
     ?` Every card the discard can hit pays out when discarded, so the discard costs you no card.`
@@ -196,6 +199,65 @@ function dhDiscoverNote(state,picked){
   return ` 惡魔獵人發現選擇請按當前需求比較：目前敵方可攻擊手下約有 ${incoming} 攻擊、我方 ${health} 血${urgency?'（已達致命線，先找本回合能移除或阻止攻擊的牌）':''}；我方有 ${bodiesOnBoard} 隻非休眠手下、手牌 ${handSize} 張、剩餘 ${mana} 費。選項分類：${offers.map(describeOffer).join('; ')}。解場要確認目標合法且傷害足以擊殺；若場面不急且手牌少，抽牌較有價值；若場面空或落後，優先能立刻站場的手下。休眠或下回合才召喚的牌不算立即解場／防斬殺。${selected?`目前候選 ${name(selected)}，依上述局勢評估是否比其他選項更合適。`:''}`;
 }
 export const bodies=c=>(c?.CARDTYPE==='MINION'?1:0)+summoned(c);
+
+// User valuation (2026-09-30): three +1/+1 recipients are roughly 2.5 mana of
+// tempo; five are roughly 4-5. These are coaching heuristics, not game mechanics.
+export function buffImpact(state,card){
+  const t=flat(card?.text),m=/give your (?:other )?minions \+(\d+)\/\+(\d+)/i.exec(t);
+  if(card?.CARDTYPE!=='SPELL'||!m||/destroy|random|if |until /i.test(t))return null;
+  const board=state.me?.board??[];
+  const live=board.filter(c=>c.CARDTYPE==='MINION'&&c.DORMANT!==1&&c.DORMANT!=='1'
+    &&(c.HEALTH==null&&c.baseHealth==null||Number(c.HEALTH??c.baseHealth)-Number(c.DAMAGE??0)>0));
+  const slots=Math.max(0,7-board.filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length);
+  const lowest=/discard your lowest cost card/i.test(t);
+  const rest=(state.me?.hand??[]).filter(c=>c.entityId!==card.entityId);
+  const low=Math.min(...rest.map(cost)),targets=lowest?rest.filter(c=>cost(c)===low):[];
+  const discardBodies=c=>!DISCARD_PAYOFF.test(flat(c.text))?0
+    :/if you discard this minion, summon it/i.test(flat(c.text))?1:summoned(c);
+  // A lowest-cost tie is random. Only the minimum known summon payoff is guaranteed.
+  const added=targets.length?Math.min(slots,...targets.map(discardBodies)):0;
+  const recipients=live.length+added,attack=recipients*Number(m[1]),health=recipients*Number(m[2]);
+  return {existing:live.length,recipients,attack,health,added,targets,safeDiscard:targets.every(c=>DISCARD_PAYOFF.test(flat(c.text))),
+    tempoMana:m[1]==='1'&&m[2]==='1'?Math.max(0,recipients-0.5):null};
+}
+export const valuableBuff=(state,c)=>{
+  const v=buffImpact(state,c);
+  return !!v&&v.existing>=3&&cost(c)<=1&&cost(c)<=Number(state.me?.mana??0)
+    &&(v.safeDiscard||buffLines(state,c).length>0);
+};
+function buffLines(state,c){
+  const hand=state.me?.hand??[];
+  const pool=hand.some(x=>x.entityId===c?.entityId)?hand:[...hand,c].filter(Boolean);
+  const pure=x=>buffImpact(state,x)&&!/discard/i.test(flat(x.text));
+  const lines=[];
+  for(const first of pool){
+    if(!pure(first))continue;
+    for(const second of pool){
+      if(first.entityId===second.entityId||first.entityId!==c.entityId&&second.entityId!==c.entityId
+        ||!/discard your lowest cost card/i.test(flat(second.text))
+        ||cost(first)+cost(second)>Number(state.me?.mana??0))continue;
+      const before=buffImpact(state,first);
+      const after={...state,me:{...state.me,hand:pool.filter(x=>x.entityId!==first.entityId)}};
+      const next=buffImpact(after,second);
+      if(next?.safeDiscard)lines.push({first,second,mana:cost(first)+cost(second),
+        attack:before.attack+next.attack,health:before.health+next.health,next});
+    }
+  }
+  return lines;
+}
+export const buffManaReserve=(state,c)=>Math.max(cost(c),...buffLines(state,c).map(line=>line.mana));
+function buffNote(state,c){
+  const v=buffImpact(state,c);
+  if(!v||cost(c)>Number(state.me?.mana??0))return '';
+  let note=` Board buff: ${v.recipients} recipient(s), total +${v.attack} Attack/+${v.health} Health`
+    +(v.added?`, including ${v.added} minion(s) summoned by the discard before the buff`:'')+'.';
+  if(v.tempoMana!=null&&v.recipients>=3)
+    note+=` User tempo estimate: about ${v.tempoMana} mana of board value for ${cost(c)} mana; Life Tap buys only one unknown card (roughly 1-1.5 mana of value), costs 2 mana and 2 Health. Prefer the productive buff over tapping or hard-casting a passive egg, unless survival, lethal or the discard cost changes the comparison.`;
+  // A pure buff clears its own low-cost card before Whispers, preserving both buffs.
+  const lines=buffLines(state,c);
+  return note+(lines.length?' Available buff sequence: '+lines.map(({first,second,mana,attack,health,next})=>
+    `Play ${name(first)} then ${name(second)} for ${mana} mana: total +${attack} Attack/+${health} Health; the second buff reaches ${next.recipients} minions and discards ${next.targets.map(name).join(' or ')||'nothing'}. Newly summoned minions do not gain an immediate face attack.`).join(' '):'');
+}
 const slotsFree=state=>7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
 
 // User ruling (2026-09-25, game 6): Catacombs offered Disposable Acolytes and Silverware Golem at
@@ -228,12 +290,14 @@ function pickNote(state,c){
       +(isOutcast(c)?' It enters at the right end, so Outcast is available immediately; adding another card can bury it.':'')
       +dhDiscoverNote(state,c);
   }
+  const freeBody=c.CARDTYPE==='MINION'&&/^(?:taunt\s+)?if you discard this minion, summon it\.?$/i.test(flat(c.text));
   const onDiscard=DISCARD_PAYOFF.test(flat(c.text))
     ?' Being discarded triggers its text, so it pays out at end of turn even if never cast.'
     :' Nothing happens when it is discarded, so an uncast copy is simply lost.';
   return ` ${name(state.choice.source)} makes the pick Temporary: it is discarded at the end of this turn.`
     +` You have ${mana} mana left, so `+(castable?`it can still be cast this turn.`:`it cannot be cast this turn and is only worth what its discard does.`)
-    +onDiscard+(DISCARD_PAYOFF.test(flat(c.text))?discardBoard(state,c):'');
+    +onDiscard+(DISCARD_PAYOFF.test(flat(c.text))?discardBoard(state,c):'')
+    +(freeBody?' This body can enter for zero mana when Temporary discards it at turn end. Do not pay its printed cost solely to put it on the board; compare conserving mana for a safe draw or another play. Check board slots and any immediate buff/attack benefit first.':'');
 }
 
 // The hero power is spare-mana value: 2 mana for a card later. Offered Life Tap at 3 mana
@@ -346,7 +410,9 @@ export function describe(state,action){
     const c=find(action.entityId),t=flat(c?.text);
     return `Choose ${name(c)} (${(c?.CARDTYPE??'card').toLowerCase()}, ${c?.COST??c?.baseCost} mana${stats(c)}).`
       +(t?` Its text: "${t}".`:'')
-      +pickNote(state,c);
+      +pickNote(state,c)
+      +(/discover/i.test(flat(state.choice?.source?.text))
+        ?buffNote({...state,me:{...state.me,hand:[...(state.me.hand??[]),c]}},c):'');
   }
 
   const src=find(action.entityId);
@@ -374,6 +440,7 @@ export function describe(state,action){
   const targetText=target
     ? ` Target: ${where} ${name(target)}${stats(target)}.`
       +(tText?` It reads: "${tText}".`:'')
+      +(!targetInHand&&side==='enemy'&&target.CARDTYPE==='MINION'?` Effect assessment: ${effectNote(target)}.`:'')
       +verdict
       +(!targetInHand&&target.CARDTYPE==='MINION'&&tAtk===0?' It has 0 Attack, so it deals no damage back.':'')
       +(target.CARDTYPE==='HERO'?' A hero never deals damage back when attacked, so this attack is free.':'')
@@ -386,26 +453,33 @@ export function describe(state,action){
     // Minion text used to be suppressed as redundant with the board state. It is not:
     // Duke of Below reached Jev as a bare "minion 4/4", with no Rush and no sign that it
     // grows +2/+2 per discard -- the whole reason to hold it rather than play it now.
-    const body=text?` Text: "${text}"`:'';
+    const n=src?.CARDTYPE==='LOCATION'?0:immediateDraws(src,state);
+    const body=(text?` Text: "${text}"`:'')+(n?drawRiskText(state,n,{played:true}):'');
     const mine=(state.me.board??[]).filter(c=>c.CARDTYPE==='MINION').length;
     // Board space decides whether a card that summons is value or a blank. Locations
     // occupy a slot too, so count them: at 7/7 a summon payoff has nowhere to land.
     const used=(state.me.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
     const space=` Your board is ${used}/7; ${7-used} space(s) free${used>=7?', so nothing you summon this turn can enter play':''}.`;
     const context=(/minions/i.test(text)?` You control ${mine} minion(s).`:'')
+      +(src?.cardId==='CAP_805t'?(src.resummons?.length
+        ?` Known friendly recovery pool: ${src.resummons.map(c=>c.name??c.cardId).join(', ')}; up to ${Math.min(7-used,src.resummons.length)} bodies fit. Resummoning does not trigger Battlecries or guarantee attacks this turn; restored stats and further triggers are resolved by the game.`
+        :' Recovery pool is unknown; do not assume an empty pool or invent summons.'):'')
       +(/summon|discover|discard/i.test(text)?space:'')
       +discardTargets(state,src)
       +roleNote(state,src)
       +coinNote(state,src)
       +outcastNote(state,src)
       +dhNote(state,src,target);
-    return `Play ${name(src)} from hand for ${src?.COST??src?.baseCost} mana (${(src?.CARDTYPE??'card').toLowerCase()}${stats(src)}).${body}${context}${targetText}`;
+    return `Play ${name(src)} from hand for ${src?.COST??src?.baseCost} mana (${(src?.CARDTYPE??'card').toLowerCase()}${stats(src)}).${body}${context}${buffNote(state,src)}${targetText}`;
   }
   if(src?.CARDTYPE==='HERO_POWER'){
     const t=flat(src?.text).replace(/^Hero Power\s*/i,'').replace(/\$(\d+)/g,'$1');
     const gain=heroAttackGain(src),h=(state.me.board??[]).find(c=>c.CARDTYPE==='HERO');
     const attack=gain?` Your hero's Attack becomes ${Number(h?.ATK??0)+gain} this turn. This does not grant an extra attack${heroCanSwing(state)?'':'; your hero cannot swing in its current state'}.`:'';
-    return `Use hero power ${name(src)} for ${src?.COST??src?.baseCost??2} mana.${t?` Text: "${t}".`:''}${attack}${crowdOut(state,src)}${targetText}`;
+    const buffs=(state.me.hand??[]).filter(c=>valuableBuff(state,c));
+    const tempo=buffs.length&&/draw a card/i.test(t)?` Productive board buffs already in hand: ${buffs.map(name).join(', ')}. Their known board gain takes priority over this speculative one-card draw.`:'';
+    const n=immediateDraws(src,state);
+    return `Use hero power ${name(src)} for ${src?.COST??src?.baseCost??2} mana.${t?` Text: "${t}".`:''}${n?drawRiskText(state,n):''}${attack}${crowdOut(state,src)}${tempo}${targetText}`;
   }
   if(src?.CARDTYPE==='HERO'){
     // Swinging the hero fires the equipped weapon's after-attack text. Left unsaid, Jev was

@@ -6,11 +6,15 @@
 // each step does, and the model must never pretend: a step it cannot predict is marked inexact,
 // the plan ends there, and the turn is re-planned from the real board after it.
 //
-// Exact: attacks (Taunt, Divine Shield, armour, Windfury, Poisonous, Lifesteal), minions whose
-// whole text is keywords, and board-wide +X/+Y buffs (with Whispers' lowest-cost discard).
-// Inexact: Deathrattles and Reborn on a death, attack triggers, weapon text, anything random.
+// Exact in the supported subset: combat arithmetic, fixed bodies/buffs, unique
+// lowest/highest discards summoning Walking Dead/Golem/Spiders and Duke growth.
+// Unknown draws, ties, random damage/summons, choices and unmodelled triggers stop the plan.
 
-import {textOf,heroAttackGain,ignoresTaunt} from './mechanics.mjs';
+import {textOf,heroAttackGain,ignoresTaunt,immediateDraws} from './mechanics.mjs';
+import {drawImpact} from './draw-risk.mjs';
+import {assessEffect} from './effect-state.mjs';
+import {discardModel,discardGrowth} from './discard-model.mjs';
+import {matchupObjective} from './matchup-objective.mjs';
 const flat=t=>textOf({text:t});
 const on=(c,tag)=>c?.[tag]===1||c?.[tag]==='1';
 const num=v=>Number(v??0);
@@ -22,7 +26,9 @@ const kw=(c,tag,word)=>c?.[tag]!=null?on(c,tag):(!silenced(c)&&new RegExp(`\\b${
 
 // Things that happen in combat the model does not follow. Any of them on a participant makes the
 // swing inexact. Deathrattle and Reborn only matter when the body actually dies.
-const COMBAT_TRIGGER=/\b(?:after|whenever|when)\b[^.]*\b(?:attacks?|damaged?|dies|die|destroy|kills?)\b|\boverkill\b|\bfrenzy\b|\bhonorable kill\b|\bspellburst\b/i;
+// Match the event before the comma, not its reward: Mana Wyrm's
+// "Whenever you cast a spell, gain +1 Attack" does not trigger during combat.
+const COMBAT_TRIGGER=/\b(?:after|whenever|when)\b[^.,]*\b(?:attacks?|damaged?|dies|die|destroy|kills?)\b|\boverkill\b|\bfrenzy\b|\bhonorable kill\b|\bspellburst\b/i;
 const ON_DEATH=/\bdeathrattle\b|\breborn\b/i;
 // Text a card hands to others sits in quotes: Braingill's Battlecry gives Murlocs "Deathrattle:
 // Draw a card." and has none itself. Reading it as its own Deathrattle cut every plan that killed it.
@@ -32,12 +38,14 @@ const DISCARD_HIGH=/^after your hero attacks, discard your highest cost card\.?$
 
 function body(c,side){
   const hp=num(c.HEALTH??c.baseHealth)-num(c.DAMAGE);
-  return {id:c.entityId,side,type:c.CARDTYPE,name:c.name,text:silenced(c)?'':flat(c.text),
+  return {id:c.entityId,cardId:c.cardId,effectAssessment:assessEffect(c,{zone:'PLAY'}),side,type:c.CARDTYPE,name:c.name,text:silenced(c)?'':flat(c.text),
     atk:num(c.ATK??c.baseAttack),hp,maxHp:num(c.HEALTH??c.baseHealth),armor:num(c.ARMOR),
     taunt:kw(c,'TAUNT','taunt'),ds:on(c,'DIVINE_SHIELD'),stealth:on(c,'STEALTH'),
     poison:kw(c,'POISONOUS','poisonous'),lifesteal:kw(c,'LIFESTEAL','lifesteal'),
     windfury:kw(c,'WINDFURY','windfury'),rush:kw(c,'RUSH','rush'),ignoreTaunt:ignoresTaunt(c),
     exhausted:on(c,'EXHAUSTED'),
+    zeroReady:c.CARDTYPE==='MINION'&&num(c.ATK??c.baseAttack)===0
+      &&(c.EXHAUSTED===0||c.EXHAUSTED==='0')&&!on(c,'FROZEN')&&!on(c,'DORMANT'),
     dormant:on(c,'DORMANT'),immune:on(c,'IMMUNE'),frozen:on(c,'FROZEN'),
     attacks:num(c.NUM_ATTACKS_THIS_TURN)};
 }
@@ -72,11 +80,14 @@ export function fromState(state,actions=[]){
   // A minion the mana covers is playable once a death frees a slot (moves() checks the room).
   if(mine.filter(b=>b.type==='MINION').length+locations>=7)
     for(const c of state.me.hand??[])if(c.CARDTYPE==='MINION'&&cost(c)<=num(state.me.mana))plays.add(c.entityId);
-  const hp=(state.me.board??[]).find(c=>heroAttackGain(c)>0&&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
-  return {mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
+  const hp=(state.me.board??[]).find(c=>(heroAttackGain(c)>0||immediateDraws(c,state)>0)
+    &&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
+  return {objective:matchupObjective(state),mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
       atk:num(c.ATK??c.baseAttack),hp:num(c.HEALTH??c.baseHealth),raw:c,playable:plays.has(c.entityId)})),
     me:mine,opp:theirs,weapon:weapon?weaponBody(weapon):null,
-    power:hp?{id:hp.entityId,name:hp.name,cost:cost(hp),gain:heroAttackGain(hp),used:on(hp,'EXHAUSTED')}:null,
+    power:hp?{id:hp.entityId,name:hp.name,cost:cost(hp),gain:heroAttackGain(hp),draw:immediateDraws(hp,state),
+      selfHit:Number(/take \$?(\d+)\s*damage/i.exec(flat(hp.text))?.[1]??0),used:on(hp,'EXHAUSTED')}:null,
+    drawState:{me:{deckCount:state.me.deckCount,fatigue:state.me.fatigue,drawHazards:state.me.drawHazards}},
     locations,tauntAtStart:tauntUp,faceDealt:0,nextToken:0};
 }
 
@@ -102,6 +113,11 @@ const COUNT={a:1,an:1,one:1,two:2,three:3};
 const SUMMON=/^battlecry: summon (a|an|one|two|three) (\d+)\/(\d+) [a-z' -]+?(?: with ((?:(?:taunt|rush|divine shield|poisonous|lifesteal|windfury|stealth)(?:,? and |, | )?)+))?\.?$/i;
 const SELF_HIT=/^deal (\d+) damage to your hero\.?$/i;
 export function cardModel(c){
+  if(c.type==='SPELL'&&/^gain 1 mana crystal this turn only\.?$/i.test(c.text))return {kind:'mana',gain:1};
+  if(c.type==='SPELL'){
+    const d=discardModel(c);
+    if(d.kind==='randomBodies')return {kind:'randomSummon',n:d.n,cost:d.cost};
+  }
   // Kayn's continuous aura is recalculated from the surviving board after every swing.
   if(c.type==='MINION'&&/^charge\s+all friendly attacks ignore taunt\.?$/i.test(c.text))return {kind:'minion'};
   // Equip itself is deterministic; Scythe's generated card makes its later swing terminal.
@@ -111,7 +127,8 @@ export function cardModel(c){
   if(c.type==='MINION'){
     let summon=null,selfHit=0;
     // Duke of Below: the growth is already in the tags, so it is a statline, not an effect.
-    const text=c.text.replace(/\bhas \+\d+\/\+\d+ for each card you'?ve discarded this game\.?/i,'');
+    let text=c.text.replace(/\b(?:has|gains) \+\d+\/\+\d+ for each card you'?ve discarded this game\.?/i,'');
+    if(discardModel(c).kind==='body')text=text.replace(/If you discard this minion, summon it\.?/i,'');
     for(const p of text.split(/(?<=\.)\s+/).filter(Boolean)){
       const m=/\b(?:for|each|if|random|opponent)\b/i.test(p)?null:SUMMON.exec(p);
       if(m&&!summon){summon={n:COUNT[m[1].toLowerCase()],atk:Number(m[2]),hp:Number(m[3]),with:(m[4]??'').toLowerCase()};continue}
@@ -122,6 +139,8 @@ export function cardModel(c){
     return {kind:'minion',...(summon?{summon}:{}),...(selfHit?{selfHit}:{})};
   }
   if(c.type!=='SPELL')return null;
+  if(/^draw (?:a|an|one|two|three|\d+) cards?\.(?: they are temporary\.| at the end of turn, discard them\.)?$/i.test(c.text))
+    return {kind:'draw',n:immediateDraws(c.raw)};
   const parts=c.text.split(/(?<=\.)\s+/).filter(Boolean);
   let buff=null,discard=false;
   for(const p of parts){
@@ -133,8 +152,52 @@ export function cardModel(c){
   }
   return buff?{kind:'buff',...buff,discard}:null;
 }
-const FODDER=/if you discard this|when you (?:play or )?discard this/i;
-const DRAW_ONLY=/^(?:when|if) you (?:play or )?discard this, draw (?:a|an|one|two|three|\d+) cards?\.?$/i;
+function summonDiscard(s,c){
+  if(room(s)<=0)return;
+  const b=body({...c.raw,entityId:c.id,ATK:c.atk,HEALTH:c.hp,DAMAGE:0},'me');
+  const charge=kw(c.raw,'CHARGE','charge'),rush=kw(c.raw,'RUSH','rush');
+  Object.assign(b,{canAttack:!b.dormant&&(charge||rush),zeroReady:false,attacks:0,
+    rushOnly:rush&&!charge,targets:new Set(s.opp.map(t=>t.id)),maxAttacks:b.windfury?2:1});
+  s.me.push(b);
+}
+
+// Mutates only a cloned planning state. No arbitrary first-card surrogate for ties.
+function discard(s,mode){
+  if(!s.hand.length)return {exact:true,note:''};
+  const extreme=(mode==='low'?Math.min:Math.max)(...s.hand.map(c=>c.cost));
+  const tied=s.hand.filter(c=>c.cost===extreme);
+  if(tied.length>1){
+    s.uncertainDiscard=tied.map(c=>({id:c.id,name:c.name,cost:c.cost}));
+    return {exact:false,note:`random ${mode==='low'?'lowest':'highest'}-cost discard among ${tied.map(c=>c.name).join(', ')}; no particular outcome assumed`};
+  }
+  const lost=tied[0],model=discardModel(lost);
+  s.hand=s.hand.filter(c=>c.id!==lost.id);
+  s.discarded=[...(s.discarded??[]),lost];
+  // Tags already include historical growth. Add only this newly simulated discard.
+  for(const c of s.hand){
+    const gain=discardGrowth(c);
+    if(gain){c.atk+=gain;c.hp+=gain;c.raw={...c.raw,ATK:c.atk,HEALTH:c.hp};}
+  }
+  for(const b of s.me){const gain=discardGrowth(b);if(gain){b.atk+=gain;b.hp+=gain;b.maxHp+=gain}}
+  if(model.kind==='body'){s.fixedDiscard=true;summonDiscard(s,lost);return {exact:true,note:`discard summons ${lost.name} if space permits`}}
+  if(model.kind==='spiders'){
+    s.fixedDiscard=true;
+    for(let i=0;i<model.n&&room(s)>0;i++)summonDiscard(s,{id:-(++s.nextToken),name:'Spider',atk:2,hp:1,
+      raw:{CARDTYPE:'MINION',name:'Spider',ATK:2,HEALTH:1}});
+    return {exact:true,note:'discard summons up to two 2/1 Spiders before the buff'};
+  }
+  if(model.kind==='draw'){
+    const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},model.n);
+    const h=hero(s,'me');if(h)strike({},h,r.damageMin);
+    s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
+    return {exact:false,note:`discard draw ${model.n}: at least ${r.damageMin} damage; observe and replan`};
+  }
+  if(model.kind==='randomBodies'){
+    s.pendingSummons={sourceId:lost.id,n:model.n,cost:model.cost,via:'discard'};
+    return {exact:false,note:`discarding ${lost.name} triggers an unmodelled effect; observe and replan`};
+  }
+  return {exact:model.kind==='none',note:model.kind==='none'?'':`discarding ${lost.name} triggers an unmodelled effect; observe and replan`};
+}
 
 // Every exact-or-terminal step available in s. Each is {kind,id,targetId?}.
 export function moves(s){
@@ -159,7 +222,8 @@ export function moves(s){
     }
   }
   const h=hero(s,'me');
-  if(s.power&&!s.power.used&&s.power.cost<=s.mana&&h&&!h.frozen&&!h.exhausted&&h.attacks<h.maxAttacks)
+  if(s.power&&!s.power.used&&s.power.cost<=s.mana&&h
+    &&(s.power.draw||!h.frozen&&!h.exhausted&&h.attacks<h.maxAttacks))
     out.push({kind:'power',id:s.power.id});
   const free=room(s);
   for(const c of s.hand){
@@ -183,11 +247,17 @@ function strike(dealer,victim,n){
 
 // Apply a step. Returns {s,exact,note}: exact=false means the result is a best guess and the plan
 // must stop after this step.
-export function apply(s0,m){
+function applyStep(s0,m){
   const s=clone(s0);
   if(m.kind==='power'){
     const h=hero(s,'me');
     s.mana-=s.power.cost;s.power.used=true;h.atk+=s.power.gain;
+    if(s.power.draw){
+      const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},s.power.draw);
+      strike({},h,s.power.selfHit+r.damageMin);
+      s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
+      return {s,exact:false,note:`draw ${s.power.draw}; at most ${r.cardsMax} hand cards, at least ${r.damageMin} draw damage and ${s.power.selfHit} self-damage; observe the hand and replan`};
+    }
     enableHero(s,h);
     return {s,exact:true,note:''};
   }
@@ -195,16 +265,8 @@ export function apply(s0,m){
     const a=s.me.find(b=>b.id===m.id),t=s.opp.find(b=>b.id===m.targetId);
     let exact=true;const notes=[];
     if(COMBAT_TRIGGER.test(a.text)||COMBAT_TRIGGER.test(t.text)){exact=false;notes.push('a combat trigger fires')}
-    if(a.type==='HERO'&&s.weapon?.text){
-      if(DISCARD_HIGH.test(s.weapon.text)){
-        if(s.hand.length){
-          const top=Math.max(...s.hand.map(x=>x.cost)),tied=s.hand.filter(x=>x.cost===top),lost=tied[0];
-          s.hand=s.hand.filter(x=>x!==lost);s.discarded=[...(s.discarded??[]),lost];
-          if(tied.length>1){exact=false;notes.push(`${s.weapon.name} discards one of ${tied.map(x=>x.name).join(', ')} at random`)}
-          if(FODDER.test(lost.text)&&!DRAW_ONLY.test(lost.text)){exact=false;notes.push(`discarding ${lost.name} triggers its text`)}
-        }
-      }else{exact=false;notes.push(`${s.weapon.name} triggers`)}
-    }
+    // After-attack discards resolve after combat and death frees board space.
+    const afterWeapon=a.type==='HERO'&&s.weapon?.text?s.weapon.text:null;
     const before=hpOf(t);
     const hitT=strike(a,t,a.atk);
     if(t.type==='MINION')strike(t,a,t.atk);
@@ -217,11 +279,32 @@ export function apply(s0,m){
     }
     for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
     s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
+    if(afterWeapon){
+      if(DISCARD_HIGH.test(afterWeapon)&&a.hp>0){const r=discard(s,'high');exact&&=r.exact;if(r.note)notes.push(r.note)}
+      else if(!DISCARD_HIGH.test(afterWeapon)){exact=false;notes.push('weapon triggers an unmodelled effect')}
+    }
     return {s,exact,note:notes.join('; ')};
   }
   if(m.kind==='play'){
     const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=cardModel(c);
     s.hand.splice(i,1);s.mana-=c.cost;
+    if(model.kind==='mana'){
+      s.mana+=model.gain;
+      // A newly affordable supported card is a future step, not an invented
+      // current game option. The live queue still checks its actual legality.
+      for(const held of s.hand)if(held.cost>s0.mana&&held.cost<=s.mana&&cardModel(held))held.playable=true;
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='randomSummon'){
+      s.pendingSummons={sourceId:c.id,n:model.n,cost:model.cost,via:'play'};
+      return {s,exact:false,note:`summon up to ${model.n} random ${model.cost}-Cost minions; identities, stats and buff eligibility unknown; observe and replan`};
+    }
+    if(model.kind==='draw'){
+      const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},model.n);
+      const h=hero(s,'me');if(h)strike({},h,r.damageMin);
+      s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
+      return {s,exact:false,note:`draw ${model.n}; at most ${r.cardsMax} hand cards and at least ${r.damageMin} draw damage; observe the hand and replan`};
+    }
     if(model.kind==='weapon'){
       const h=hero(s,'me'),previous=s.weapon;
       s.weapon=weaponBody(c.raw);
@@ -233,7 +316,7 @@ export function apply(s0,m){
     if(model.kind==='minion'){
       const b=body({...c.raw,entityId:c.id},'me');
       const charge=kw(c.raw,'CHARGE','charge'),rush=kw(c.raw,'RUSH','rush');
-      Object.assign(b,{canAttack:!b.dormant&&(charge||rush),rushOnly:rush&&!charge,targets:new Set(),maxAttacks:b.windfury?2:1});
+      Object.assign(b,{canAttack:!b.dormant&&(charge||rush),zeroReady:false,rushOnly:rush&&!charge,targets:new Set(),maxAttacks:b.windfury?2:1});
       // A fresh body has no targets from the game's options; charge/rush may hit what is open.
       if(b.canAttack)for(const t of s.opp)b.targets.add(t.id);
       s.me.push(b);
@@ -252,22 +335,34 @@ export function apply(s0,m){
     }
     let exact=true;const notes=[];
     if(model.discard){
-      if(s.hand.length){
-        const low=Math.min(...s.hand.map(x=>x.cost));
-        const tied=s.hand.filter(x=>x.cost===low);
-        const lost=tied[0];
-        s.hand=s.hand.filter(x=>x!==lost);
-        if(tied.length>1){exact=false;notes.push(`the discard is a random pick among ${tied.map(x=>x.name).join(', ')}`)}
-        // A discard payoff that only draws leaves the board as predicted; the new cards are
-        // unknown, so the next step is re-checked against the real hand, but the order holds.
-        if(FODDER.test(lost.text)&&!DRAW_ONLY.test(lost.text)){exact=false;notes.push(`discarding ${lost.name} triggers its text`)}
-        s.discarded=[...(s.discarded??[]),lost];
-      }
+      const r=discard(s,'low');exact&&=r.exact;if(r.note)notes.push(r.note);
     }
-    for(const b of s.me)if(b.type==='MINION'&&!b.dormant){b.atk+=model.atk;b.hp+=model.hp;b.maxHp+=model.hp}
+    if(c.name==='Entropic Continuity'&&s.drawState.me.deckCount!=null){
+      s.drawState={me:{...s.drawState.me,deckCount:Number(s.drawState.me.deckCount)+2,drawHazards:[...(s.drawState.me.drawHazards??[]),3,3]}};
+    }
+    for(const b of s.me)if(b.type==='MINION'&&!b.dormant){
+      b.atk+=model.atk;b.hp+=model.hp;b.maxHp+=model.hp;
+      // A ready 0-Attack egg had no printed targets before the buff. Explicit
+      // readiness tags let it join the plan; never grant attacks to a new body.
+      if(b.zeroReady&&b.atk>0){b.canAttack=true;b.targets=new Set(s.opp.map(t=>t.id))}
+    }
     return {s,exact,note:notes.join('; ')};
   }
   throw Error(`unknown move ${m.kind}`);
+}
+
+export function apply(s0,m){
+  const r=applyStep(s0,m);
+  const summoned=r.s.me.some(b=>!s0.me.some(x=>x.id===b.id))||!!r.s.pendingSummons;
+  const discarded=(r.s.discarded?.length??0)>(s0.discarded?.length??0)||!!r.s.uncertainDiscard;
+  // Do not call a fixed summon/buff exact in the presence of an unmodelled
+  // friendly cast/summon/discard engine (e.g. Knife Juggler).
+  const trigger=s0.me.some(b=>b.type==='MINION'&&!b.dormant&&
+    [...b.text.matchAll(/\b(?:after|whenever|when)\b[^.,]*/gi)].some(([event])=>
+      summoned&&/\bsummon\b/i.test(event)||discarded&&/\bdiscard\b/i.test(event)
+      ||m.kind==='play'&&/\b(?:cast|play)\b/i.test(event)));
+  if(trigger){r.exact=false;r.note=[r.note,'unmodelled friendly event trigger; observe and replan'].filter(Boolean).join('; ')}
+  return r;
 }
 
 function enableHero(s,h){
@@ -284,3 +379,13 @@ export const signature=s=>JSON.stringify([
   s.me.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds,b.taunt,b.dormant,b.frozen,b.ignoreTaunt]).sort((x,y)=>x[0]-y[0]),
   s.opp.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds,b.taunt,b.dormant,b.frozen]).sort((x,y)=>x[0]-y[0]),
   s.hand.map(c=>c.id),s.mana,s.weapon&&[s.weapon.id,s.weapon.atk,s.weapon.durability]]);
+
+// Search equivalence is stricter than the live observation signature. Readiness,
+// remaining attacks, card costs/stats and resource history affect future moves.
+export const searchSignature=s=>JSON.stringify([
+  ...['me','opp'].map(side=>s[side].map(b=>[b.id,b.atk,b.hp,b.maxHp,b.armor,b.ds,b.taunt,
+    b.stealth,b.poison,b.lifesteal,b.windfury,b.rush,b.ignoreTaunt,b.dormant,b.immune,b.frozen,
+    b.attacks,b.maxAttacks,b.canAttack,b.rushOnly,b.zeroReady,[...b.targets??[]].sort((a,b)=>a-b)])
+    .sort((a,b)=>a[0]-b[0])),
+  s.hand.map(c=>[c.id,c.cost,c.atk,c.hp,c.playable]),s.mana,s.weapon,s.power,s.locations,
+  s.drawState,s.discarded?.map(c=>[c.id,c.cost]),s.fixedDiscard,s.uncertainDiscard,s.pendingSummons,s.drawnUnknown,s.faceDealt,s.nextToken]);

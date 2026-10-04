@@ -40,8 +40,8 @@ for(const p of blocked)console.log(`  ${p.id}  best: ${labels[p.id].best.map(id=
 // Jev on each position. forced = the rules pick alone; settled = every option left is best or
 // acceptable; open = a best action is left but so is a wrong one; blocked = no best action left.
 const rules=set.map(p=>{
- const l=labels[p.id],menu=constrainActions(p.state,raw(p));
- const pr=prepare(p.state,menu);
+ const l=labels[p.id],trace={},menu=constrainActions(p.state,raw(p),{trace});
+ const pr=prepare(p.state,menu,{admission:trace.admission});
  if(pr.forced||pr.lethal){const pick=(pr.forced??pr.lethal).action.id,pts=points(l,pick);
   return {p,status:pts===1?'forced':pts?'forced~':'forced-wrong',pick}}
  const ids=pr.acts.map(a=>a.id);
@@ -56,7 +56,8 @@ for(const r of rules.filter(r=>!['forced','settled'].includes(r.status)))
 if(live){
  const rows=[];
  for(const p of set){
-  const pr=prepare(p.state,raw(p));
+  const trace={},menu=constrainActions(p.state,raw(p),{trace});
+  const pr=prepare(p.state,menu,{admission:trace.admission});
   let pick,source,probabilities,cost;
   if(pr.forced||pr.lethal){({action:{id:pick},source}=pr.forced??pr.lethal)}
   else{

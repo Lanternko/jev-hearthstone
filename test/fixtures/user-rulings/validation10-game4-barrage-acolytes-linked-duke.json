@@ -1,0 +1,478 @@
+{
+  "id": "validation10-game4-barrage-acolytes-linked-duke",
+  "source": "runtime/ranked-2026-10-03T17-42-01-535Z/game-0004-decisions.jsonl",
+  "batchGame": 4,
+  "ownTurn": 6,
+  "row": 8480,
+  "plannerVersion": "silverfish-v1-combo-admission-v2",
+  "createdAt": "2026-10-03T18:06:12.739Z",
+  "state": {
+    "gameNumber": 4,
+    "turn": 12,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 2,
+      "heroClass": "WARLOCK",
+      "mana": 6,
+      "maxMana": 6,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 21,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_07",
+          "name": "Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 5,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 67,
+          "cardId": "HERO_07bp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 84,
+          "cardId": "VAC_940t",
+          "name": "Felbeast",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 3,
+          "HEALTH": 3,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 37,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 2,
+          "HEALTH": 3,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 63,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 54,
+          "cardId": "SCH_147",
+          "name": "Boneweb Egg",
+          "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+          "baseCost": 2,
+          "baseAttack": 0,
+          "baseHealth": 2,
+          "COST": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 60,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 56,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 57,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "RUSH": 1,
+          "doomed": true
+        },
+        {
+          "entityId": 53,
+          "cardId": "BT_300",
+          "name": "Hand of Gul'dan",
+          "text": "When you play\nor discard this,\ndraw 3 cards.",
+          "baseCost": 6,
+          "COST": 6,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 61,
+          "cardId": "CATA_499",
+          "name": "Disposable Acolytes",
+          "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+          "baseCost": 2,
+          "COST": 2,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "SPELL"
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "opponent": {
+      "playerId": 1,
+      "heroClass": "DEATHKNIGHT",
+      "mana": 0,
+      "maxMana": 6,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 19,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_11",
+          "name": "The Lich King",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 16,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_11bp",
+          "name": "Ghoul Charge",
+          "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER",
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 7,
+          "cardId": "CORE_RLK_121",
+          "name": "Acolyte of Death",
+          "text": "After a friendly Undead dies, draw a card.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 4,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 4,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 116,
+          "cardId": "RLK_118t3",
+          "name": "Menacing Zombie",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        },
+        {
+          "entityId": 117,
+          "cardId": "RLK_118t3",
+          "name": "Menacing Zombie",
+          "text": "<b>Taunt</b>",
+          "baseCost": 2,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 1
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 1,
+          "entityId": 21,
+          "cardId": "RLK_958",
+          "name": "Skeletal Sidekick",
+          "CARDTYPE": "MINION",
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "text": "<b>Battlecry:</b> Give a friendly Undead +2 Attack."
+        },
+        {
+          "public": true,
+          "engineTurn": 3,
+          "entityId": 27,
+          "cardId": "RLK_061",
+          "name": "Battlefield Necromancer",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 2,
+          "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  "
+        },
+        {
+          "public": true,
+          "engineTurn": 7,
+          "entityId": 30,
+          "cardId": "CORE_RLK_118",
+          "name": "Tomb Guardians",
+          "CARDTYPE": "SPELL",
+          "COST": 4,
+          "text": "Summon two 2/2 Zombies with <b>Taunt</b>. Spend 4 <b>Corpses</b> to\ngive them <b>Reborn</b>."
+        },
+        {
+          "public": true,
+          "engineTurn": 9,
+          "entityId": 7,
+          "cardId": "CORE_RLK_121",
+          "name": "Acolyte of Death",
+          "CARDTYPE": "MINION",
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 4,
+          "text": "After a friendly Undead dies, draw a card."
+        },
+        {
+          "public": true,
+          "engineTurn": 9,
+          "entityId": 18,
+          "cardId": "RLK_061",
+          "name": "Battlefield Necromancer",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 2,
+          "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  "
+        },
+        {
+          "public": true,
+          "engineTurn": 11,
+          "entityId": 6,
+          "cardId": "CORE_RLK_118",
+          "name": "Tomb Guardians",
+          "CARDTYPE": "SPELL",
+          "COST": 4,
+          "text": "Summon two 2/2 Zombies with <b>Taunt</b>. Spend 4 <b>Corpses</b> to\ngive them <b>Reborn</b>."
+        }
+      ]
+    },
+    "optionsId": 46,
+    "mulliganResult": {
+      "choiceId": 2,
+      "kept": [],
+      "complete": true
+    },
+    "fingerprint": "e60b71093b1be1d1254f",
+    "decisionFingerprint": "8a70c473d86c22fd58e1"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 60,
+      "type": "POWER",
+      "id": "o1"
+    },
+    {
+      "option": 2,
+      "entityId": 56,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 57,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 53,
+      "type": "POWER",
+      "id": "o4"
+    },
+    {
+      "option": 5,
+      "entityId": 61,
+      "type": "POWER",
+      "id": "o5"
+    },
+    {
+      "option": 6,
+      "entityId": 67,
+      "type": "POWER",
+      "id": "o6"
+    },
+    {
+      "option": 7,
+      "entityId": 84,
+      "type": "POWER",
+      "id": "o7t0",
+      "targetId": 116
+    },
+    {
+      "option": 7,
+      "entityId": 84,
+      "type": "POWER",
+      "id": "o7t1",
+      "targetId": 117
+    },
+    {
+      "option": 8,
+      "entityId": 37,
+      "type": "POWER",
+      "id": "o8t0",
+      "targetId": 116
+    },
+    {
+      "option": 8,
+      "entityId": 37,
+      "type": "POWER",
+      "id": "o8t1",
+      "targetId": 117
+    },
+    {
+      "option": 9,
+      "entityId": 63,
+      "type": "POWER",
+      "id": "o9t0",
+      "targetId": 116
+    },
+    {
+      "option": 9,
+      "entityId": 63,
+      "type": "POWER",
+      "id": "o9t1",
+      "targetId": 117
+    }
+  ],
+  "actual": {
+    "option": 2,
+    "entityId": 56,
+    "type": "POWER",
+    "id": "o2"
+  },
+  "recordedPlan": {
+    "id": "p3",
+    "steps": [
+      {
+        "kind": "play",
+        "id": 56,
+        "exact": true,
+        "note": "",
+        "before": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[63,2,5,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false],[84,3,1,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false],[116,2,2,0,false,true,false,false],[117,2,2,0,false,true,false,false]],[60,56,57,53,61],6,null]",
+        "after": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,5,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false],[84,3,1,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false],[116,2,2,0,false,true,false,false],[117,2,2,0,false,true,false,false]],[60,57,53,61],2,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 63,
+        "targetId": 116,
+        "exact": true,
+        "note": "",
+        "before": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,5,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false],[84,3,1,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false],[116,2,2,0,false,true,false,false],[117,2,2,0,false,true,false,false]],[60,57,53,61],2,null]",
+        "after": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,3,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false],[84,3,1,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false],[117,2,2,0,false,true,false,false]],[60,57,53,61],2,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 84,
+        "targetId": 117,
+        "exact": true,
+        "note": "",
+        "before": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,3,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false],[84,3,1,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false],[117,2,2,0,false,true,false,false]],[60,57,53,61],2,null]",
+        "after": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,3,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false]],[60,57,53,61],2,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 37,
+        "targetId": 7,
+        "exact": false,
+        "note": "a combat trigger fires; Platysaur dies with a Deathrattle/Reborn",
+        "before": "[[[37,2,1,0,false,false,false,false,false],[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,3,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false]],[[7,2,2,0,false,false,false,false],[64,0,14,0,false,false,false,false]],[60,57,53,61],2,null]",
+        "after": "[[[54,0,2,0,false,false,false,false,false],[56,2,2,0,false,false,false,false,false],[63,2,3,0,false,true,false,false,false],[66,0,25,0,false,false,false,false,false]],[[64,0,14,0,false,false,false,false]],[60,57,53,61],2,null]"
+      }
+    ],
+    "text": "Plan of 4 step(s), carried out in this order: 1) Play Duke of Below (4 mana) as a 2/2. 2) Walking Dead 2/5 attacks Menacing Zombie 2/2: Menacing Zombie dies; your Walking Dead survives at 2/3. 3) Felbeast 3/1 attacks Menacing Zombie 2/2: Menacing Zombie dies; your Felbeast dies. 4) Platysaur 2/1 attacks Acolyte of Death 2/2: Acolyte of Death dies; your Platysaur dies.    After this step the result is not predictable (a combat trigger fires; Platysaur dies with a Deathrattle/Reborn), so the turn is re-planned from the real board. Known partial result; unmodelled effects remain: enemy hero 14 -> 14 Health. Enemy minions killed: Acolyte of Death (2 Attack), Menacing Zombie (2 Attack), Menacing Zombie (2 Attack). Persistent enemy effects removed: none. Persistent enemy effects remaining: none. Effect evidence for killed targets: Acolyte of Death: effect unknown, classification confidence 0.25 (rule evidence, not trigger probability), strength unknown; No verified rule for this complete effect; Jev must evaluate the text. Unclassified text: After a friendly Undead dies, draw a card.; Menacing Zombie: effect none, classification confidence 0.95 (rule evidence, not trigger probability), strength unknown; Keyword-only text; combat keywords are valued separately, not as an engine.; Menacing Zombie: effect none, classification confidence 0.95 (rule evidence, not trigger probability), strength unknown; Keyword-only text; combat keywords are valued separately, not as an engine.. Unknown remaining effects (not assumed blank): none. Your minions lost: Felbeast, Platysaur. Their board can then attack for 0 next turn, against your 25 Health behind 3 Health of Taunt; before this plan it was 6. Still able to attack afterwards: Duke of Below. Cards and mana not used by this plan stay available afterwards (2 mana left)."
+  },
+  "image": "validation10-game4-barrage-acolytes-linked-duke.png",
+  "ruling": {
+    "preferred": "Soul Barrage, observe random damage, then consider Disposable Acolytes; reserve 2 mana.",
+    "alternative": "Safe draw then reassess remaining mana and observed cards.",
+    "equivalentCopies": "If playing Duke, use Platysaur-linked entity 57 before equivalent unlinked entity 56.",
+    "limitation": "Five random damage cannot guarantee clearing three two-health minions; hero can also receive hits."
+  }
+}

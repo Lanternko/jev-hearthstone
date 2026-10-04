@@ -1,0 +1,317 @@
+{
+  "ranked-2026-10-01T12-42-04-012Z/game-0006": {
+    "type": "control",
+    "evidence": [
+      "Reno Jackson",
+      "Doctor Holli'dae",
+      "Grumble, Worldshaker"
+    ],
+    "rationale": "雷諾恢復、持續資源與回手重用的慢速薩滿",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0009": {
+    "type": "control",
+    "evidence": [
+      "Brawl",
+      "Aftershocks",
+      "Drywhisker Armorer",
+      "Zilliax Deluxe 3000"
+    ],
+    "rationale": "多種清場、護甲與恢復資源的慢速戰士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0010": {
+    "type": "control",
+    "evidence": [
+      "Reno Jackson",
+      "Frost Nova",
+      "Blizzard",
+      "Flamestrike"
+    ],
+    "rationale": "恢復、反覆凍結與清場的慢速法師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0020": {
+    "type": "control",
+    "evidence": [
+      "Reno Jackson",
+      "Zephrys the Great",
+      "Elemental Destruction",
+      "Aftershocks"
+    ],
+    "rationale": "雷諾恢復、解場與工具資源的慢速薩滿",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0021": {
+    "type": "control",
+    "evidence": [
+      "Brawl",
+      "Shield Block",
+      "Drywhisker Armorer",
+      "Marin the Manager"
+    ],
+    "rationale": "清場、護甲與後期資源的慢速戰士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0001": {
+    "type": "other",
+    "evidence": [
+      "Sorcerer's Gambit",
+      "Arcane Missiles"
+    ],
+    "rationale": "任務法術路線；暫歸組合技，非控制",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0004": {
+    "type": "other",
+    "evidence": [
+      "Papercraft Angel",
+      "Patches the Pirate",
+      "Frenzied Felwing"
+    ],
+    "rationale": "低費鋪場與直接傷害牧師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0008": {
+    "type": "other",
+    "evidence": [
+      "Contract Conjurer",
+      "Anonymous Informant",
+      "Costumed Singer"
+    ],
+    "rationale": "秘密與減費鋪場法師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0011": {
+    "type": "other",
+    "evidence": [
+      "Contract Conjurer",
+      "Kabal Crystal Runner"
+    ],
+    "rationale": "秘密減費鋪場法師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0013": {
+    "type": "other",
+    "evidence": [
+      "The Stonewright",
+      "Totemic Might",
+      "Totemic Surge"
+    ],
+    "rationale": "圖騰鋪場與強化薩滿",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0015": {
+    "type": "other",
+    "evidence": [
+      "Risky Skipper",
+      "Cannoneer",
+      "Roaring Applause"
+    ],
+    "rationale": "自傷與手下節奏戰士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0016": {
+    "type": "other",
+    "evidence": [
+      "Treasure Distributor",
+      "Parachute Brigand",
+      "Patches the Pirate"
+    ],
+    "rationale": "海盜快攻牧師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0018": {
+    "type": "other",
+    "evidence": [
+      "Brain Masseuse",
+      "Papercraft Angel",
+      "Shadowbomber"
+    ],
+    "rationale": "暗牧快攻",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T12-42-04-012Z/game-0019": {
+    "type": "other",
+    "evidence": [
+      "Tuskarr Totemic",
+      "Flametongue Totem",
+      "Totemic Surge"
+    ],
+    "rationale": "圖騰鋪場薩滿",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0001": {
+    "type": "other",
+    "evidence": [
+      "Shadowbomber",
+      "Papercraft Angel",
+      "Brain Masseuse"
+    ],
+    "rationale": "暗牧快攻",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0004": {
+    "type": "other",
+    "evidence": [
+      "Anchored Totem",
+      "Flametongue Totem",
+      "Totemic Might"
+    ],
+    "rationale": "圖騰鋪場薩滿",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0005": {
+    "type": "other",
+    "evidence": [
+      "Patches the Pirate",
+      "Sky Raider",
+      "Ship's Cannon"
+    ],
+    "rationale": "海盜鋪場戰士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0006": {
+    "type": "other",
+    "evidence": [
+      "Black Market Auctioneer",
+      "Biology Project",
+      "Lightning Bloom"
+    ],
+    "rationale": "加速抽牌的拍賣師組合技德魯伊",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0008": {
+    "type": "other",
+    "evidence": [
+      "Treasure Distributor",
+      "Parachute Brigand",
+      "Shadowbomber"
+    ],
+    "rationale": "暗牧海盜快攻",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0010": {
+    "type": "other",
+    "evidence": [
+      "Aldor Attendant",
+      "Interstellar Researcher",
+      "Interstellar Starslicer"
+    ],
+    "rationale": "聖契鋪場節奏聖騎士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0011": {
+    "type": "other",
+    "evidence": [
+      "Confection Cyclone",
+      "Aqua Archivist",
+      "Lamplighter"
+    ],
+    "rationale": "元素鋪場與燈光師傷害法師",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0012": {
+    "type": "other",
+    "evidence": [
+      "Sanguine Depths",
+      "Giftwrapped Whelp",
+      "Cannoneer"
+    ],
+    "rationale": "自傷與龍手下节奏戰士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0013": {
+    "type": "other",
+    "evidence": [
+      "Patches the Pirate",
+      "Parachute Brigand",
+      "Papercraft Angel"
+    ],
+    "rationale": "暗牧海盜快攻",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0014": {
+    "type": "other",
+    "evidence": [
+      "Skeletal Sidekick",
+      "Body Bagger",
+      "Murmy",
+      "Army of the Dead"
+    ],
+    "rationale": "低費不死手下鋪場死亡騎士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0015": {
+    "type": "other",
+    "evidence": [
+      "Security Automaton",
+      "Galvanizer",
+      "Frequency Oscillator"
+    ],
+    "rationale": "機械鋪場聖騎士",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  },
+  "ranked-2026-10-01T15-41-25-602Z/game-0016": {
+    "type": "other",
+    "evidence": [
+      "Shadowbomber",
+      "Papercraft Angel",
+      "Brain Masseuse"
+    ],
+    "rationale": "暗牧快攻",
+    "source": "analyst-public-card-signature-v1",
+    "inferred": true,
+    "usage": "postgame analysis only; never a mulligan-time known type"
+  }
+}

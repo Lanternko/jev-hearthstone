@@ -1,0 +1,1147 @@
+{
+  "id": "validation10-game2-buff-before-queued-attacks",
+  "source": "runtime/ranked-2026-10-03T17-42-01-535Z/game-0002-decisions.jsonl",
+  "batchGame": 2,
+  "ownTurn": 4,
+  "row": 8357,
+  "createdAt": "2026-10-03T17:50:14.056Z",
+  "plannerVersion": "silverfish-v1-combo-admission-v2",
+  "state": {
+    "gameNumber": 2,
+    "turn": 7,
+    "step": "MAIN_ACTION",
+    "status": "RUNNING",
+    "me": {
+      "playerId": 1,
+      "heroClass": "WARLOCK",
+      "mana": 4,
+      "maxMana": 4,
+      "current": true,
+      "playstate": "PLAYING",
+      "handCount": 5,
+      "deckCount": 22,
+      "board": [
+        {
+          "entityId": 64,
+          "cardId": "HERO_07f",
+          "name": "Nemesis Gul'dan",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 65,
+          "cardId": "HERO_07ebp",
+          "name": "Life Tap",
+          "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 12,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+          "baseCost": 1,
+          "baseAttack": 1,
+          "baseHealth": 2,
+          "COST": 1,
+          "ATK": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 80,
+          "cardId": "CATA_210",
+          "name": "Twilight Egg",
+          "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+          "baseCost": 1,
+          "baseAttack": 0,
+          "baseHealth": 2,
+          "COST": 1,
+          "HEALTH": 2,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0
+        },
+        {
+          "entityId": 81,
+          "cardId": "CORE_SW_439",
+          "name": "Vibrant Squirrel",
+          "text": "[x]<b>Deathrattle:</b> Shuffle 4 Acorns\ninto your deck. When drawn,\nsummon a 2/1 Squirrel.",
+          "baseCost": 1,
+          "baseAttack": 2,
+          "baseHealth": 1,
+          "COST": 1,
+          "ATK": 2,
+          "HEALTH": 1,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 0,
+          "NUM_ATTACKS_THIS_TURN": 0
+        },
+        {
+          "entityId": 24,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1,
+          "EXHAUSTED": 0
+        }
+      ],
+      "hand": [
+        {
+          "entityId": 7,
+          "cardId": "EX1_308",
+          "name": "Soulfire",
+          "text": "[x]Deal $4 damage.\nDiscard a random card.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 32,
+          "cardId": "DMF_119",
+          "name": "Wicked Whispers",
+          "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+          "baseCost": 1,
+          "COST": 1,
+          "ZONE_POSITION": 2,
+          "CARDTYPE": "SPELL",
+          "doomed": true
+        },
+        {
+          "entityId": 5,
+          "cardId": "RLK_534",
+          "name": "Soul Barrage",
+          "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+          "baseCost": 4,
+          "COST": 4,
+          "ZONE_POSITION": 3,
+          "CARDTYPE": "SPELL"
+        },
+        {
+          "entityId": 33,
+          "cardId": "CATA_493",
+          "name": "Duke of Below",
+          "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+          "baseCost": 4,
+          "baseAttack": 2,
+          "baseHealth": 2,
+          "COST": 4,
+          "ATK": 2,
+          "HEALTH": 2,
+          "ZONE_POSITION": 4,
+          "CARDTYPE": "MINION",
+          "RUSH": 1
+        },
+        {
+          "entityId": 10,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+          "baseCost": 3,
+          "baseAttack": 2,
+          "baseHealth": 5,
+          "COST": 3,
+          "ATK": 2,
+          "HEALTH": 5,
+          "ZONE_POSITION": 5,
+          "CARDTYPE": "MINION",
+          "TAUNT": 1
+        }
+      ],
+      "fatigue": 0,
+      "drawHazards": []
+    },
+    "opponent": {
+      "playerId": 2,
+      "heroClass": "MAGE",
+      "mana": 0,
+      "maxMana": 3,
+      "current": false,
+      "playstate": "PLAYING",
+      "handCount": 8,
+      "deckCount": 20,
+      "board": [
+        {
+          "entityId": 66,
+          "cardId": "HERO_08cr",
+          "name": "Escape Artist Millhouse",
+          "baseHealth": 30,
+          "HEALTH": 30,
+          "DAMAGE": 4,
+          "CARDTYPE": "HERO"
+        },
+        {
+          "entityId": 83,
+          "cardId": "EDR_851p",
+          "name": "Blessing of the Wisp",
+          "text": "[x]Summon <b>@</b> Wisp.\nDeal <b>$@</b> damage\nrandomly split among\nall enemies.",
+          "baseCost": 2,
+          "COST": 2,
+          "CARDTYPE": "HERO_POWER"
+        },
+        {
+          "entityId": 48,
+          "cardId": "EDR_852",
+          "name": "Bitterbloom Knight",
+          "text": "<b>Battlecry:</b> <b>Imbue</b> your\nHero Power.",
+          "baseCost": 2,
+          "baseAttack": 2,
+          "baseHealth": 3,
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 3,
+          "DAMAGE": 2,
+          "ZONE_POSITION": 1,
+          "CARDTYPE": "MINION",
+          "EXHAUSTED": 1,
+          "NUM_ATTACKS_THIS_TURN": 0
+        }
+      ],
+      "secretCount": 0,
+      "initialHealth": 30,
+      "publicPlays": [
+        {
+          "public": true,
+          "engineTurn": 4,
+          "entityId": 48,
+          "cardId": "EDR_852",
+          "name": "Bitterbloom Knight",
+          "CARDTYPE": "MINION",
+          "COST": 2,
+          "ATK": 2,
+          "HEALTH": 3,
+          "text": "<b>Battlecry:</b> <b>Imbue</b> your\nHero Power."
+        },
+        {
+          "public": true,
+          "engineTurn": 6,
+          "entityId": 60,
+          "cardId": "FIR_911",
+          "name": "Smoldering Grove",
+          "CARDTYPE": "SPELL",
+          "COST": 2,
+          "text": "Draw {0} card.\n<i>(Upgrades each turn,\nbut discards after {1}!)</i>1Draw {0} cards.\n<i>(Discards this turn!)</i>"
+        },
+        {
+          "public": true,
+          "engineTurn": 6,
+          "entityId": 52,
+          "cardId": "BAR_546",
+          "name": "Wildfire",
+          "CARDTYPE": "SPELL",
+          "COST": 1,
+          "text": "[x]Your Hero Power\ndeals 1 more damage\nthis game."
+        }
+      ]
+    },
+    "optionsId": 17,
+    "mulliganResult": {
+      "choiceId": 1,
+      "kept": [
+        29,
+        12
+      ],
+      "complete": true
+    },
+    "fingerprint": "7e2a806d1e0be55b9359",
+    "decisionFingerprint": "a732e3949c903a7368fa"
+  },
+  "options": [
+    {
+      "id": "o0",
+      "type": "END_TURN",
+      "option": 0
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t0",
+      "targetId": 64
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t1",
+      "targetId": 66
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t2",
+      "targetId": 12
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t3",
+      "targetId": 80
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t4",
+      "targetId": 81
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t5",
+      "targetId": 48
+    },
+    {
+      "option": 1,
+      "entityId": 7,
+      "type": "POWER",
+      "id": "o1t6",
+      "targetId": 24
+    },
+    {
+      "option": 2,
+      "entityId": 32,
+      "type": "POWER",
+      "id": "o2"
+    },
+    {
+      "option": 3,
+      "entityId": 5,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 33,
+      "type": "POWER",
+      "id": "o4"
+    },
+    {
+      "option": 5,
+      "entityId": 10,
+      "type": "POWER",
+      "id": "o5"
+    },
+    {
+      "option": 6,
+      "entityId": 65,
+      "type": "POWER",
+      "id": "o6"
+    },
+    {
+      "option": 7,
+      "entityId": 12,
+      "type": "POWER",
+      "id": "o7t0",
+      "targetId": 66
+    },
+    {
+      "option": 7,
+      "entityId": 12,
+      "type": "POWER",
+      "id": "o7t1",
+      "targetId": 48
+    },
+    {
+      "option": 8,
+      "entityId": 81,
+      "type": "POWER",
+      "id": "o8t0",
+      "targetId": 66
+    },
+    {
+      "option": 8,
+      "entityId": 81,
+      "type": "POWER",
+      "id": "o8t1",
+      "targetId": 48
+    },
+    {
+      "option": 9,
+      "entityId": 24,
+      "type": "POWER",
+      "id": "o9t0",
+      "targetId": 66
+    },
+    {
+      "option": 9,
+      "entityId": 24,
+      "type": "POWER",
+      "id": "o9t1",
+      "targetId": 48
+    }
+  ],
+  "recordedOptions": [
+    {
+      "option": 3,
+      "entityId": 5,
+      "type": "POWER",
+      "id": "o3"
+    },
+    {
+      "option": 4,
+      "entityId": 33,
+      "type": "POWER",
+      "id": "o4"
+    },
+    {
+      "option": 5,
+      "entityId": 10,
+      "type": "POWER",
+      "id": "o5"
+    }
+  ],
+  "recordedPlan": {
+    "id": "p1",
+    "steps": [
+      {
+        "kind": "play",
+        "id": 10,
+        "exact": true,
+        "note": "",
+        "before": "[[[12,1,2,0,false,false,false,false,false],[24,2,3,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[48,2,1,0,false,false,false,false],[66,0,26,0,false,false,false,false]],[7,32,5,33,10],4,null]",
+        "after": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,3,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[48,2,1,0,false,false,false,false],[66,0,26,0,false,false,false,false]],[7,32,5,33],1,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 24,
+        "targetId": 48,
+        "exact": true,
+        "note": "",
+        "before": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,3,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[48,2,1,0,false,false,false,false],[66,0,26,0,false,false,false,false]],[7,32,5,33],1,null]",
+        "after": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,1,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[66,0,26,0,false,false,false,false]],[7,32,5,33],1,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 81,
+        "targetId": 66,
+        "exact": true,
+        "note": "",
+        "before": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,1,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[66,0,26,0,false,false,false,false]],[7,32,5,33],1,null]",
+        "after": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,1,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[66,0,24,0,false,false,false,false]],[7,32,5,33],1,null]"
+      },
+      {
+        "kind": "attack",
+        "id": 12,
+        "targetId": 66,
+        "exact": true,
+        "note": "",
+        "before": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,1,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[66,0,24,0,false,false,false,false]],[7,32,5,33],1,null]",
+        "after": "[[[10,2,5,0,false,true,false,false,false],[12,1,2,0,false,false,false,false,false],[24,2,1,0,false,true,false,false,false],[64,0,30,0,false,false,false,false,false],[80,0,2,0,false,false,false,false,false],[81,2,1,0,false,false,false,false,false]],[[66,0,23,0,false,false,false,false]],[7,32,5,33],1,null]"
+      }
+    ],
+    "text": "Plan of 4 step(s), carried out in this order: 1) Play Walking Dead (3 mana) as a 2/5. 2) Walking Dead 2/3 attacks Bitterbloom Knight 2/1: Bitterbloom Knight dies; your Walking Dead survives at 2/1. 3) Vibrant Squirrel 2/1 attacks the enemy hero: 2 damage, leaving 24. 4) Platysaur 1/2 attacks the enemy hero: 1 damage, leaving 23. Result: enemy hero 26 -> 23 Health. Enemy minions killed: Bitterbloom Knight (2 Attack). Persistent enemy effects removed: none. Persistent enemy effects remaining: none. Effect evidence for killed targets: Bitterbloom Knight: effect inactive, classification confidence 0.85 (rule evidence, not trigger probability), strength unknown; Simple completed Battlecry adds no recurring board premium; unresolved play animations are outside this assessment.. Unknown remaining effects (not assumed blank): none. Your minions lost: none. Their board can then attack for 0 next turn, against your 30 Health behind 6 Health of Taunt; before this plan it was 2. No attacker is left unused. Cards and mana not used by this plan stay available afterwards (1 mana left)."
+  },
+  "actual": {
+    "option": 5,
+    "entityId": 10,
+    "type": "POWER",
+    "id": "o5"
+  },
+  "afterAttacks": {
+    "createdAt": "2026-10-03T17:50:39.232Z",
+    "plannerVersion": "silverfish-v1-combo-admission-v2",
+    "state": {
+      "gameNumber": 2,
+      "turn": 7,
+      "step": "MAIN_ACTION",
+      "status": "RUNNING",
+      "me": {
+        "playerId": 1,
+        "heroClass": "WARLOCK",
+        "mana": 1,
+        "maxMana": 4,
+        "current": true,
+        "playstate": "PLAYING",
+        "handCount": 4,
+        "deckCount": 22,
+        "board": [
+          {
+            "entityId": 64,
+            "cardId": "HERO_07f",
+            "name": "Nemesis Gul'dan",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 65,
+            "cardId": "HERO_07ebp",
+            "name": "Life Tap",
+            "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          },
+          {
+            "entityId": 12,
+            "cardId": "TLC_603",
+            "name": "Platysaur",
+            "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+            "baseCost": 1,
+            "baseAttack": 1,
+            "baseHealth": 2,
+            "COST": 1,
+            "ATK": 1,
+            "HEALTH": 2,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1,
+            "NUM_ATTACKS_THIS_TURN": 1
+          },
+          {
+            "entityId": 80,
+            "cardId": "CATA_210",
+            "name": "Twilight Egg",
+            "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+            "baseCost": 1,
+            "baseAttack": 0,
+            "baseHealth": 2,
+            "COST": 1,
+            "HEALTH": 2,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 0
+          },
+          {
+            "entityId": 81,
+            "cardId": "CORE_SW_439",
+            "name": "Vibrant Squirrel",
+            "text": "[x]<b>Deathrattle:</b> Shuffle 4 Acorns\ninto your deck. When drawn,\nsummon a 2/1 Squirrel.",
+            "baseCost": 1,
+            "baseAttack": 2,
+            "baseHealth": 1,
+            "COST": 1,
+            "ATK": 2,
+            "HEALTH": 1,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "MINION",
+            "EXHAUSTED": 1,
+            "NUM_ATTACKS_THIS_TURN": 1
+          },
+          {
+            "entityId": 24,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 2,
+            "baseHealth": 5,
+            "COST": 3,
+            "ATK": 2,
+            "HEALTH": 5,
+            "DAMAGE": 4,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "MINION",
+            "TAUNT": 1,
+            "EXHAUSTED": 1,
+            "NUM_ATTACKS_THIS_TURN": 1
+          },
+          {
+            "entityId": 10,
+            "cardId": "RLK_532",
+            "name": "Walking Dead",
+            "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+            "baseCost": 3,
+            "baseAttack": 2,
+            "baseHealth": 5,
+            "COST": 3,
+            "ATK": 2,
+            "HEALTH": 5,
+            "ZONE_POSITION": 5,
+            "CARDTYPE": "MINION",
+            "TAUNT": 1,
+            "EXHAUSTED": 1
+          }
+        ],
+        "hand": [
+          {
+            "entityId": 7,
+            "cardId": "EX1_308",
+            "name": "Soulfire",
+            "text": "[x]Deal $4 damage.\nDiscard a random card.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 1,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 32,
+            "cardId": "DMF_119",
+            "name": "Wicked Whispers",
+            "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+            "baseCost": 1,
+            "COST": 1,
+            "ZONE_POSITION": 2,
+            "CARDTYPE": "SPELL",
+            "doomed": true
+          },
+          {
+            "entityId": 5,
+            "cardId": "RLK_534",
+            "name": "Soul Barrage",
+            "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+            "baseCost": 4,
+            "COST": 4,
+            "ZONE_POSITION": 3,
+            "CARDTYPE": "SPELL"
+          },
+          {
+            "entityId": 33,
+            "cardId": "CATA_493",
+            "name": "Duke of Below",
+            "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+            "baseCost": 4,
+            "baseAttack": 2,
+            "baseHealth": 2,
+            "COST": 4,
+            "ATK": 2,
+            "HEALTH": 2,
+            "ZONE_POSITION": 4,
+            "CARDTYPE": "MINION",
+            "RUSH": 1
+          }
+        ],
+        "fatigue": 0,
+        "drawHazards": []
+      },
+      "opponent": {
+        "playerId": 2,
+        "heroClass": "MAGE",
+        "mana": 0,
+        "maxMana": 3,
+        "current": false,
+        "playstate": "PLAYING",
+        "handCount": 8,
+        "deckCount": 20,
+        "board": [
+          {
+            "entityId": 66,
+            "cardId": "HERO_08cr",
+            "name": "Escape Artist Millhouse",
+            "baseHealth": 30,
+            "HEALTH": 30,
+            "DAMAGE": 7,
+            "CARDTYPE": "HERO"
+          },
+          {
+            "entityId": 83,
+            "cardId": "EDR_851p",
+            "name": "Blessing of the Wisp",
+            "text": "[x]Summon <b>@</b> Wisp.\nDeal <b>$@</b> damage\nrandomly split among\nall enemies.",
+            "baseCost": 2,
+            "COST": 2,
+            "CARDTYPE": "HERO_POWER"
+          }
+        ],
+        "secretCount": 0,
+        "initialHealth": 30,
+        "publicPlays": [
+          {
+            "public": true,
+            "engineTurn": 4,
+            "entityId": 48,
+            "cardId": "EDR_852",
+            "name": "Bitterbloom Knight",
+            "CARDTYPE": "MINION",
+            "COST": 2,
+            "ATK": 2,
+            "HEALTH": 3,
+            "text": "<b>Battlecry:</b> <b>Imbue</b> your\nHero Power."
+          },
+          {
+            "public": true,
+            "engineTurn": 6,
+            "entityId": 60,
+            "cardId": "FIR_911",
+            "name": "Smoldering Grove",
+            "CARDTYPE": "SPELL",
+            "COST": 2,
+            "text": "Draw {0} card.\n<i>(Upgrades each turn,\nbut discards after {1}!)</i>1Draw {0} cards.\n<i>(Discards this turn!)</i>"
+          },
+          {
+            "public": true,
+            "engineTurn": 6,
+            "entityId": 52,
+            "cardId": "BAR_546",
+            "name": "Wildfire",
+            "CARDTYPE": "SPELL",
+            "COST": 1,
+            "text": "[x]Your Hero Power\ndeals 1 more damage\nthis game."
+          }
+        ]
+      },
+      "optionsId": 21,
+      "mulliganResult": {
+        "choiceId": 1,
+        "kept": [
+          29,
+          12
+        ],
+        "complete": true
+      },
+      "fingerprint": "640ab09ab2007122ce42",
+      "decisionFingerprint": "041389ea3cf24b7dd431"
+    },
+    "options": [
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t1",
+        "targetId": 66
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t2",
+        "targetId": 12
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t3",
+        "targetId": 80
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t4",
+        "targetId": 81
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t5",
+        "targetId": 24
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t6",
+        "targetId": 10
+      },
+      {
+        "option": 2,
+        "entityId": 32,
+        "type": "POWER",
+        "id": "o2"
+      }
+    ],
+    "rawOptions": [
+      {
+        "id": "o0",
+        "type": "END_TURN",
+        "option": 0
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t0",
+        "targetId": 64
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t1",
+        "targetId": 66
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t2",
+        "targetId": 12
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t3",
+        "targetId": 80
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t4",
+        "targetId": 81
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t5",
+        "targetId": 24
+      },
+      {
+        "option": 1,
+        "entityId": 7,
+        "type": "POWER",
+        "id": "o1t6",
+        "targetId": 10
+      },
+      {
+        "option": 2,
+        "entityId": 32,
+        "type": "POWER",
+        "id": "o2"
+      }
+    ],
+    "combinationEvidence": {
+      "version": "combo-admission-v2",
+      "stats": {
+        "generated": 0,
+        "nodeLimit": false,
+        "depthLimit": false,
+        "maxNodes": 256,
+        "depth": 4
+      },
+      "lineCount": 0,
+      "truncated": false,
+      "lines": [],
+      "comparisonCount": 0,
+      "comparisonTruncated": false,
+      "comparisonRoutes": [],
+      "blockedFirstIds": [],
+      "blockedComparisonFirstIds": []
+    },
+    "decisionPolicy": {
+      "version": "turn-intent-v2",
+      "source": "compare_intents",
+      "weaponProofKey": null,
+      "priority": [
+        "legal/survival gates",
+        "visible lethal",
+        "expiring development",
+        "chosen information preserving setup mana",
+        "proved user weapon ruling",
+        "opening/tactical/recovery rulings",
+        "compare feasible development and buff intents"
+      ]
+    },
+    "candidateTrace": {
+      "version": "combo-admission-v2",
+      "stats": {
+        "generated": 0,
+        "nodeLimit": false,
+        "depthLimit": false,
+        "maxNodes": 256,
+        "depth": 4
+      },
+      "lineCount": 0,
+      "truncated": false,
+      "lines": [],
+      "comparisonCount": 0,
+      "comparisonTruncated": false,
+      "comparisonRoutes": [],
+      "blockedFirstIds": [],
+      "blockedComparisonFirstIds": [],
+      "softHoldExemptions": []
+    },
+    "matchupObjective": {
+      "version": "matchup-objective-v2-class-prior",
+      "mode": "unknown",
+      "support": "insufficient public evidence",
+      "evidence": [
+        "public draw spell: Smoldering Grove"
+      ],
+      "weights": {
+        "face": 0.5979175333116672,
+        "finishFace": 1.2739089616509587,
+        "draw": 2.4872720994475137,
+        "mana": 0.5072894052648683,
+        "coin": 0.03366988950276242
+      },
+      "deadlineTurn": null,
+      "prior": {
+        "version": "local-class-prior-v2",
+        "source": "audited history-quadrants-2026-10-01T19-17-42-331Z; user/analyst public replay rulings",
+        "window": {
+          "start": "2026-09-24T17:31:28.715Z",
+          "end": "2026-10-01T17:31:28.715Z"
+        },
+        "trainedThrough": "2026-10-01T17:31:28.715Z",
+        "probabilities": {
+          "control": 0.20699815837937383,
+          "tempo": 0.5659300184162063,
+          "combo": 0.08287292817679558,
+          "unknown": 0.1441988950276243
+        },
+        "counts": {
+          "control": 4,
+          "tempo": 13,
+          "combo": 2,
+          "unknown": 3
+        },
+        "sampleSize": 22,
+        "classSampleSize": 22,
+        "mulliganProbabilities": {
+          "pressure": 0.2898710865561694,
+          "board": 0.5659300184162063,
+          "unknown": 0.1441988950276243
+        },
+        "mulliganGrouping": {
+          "pressure": [
+            "control",
+            "combo"
+          ],
+          "board": [
+            "tempo"
+          ],
+          "unknown": [
+            "unknown"
+          ],
+          "guidance": "Control and combo share one opening strategy: establish attacking bodies and a reliable curve/discard payoff. Do not invent different mulligan rules from the diagnostic subtype. Preserve subtype only for review; observed quests, clears and recovery guide later turns."
+        },
+        "confidence": 0.5588235294117647,
+        "decisionWeight": 0.0838235294117647,
+        "highProbability": null,
+        "evidence": [
+          "opponent class: MAGE"
+        ],
+        "publicCards": [
+          "EDR_852",
+          "FIR_911",
+          "BAR_546"
+        ],
+        "interpretation": "Local smoothed frequency estimates; unknown mass is unresolved classification. Confidence reflects sample support, not effect strength or validated forecast accuracy. Class is a soft prior; public evidence overrides it. No fixed lethal deadline."
+      },
+      "mulligan": null,
+      "guidance": "Use the logged class/opening prior as a soft preference when comparing pressure and board/resource plans, including mulligan. Its confidence is sample support, not a known deck label. Unknown classification remains possible. Retain efficient early development and one retained discard activation per material; do not keep unsupported materials based on a matchup guess. Empty early turns do not identify a deck."
+    },
+    "weaponBuff": null,
+    "resourceTools": {
+      "refillWindow": false,
+      "ownCards": 4,
+      "opponentCards": 8,
+      "chamber": null,
+      "duke": {
+        "entityId": 33,
+        "attack": 2,
+        "health": 2,
+        "cost": 4,
+        "affordable": false,
+        "boardRoom": 2,
+        "limitation": "Use observed tags, not an invented discard count. Rush can trade on the summoning turn; it does not grant a face attack. Large size does not prove the opponent lacks removal."
+      }
+    },
+    "searchStats": {
+      "expanded": 1,
+      "generated": 1,
+      "deduplicated": 0,
+      "beamPruned": 0,
+      "depthReached": 1,
+      "nodeLimit": false,
+      "depthLimit": false
+    },
+    "action": {
+      "option": 2,
+      "entityId": 32,
+      "type": "POWER",
+      "id": "o2"
+    },
+    "model": "typesafe-ai/jev",
+    "latencyMs": 1025,
+    "answers": {
+      "move": {
+        "type": "choice",
+        "choice": "o2",
+        "probabilities": {
+          "o2": 0.62,
+          "o1t6": 0.04,
+          "o1t2": 0.03,
+          "o1t4": 0.02,
+          "o1t3": 0.03,
+          "o1t5": 0.06,
+          "o1t1": 0.2
+        }
+      }
+    },
+    "usage": {
+      "inputTokens": 8961,
+      "outputTokens": 86,
+      "totalTokens": 9047
+    },
+    "metadata": {
+      "typesafe": {
+        "confidence": {
+          "move": 0.55
+        }
+      },
+      "gateway": {
+        "routing": {
+          "originalModelId": "typesafe-ai/jev",
+          "resolvedProvider": "typesafe-ai",
+          "fallbacksAvailable": [
+            "digitalocean"
+          ],
+          "planningReasoning": "System credentials planned for: typesafe-ai, digitalocean. Total execution order: typesafe-ai(system) → digitalocean(system)",
+          "canonicalSlug": "typesafe-ai/jev",
+          "finalProvider": "typesafe-ai",
+          "modelAttemptCount": 1,
+          "modelAttempts": [
+            {
+              "canonicalSlug": "typesafe-ai/jev",
+              "success": true,
+              "providerAttemptCount": 1,
+              "providerAttempts": [
+                {
+                  "provider": "typesafe-ai",
+                  "credentialType": "system",
+                  "success": true,
+                  "startTime": 1791049840528,
+                  "endTime": 1791049840822,
+                  "statusCode": 200
+                }
+              ]
+            }
+          ],
+          "totalProviderAttemptCount": 1
+        },
+        "cost": "0.000376362",
+        "marketCost": "0.000376362",
+        "surchargeCost": "0",
+        "gatewayCost": "0.000376362",
+        "inferenceCost": "0.000376362",
+        "inputInferenceCost": "0.000376362",
+        "outputInferenceCost": "0",
+        "generationId": "gen_01M41E7DTW2F034510182C21B2"
+      }
+    },
+    "effectAssessments": {
+      "version": "2026-10-01-v1",
+      "confidenceMeaning": "uncalibrated classification evidence, not trigger probability",
+      "cards": [
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 12,
+          "cardId": "TLC_603",
+          "name": "Platysaur",
+          "observedZone": "PLAY",
+          "text": "Battlecry: Draw a card. Deathrattle: Discard it.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 80,
+          "cardId": "CATA_210",
+          "name": "Twilight Egg",
+          "observedZone": "PLAY",
+          "text": "Deathrattle: Summon a {0}/{1} Whelp. (Gains +1/+1 at the start of your turns!)",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 81,
+          "cardId": "CORE_SW_439",
+          "name": "Vibrant Squirrel",
+          "observedZone": "PLAY",
+          "text": "Deathrattle: Shuffle 4 Acorns into your deck. When drawn, summon a 2/1 Squirrel.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 24,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "observedZone": "PLAY",
+          "text": "Taunt If you discard this minion, summon it.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        },
+        {
+          "side": "me",
+          "version": "2026-10-01-v1",
+          "entityId": 10,
+          "cardId": "RLK_532",
+          "name": "Walking Dead",
+          "observedZone": "PLAY",
+          "text": "Taunt If you discard this minion, summon it.",
+          "status": "unknown",
+          "confidence": 0.25,
+          "confidenceBasis": "uncalibrated rule evidence",
+          "rule": "unclassified",
+          "requiredZone": null,
+          "trigger": null,
+          "repeatability": "unknown",
+          "removalPremium": 0,
+          "strength": "unknown",
+          "reason": "No verified rule for this complete effect; Jev must evaluate the text."
+        }
+      ]
+    }
+  },
+  "ruling": {
+    "expectedDevelopment": 10,
+    "expectedBuff": 32,
+    "reviewStatus": "implemented_turn-order-v1",
+    "reason": "Play Walking Dead, then Wicked Whispers before the trade and face attacks. After development Whispers discards Soulfire and buffs five bodies. The queued plan must recheck ordering instead of bypassing spendFirst."
+  }
+}

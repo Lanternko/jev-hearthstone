@@ -1089,3 +1089,7 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 ### 2026-10-04 棄牌素材改為計分（規則分層第2步）
 
 新預設silverfish-v1-fodder-hold-v1，weapon-replacement-v1凍結到既有candidate。wastedFodder仍預設刪除。搜尋改為扣掉素材的免費棄牌收益（holdValue，不打折）後，只有打出素材仍嚴格最佳時才解除該動作，並在說明附上放棄的收益。今早11個「模擬最佳被刪」計入收益後全部不再選打出；g1 T16、g2 T15的Golem無嘲諷，打不打都會被斬殺，不是規則錯誤。全歷史8524決策中有32個可重播候選，解除0次；合成「Walking Dead嘲諷擋斬殺」會解除，沒有威脅或擋不住時不解除。494/494測試通過（新增7項），組合與戰鬥對照與上一版相同。詳見docs/fodder-hold-20261004.md及eval/runs/fodder-hold-20261004/。未呼叫Jev、未開排位、未commit。
+
+### 2026-10-04 順序型刪除規則改為可解除（規則分層第2b步）
+
+新預設silverfish-v1-rule-release-v1，fodder-hold-v1凍結到既有candidate。weaponFirst、overflowWaits、buffBeforeTap、bodyBeforeBuff仍預設刪除；搜尋可越過「只多抽未知牌」的步驟（含Platysaur類戰吼抽牌模型），被刪動作只在最佳計畫以它開頭、且嚴格高於「第一步禁用它」的最佳計畫與什麼都不做時放回一個；規則保留的動作若模擬器無法下或下完即中斷（Chronoclaws/Whispers棄未知牌、空手揮擊）則不解除，擋掉首輪重播中7個不公平解除。tempoBuffPick在選擇階段、模擬器不模擬挑牌與暫時牌，維持刪除。全歷史8524決策解除2次：09-25先讓Runic Egg交換而非揮刀棄Reliquary Prime；09-29六血時不下自傷3的Party Fiend改下Continuity並交換。game 4 Platysaur裁定不變。501/501測試通過（新增7項），組合與戰鬥對照與上一版相同；全歷史搜尋7.0s（舊2.9s），單次最長776ms。詳見docs/rule-release-20261004.md及eval/runs/rule-release-20261004/。未呼叫Jev、未開排位、未commit。

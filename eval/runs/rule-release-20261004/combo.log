@@ -1,0 +1,72 @@
+{
+  "output": "D:\\Projects\\jev-hearthstone\\eval\\runs\\rule-release-20261004\\combo",
+  "summary": {
+    "baseline": {
+      "cases": 42,
+      "wholeIntentsAvailable": 42,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 32,
+      "medianMs": 0.8279999999999745,
+      "p95Ms": 1.4841000000000122,
+      "maxMs": 50.2167
+    },
+    "candidate": {
+      "cases": 42,
+      "wholeIntentsAvailable": 42,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 32,
+      "medianMs": 0.8029000000000224,
+      "p95Ms": 1.574799999999982,
+      "maxMs": 45.70490000000001
+    },
+    "withoutAdmission": {
+      "cases": 42,
+      "wholeIntentsAvailable": 0,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 0,
+      "medianMs": 0.5558000000000902,
+      "p95Ms": 0.9552999999999656,
+      "maxMs": 41.45219999999995
+    }
+  },
+  "safety": [
+    {
+      "id": "frozen",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "exhausted",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "tie",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "secret",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "clipped",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "no-buff-mana",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "unmodelled-summon-engine",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    }
+  ]
+}

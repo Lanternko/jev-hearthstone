@@ -12,6 +12,7 @@ import {temporaryDiscardAssessments} from './temporary-discard.mjs';
 import {handRetentionAssessment} from './hand-retention.mjs';
 import {search,score,actionFor} from './plan.mjs';
 import {FODDER_HOLD_VERSION,holdValue} from './fodder-hold.mjs';
+import {releasing} from './rule-release.mjs';
 const isDH=state=>deckFor(state).name==='dh-void';
 
 // Explicit user correction: early tempo takes precedence over speculative combos.
@@ -906,8 +907,10 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  {const od=overdrawWaits(state);const kept=out.filter(a=>!od(a));if(kept.length)out=kept;}
  {const dk=drawKills(state);const kept=out.filter(a=>!dk(a));if(kept.length)out=kept;}
  {const rest=locationResting(state);const kept=out.filter(a=>!rest(a));if(kept.length)out=kept;}
- if(!isDH(state))out=weaponFirst(state,out);
  const wasted=wastedFodder(state);
+ // Ordering deletes the simulator may overturn (rule-release.mjs); the delete is the default.
+ const releases=[],hold={fodderHold:[...wasted]};
+ if(!isDH(state))out=releasing(state,out,weaponFirst(state,out),'weaponFirst',releases,hold);
  let released=null;
  if(wasted.size){
   // Development may make a buff valuable even when the current board is thin.
@@ -920,7 +923,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  }
  out=occultistPick(state,boardFirstDiscard(state,doomedPick(state,out)));
  out=counterFirst(state,out);
- {const kept=out.filter(a=>!overflowWaits(state,out)(a));if(kept.length)out=kept;}
+ {const kept=out.filter(a=>!overflowWaits(state,out)(a));if(kept.length)out=releasing(state,out,kept,'overflowWaits',releases,hold);}
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);
  out=out.filter(a=>!deadWhispers(state,held(a.entityId)));
  if(!out.length)out=actions;
@@ -935,7 +938,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  // Warlock's historical rulings must not hide DH's Outcast enablers, attacks before weapon
  // replacement, or attacks before a generated card buries the rightmost Outcast.
  // Decide WHETHER to draw before ordering it. Availability alone is not a draw intent.
- if(!isDH(state))out=buffBeforeTap(state,out);
+ if(!isDH(state))out=releasing(state,out,buffBeforeTap(state,out),'buffBeforeTap',releases,hold);
  else out=out.filter(a=>{
   const hp=(state.me.board??[]).find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
   return !heroAttackGain(hp)||heroCanSwing(state);
@@ -985,6 +988,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  });
  if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,safe);
   trace.fodderRelease=released;
+  trace.ruleReleases=releases;
   trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&safe.some(x=>x.id===a.id)).map(a=>a.id);}
  return safe;
 }
@@ -1061,7 +1065,7 @@ export function setupFirst(state,actions){
   return !!c&&(buff(c)&&costOf(c)<=mana||(isCoin(c)&&coinBuys));
  });
 }
-export function spendFirst(state,actions,{admission=combinationAdmission(state,actions)}={}){
+export function spendFirst(state,actions,{admission=combinationAdmission(state,actions),trace}={}){
  if(state?.choice)return actions;
  // DH has damage spells, delayed Sigils and generated cards whose order is a real choice.
  // Keep those alternatives (including saving a removal spell) available to the planner/Jev.
@@ -1100,7 +1104,8 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  if(tapOn&&!fromHand&&drawCount(hp)>0&&!pricedOut
   &&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state))out=out.filter(a=>a.type!=='END_TURN');
  // Here, not in constrainActions: a lethal that needs the buff now is found on the full menu first.
- out=bodyBeforeBuff(state,out);
+ {const log=[];out=releasing(state,out,bodyBeforeBuff(state,out),'bodyBeforeBuff',log,{fodderHold:[...wastedFodder(state)]});
+  if(trace)trace.ruleReleases=[...(trace.ruleReleases??[]).filter(r=>r.rule!=='bodyBeforeBuff'),...log];}
  // An attack that triggers the proved development is setup, not premature
  // combat. Restore only that game's offered first step, never arbitrary attacks.
  const first=admittedFirstIds({lines:admittedLines(admission,actions)});

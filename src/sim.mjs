@@ -152,6 +152,28 @@ export function cardModel(c){
   }
   return buff?{kind:'buff',...buff,discard}:null;
 }
+// Rule-release searches only (rule-release.mjs, s.additive): a minion whose battlecry draws is a
+// body plus unknown cards, like Platysaur ("Battlecry: Draw a card. Deathrattle: Discard it.").
+// The ordinary search leaves it unmodelled. Its Deathrattle is the death check's business: a
+// trade that kills it already ends the plan there.
+const BATTLECRY_DRAW=/^battlecry: draw (a|an|one|two|three) cards?\.?$/i;
+export function drawMinionModel(c){
+  if(c?.type!=='MINION')return null;
+  let n=0;
+  for(const p of c.text.split(/(?<=\.)\s+/).filter(Boolean)){
+    const m=BATTLECRY_DRAW.exec(p);
+    if(m){n+=COUNT[m[1].toLowerCase()];continue}
+    if(/^deathrattle:/i.test(p))continue;
+    if(p.replace(KEYWORDS,'').replace(/[\s.,]/g,''))return null;
+  }
+  return n?{kind:'minion',draw:n}:null;
+}
+// Earlier unknown draws in the same plan (pastAdditive) still take hand space and deck cards.
+const drawFrom=(s,n)=>{
+  const k=s.drawnUnknown??0,d=s.drawState.me.deckCount;
+  return drawImpact({me:{...s.drawState.me,deckCount:k&&d!=null?Math.max(0,Number(d)-k):d,hand:[...s.hand,...Array(k).fill({})]}},n);
+};
+const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null);
 function summonDiscard(s,c){
   if(room(s)<=0)return;
   const b=body({...c.raw,entityId:c.id,ATK:c.atk,HEALTH:c.hp,DAMAGE:0},'me');
@@ -163,6 +185,8 @@ function summonDiscard(s,c){
 
 // Mutates only a cloned planning state. No arbitrary first-card surrogate for ties.
 function discard(s,mode){
+  // Past an additive draw (search pastAdditive) the hand holds unknown cards; any could be the one.
+  if(s.drawnUnknown>0){s.uncertainDiscard=[{unknown:true}];return {exact:false,note:'discard after an unknown draw; no particular outcome assumed'}}
   if(!s.hand.length)return {exact:true,note:''};
   const extreme=(mode==='low'?Math.min:Math.max)(...s.hand.map(c=>c.cost));
   const tied=s.hand.filter(c=>c.cost===extreme);
@@ -187,7 +211,7 @@ function discard(s,mode){
     return {exact:true,note:'discard summons up to two 2/1 Spiders before the buff'};
   }
   if(model.kind==='draw'){
-    const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},model.n);
+    const r=drawFrom(s,model.n);
     const h=hero(s,'me');if(h)strike({},h,r.damageMin);
     s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
     return {exact:false,note:`discard draw ${model.n}: at least ${r.damageMin} damage; observe and replan`};
@@ -228,7 +252,7 @@ export function moves(s){
   const free=room(s);
   for(const c of s.hand){
     if(!c.playable||c.cost>s.mana)continue;
-    const m=cardModel(c);
+    const m=modelOf(s,c);
     if(!m||(m.kind==='minion'&&free<=0))continue;
     out.push({kind:'play',id:c.id});
   }
@@ -253,7 +277,7 @@ function applyStep(s0,m){
     const h=hero(s,'me');
     s.mana-=s.power.cost;s.power.used=true;h.atk+=s.power.gain;
     if(s.power.draw){
-      const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},s.power.draw);
+      const r=drawFrom(s,s.power.draw);
       strike({},h,s.power.selfHit+r.damageMin);
       s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
       return {s,exact:false,note:`draw ${s.power.draw}; at most ${r.cardsMax} hand cards, at least ${r.damageMin} draw damage and ${s.power.selfHit} self-damage; observe the hand and replan`};
@@ -286,13 +310,13 @@ function applyStep(s0,m){
     return {s,exact,note:notes.join('; ')};
   }
   if(m.kind==='play'){
-    const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=cardModel(c);
+    const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=modelOf(s,c);
     s.hand.splice(i,1);s.mana-=c.cost;
     if(model.kind==='mana'){
       s.mana+=model.gain;
       // A newly affordable supported card is a future step, not an invented
       // current game option. The live queue still checks its actual legality.
-      for(const held of s.hand)if(held.cost>s0.mana&&held.cost<=s.mana&&cardModel(held))held.playable=true;
+      for(const held of s.hand)if(held.cost>s0.mana&&held.cost<=s.mana&&modelOf(s,held))held.playable=true;
       return {s,exact:true,note:''};
     }
     if(model.kind==='randomSummon'){
@@ -300,7 +324,7 @@ function applyStep(s0,m){
       return {s,exact:false,note:`summon up to ${model.n} random ${model.cost}-Cost minions; identities, stats and buff eligibility unknown; observe and replan`};
     }
     if(model.kind==='draw'){
-      const r=drawImpact({me:{...s.drawState.me,hand:s.hand}},model.n);
+      const r=drawFrom(s,model.n);
       const h=hero(s,'me');if(h)strike({},h,r.damageMin);
       s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
       return {s,exact:false,note:`draw ${model.n}; at most ${r.cardsMax} hand cards and at least ${r.damageMin} draw damage; observe the hand and replan`};
@@ -331,6 +355,12 @@ function applyStep(s0,m){
           targets:new Set(/rush/.test(t)?s.opp.filter(o=>o.type==='MINION').map(o=>o.id):[]),maxAttacks:/windfury/.test(t)?2:1});
       }
       if(model.selfHit){const h=hero(s,'me');if(h)strike({},h,model.selfHit)}
+      if(model.draw){
+        const r=drawFrom(s,model.draw);
+        const h=hero(s,'me');if(h)strike({},h,r.damageMin);
+        s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
+        return {s,exact:false,note:`battlecry draw ${model.draw}; at most ${r.cardsMax} hand cards and at least ${r.damageMin} draw damage; observe the hand and replan`};
+      }
       return {s,exact:true,note:''};
     }
     let exact=true;const notes=[];

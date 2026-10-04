@@ -1,0 +1,25 @@
+{
+  "source": "User-provided mulligan-stat screenshot for Void Demon Hunter, received 2026-09-27.",
+  "note": "mulliganWR is the win rate when the card is in the opening hand; kept is the share of those opening hands where players kept it. relativeToDeck records only the up/down arrow shown in the screenshot; the numeric deck-wide baseline is not shown, so deckWinrate remains null.",
+  "deckWinrate": null,
+  "keepRateOverride": 80,
+  "combos": [],
+  "cards": {
+    "Glacial Shard": { "mulliganWR": 52.9, "kept": 22.9, "relativeToDeck": "below" },
+    "Hive Map": { "mulliganWR": 51.0, "kept": 18.4, "relativeToDeck": "below" },
+    "Illidari Studies": { "mulliganWR": 52.3, "kept": 31.4, "relativeToDeck": "below" },
+    "Sigil of the Seas": { "mulliganWR": 57.7, "kept": 93.6, "relativeToDeck": "above" },
+    "Sizzling Cinder": { "mulliganWR": 56.2, "kept": 90.2, "relativeToDeck": "below" },
+    "Void Soul": { "mulliganWR": 59.8, "kept": 97.9, "relativeToDeck": "above" },
+    "Cult Neophyte": { "mulliganWR": 53.8, "kept": 49.6, "relativeToDeck": "below" },
+    "Grim Harvest": { "mulliganWR": 57.7, "kept": 84.5, "relativeToDeck": "above" },
+    "Infestation": { "mulliganWR": 53.3, "kept": 33.1, "relativeToDeck": "below" },
+    "Press the Advantage": { "mulliganWR": 53.0, "kept": 33.7, "relativeToDeck": "below" },
+    "Spectral Sight": { "mulliganWR": 52.3, "kept": 40.5, "relativeToDeck": "below" },
+    "Void Blast": { "mulliganWR": 56.7, "kept": 81.5, "relativeToDeck": "below" },
+    "Rustrot Viper": { "mulliganWR": 53.1, "kept": 13.4, "relativeToDeck": "below" },
+    "Vicious Voidscale": { "mulliganWR": 56.9, "kept": 88.1, "relativeToDeck": "below" },
+    "Kayn Sunfury": { "mulliganWR": 54.0, "kept": 7.8, "relativeToDeck": "below" },
+    "Stardust Scythe": { "mulliganWR": 61.2, "kept": 75.0, "relativeToDeck": "above" }
+  }
+}

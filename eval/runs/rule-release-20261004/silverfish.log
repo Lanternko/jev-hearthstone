@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "baseline": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.3026999999997315,
+      "fixtureMaxMedianMs": 2536.910799999998
+    },
+    "candidate": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.672600000001694,
+      "fixtureMaxMedianMs": 2450.046999999995
+    }
+  },
+  "regression": {
+    "lostTactics": [],
+    "lostCombat": [],
+    "lostRulingAvailability": [],
+    "worseFallback": []
+  },
+  "report": "D:\\Projects\\jev-hearthstone\\eval\\runs\\rule-release-20261004\\silverfish\\report.md"
+}

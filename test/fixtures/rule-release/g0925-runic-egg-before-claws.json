@@ -1,0 +1,345 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-25T16:58:10.243Z"
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 11,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "mana": 0,
+   "maxMana": 6,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 12,
+   "board": [
+    {
+     "entityId": 35,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 66,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "ATK": 4,
+     "HEALTH": 30,
+     "DAMAGE": 6,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 81,
+     "cardId": "KAR_029",
+     "name": "Runic Egg",
+     "text": "<b>Deathrattle:</b> Draw a card.",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 125,
+     "cardId": "SCH_147t",
+     "name": "Boneweb Spider",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 126,
+     "cardId": "SCH_147t",
+     "name": "Boneweb Spider",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 132,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 55,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 131,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 52,
+     "cardId": "KAR_205",
+     "name": "Silverware Golem",
+     "text": "If you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 103,
+     "cardId": "BT_197t",
+     "name": "Reliquary Prime",
+     "text": "<b>Taunt</b>, <b>Lifesteal</b>\n<b>Elusive</b> on your\nopponent's turn.",
+     "baseCost": 7,
+     "baseAttack": 6,
+     "baseHealth": 8,
+     "COST": 7,
+     "ATK": 6,
+     "HEALTH": 8,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 42,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    }
+   ]
+  },
+  "opponent": {
+   "playerId": 1,
+   "mana": 0,
+   "maxMana": 5,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 10,
+   "deckCount": 16,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_11",
+     "name": "The Lich King",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 7,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_11bp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 99,
+     "cardId": "YOG_512",
+     "name": "Sickly Grimewalker",
+     "text": "[x]After you summon an\n Undead, give it <b>Poisonous</b>.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 4,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 21,
+     "cardId": "CORE_RLK_116",
+     "name": "Necrotic Mortician",
+     "text": "<b>Battlecry:</b> If a friendly Undead died after your\nlast turn, <b>Discover</b> an Unholy Rune card.",
+     "baseCost": 2,
+     "baseAttack": 2,
+     "baseHealth": 3,
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    }
+   ]
+  },
+  "optionsId": 46,
+  "fingerprint": "ecf1b861e99cb7d6abcc",
+  "decisionFingerprint": "06ddcd764662ef5cbab5"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 66,
+   "type": "POWER",
+   "id": "o1t0",
+   "targetId": 64
+  },
+  {
+   "option": 1,
+   "entityId": 66,
+   "type": "POWER",
+   "id": "o1t1",
+   "targetId": 21
+  },
+  {
+   "option": 1,
+   "entityId": 66,
+   "type": "POWER",
+   "id": "o1t2",
+   "targetId": 99
+  },
+  {
+   "option": 2,
+   "entityId": 81,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 64
+  },
+  {
+   "option": 2,
+   "entityId": 81,
+   "type": "POWER",
+   "id": "o2t1",
+   "targetId": 21
+  },
+  {
+   "option": 2,
+   "entityId": 81,
+   "type": "POWER",
+   "id": "o2t2",
+   "targetId": 99
+  },
+  {
+   "option": 3,
+   "entityId": 125,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 64
+  },
+  {
+   "option": 3,
+   "entityId": 125,
+   "type": "POWER",
+   "id": "o3t1",
+   "targetId": 21
+  },
+  {
+   "option": 3,
+   "entityId": 125,
+   "type": "POWER",
+   "id": "o3t2",
+   "targetId": 99
+  },
+  {
+   "option": 4,
+   "entityId": 126,
+   "type": "POWER",
+   "id": "o4t0",
+   "targetId": 64
+  },
+  {
+   "option": 4,
+   "entityId": 126,
+   "type": "POWER",
+   "id": "o4t1",
+   "targetId": 21
+  },
+  {
+   "option": 4,
+   "entityId": 126,
+   "type": "POWER",
+   "id": "o4t2",
+   "targetId": 99
+  }
+ ]
+}

@@ -159,7 +159,7 @@ test('visible lethal is resolved before the new value intent',()=>{
 
 test('the v2 engine remains frozen; default and recorded new ruling have distinct behavior',async()=>{
  const old=await loadDecisionEngine('silverfish-v1-combo-admission-v2'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-fodder-hold-v1');assert.notEqual(old.prepare,now.prepare);
+ assert.equal(now.version,'silverfish-v1-rule-release-v1');assert.notEqual(old.prepare,now.prepare);
  const c=fixture(),previous=old.prepare(c.state,old.constrainActions(c.state,c.options));
  assert.notEqual(previous.forced?.source,'chamber_development');
  assert.equal(pipeline(c).forced.action.entityId,24);

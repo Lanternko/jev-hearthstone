@@ -84,11 +84,20 @@ export function wastedChip(start,steps){
 
 // Beam search over exact steps. A node whose last step was inexact is terminal: the plan ends
 // there and the turn is re-planned from what really happened.
-export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searchSignature,fodderHold}={}){
+// pastAdditive (rule-release.mjs only): a step whose only unknown is cards drawn into hand stays
+// open, so "Platysaur, then the buff" is scored against "the buff, then Platysaur". The drawn
+// cards are never played; they count at the draw weight as usual. Random summons, random
+// discards, combat triggers and deathrattles still end the plan.
+// firstAllowed: a predicate on the first step, for "the best plan while this rule holds".
+export const additiveStep=(s0,r)=>!r.exact&&(r.s.drawnUnknown??0)>(s0.drawnUnknown??0)
+  &&!r.s.uncertainDiscard&&r.s.pendingSummons===s0.pendingSummons
+  &&!/combat trigger|Deathrattle|unmodelled/.test(r.note??'');
+export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searchSignature,fodderHold,pastAdditive=false,firstAllowed}={}){
   if(!Number.isInteger(beam)||beam<1||!Number.isInteger(depth)||depth<1||!Number.isInteger(maxNodes)||maxNodes<1)
     throw Error('search budgets must be positive integers');
   const start=fromState(state,actions);
   if(fodderHold?.length)start.fodderHold=fodderHold;
+  if(pastAdditive)start.additive=true;
   let frontier=[{s:start,steps:[],open:true}];
   const done=new Map();                           // final signature -> best node
   const stats={expanded:0,generated:0,deduplicated:0,beamPruned:0,depthReached:0,nodeLimit:false,depthLimit:false};
@@ -105,11 +114,12 @@ export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searc
       if(!n.open)continue;
       stats.expanded++;
       for(const m of moves(n.s)){
+        if(!n.steps.length&&firstAllowed&&!firstAllowed(m))continue;
         if(stats.generated>=maxNodes){stats.nodeLimit=true;break;}
         stats.generated++;
         const r=apply(n.s,m);
         const child={s:r.s,steps:[...n.steps,{...m,exact:r.exact,note:r.note,before:signature(n.s),after:signature(r.s)}],
-          open:r.exact&&(!hero(r.s,'opp')||hpOf(hero(r.s,'opp'))>0)};
+          open:(r.exact||pastAdditive&&additiveStep(n.s,r))&&(!hero(r.s,'opp')||hpOf(hero(r.s,'opp'))>0)};
         if(hero(r.s,'me')&&hpOf(hero(r.s,'me'))<=0)continue;
         keep(child);
         if(!child.open)continue;

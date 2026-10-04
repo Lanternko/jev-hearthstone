@@ -52,7 +52,7 @@ export async function next({shot,skip}={}){
  if(skip)s.actions=s.actions.filter(a=>!skip(a,s.state));
  if(!s.actions.length){queue=[];return {ready:false,state:s.state}}
  const full=s.actions;
- const acts=spendFirst(s.state,full,{admission:trace.admission});
+ const acts=spendFirst(s.state,full,{admission:trace.admission,trace});
  if(queue.length&&!s.state.choice){
   const step=queue[0];
   // A legal queued attack still has to obey the current buff/setup ordering.
@@ -85,7 +85,7 @@ export async function next({shot,skip}={}){
  }
  const pick=result.answers.move.choice,{action,plan}=resolve(p,pick);
  if(plan)queue=plan.slice(1);
- const row=await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:s.actions,rawOptions:rawActions,combinationEvidence:p.combinationEvidence,decisionPolicy:p.decisionPolicy,candidateTrace:trace.evidence,matchupObjective:p.objective,weaponBuff:p.weaponBuff,weaponPreservation:p.weaponPreservation,weaponReplacement:p.weaponReplacement,turnOrder:p.turnOrder,turnAlternatives:p.turnAlternatives,handRetention:p.handRetention,temporaryDiscard:p.temporaryDiscard,divineShield:p.divineShield,chamberIntents:p.chamberIntents,resourceTools:p.resourceTools,searchStats:p.searchStats,...(plan?{plan:{id:pick,steps:plan,text:p.crit[pick].description,developmentEvidence:p.crit[pick].developmentEvidence,combination:p.crit[pick].combination}}:{}),action,...result});
+ const row=await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:s.actions,rawOptions:rawActions,combinationEvidence:p.combinationEvidence,decisionPolicy:p.decisionPolicy,candidateTrace:trace.evidence,fodderRelease:trace.fodderRelease,ruleReleases:trace.ruleReleases,matchupObjective:p.objective,weaponBuff:p.weaponBuff,weaponPreservation:p.weaponPreservation,weaponReplacement:p.weaponReplacement,turnOrder:p.turnOrder,turnAlternatives:p.turnAlternatives,handRetention:p.handRetention,temporaryDiscard:p.temporaryDiscard,divineShield:p.divineShield,chamberIntents:p.chamberIntents,resourceTools:p.resourceTools,searchStats:p.searchStats,...(plan?{plan:{id:pick,steps:plan,text:p.crit[pick].description,developmentEvidence:p.crit[pick].developmentEvidence,combination:p.crit[pick].combination}}:{}),action,...result});
  if(shotTaken)await rename(PENDING,`${SHOTS}g${s.state.gameNumber}t${s.state.turn}r${row}.jpg`).catch(()=>{});
  return {ready:true,action,state:s.state,plan:plan&&pick,source:result.source,latencyMs:result.latencyMs,cost:result.metadata?.gateway?.cost};
 }

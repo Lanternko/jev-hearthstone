@@ -1,0 +1,2519 @@
+
+> jev-hearthstone@0.1.0 test
+> node --test
+
+TAP version 13
+# Subtest: new50 game10 T4: develop Acolytes before buff even without filling all seven slots
+ok 1 - new50 game10 T4: develop Acolytes before buff even without filling all seven slots
+  ---
+  duration_ms: 112.8538
+  ...
+# Subtest: development preference requires full summon space, buff reserve and no immediate survival emergency
+ok 2 - development preference requires full summon space, buff reserve and no immediate survival emergency
+  ---
+  duration_ms: 1.663
+  ...
+# Subtest: after an illustrative observed summon, the reserved buff remains legal before attacks
+ok 3 - after an illustrative observed summon, the reserved buff remains legal before attacks
+  ---
+  duration_ms: 4.5157
+  ...
+# Subtest: game 148 turn 3: direct battlecry prefers Walking Dead over Hand of Guldan
+ok 4 - game 148 turn 3: direct battlecry prefers Walking Dead over Hand of Guldan
+  ---
+  duration_ms: 41.1832
+  ...
+# Subtest: keep resource comparison with spare mana, a developed board, close lethal, or no summon space
+ok 5 - keep resource comparison with spare mana, a developed board, close lethal, or no summon space
+  ---
+  duration_ms: 3.3326
+  ...
+# Subtest: real game2 T4: deferred Whispers is preserved as a complete development then buff intent
+ok 6 - real game2 T4: deferred Whispers is preserved as a complete development then buff intent
+  ---
+  duration_ms: 299.6422
+  ...
+# Subtest: the exact recorded queued trade is rejected even when legal and board signature matches
+ok 7 - the exact recorded queued trade is rejected even when legal and board signature matches
+  ---
+  duration_ms: 659.472
+  ...
+# Subtest: full replay: play body, observe, buff, observe, then attacks; original attackers gain stats and egg gains Attack
+ok 8 - full replay: play body, observe, buff, observe, then attacks; original attackers gain stats and egg gains Attack
+  ---
+  duration_ms: 926.7735
+  ...
+# Subtest: a discarded plain damage outlet does not cast; actual and unknown discard triggers stay modelled
+ok 9 - a discarded plain damage outlet does not cast; actual and unknown discard triggers stay modelled
+  ---
+  duration_ms: 3.2667
+  ...
+# Subtest: discard ties/draws/unknown effects do not turn Whispers into an exact queued continuation
+ok 10 - discard ties/draws/unknown effects do not turn Whispers into an exact queued continuation
+  ---
+  duration_ms: 9.0744
+  ...
+# Subtest: no legal buff or insufficient mana cannot block attacks solely because a buff is in hand
+ok 11 - no legal buff or insufficient mana cannot block attacks solely because a buff is in hand
+  ---
+  duration_ms: 7.9814
+  ...
+# Subtest: queue ordering generalizes across unnamed pure/discard buffs, board counts and costs
+ok 12 - queue ordering generalizes across unnamed pure/discard buffs, board counts and costs
+  ---
+  duration_ms: 62.088
+  ...
+# Subtest: a queued attack rejected for ordering still yields to a fresh visible lethal
+ok 13 - a queued attack rejected for ordering still yields to a fresh visible lethal
+  ---
+  duration_ms: 8.2564
+  ...
+# Subtest: a space-making trade remains an exception, while face attacks wait for the buff
+ok 14 - a space-making trade remains an exception, while face attacks wait for the buff
+  ---
+  duration_ms: 4.7641
+  ...
+# Subtest: proved weapon-discard development is still allowed before the buff
+ok 15 - proved weapon-discard development is still allowed before the buff
+  ---
+  duration_ms: 19.622
+  ...
+# Subtest: pure drawing is optional and does not cause the buff gate without any buff
+ok 16 - pure drawing is optional and does not cause the buff gate without any buff
+  ---
+  duration_ms: 26.5934
+  ...
+# Subtest: old weapon version remains frozen, new default adds shared queue ordering and discard-buff admission
+ok 17 - old weapon version remains frozen, new default adds shared queue ordering and discard-buff admission
+  ---
+  duration_ms: 462.3326
+  ...
+# Subtest: three bodies keep the one-mana buff ahead of Life Tap even without an exact mana spend
+ok 18 - three bodies keep the one-mana buff ahead of Life Tap even without an exact mana spend
+  ---
+  duration_ms: 84.5826
+  ...
+# Subtest: draw-three remains an alternative but cannot hide a productive cheap board buff
+ok 19 - draw-three remains an alternative but cannot hide a productive cheap board buff
+  ---
+  duration_ms: 8.0867
+  ...
+# Subtest: reserve both buffs before hard-casting an egg; keep body-first available when all three fit
+ok 20 - reserve both buffs before hard-casting an egg; keep body-first available when all three fit
+  ---
+  duration_ms: 13.9599
+  ...
+# Subtest: game 51 discover takes Whispers, then Continuity, then Whispers discarding the egg
+ok 21 - game 51 discover takes Whispers, then Continuity, then Whispers discarding the egg
+  ---
+  duration_ms: 18.299
+  ...
+# Subtest: buff arithmetic excludes dormant bodies, counts locations for space, and respects discard ties
+ok 22 - buff arithmetic excludes dormant bodies, counts locations for space, and respects discard ties
+  ---
+  duration_ms: 0.5277
+  ...
+# Subtest: discover preference preserves urgent removal and does not affect choose-to-discard prompts
+ok 23 - discover preference preserves urgent removal and does not affect choose-to-discard prompts
+  ---
+  duration_ms: 0.8552
+  ...
+# Subtest: model descriptions expose total buff value and do not call the heuristic a guaranteed result
+ok 24 - model descriptions expose total buff value and do not call the heuristic a guaranteed result
+  ---
+  duration_ms: 1.1123
+  ...
+# Subtest: screenshot: Acolytes fill the two slots before Continuity despite a discard outlet and a draw minion
+ok 25 - screenshot: Acolytes fill the two slots before Continuity despite a discard outlet and a draw minion
+  ---
+  duration_ms: 41.7332
+  ...
+# Subtest: summon-buff setup must fit in both mana and slots, and cannot replace visible survival or lethal
+ok 26 - summon-buff setup must fit in both mana and slots, and cannot replace visible survival or lethal
+  ---
+  duration_ms: 70.4047
+  ...
+# Subtest: recorded game: install Chamber instead of nonlethal Soulfire, with the full payoff logged
+ok 27 - recorded game: install Chamber instead of nonlethal Soulfire, with the full payoff logged
+  ---
+  duration_ms: 109.9525
+  ...
+# Subtest: the installed location can activate at zero mana; choose only from the fresh offer
+ok 28 - the installed location can activate at zero mana; choose only from the fresh offer
+  ---
+  duration_ms: 21.6575
+  ...
+# Subtest: cost changes and entity ids generalize; installing is unaffordable when mana is short
+ok 29 - cost changes and entity ids generalize; installing is unaffordable when mana is short
+  ---
+  duration_ms: 8.8501
+  ...
+# Subtest: a four-card remaining hand is an uncertain offer, not a guaranteed summon
+ok 30 - a four-card remaining hand is an uncertain offer, not a guaranteed summon
+  ---
+  duration_ms: 20.7329
+  ...
+# Subtest: other known summon payoffs generalize; two rewarding offers remain a comparison
+ok 31 - other known summon payoffs generalize; two rewarding offers remain a comparison
+  ---
+  duration_ms: 2.4608
+  ...
+# Subtest: the install description does not claim activation draws occurred on installation
+ok 32 - the install description does not claim activation draws occurred on installation
+  ---
+  duration_ms: 11.2117
+  ...
+# Subtest: a missing legal install/activation/choice cannot be manufactured
+ok 33 - a missing legal install/activation/choice cannot be manufactured
+  ---
+  duration_ms: 2.9263
+  ...
+# Subtest: cooldown/exhaustion and no charges forbid activating even if a stale option survives
+ok 34 - cooldown/exhaustion and no charges forbid activating even if a stale option survives
+  ---
+  duration_ms: 1.3627
+  ...
+# Subtest: slots include installation and last-charge release; clipped bodies are not promised
+ok 35 - slots include installation and last-charge release; clipped bodies are not promised
+  ---
+  duration_ms: 1.4821
+  ...
+# Subtest: safe refill must leave next compulsory draw, avoid burn and survive known auto-casts
+ok 36 - safe refill must leave next compulsory draw, avoid burn and survive known auto-casts
+  ---
+  duration_ms: 2.2687
+  ...
+# Subtest: a fresh choice reads current occupancy instead of spending a last charge twice
+ok 37 - a fresh choice reads current occupancy instead of spending a last charge twice
+  ---
+  duration_ms: 0.7185
+  ...
+# Subtest: buff/development, secrets, enemy minions and unknown friendly engines keep comparison
+ok 38 - buff/development, secrets, enemy minions and unknown friendly engines keep comparison
+  ---
+  duration_ms: 79.0757
+  ...
+# Subtest: visible lethal is resolved before the new value intent
+ok 39 - visible lethal is resolved before the new value intent
+  ---
+  duration_ms: 37.3444
+  ...
+# Subtest: the v2 engine remains frozen; default and recorded new ruling have distinct behavior
+ok 40 - the v2 engine remains frozen; default and recorded new ruling have distinct behavior
+  ---
+  duration_ms: 198.2587
+  ...
+# Subtest: original game18 raw options: candidates, weapon prefix and conditional buff reach the live pipeline
+ok 41 - original game18 raw options: candidates, weapon prefix and conditional buff reach the live pipeline
+  ---
+  duration_ms: 339.1859
+  ...
+# Subtest: unnamed attack-discard payoff becomes a selectable whole intent, rather than a forced single-card setup
+ok 42 - unnamed attack-discard payoff becomes a selectable whole intent, rather than a forced single-card setup
+  ---
+  duration_ms: 26.9416
+  ...
+# Subtest: equipped weapon setup attack survives spend-first while unrelated attacks do not gain the exemption
+ok 43 - equipped weapon setup attack survives spend-first while unrelated attacks do not gain the exemption
+  ---
+  duration_ms: 6.649
+  ...
+# Subtest: complete buff lines generalize across costs, empty boards, summons and available slots
+ok 44 - complete buff lines generalize across costs, empty boards, summons and available slots
+  ---
+  duration_ms: 306.6978
+  ...
+# Subtest: Coin can enable a future affordable body and buff; only the offered first step is executed
+ok 45 - Coin can enable a future affordable body and buff; only the offered first step is executed
+  ---
+  duration_ms: 29.9505
+  ...
+# Subtest: ties, unsafe attacks, frozen heroes, secrets, engine triggers and clipped summons do not get weapon proofs
+ok 46 - ties, unsafe attacks, frozen heroes, secrets, engine triggers and clipped summons do not get weapon proofs
+  ---
+  duration_ms: 4.898
+  ...
+# Subtest: unknown bodies have count bounds, never fabricated statlines, and every inexact prefix stops
+ok 47 - unknown bodies have count bounds, never fabricated statlines, and every inexact prefix stops
+  ---
+  duration_ms: 1.8021
+  ...
+# Subtest: fatal direct development and an absent legal first option are never admitted
+ok 48 - fatal direct development and an absent legal first option are never admitted
+  ---
+  duration_ms: 1.9348
+  ...
+# Subtest: new version is distinct; requesting class-prior replays frozen pre-change policy and simulator
+ok 49 - new version is distinct; requesting class-prior replays frozen pre-change policy and simulator
+  ---
+  duration_ms: 251.7539
+  ...
+# Subtest: confirmed draw-first ruling retains information before an affordable development+buff line
+ok 50 - confirmed draw-first ruling retains information before an affordable development+buff line
+  ---
+  duration_ms: 25.0763
+  ...
+# Subtest: the weapon ruling references the same surviving proof as candidate filtering and planning
+ok 51 - the weapon ruling references the same surviving proof as candidate filtering and planning
+  ---
+  duration_ms: 322.8565
+  ...
+# Subtest: unknown summon engines cannot be forced by a second weapon simulator
+ok 52 - unknown summon engines cannot be forced by a second weapon simulator
+  ---
+  duration_ms: 349.1658
+  ...
+# Subtest: proof budget exhaustion cannot be bypassed by the weapon rule
+ok 53 - proof budget exhaustion cannot be bypassed by the weapon rule
+  ---
+  duration_ms: 173.0602
+  ...
+# Subtest: the shared conservative survival check does not assume an unknown summon will save us
+ok 54 - the shared conservative survival check does not assume an unknown summon will save us
+  ---
+  duration_ms: 544.291
+  ...
+# Subtest: a chosen free discovery precedes the weapon combo and requires a fresh decision
+ok 55 - a chosen free discovery precedes the weapon combo and requires a fresh decision
+  ---
+  duration_ms: 114.5997
+  ...
+# Subtest: incomplete equipped-weapon alternatives survive only ordering, not legal candidate removal
+ok 56 - incomplete equipped-weapon alternatives survive only ordering, not legal candidate removal
+  ---
+  duration_ms: 22.7323
+  ...
+# Subtest: a complete combo is not duplicated as a separate weapon prefix
+ok 57 - a complete combo is not duplicated as a separate weapon prefix
+  ---
+  duration_ms: 8.8496
+  ...
+# Subtest: a secret-dependent prefix observes immediately instead of queuing a speculative hero attack
+ok 58 - a secret-dependent prefix observes immediately instead of queuing a speculative hero attack
+  ---
+  duration_ms: 125.3221
+  ...
+# Subtest: an unmodelled chosen-discard alternative is compared before assuming the turn must buff
+ok 59 - an unmodelled chosen-discard alternative is compared before assuming the turn must buff
+  ---
+  duration_ms: 41.158
+  ...
+# Subtest: the previous combo engine remains frozen after consolidation
+ok 60 - the previous combo engine remains frozen after consolidation
+  ---
+  duration_ms: 597.2722
+  ...
+# Subtest: a discard that summons counts against the room left on the board
+ok 61 - a discard that summons counts against the room left on the board
+  ---
+  duration_ms: 46.0627
+  ...
+# Subtest: with the hand crowded out, trades into enemy minions stay on the menu
+ok 62 - with the hand crowded out, trades into enemy minions stay on the menu
+  ---
+  duration_ms: 5.3947
+  ...
+# Subtest: an action that dies twice is off the menu for the rest of the turn
+ok 63 - an action that dies twice is off the menu for the rest of the turn
+  ---
+  duration_ms: 1.121
+  ...
+# Subtest: a new turn clears the list
+ok 64 - a new turn clears the list
+  ---
+  duration_ms: 0.1729
+  ...
+# Subtest: end turn, mulligan and choices are never retired
+ok 65 - end turn, mulligan and choices are never retired
+  ---
+  duration_ms: 0.2662
+  ...
+# Subtest: missing candidates cannot earn a labelled best score
+ok 66 - missing candidates cannot earn a labelled best score
+  ---
+  duration_ms: 2.5266
+  ...
+# Subtest: API failures remain in score denominator and incomplete pairs are explicit
+ok 67 - API failures remain in score denominator and incomplete pairs are explicit
+  ---
+  duration_ms: 3.4039
+  ...
+# Subtest: the deck follows the hero class, and JEV_DECK overrides it
+ok 68 - the deck follows the hero class, and JEV_DECK overrides it
+  ---
+  duration_ms: 5.4588
+  ...
+# Subtest: heroClass is read off the hero card on the board
+ok 69 - heroClass is read off the hero card on the board
+  ---
+  duration_ms: 3.5427
+  ...
+# Subtest: win rates and combos belong to their own deck only
+ok 70 - win rates and combos belong to their own deck only
+  ---
+  duration_ms: 4.8378
+  ...
+# Subtest: DH screenshot keeps use its own relative stats and retain a no-data fallback
+ok 71 - DH screenshot keeps use its own relative stats and retain a no-data fallback
+  ---
+  duration_ms: 44.4402
+  ...
+# Subtest: an Outcast card says whether it is at an end of the hand
+ok 72 - an Outcast card says whether it is at an end of the hand
+  ---
+  duration_ms: 7.4772
+  ...
+# Subtest: a play that opens an Outcast card, or buries one, says so
+ok 73 - a play that opens an Outcast card, or buries one, says so
+  ---
+  duration_ms: 6.6332
+  ...
+# Subtest: an attack names the attacker, the target and which side it is on
+ok 74 - an attack names the attacker, the target and which side it is on
+  ---
+  duration_ms: 1.9939
+  ...
+# Subtest: a damaged target reports remaining health, not printed health
+ok 75 - a damaged target reports remaining health, not printed health
+  ---
+  duration_ms: 0.7135
+  ...
+# Subtest: playing from hand states the cost and card type
+ok 76 - playing from hand states the cost and card type
+  ---
+  duration_ms: 4.0496
+  ...
+# Subtest: the hero power is not described as an attack
+ok 77 - the hero power is not described as an attack
+  ---
+  duration_ms: 0.8732
+  ...
+# Subtest: end turn and mulligan read as plain instructions
+ok 78 - end turn and mulligan read as plain instructions
+  ---
+  duration_ms: 0.873
+  ...
+# Subtest: criteria keeps the option fields Jev must echo back, and adds the sentence
+ok 79 - criteria keeps the option fields Jev must echo back, and adds the sentence
+  ---
+  duration_ms: 0.6571
+  ...
+# Subtest: a buff that only buffs counts as pure; one that also discards does not
+ok 80 - a buff that only buffs counts as pure; one that also discards does not
+  ---
+  duration_ms: 0.5394
+  ...
+# Subtest: an empty board removes the pure buff, and Whispers with nothing worth eating
+ok 81 - an empty board removes the pure buff, and Whispers with nothing worth eating
+  ---
+  duration_ms: 9.8253
+  ...
+# Subtest: one friendly minion is enough to leave the decision to Jev
+ok 82 - one friendly minion is enough to leave the decision to Jev
+  ---
+  duration_ms: 3.592
+  ...
+# Subtest: the option text states the card text and the friendly minion count
+ok 83 - the option text states the card text and the friendly minion count
+  ---
+  duration_ms: 0.899
+  ...
+# Subtest: the damage clock says something different on each option
+ok 84 - the damage clock says something different on each option
+  ---
+  duration_ms: 0.5731
+  ...
+# Subtest: short of lethal, no option claims a kill
+ok 85 - short of lethal, no option claims a kill
+  ---
+  duration_ms: 0.2968
+  ...
+# Subtest: card roles come from the text, not a list of card names
+ok 86 - card roles come from the text, not a list of card names
+  ---
+  duration_ms: 0.4049
+  ...
+# Subtest: hard-casting fodder names the outlets already in hand
+ok 87 - hard-casting fodder names the outlets already in hand
+  ---
+  duration_ms: 0.502
+  ...
+# Subtest: buff and taunt are roles too
+ok 88 - buff and taunt are roles too
+  ---
+  duration_ms: 0.4322
+  ...
+# Subtest: a Temporary pick says it cannot be cast and what its discard does
+ok 89 - a Temporary pick says it cannot be cast and what its discard does
+  ---
+  duration_ms: 1.7364
+  ...
+# Subtest: the hero power names the cards it prices out of the turn
+ok 90 - the hero power names the cards it prices out of the turn
+  ---
+  duration_ms: 0.6564
+  ...
+# Subtest: DH retains Outcast enablers and attacks but spends playable bodies before ending
+ok 91 - DH retains Outcast enablers and attacks but spends playable bodies before ending
+  ---
+  duration_ms: 44.8523
+  ...
+# Subtest: Seas and generated Souls take mana before Demon Claws and fallback attack plans
+ok 92 - Seas and generated Souls take mana before Demon Claws and fallback attack plans
+  ---
+  duration_ms: 66.8942
+  ...
+# Subtest: Shard freezes the highest attack legal unfrozen active enemy minion
+ok 93 - Shard freezes the highest attack legal unfrozen active enemy minion
+  ---
+  duration_ms: 7.612
+  ...
+# Subtest: tempo spending does not override lethal or force summons on a full board
+ok 94 - tempo spending does not override lethal or force summons on a full board
+  ---
+  duration_ms: 9.3482
+  ...
+# Subtest: DH allows a minion attack before a weapon attack and a weapon replacement
+ok 95 - DH allows a minion attack before a weapon attack and a weapon replacement
+  ---
+  duration_ms: 20.847
+  ...
+# Subtest: Spectral Sight counts the Outcast draw before it leaves hand
+ok 96 - Spectral Sight counts the Outcast draw before it leaves hand
+  ---
+  duration_ms: 10.1337
+  ...
+# Subtest: Demon Claws creates a one-damage lethal from zero Attack
+ok 97 - Demon Claws creates a one-damage lethal from zero Attack
+  ---
+  duration_ms: 13.3106
+  ...
+# Subtest: Demon Claws does not buy an attack when frozen or already spent
+ok 98 - Demon Claws does not buy an attack when frozen or already spent
+  ---
+  duration_ms: 11.1904
+  ...
+# Subtest: the Coin is not spent solely to buy Demon Claws after the hero has attacked
+ok 99 - the Coin is not spent solely to buy Demon Claws after the hero has attacked
+  ---
+  duration_ms: 2.1825
+  ...
+# Subtest: Kayn opens a lethal behind Taunt and the first step remains a real legal play
+ok 100 - Kayn opens a lethal behind Taunt and the first step remains a real legal play
+  ---
+  duration_ms: 15.7431
+  ...
+# Subtest: Kayn aura disappears on death, silence or dormancy; Rush still cannot hit face
+ok 101 - Kayn aura disappears on death, silence or dormancy; Rush still cannot hit face
+  ---
+  duration_ms: 7.219
+  ...
+# Subtest: frozen heroes cannot swing with a newly equipped weapon and unknown equip effects stay unmodelled
+ok 102 - frozen heroes cannot swing with a newly equipped weapon and unknown equip effects stay unmodelled
+  ---
+  duration_ms: 2.8292
+  ...
+# Subtest: Scythe equip adds weapon Attack without resetting a spent attack; generated Soul ends search
+ok 103 - Scythe equip adds weapon Attack without resetting a spent attack; generated Soul ends search
+  ---
+  duration_ms: 3.2402
+  ...
+# Subtest: a last-durability weapon cannot supply a second Windfury attack after breaking
+ok 104 - a last-durability weapon cannot supply a second Windfury attack after breaking
+  ---
+  duration_ms: 0.4361
+  ...
+# Subtest: Hive Map pick accounts for remaining mana and Studies accounts for its shared discount
+ok 105 - Hive Map pick accounts for remaining mana and Studies accounts for its shared discount
+  ---
+  duration_ms: 16.7928
+  ...
+# Subtest: Sigil, Dormant and generated cards do not pretend to be immediate board damage
+ok 106 - Sigil, Dormant and generated cards do not pretend to be immediate board damage
+  ---
+  duration_ms: 10.0122
+  ...
+# Subtest: a fresh Hive Map choice replaces the submitted one, with source in its decision fingerprint
+ok 107 - a fresh Hive Map choice replaces the submitted one, with source in its decision fingerprint
+  ---
+  duration_ms: 5.5929
+  ...
+# Subtest: empty-board turn three develops Harvest before buying Stingers or hero power
+ok 108 - empty-board turn three develops Harvest before buying Stingers or hero power
+  ---
+  duration_ms: 14.39
+  ...
+# Subtest: ready Rush Grub finishes a one-health target before another Stinger or Soul
+ok 109 - ready Rush Grub finishes a one-health target before another Stinger or Soul
+  ---
+  duration_ms: 15.5001
+  ...
+# Subtest: weapon prioritises a safe legal kill, never invents a Stealth target, and preserves lethal
+ok 110 - weapon prioritises a safe legal kill, never invents a Stealth target, and preserves lethal
+  ---
+  duration_ms: 9.9073
+  ...
+# Subtest: tactics do not force a lethal hero trade or consume a Rush body needed for searched lethal
+ok 111 - tactics do not force a lethal hero trade or consume a Rush body needed for searched lethal
+  ---
+  duration_ms: 9.5348
+  ...
+# Subtest: spare mana banks Stingers on an empty enemy board, but does not burn a full hand
+ok 112 - spare mana banks Stingers on an empty enemy board, but does not burn a full hand
+  ---
+  duration_ms: 25.7007
+  ...
+# Subtest: a small ordinary attacker sets up Blast, and the real new board determines the follow-up
+ok 113 - a small ordinary attacker sets up Blast, and the real new board determines the follow-up
+  ---
+  duration_ms: 20.5803
+  ...
+# Subtest: Studies reveals options before Souls; active right-edge Outcast and rescue mana remain protected
+ok 114 - Studies reveals options before Souls; active right-edge Outcast and rescue mana remain protected
+  ---
+  duration_ms: 30.3945
+  ...
+# Subtest: Press buffs before a hero trade and can ping a different target; queued swing must replan
+ok 115 - Press buffs before a hero trade and can ping a different target; queued swing must replan
+  ---
+  duration_ms: 16.5721
+  ...
+# Subtest: Chaos Strike is not forced as pure draw when Cinder is productive development
+ok 116 - Chaos Strike is not forced as pure draw when Cinder is productive development
+  ---
+  duration_ms: 12.3868
+  ...
+# Subtest: Harvest draw does not leave the Eye Beam immediately to its left in Outcast position
+ok 117 - Harvest draw does not leave the Eye Beam immediately to its left in Outcast position
+  ---
+  duration_ms: 7.9344
+  ...
+# Subtest: same enemy kill preserves the 3/3 over a 2/1 and does not buy redundant hero Attack
+ok 118 - same enemy kill preserves the 3/3 over a 2/1 and does not buy redundant hero Attack
+  ---
+  duration_ms: 19.8398
+  ...
+# Subtest: actual dormant Sprite: buff has zero recipients, safe tap wins with either planner setting
+ok 119 - actual dormant Sprite: buff has zero recipients, safe tap wins with either planner setting
+  ---
+  duration_ms: 117.7974
+  ...
+# Subtest: single awake body without a better trade prefers drawing when the two compete for mana
+ok 120 - single awake body without a better trade prefers drawing when the two compete for mana
+  ---
+  duration_ms: 7.2554
+  ...
+# Subtest: a one-body buff that converts a mutual death into a surviving kill remains available
+ok 121 - a one-body buff that converts a mutual death into a surviving kill remains available
+  ---
+  duration_ms: 17.0674
+  ...
+# Subtest: an unsafe tap is not forced by a dormant board, and a single-body lethal buff is preserved
+ok 122 - an unsafe tap is not forced by a dormant board, and a single-body lethal buff is preserved
+  ---
+  duration_ms: 28.1277
+  ...
+# Subtest: game 46: two auto-casts give no hand card and cause six damage plus first fatigue
+ok 123 - game 46: two auto-casts give no hand card and cause six damage plus first fatigue
+  ---
+  duration_ms: 5942.1475
+  ...
+# Subtest: mixed ordinary cards and auto-casts expose bounds without assuming order
+ok 124 - mixed ordinary cards and auto-casts expose bounds without assuming order
+  ---
+  duration_ms: 0.4007
+  ...
+# Subtest: fatigue continues from the current counter and cannot masquerade as resources
+ok 125 - fatigue continues from the current counter and cannot masquerade as resources
+  ---
+  duration_ms: 0.2404
+  ...
+# Subtest: hand capacity deducts a cast card, respects unknown deck size, and handles full-hand burning
+ok 126 - hand capacity deducts a cast card, respects unknown deck size, and handles full-hand burning
+  ---
+  duration_ms: 0.2907
+  ...
+# Subtest: a fatal draw cannot return through fallback when it is the only printed action
+ok 127 - a fatal draw cannot return through fallback when it is the only printed action
+  ---
+  duration_ms: 3.2362
+  ...
+# Subtest: generated hidden Shreds are known from the visible Continuity source; fatigue is public
+ok 128 - generated hidden Shreds are known from the visible Continuity source; fatigue is public
+  ---
+  duration_ms: 2.7045
+  ...
+# Subtest: game 120 T2: live preparation chooses Coin over bare Egg, then re-observes
+ok 129 - game 120 T2: live preparation chooses Coin over bare Egg, then re-observes
+  ---
+  duration_ms: 97.4054
+  ...
+# Subtest: after Coin: legal Occultist development chooses a body and preserves a T3 play
+ok 130 - after Coin: legal Occultist development chooses a body and preserves a T3 play
+  ---
+  duration_ms: 9.3364
+  ...
+# Subtest: Battlecry choice can be deferred until the game presents it
+ok 131 - Battlecry choice can be deferred until the game presents it
+  ---
+  duration_ms: 0.41
+  ...
+# Subtest: Coin development abstains without payoff, follow-up curve, or legal execution
+ok 132 - Coin development abstains without payoff, follow-up curve, or legal execution
+  ---
+  duration_ms: 0.5756
+  ...
+# Subtest: real cheap alternatives, an occupied board, opponent turn and unrelated mana stay open
+ok 133 - real cheap alternatives, an occupied board, opponent turn and unrelated mana stay open
+  ---
+  duration_ms: 0.7642
+  ...
+# Subtest: game153 own turn5: recover five known bodies before location or tap, with either planner setting
+ok 134 - game153 own turn5: recover five known bodies before location or tap, with either planner setting
+  ---
+  duration_ms: 52.1482
+  ...
+# Subtest: recovery pool comes only from own copied SETASIDE entities for the same clear
+ok 135 - recovery pool comes only from own copied SETASIDE entities for the same clear
+  ---
+  duration_ms: 7.7751
+  ...
+# Subtest: recovery priority requires a known substantial pool, space, mana and a live own turn
+ok 136 - recovery priority requires a known substantial pool, space, mana and a live own turn
+  ---
+  duration_ms: 7.6208
+  ...
+# Subtest: game175 turn2: Patches is inactive on board; Chirurgeon remains repeatable after buffing Patches
+ok 137 - game175 turn2: Patches is inactive on board; Chirurgeon remains repeatable after buffing Patches
+  ---
+  duration_ms: 214.4647
+  ...
+# Subtest: zone, silence, dormancy and changed full text invalidate a known active rule
+ok 138 - zone, silence, dormancy and changed full text invalidate a known active rule
+  ---
+  duration_ms: 3.5303
+  ...
+# Subtest: from your deck is not a blanket exclusion; unverified and mixed effects stay unknown
+ok 139 - from your deck is not a blanket exclusion; unverified and mixed effects stay unknown
+  ---
+  duration_ms: 1.0274
+  ...
+# Subtest: strong verified engines permit cost comparisons; confidence is separate from strength
+ok 140 - strong verified engines permit cost comparisons; confidence is separate from strength
+  ---
+  duration_ms: 0.5058
+  ...
+# Subtest: unknown competing effect is not pruned as a confirmed blank at equal combat cost
+ok 141 - unknown competing effect is not pruned as a confirmed blank at equal combat cost
+  ---
+  duration_ms: 55.2093
+  ...
+# Subtest: a Battlecry that picks a hand card finds it in the hand left after the play
+ok 142 - a Battlecry that picks a hand card finds it in the hand left after the play
+  ---
+  duration_ms: 4.5136
+  ...
+# Subtest: new50 game9 T11: fatal Party never reaches Jev, a plan or forced_spend
+ok 143 - new50 game9 T11: fatal Party never reaches Jev, a plan or forced_spend
+  ---
+  duration_ms: 78.5197
+  ...
+# Subtest: exact survival boundaries account for Armor and observed Immunity
+ok 144 - exact survival boundaries account for Armor and observed Immunity
+  ---
+  duration_ms: 1.7498
+  ...
+# Subtest: self-damage text recognition generalizes beyond names and excludes delayed minion effects
+ok 145 - self-damage text recognition generalizes beyond names and excludes delayed minion effects
+  ---
+  duration_ms: 0.3519
+  ...
+# Subtest: test\\fixtures\\matchup-objective-cases.mjs
+ok 21 - test\\fixtures\\matchup-objective-cases.mjs
+  ---
+  duration_ms: 705.7679
+  ...
+# Subtest: test\\fixtures\\opening-burst-cases.mjs
+ok 22 - test\\fixtures\\opening-burst-cases.mjs
+  ---
+  duration_ms: 645.945
+  ...
+# Subtest: recorded g1 T16: Golem has no Taunt, cannot stop their lethal, and stays deleted
+ok 148 - recorded g1 T16: Golem has no Taunt, cannot stop their lethal, and stays deleted
+  ---
+  duration_ms: 91.4835
+  ...
+# Subtest: a Taunt cast that turns their lethal into survival is released for that one action
+ok 149 - a Taunt cast that turns their lethal into survival is released for that one action
+  ---
+  duration_ms: 13.5075
+  ...
+# Subtest: the same Walking Dead with no lethal to stop is an ordinary hold and stays deleted
+ok 150 - the same Walking Dead with no lethal to stop is an ordinary hold and stays deleted
+  ---
+  duration_ms: 9.2553
+  ...
+# Subtest: a Taunt that is not enough to survive is not released either
+ok 151 - a Taunt that is not enough to survive is not released either
+  ---
+  duration_ms: 2.7102
+  ...
+# Subtest: hold value is what the simulator would award for the discard
+ok 152 - hold value is what the simulator would award for the discard
+  ---
+  duration_ms: 2.3861
+  ...
+# Subtest: the penalty charges a held card only when it left the hand without being discarded
+ok 153 - the penalty charges a held card only when it left the hand without being discarded
+  ---
+  duration_ms: 0.3042
+  ...
+# Subtest: weapon-replacement engine is frozen; current version adds the release
+ok 154 - weapon-replacement engine is frozen; current version adds the release
+  ---
+  duration_ms: 128.755
+  ...
+# Subtest: game archive starts at authoritative GameState, retaining the opening before client CREATE_GAME
+ok 155 - game archive starts at authoritative GameState, retaining the opening before client CREATE_GAME
+  ---
+  duration_ms: 1.9976
+  ...
+# Subtest: result is our PLAYSTATE in the last game only
+ok 156 - result is our PLAYSTATE in the last game only
+  ---
+  duration_ms: 0.6487
+  ...
+# Subtest: an access or budget error stops the run at once
+ok 157 - an access or budget error stops the run at once
+  ---
+  duration_ms: 0.7074
+  ...
+# Subtest: repeated rule_fallback stops the run; one transient does not
+ok 158 - repeated rule_fallback stops the run; one transient does not
+  ---
+  duration_ms: 0.2809
+  ...
+# Subtest: game 4 turn 4: Platysaur goes down before Entropic Continuity
+ok 159 - game 4 turn 4: Platysaur goes down before Entropic Continuity
+  ---
+  duration_ms: 55.0036
+  ...
+# Subtest: once the minion no longer fits beside the buff, the buff comes back
+ok 160 - once the minion no longer fits beside the buff, the buff comes back
+  ---
+  duration_ms: 40.9703
+  ...
+# Subtest: the whole pipeline plays Platysaur first, before any buff-first plan
+ok 161 - the whole pipeline plays Platysaur first, before any buff-first plan
+  ---
+  duration_ms: 24.9015
+  ...
+# Subtest: game 4 turn 8: Occultist throws Walking Dead, not Soul Barrage, at a lone 3/3
+ok 162 - game 4 turn 8: Occultist throws Walking Dead, not Soul Barrage, at a lone 3/3
+  ---
+  duration_ms: 5.4749
+  ...
+# Subtest: against a swarm of small minions the Barrage discard stays a pick
+ok 163 - against a swarm of small minions the Barrage discard stays a pick
+  ---
+  duration_ms: 3.0971
+  ...
+# Subtest: two small minions with 5 Attack between them also keep the Barrage discard
+ok 164 - two small minions with 5 Attack between them also keep the Barrage discard
+  ---
+  duration_ms: 4.4552
+  ...
+# Subtest: ordering invariant spans board counts, body/buff costs and summon counts without name or fill-seven dependence
+ok 165 - ordering invariant spans board counts, body/buff costs and summon counts without name or fill-seven dependence
+  ---
+  duration_ms: 148.7762
+  ...
+# Subtest: ordering excludes unsafe/unknown/delayed development and does not block buff lethal
+ok 166 - ordering excludes unsafe/unknown/delayed development and does not block buff lethal
+  ---
+  duration_ms: 3.5005
+  ...
+# Subtest: Deathrattle bodies are not mistaken for immediate extra buff targets
+ok 167 - Deathrattle bodies are not mistaken for immediate extra buff targets
+  ---
+  duration_ms: 0.2557
+  ...
+# Subtest: historical replay evidence uses setup-adjusted health and only public opponent cards
+ok 168 - historical replay evidence uses setup-adjusted health and only public opponent cards
+  ---
+  duration_ms: 10.0397
+  ...
+# Subtest: Coin and random missiles are not control ramp or board-clear signals
+ok 169 - Coin and random missiles are not control ramp or board-clear signals
+  ---
+  duration_ms: 3.6316
+  ...
+# Subtest: post-mulligan snapshot excludes Coin and the turn-one draw for both initiatives
+ok 170 - post-mulligan snapshot excludes Coin and the turn-one draw for both initiatives
+  ---
+  duration_ms: 2.0963
+  ...
+# Subtest: with nothing else to do and a safe tap, the spare mana draws a card
+ok 171 - with nothing else to do and a safe tap, the spare mana draws a card
+  ---
+  duration_ms: 40.0779
+  ...
+# Subtest: the tap is not forced when it would put us in reach of their board
+ok 172 - the tap is not forced when it would put us in reach of their board
+  ---
+  duration_ms: 7.4094
+  ...
+# Subtest: turn 7: an empty hand and a hero swing still left do not keep END_TURN on the menu
+ok 173 - turn 7: an empty hand and a hero swing still left do not keep END_TURN on the menu
+  ---
+  duration_ms: 7.3995
+  ...
+# Subtest: access denial falls back immediately and is not retried on later decisions
+ok 174 - access denial falls back immediately and is not retried on later decisions
+  ---
+  duration_ms: 2.7619
+  ...
+# Subtest: transient failures have a bounded budget across changing decisions and recover
+ok 175 - transient failures have a bounded budget across changing decisions and recover
+  ---
+  duration_ms: 1.2078
+  ...
+# Subtest: a throttle backs off and waits up to 30s before the rule pick
+ok 176 - a throttle backs off and waits up to 30s before the rule pick
+  ---
+  duration_ms: 4.8806
+  ...
+# Subtest: a 16:9 client has no letterbox; a wider one gets pillars
+ok 177 - a 16:9 client has no letterbox; a wider one gets pillars
+  ---
+  duration_ms: 2.1158
+  ...
+# Subtest: the same fractions land on the same relative spot at 1080p and 1440p
+ok 178 - the same fractions land on the same relative spot at 1080p and 1440p
+  ---
+  duration_ms: 0.4513
+  ...
+# Subtest: rows stay centred and ordered left to right
+ok 179 - rows stay centred and ordered left to right
+  ---
+  duration_ms: 0.4144
+  ...
+# Subtest: the hand row agrees with the positions measured on screen
+ok 180 - the hand row agrees with the positions measured on screen
+  ---
+  duration_ms: 0.249
+  ...
+# Subtest: no hand size pushes a card off the board
+ok 181 - no hand size pushes a card off the board
+  ---
+  duration_ms: 0.2819
+  ...
+# Subtest: the hand arcs with the middle card highest
+ok 182 - the hand arcs with the middle card highest
+  ---
+  duration_ms: 0.2046
+  ...
+# Subtest: a summon drops into one of n+1 gaps and rejects a full board
+ok 183 - a summon drops into one of n+1 gaps and rejects a full board
+  ---
+  duration_ms: 0.7033
+  ...
+# Subtest: out-of-range indices throw rather than clicking somewhere arbitrary
+ok 184 - out-of-range indices throw rather than clicking somewhere arbitrary
+  ---
+  duration_ms: 0.3284
+  ...
+# Subtest: playing a minion selects the card then drops it right of the board
+ok 185 - playing a minion selects the card then drops it right of the board
+  ---
+  duration_ms: 1.2283
+  ...
+# Subtest: a targeted spell selects the card then the target, with no drop step
+ok 186 - a targeted spell selects the card then the target, with no drop step
+  ---
+  duration_ms: 0.8783
+  ...
+# Subtest: an attack is source then target, both on the board
+ok 187 - an attack is source then target, both on the board
+  ---
+  duration_ms: 0.4049
+  ...
+# Subtest: hero power resolves to the hero power slot, not the hero
+ok 188 - hero power resolves to the hero power slot, not the hero
+  ---
+  duration_ms: 0.5998
+  ...
+# Subtest: a mulligan tosses each named card then confirms
+ok 189 - a mulligan tosses each named card then confirms
+  ---
+  duration_ms: 0.526
+  ...
+# Subtest: end turn is a single click
+ok 190 - end turn is a single click
+  ---
+  duration_ms: 0.1636
+  ...
+# Subtest: an entity that is nowhere on screen throws
+ok 191 - an entity that is nowhere on screen throws
+  ---
+  duration_ms: 0.1505
+  ...
+# Subtest: every Coin variant is recognised, including GAME_005 whose id lacks "COIN"
+ok 192 - every Coin variant is recognised, including GAME_005 whose id lacks "COIN"
+  ---
+  duration_ms: 0.1054
+  ...
+# Subtest: the Coin is excluded from the mulligan row it is not drawn on
+ok 193 - the Coin is excluded from the mulligan row it is not drawn on
+  ---
+  duration_ms: 0.2375
+  ...
+# Subtest: hand grab points: the 7-card fan measured by hover on 2026-09-24
+ok 194 - hand grab points: the 7-card fan measured by hover on 2026-09-24
+  ---
+  duration_ms: 1.098
+  ...
+# Subtest: public combined control evidence and early board pressure select different objectives
+ok 195 - public combined control evidence and early board pressure select different objectives
+  ---
+  duration_ms: 20.7521
+  ...
+# Subtest: class, forty Health, empty turns, future records and historical annotations cannot supply a matchup
+ok 196 - class, forty Health, empty turns, future records and historical annotations cannot supply a matchup
+  ---
+  duration_ms: 12.9683
+  ...
+# Subtest: pressure-convert-face-before-harmless-trade
+ok 197 - pressure-convert-face-before-harmless-trade
+  ---
+  duration_ms: 31.6262
+  ...
+# Subtest: board-preserve-efficient-trade
+ok 198 - board-preserve-efficient-trade
+  ---
+  duration_ms: 12.2797
+  ...
+# Subtest: board-thin-hand-safe-lead-can-refill
+ok 199 - board-thin-hand-safe-lead-can-refill
+  ---
+  duration_ms: 25.1511
+  ...
+# Subtest: pressure-do-not-price-out-productive-buff-with-Tap
+ok 200 - pressure-do-not-price-out-productive-buff-with-Tap
+  ---
+  duration_ms: 12.7122
+  ...
+# Subtest: identical combat arithmetic ranks face in pressure mode and favorable exchange in resource mode
+ok 201 - identical combat arithmetic ranks face in pressure mode and favorable exchange in resource mode
+  ---
+  duration_ms: 9.4434
+  ...
+# Subtest: resource refill permission closes with low Health, weak board, many cards or depleted deck
+ok 202 - resource refill permission closes with low Health, weak board, many cards or depleted deck
+  ---
+  duration_ms: 10.6997
+  ...
+# Subtest: lethal retains priority even when the resource mode makes refill available
+ok 203 - lethal retains priority even when the resource mode makes refill available
+  ---
+  duration_ms: 8.9626
+  ...
+# Subtest: Chamber requires a real offered summoning discard and Duke uses actual tags, slots and Rush
+ok 204 - Chamber requires a real offered summoning discard and Duke uses actual tags, slots and Rush
+  ---
+  duration_ms: 31.0379
+  ...
+# Subtest: previous version loads its own policy; new default labels matchup objective distinctly
+ok 205 - previous version loads its own policy; new default labels matchup objective distinctly
+  ---
+  duration_ms: 248.0282
+  ...
+# Subtest: a Power.log clock reads as today, and a pre-midnight line as yesterday
+ok 206 - a Power.log clock reads as today, and a pre-midnight line as yesterday
+  ---
+  duration_ms: 4.5097
+  ...
+# Subtest: server receipt rejects duplicates, incomplete packets and foreign originals
+ok 207 - server receipt rejects duplicates, incomplete packets and foreign originals
+  ---
+  duration_ms: 2.7972
+  ...
+# Subtest: unknown opponents do not contaminate other; duplicate card copies count one game
+ok 208 - unknown opponents do not contaminate other; duplicate card copies count one game
+  ---
+  duration_ms: 3.2779
+  ...
+# Subtest: a combination requires distinct cards and counts games rather than copies
+ok 209 - a combination requires distinct cards and counts games rather than copies
+  ---
+  duration_ms: 0.7811
+  ...
+# Subtest: confidence scales aggression preferences continuously and zero evidence is neutral
+ok 210 - confidence scales aggression preferences continuously and zero evidence is neutral
+  ---
+  duration_ms: 3.4648
+  ...
+# Subtest: live mulligan preparation exposes the weighted strategy in logged objective
+ok 211 - live mulligan preparation exposes the weighted strategy in logged objective
+  ---
+  duration_ms: 9.3928
+  ...
+# Subtest: real ranked22 receipt remains a misfire, but the committed hand can safely be played
+ok 212 - real ranked22 receipt remains a misfire, but the committed hand can safely be played
+  ---
+  duration_ms: 43.8115
+  ...
+# Subtest: incomplete, open, foreign, duplicate and unknown-entity receipts cannot trigger recovery
+ok 213 - incomplete, open, foreign, duplicate and unknown-entity receipts cannot trigger recovery
+  ---
+  duration_ms: 1.1766
+  ...
+# Subtest: a failed confirm retries confirmation only, without unselecting any card
+ok 214 - a failed confirm retries confirmation only, without unselecting any card
+  ---
+  duration_ms: 40.6742
+  ...
+# Subtest: an interrupted selection must not repeat its toggles; clearing permits the next game
+ok 215 - an interrupted selection must not repeat its toggles; clearing permits the next game
+  ---
+  duration_ms: 0.7764
+  ...
+# Subtest: game 46 actual kept list detects the old misfire, not merely a closed dialog
+ok 216 - game 46 actual kept list detects the old misfire, not merely a closed dialog
+  ---
+  duration_ms: 2.6943
+  ...
+# Subtest: keeping all or replacing all is checked by entity ID, excluding Coin
+ok 217 - keeping all or replacing all is checked by entity ID, excluding Coin
+  ---
+  duration_ms: 0.3035
+  ...
+# Subtest: real game 46 acknowledgement is parsed and classified as a mulligan misfire
+ok 218 - real game 46 acknowledgement is parsed and classified as a mulligan misfire
+  ---
+  duration_ms: 20.8817
+  ...
+# Subtest: parser waits for complete acknowledgement, preserves our receipt across opponent packets, resets per game
+ok 219 - parser waits for complete acknowledgement, preserves our receipt across opponent packets, resets per game
+  ---
+  duration_ms: 1.2918
+  ...
+# Subtest: game 137 turn 4: prefer killing Mana Wyrm to the same-stat spent Battlecry
+ok 220 - game 137 turn 4: prefer killing Mana Wyrm to the same-stat spent Battlecry
+  ---
+  duration_ms: 49.1257
+  ...
+# Subtest: ongoing premiums exclude silence and spent Battlecries; different trades stay available
+ok 221 - ongoing premiums exclude silence and spent Battlecries; different trades stay available
+  ---
+  duration_ms: 9.267
+  ...
+# Subtest: a lethal attack still outranks removing an ongoing effect
+ok 222 - a lethal attack still outranks removing an ongoing effect
+  ---
+  duration_ms: 2.8632
+  ...
+# Subtest: T1-after-Platysaur-preserve-Coin
+ok 223 - T1-after-Platysaur-preserve-Coin
+  ---
+  duration_ms: 77.23
+  ...
+# Subtest: T2-Acolytes-before-Coin-and-buff
+ok 224 - T2-Acolytes-before-Coin-and-buff
+  ---
+  duration_ms: 18.842
+  ...
+# Subtest: T2-actual-three-bodies-Coin
+ok 225 - T2-actual-three-bodies-Coin
+  ---
+  duration_ms: 11.2374
+  ...
+# Subtest: T2-after-Coin-buff-three
+ok 226 - T2-after-Coin-buff-three
+  ---
+  duration_ms: 10.6328
+  ...
+# Subtest: T3-Occultist-discard-body-before-Coin-buff
+ok 227 - T3-Occultist-discard-body-before-Coin-buff
+  ---
+  duration_ms: 34.9122
+  ...
+# Subtest: T3-actual-four-bodies-Coin
+ok 228 - T3-actual-four-bodies-Coin
+  ---
+  duration_ms: 10.7872
+  ...
+# Subtest: T3-after-Coin-buff-four
+ok 229 - T3-after-Coin-buff-four
+  ---
+  duration_ms: 10.6886
+  ...
+# Subtest: Whispers-single-board-summons-two-exception
+ok 230 - Whispers-single-board-summons-two-exception
+  ---
+  duration_ms: 11.6178
+  ...
+# Subtest: free-Catacombs-before-burst
+ok 231 - free-Catacombs-before-burst
+  ---
+  duration_ms: 8.7811
+  ...
+# Subtest: future line has no invented draw and reports existing-body survival sensitivity
+ok 232 - future line has no invented draw and reports existing-body survival sensitivity
+  ---
+  duration_ms: 2.0867
+  ...
+# Subtest: occupied slots, changed real board, missing Coin and harmful Whispers targets are re-evaluated
+ok 233 - occupied slots, changed real board, missing Coin and harmful Whispers targets are re-evaluated
+  ---
+  duration_ms: 1.5575
+  ...
+# Subtest: enemy pressure, secrets, low Health and other decks preserve the ordinary menu
+ok 234 - enemy pressure, secrets, low Health and other decks preserve the ordinary menu
+  ---
+  duration_ms: 2.6523
+  ...
+# Subtest: direct lethal is resolved before preserving a buff/Coin for a future turn
+ok 235 - direct lethal is resolved before preserving a buff/Coin for a future turn
+  ---
+  duration_ms: 19.3751
+  ...
+# Subtest: Occultist candidate keeps the buff and targets known summoning material
+ok 236 - Occultist candidate keeps the buff and targets known summoning material
+  ---
+  duration_ms: 4.8084
+  ...
+# Subtest: default strategy has a distinct version and old execution-v2 uses the frozen pre-change source
+ok 237 - default strategy has a distinct version and old execution-v2 uses the frozen pre-change source
+  ---
+  duration_ms: 147.2672
+  ...
+# Subtest: offered, kept and final distinguish replacements and count duplicate copies once
+ok 238 - offered, kept and final distinguish replacements and count duplicate copies once
+  ---
+  duration_ms: 13.918
+  ...
+# Subtest: incomplete receipt does not exclude separately verified final hand; unknown opponent stays excluded
+ok 239 - incomplete receipt does not exclude separately verified final hand; unknown opponent stays excluded
+  ---
+  duration_ms: 3.8523
+  ...
+# Subtest: game 120: one outlet with no cheap development keeps one payoff and redraws two slots
+ok 240 - game 120: one outlet with no cheap development keeps one payoff and redraws two slots
+  ---
+  duration_ms: 7.0086
+  ...
+# Subtest: cheap development does not let one outlet retain two payoffs
+ok 241 - cheap development does not let one outlet retain two payoffs
+  ---
+  duration_ms: 0.6865
+  ...
+# Subtest: one Golem remains available with Occultist; unsupported pairs do not force a toss
+ok 242 - one Golem remains available with Occultist; unsupported pairs do not force a toss
+  ---
+  duration_ms: 0.6586
+  ...
+# Subtest: duplicate Walking Dead cannot consume a second unsupported opening slot
+ok 243 - duplicate Walking Dead cannot consume a second unsupported opening slot
+  ---
+  duration_ms: 0.4781
+  ...
+# Subtest: new 50 game 14: tossing Whispers also redraws both unsupported Walking Dead
+ok 244 - new 50 game 14: tossing Whispers also redraws both unsupported Walking Dead
+  ---
+  duration_ms: 0.8049
+  ...
+# Subtest: game 46 complete recorded opening: toss all four, including unsupported Egg
+ok 245 - game 46 complete recorded opening: toss all four, including unsupported Egg
+  ---
+  duration_ms: 7.735
+  ...
+# Subtest: Egg is supported by early targeted or lowest-cost discard, not a four-cost weapon
+ok 246 - Egg is supported by early targeted or lowest-cost discard, not a four-cost weapon
+  ---
+  duration_ms: 0.7017
+  ...
+# Subtest: Party Fiend and buff remain a supported opening combo
+ok 247 - Party Fiend and buff remain a supported opening combo
+  ---
+  duration_ms: 0.4382
+  ...
+# Subtest: game 46 complete turn-one record: preserve Coin instead of a lone 0/2 Egg
+ok 248 - game 46 complete turn-one record: preserve Coin instead of a lone 0/2 Egg
+  ---
+  duration_ms: 31.3936
+  ...
+# Subtest: Coin remains possible for two bodies, a discard payoff, or an existing board
+ok 249 - Coin remains possible for two bodies, a discard payoff, or an existing board
+  ---
+  duration_ms: 0.5199
+  ...
+# Subtest: class priors differ, retain unknown mass, normalize aliases and expose sample support
+ok 250 - class priors differ, retain unknown mass, normalize aliases and expose sample support
+  ---
+  duration_ms: 3.777
+  ...
+# Subtest: opening forty-card signal updates the class prior but does not hard-label control
+ok 251 - opening forty-card signal updates the class prior but does not hard-label control
+  ---
+  duration_ms: 0.4979
+  ...
+# Subtest: a conventional forty-card Coin opening uses the same cohort before Health is updated
+ok 252 - a conventional forty-card Coin opening uses the same cohort before Health is updated
+  ---
+  duration_ms: 2.0152
+  ...
+# Subtest: a thirty-card Coin opening and unrelated totals do not get the forty-card prior
+ok 253 - a thirty-card Coin opening and unrelated totals do not get the forty-card prior
+  ---
+  duration_ms: 0.5079
+  ...
+# Subtest: public count snapshots from the stopped batch expose the corrected opening signal
+ok 254 - public count snapshots from the stopped batch expose the corrected opening signal
+  ---
+  duration_ms: 1.9743
+  ...
+# Subtest: only current public card signatures update; hidden/future cards cannot affect estimates
+ok 255 - only current public card signatures update; hidden/future cards cannot affect estimates
+  ---
+  duration_ms: 0.5523
+  ...
+# Subtest: live objective exposes priors, changes neutral weights and lets observed pressure/quest override
+ok 256 - live objective exposes priors, changes neutral weights and lets observed pressure/quest override
+  ---
+  duration_ms: 4.83
+  ...
+# Subtest: a read that ends inside an options block is flagged, so snapshot waits for the rest
+ok 257 - a read that ends inside an options block is flagged, so snapshot waits for the rest
+  ---
+  duration_ms: 9.44
+  ...
+# Subtest: lethal behind a Taunt: break it, then go face
+ok 258 - lethal behind a Taunt: break it, then go face
+  ---
+  duration_ms: 30.9215
+  ...
+# Subtest: Divine Shield eats the first hit
+ok 259 - Divine Shield eats the first hit
+  ---
+  duration_ms: 1.8705
+  ...
+# Subtest: a Deathrattle on a death ends the plan: the board after it is not predictable
+ok 260 - a Deathrattle on a death ends the plan: the board after it is not predictable
+  ---
+  duration_ms: 1.6882
+  ...
+# Subtest: buff first, then swing: the order the per-option scorer could not see
+ok 261 - buff first, then swing: the order the per-option scorer could not see
+  ---
+  duration_ms: 4.5146
+  ...
+# Subtest: Whispers: the buff lands and the cheapest card goes
+ok 262 - Whispers: the buff lands and the cheapest card goes
+  ---
+  duration_ms: 2.8045
+  ...
+# Subtest: menu: attack options become plans, everything else stays
+ok 263 - menu: attack options become plans, everything else stays
+  ---
+  duration_ms: 5.8762
+  ...
+# Subtest: the prediction matches a board that did what was planned
+ok 264 - the prediction matches a board that did what was planned
+  ---
+  duration_ms: 3.219
+  ...
+# Subtest: Party Fiend first, then the buff lands on all five bodies
+ok 265 - Party Fiend first, then the buff lands on all five bodies
+  ---
+  duration_ms: 11.9275
+  ...
+# Subtest: summons for the opponent or per-something stay unmodelled
+ok 266 - summons for the opponent or per-something stay unmodelled
+  ---
+  duration_ms: 1.1938
+  ...
+# Subtest: a buff-first candidate that discards a draw-only payoff stops to observe draw effects
+ok 267 - a buff-first candidate that discards a draw-only payoff stops to observe draw effects
+  ---
+  duration_ms: 2.6536
+  ...
+# Subtest: a buff plan names the minions it would miss
+ok 268 - a buff plan names the minions it would miss
+  ---
+  duration_ms: 18.1751
+  ...
+# Subtest: the hero never swings into a minion that kills it
+ok 269 - the hero never swings into a minion that kills it
+  ---
+  duration_ms: 0.5417
+  ...
+# Subtest: Deathrattle text a card gives away is not its own
+ok 270 - Deathrattle text a card gives away is not its own
+  ---
+  duration_ms: 0.6016
+  ...
+# Subtest: healthy, the weapon takes the big hit and the minion the small one
+ok 271 - healthy, the weapon takes the big hit and the minion the small one
+  ---
+  duration_ms: 5.4939
+  ...
+# Subtest: no swing is spent chipping a minion that a later attacker kills alone
+ok 272 - no swing is spent chipping a minion that a later attacker kills alone
+  ---
+  duration_ms: 5.2386
+  ...
+# Subtest: Chronoclaws in hand counts toward lethal (game 16 turn 16)
+ok 273 - Chronoclaws in hand counts toward lethal (game 16 turn 16)
+  ---
+  duration_ms: 119.7579
+  ...
+# Subtest: on a full board a 1/1 pops the shield to make room for Duke of Below (game 19 turn 14)
+ok 274 - on a full board a 1/1 pops the shield to make room for Duke of Below (game 19 turn 14)
+  ---
+  duration_ms: 24.9641
+  ...
+# Subtest: no low tempo opening never keeps four-cost weapon
+ok 275 - no low tempo opening never keeps four-cost weapon
+  ---
+  duration_ms: 9.87
+  ...
+# Subtest: only end-turn bypasses model entirely
+ok 276 - only end-turn bypasses model entirely
+  ---
+  duration_ms: 0.3693
+  ...
+# Subtest: a lethal board never reaches the model
+ok 277 - a lethal board never reaches the model
+  ---
+  duration_ms: 0.4987
+  ...
+# Subtest: one point short is still a judgement call
+ok 278 - one point short is still a judgement call
+  ---
+  duration_ms: 0.2474
+  ...
+# Subtest: damage that cannot reach the face is not lethal
+ok 279 - damage that cannot reach the face is not lethal
+  ---
+  duration_ms: 0.2383
+  ...
+# Subtest: armour counts toward the hero that has to be killed
+ok 280 - armour counts toward the hero that has to be killed
+  ---
+  duration_ms: 0.2717
+  ...
+# Subtest: a self-damaging hero power is off the table once their board already kills us
+ok 281 - a self-damaging hero power is off the table once their board already kills us
+  ---
+  duration_ms: 13.4786
+  ...
+# Subtest: the same hero power stays available while the board cannot reach us
+ok 282 - the same hero power stays available while the board cannot reach us
+  ---
+  duration_ms: 5.1176
+  ...
+# Subtest: a Taunt in the way is health they must get through first
+ok 283 - a Taunt in the way is health they must get through first
+  ---
+  duration_ms: 3.6078
+  ...
+# Subtest: the Coin is forbidden when the extra crystal buys nothing
+ok 284 - the Coin is forbidden when the extra crystal buys nothing
+  ---
+  duration_ms: 20.3123
+  ...
+# Subtest: a dormant or frozen body is not incoming damage (game 4, turn 15)
+ok 285 - a dormant or frozen body is not incoming damage (game 4, turn 15)
+  ---
+  duration_ms: 2.5264
+  ...
+# Subtest: a free-choice outlet in hand blocks hard-casting the fodder (game 4, turns 5 and 7)
+ok 286 - a free-choice outlet in hand blocks hard-casting the fodder (game 4, turns 5 and 7)
+  ---
+  duration_ms: 9.3912
+  ...
+# Subtest: a look-at-3 outlet blocks only while at most two cards in hand are not fodder
+ok 287 - a look-at-3 outlet blocks only while at most two cards in hand are not fodder
+  ---
+  duration_ms: 9.9863
+  ...
+# Subtest: a highest-cost outlet blocks only while the fodder is the dearest thing in hand
+ok 288 - a highest-cost outlet blocks only while the fodder is the dearest thing in hand
+  ---
+  duration_ms: 5.6166
+  ...
+# Subtest: blocking the fodder never leaves Jev with nothing to pick
+ok 289 - blocking the fodder never leaves Jev with nothing to pick
+  ---
+  duration_ms: 2.2013
+  ...
+# Subtest: whispers reaches the fodder only when the fodder is the cheapest card in hand
+ok 290 - whispers reaches the fodder only when the fodder is the cheapest card in hand
+  ---
+  duration_ms: 6.5608
+  ...
+# Subtest: whispers is off the table with no board and a real card as the cheapest
+ok 291 - whispers is off the table with no board and a real card as the cheapest
+  ---
+  duration_ms: 14.951
+  ...
+# Subtest: bodies go down before whispers
+ok 292 - bodies go down before whispers
+  ---
+  duration_ms: 9.0602
+  ...
+# Subtest: three bodies out and whispers in hand takes END_TURN away
+ok 293 - three bodies out and whispers in hand takes END_TURN away
+  ---
+  duration_ms: 11.5031
+  ...
+# Subtest: a Temporary pick that cannot be cast keeps only the picks that pay out from the discard
+ok 294 - a Temporary pick that cannot be cast keeps only the picks that pay out from the discard
+  ---
+  duration_ms: 1.2712
+  ...
+# Subtest: mulligan throws back everything but the opening whitelist
+ok 295 - mulligan throws back everything but the opening whitelist
+  ---
+  duration_ms: 1.8969
+  ...
+# Subtest: mulligan follows the opening-hand win rates where a card has one
+ok 296 - mulligan follows the opening-hand win rates where a card has one
+  ---
+  duration_ms: 1.7778
+  ...
+# Subtest: burn goes face only when it finishes the game
+ok 297 - burn goes face only when it finishes the game
+  ---
+  duration_ms: 3.5714
+  ...
+# Subtest: a hero attack into Attack >= its Health is never offered
+ok 298 - a hero attack into Attack >= its Health is never offered
+  ---
+  duration_ms: 0.8662
+  ...
+# Subtest: cards and a safe hero power come before any attack or END_TURN
+ok 299 - cards and a safe hero power come before any attack or END_TURN
+  ---
+  duration_ms: 1.379
+  ...
+# Subtest: the hero power waits while its mana would price out a card
+ok 300 - the hero power waits while its mana would price out a card
+  ---
+  duration_ms: 0.7716
+  ...
+# Subtest: with the hand spent, a safe tap drops END_TURN but keeps the attacks
+ok 301 - with the hand spent, a safe tap drops END_TURN but keeps the attacks
+  ---
+  duration_ms: 1.5571
+  ...
+# Subtest: a tap into their board is never forced: attacks and END_TURN stay
+ok 302 - a tap into their board is never forced: attacks and END_TURN stay
+  ---
+  duration_ms: 0.5403
+  ...
+# Subtest: the Coin and discard outlets are not forced spend
+ok 303 - the Coin and discard outlets are not forced spend
+  ---
+  duration_ms: 1.2498
+  ...
+# Subtest: a battlecry picking a card in hand is not an attack (game 1, turn 11)
+ok 304 - a battlecry picking a card in hand is not an attack (game 1, turn 11)
+  ---
+  duration_ms: 0.7748
+  ...
+# Subtest: an open choice is left alone
+ok 305 - an open choice is left alone
+  ---
+  duration_ms: 0.1815
+  ...
+# Subtest: an outlet out of reach this turn, with fodder to spare, does not hold the fodder back
+ok 306 - an outlet out of reach this turn, with fodder to spare, does not hold the fodder back
+  ---
+  duration_ms: 6.3829
+  ...
+# Subtest: with no board, the Occultist discards a card that makes bodies
+ok 307 - with no board, the Occultist discards a card that makes bodies
+  ---
+  duration_ms: 3.6394
+  ...
+# Subtest: burn never goes to our own face, and goes to theirs on an empty board
+ok 308 - burn never goes to our own face, and goes to theirs on an empty board
+  ---
+  duration_ms: 0.9219
+  ...
+# Subtest: burn to a non-lethal face is still cut while they have minions
+ok 309 - burn to a non-lethal face is still cut while they have minions
+  ---
+  duration_ms: 0.8854
+  ...
+# Subtest: a multi-body card that would overflow the board waits for the attacks
+ok 310 - a multi-body card that would overflow the board waits for the attacks
+  ---
+  duration_ms: 3.5013
+  ...
+# Subtest: with room for every body, or nothing to attack with, it is played
+ok 311 - with room for every body, or nothing to attack with, it is played
+  ---
+  duration_ms: 17.3475
+  ...
+# Subtest: with a hand of nothing but fodder, a discarding burn may still go face
+ok 312 - with a hand of nothing but fodder, a discarding burn may still go face
+  ---
+  duration_ms: 1.2845
+  ...
+# Subtest: opening combos stay together, over the win-rate bands
+ok 313 - opening combos stay together, over the win-rate bands
+  ---
+  duration_ms: 1.6521
+  ...
+# Subtest: a middle-band card almost nobody keeps goes back; a 4-drop stays only beside a cheap card
+ok 314 - a middle-band card almost nobody keeps goes back; a 4-drop stays only beside a cheap card
+  ---
+  duration_ms: 0.5652
+  ...
+# Subtest: a choose-to-discard pick on a low board takes the card that summons itself
+ok 315 - a choose-to-discard pick on a low board takes the card that summons itself
+  ---
+  duration_ms: 2.1066
+  ...
+# Subtest: a discard pick throws away the card that pays, not a 0-cost Discover (game 21, turn 9)
+ok 316 - a discard pick throws away the card that pays, not a 0-cost Discover (game 21, turn 9)
+  ---
+  duration_ms: 1.1902
+  ...
+# Subtest: a discard pick clears a swarm with Soul Barrage, else weighs bodies against the buff in hand
+ok 317 - a discard pick clears a swarm with Soul Barrage, else weighs bodies against the buff in hand
+  ---
+  duration_ms: 1.2657
+  ...
+# Subtest: a random-split spell waits while the enemy has no minions and is far from lethal
+ok 318 - a random-split spell waits while the enemy has no minions and is far from lethal
+  ---
+  duration_ms: 4.0155
+  ...
+# Subtest: a draw-three waits when the deck cannot cover it
+ok 319 - a draw-three waits when the deck cannot cover it
+  ---
+  duration_ms: 1.3851
+  ...
+# Subtest: a draw-three waits when it would burn cards from a full hand
+ok 320 - a draw-three waits when it would burn cards from a full hand
+  ---
+  duration_ms: 1.7986
+  ...
+# Subtest: a choose-to-discard pick takes the curse first
+ok 321 - a choose-to-discard pick takes the curse first
+  ---
+  duration_ms: 0.9833
+  ...
+# Subtest: Life Tap availability leaves plays visible so the turn intent can decline drawing
+ok 322 - Life Tap availability leaves plays visible so the turn intent can decline drawing
+  ---
+  duration_ms: 0.977
+  ...
+# Subtest: a play that spends the mana exactly stays beside Life Tap (the 1+3 line)
+ok 323 - a play that spends the mana exactly stays beside Life Tap (the 1+3 line)
+  ---
+  duration_ms: 1.9426
+  ...
+# Subtest: a draw spell is an alternative to the board play, not a forced prerequisite
+ok 324 - a draw spell is an alternative to the board play, not a forced prerequisite
+  ---
+  duration_ms: 3.4022
+  ...
+# Subtest: Duke of Below that Life Tap would price out stays beside it (game 19, turn 10)
+ok 325 - Duke of Below that Life Tap would price out stays beside it (game 19, turn 10)
+  ---
+  duration_ms: 1.1246
+  ...
+# Subtest: Duke of Below that the Soularium would price out stays beside it (game 19, turn 8)
+ok 326 - Duke of Below that the Soularium would price out stays beside it (game 19, turn 8)
+  ---
+  duration_ms: 1.7016
+  ...
+# Subtest: a draw that is sure to pull a Shred of Time into lethal waits; one that might is left to Jev
+ok 327 - a draw that is sure to pull a Shred of Time into lethal waits; one that might is left to Jev
+  ---
+  duration_ms: 3.5183
+  ...
+# Subtest: a Chronoclaws swing that discards Hand of Gul'dan counts the Shreds it must draw
+ok 328 - a Chronoclaws swing that discards Hand of Gul'dan counts the Shreds it must draw
+  ---
+  duration_ms: 2.3611
+  ...
+# Subtest: a location still cooling down is never clicked (game 10, turn 4)
+ok 329 - a location still cooling down is never clicked (game 10, turn 4)
+  ---
+  duration_ms: 1.8591
+  ...
+# Subtest: the armed hero swings before the minions trade (game 11, turn 4)
+ok 330 - the armed hero swings before the minions trade (game 11, turn 4)
+  ---
+  duration_ms: 6.6674
+  ...
+# Subtest: Whispers waits while the card it would eat can be cast instead (game 12, turn 4)
+ok 331 - Whispers waits while the card it would eat can be cast instead (game 12, turn 4)
+  ---
+  duration_ms: 1.7956
+  ...
+# Subtest: a choose-discard does not pick the card a deathrattle already discards (game 13)
+ok 332 - a choose-discard does not pick the card a deathrattle already discards (game 13)
+  ---
+  duration_ms: 6.0575
+  ...
+# Subtest: a random discard waits while Duke of Below can be cast (game 13)
+ok 333 - a random discard waits while Duke of Below can be cast (game 13)
+  ---
+  duration_ms: 1.0784
+  ...
+# Subtest: a playable card the weapon would discard is played before the swing (game 16 turn 20)
+ok 334 - a playable card the weapon would discard is played before the swing (game 16 turn 20)
+  ---
+  duration_ms: 0.9029
+  ...
+# Subtest: a small minion pops a Divine Shield before the armed hero swings (game 16 turn 20)
+ok 335 - a small minion pops a Divine Shield before the armed hero swings (game 16 turn 20)
+  ---
+  duration_ms: 6.2584
+  ...
+# Subtest: no opponent hand identity or deck order is exported
+ok 336 - no opponent hand identity or deck order is exported
+  ---
+  duration_ms: 5.4223
+  ...
+# Subtest: public secret count blocks optimistic setup without leaking identity and changes the decision fingerprint
+ok 337 - public secret count blocks optimistic setup without leaking identity and changes the decision fingerprint
+  ---
+  duration_ms: 1.3569
+  ...
+# Subtest: only supported valid options and targets survive
+ok 338 - only supported valid options and targets survive
+  ---
+  duration_ms: 3.304
+  ...
+# Subtest: a new turn voids the last menu until its own options are printed
+ok 339 - a new turn voids the last menu until its own options are printed
+  ---
+  duration_ms: 0.8403
+  ...
+# Subtest: new game resets entities and delayed duplicate stream is ignored
+ok 340 - new game resets entities and delayed duplicate stream is ignored
+  ---
+  duration_ms: 0.3887
+  ...
+# Subtest: local player inference ignores unknown opponent name and choice
+ok 341 - local player inference ignores unknown opponent name and choice
+  ---
+  duration_ms: 0.8205
+  ...
+# Subtest: own choices survive opponent choice packets, then clear on submission
+ok 342 - own choices survive opponent choice packets, then clear on submission
+  ---
+  duration_ms: 1.1361
+  ...
+# Subtest: feeding the log line by line equals parsing it whole
+ok 343 - feeding the log line by line equals parsing it whole
+  ---
+  duration_ms: 0.9058
+  ...
+# Subtest: a choice carries the card that opened it; GameEntity is not a source
+ok 344 - a choice carries the card that opened it; GameEntity is not a source
+  ---
+  duration_ms: 1.3608
+  ...
+# Subtest: shownTurn follows the playback copy of the log, not the server
+ok 345 - shownTurn follows the playback copy of the log, not the server
+  ---
+  duration_ms: 0.6062
+  ...
+# Subtest: a Shred of Time in our deck is carried as its damage only
+ok 346 - a Shred of Time in our deck is carried as its damage only
+  ---
+  duration_ms: 0.3897
+  ...
+# Subtest: the card a friendly deathrattle will discard is marked doomed
+ok 347 - the card a friendly deathrattle will discard is marked doomed
+  ---
+  duration_ms: 3.5349
+  ...
+# Subtest: actual nested UNKNOWN ENTITY descriptor records public plays after reveal
+ok 348 - actual nested UNKNOWN ENTITY descriptor records public plays after reveal
+  ---
+  duration_ms: 6.1035
+  ...
+# Subtest: only public played/revealed cards enter live evidence; private hand/deck/secret identities stay hidden
+ok 349 - only public played/revealed cards enter live evidence; private hand/deck/secret identities stay hidden
+  ---
+  duration_ms: 1.3393
+  ...
+# Subtest: first public Health and played-card identity are fixed; later transformations do not rewrite history
+ok 350 - first public Health and played-card identity are fixed; later transformations do not rewrite history
+  ---
+  duration_ms: 1.5964
+  ...
+# Subtest: incremental parsing equals whole parsing and newly public evidence changes the material fingerprint
+ok 351 - incremental parsing equals whole parsing and newly public evidence changes the material fingerprint
+  ---
+  duration_ms: 3.0355
+  ...
+# Subtest: no future evidence is backdated when an unresolved card is revealed on another turn
+ok 352 - no future evidence is backdated when an unresolved card is revealed on another turn
+  ---
+  duration_ms: 1.0049
+  ...
+# Subtest: review separates weapon combat from its later discard trigger without exposing opponent hand
+ok 353 - review separates weapon combat from its later discard trigger without exposing opponent hand
+  ---
+  duration_ms: 7.1673
+  ...
+# Subtest: own fifth-turn eligibility follows initiative, not round number or chronological end alone
+ok 354 - own fifth-turn eligibility follows initiative, not round number or chronological end alone
+  ---
+  duration_ms: 14.998
+  ...
+# Subtest: a discard during Ocular root resolution is attached to that play
+ok 355 - a discard during Ocular root resolution is attached to that play
+  ---
+  duration_ms: 2.1388
+  ...
+# Subtest: hand entry records draw turn and resolves a card revealed after its zone change
+ok 356 - hand entry records draw turn and resolves a card revealed after its zone change
+  ---
+  duration_ms: 1.2447
+  ...
+# Subtest: SHOW_ENTITY tag blocks record new hand entry once, without counting a repeated reveal
+ok 357 - SHOW_ENTITY tag blocks record new hand entry once, without counting a repeated reveal
+  ---
+  duration_ms: 0.6856
+  ...
+# Subtest: a battlecry-draw minion is modelled; anything else in its text is not
+ok 358 - a battlecry-draw minion is modelled; anything else in its text is not
+  ---
+  duration_ms: 3.3248
+  ...
+# Subtest: game 4 turn 4: the release search plays past Platysaur, and the ruling still stands
+ok 359 - game 4 turn 4: the release search plays past Platysaur, and the ruling still stands
+  ---
+  duration_ms: 75.2349
+  ...
+# Subtest: a discard after an unknown draw no longer pretends to know the card
+ok 360 - a discard after an unknown draw no longer pretends to know the card
+  ---
+  duration_ms: 5.3545
+  ...
+# Subtest: weaponFirst gives way when the swing would discard Reliquary Prime (2026-09-25)
+ok 361 - weaponFirst gives way when the swing would discard Reliquary Prime (2026-09-25)
+  ---
+  duration_ms: 59.682
+  ...
+# Subtest: weaponFirst holds when the swing costs nothing or its discard ends the plan
+ok 362 - weaponFirst holds when the swing costs nothing or its discard ends the plan
+  ---
+  duration_ms: 39.0549
+  ...
+# Subtest: bodyBeforeBuff gives way when Party Fiend's 3 self-damage loses to their board (2026-09-29)
+ok 363 - bodyBeforeBuff gives way when Party Fiend's 3 self-damage loses to their board (2026-09-29)
+  ---
+  duration_ms: 13.5237
+  ...
+# Subtest: fodder-hold engine is frozen; current version adds the rule releases
+ok 364 - fodder-hold engine is frozen; current version adds the rule releases
+  ---
+  duration_ms: 508.0467
+  ...
+# Subtest: a ready location and the Coin that buys a board buff come before any swing
+ok 365 - a ready location and the Coin that buys a board buff come before any swing
+  ---
+  duration_ms: 17.4001
+  ...
+# Subtest: a castable board buff holds the swings back too
+ok 366 - a castable board buff holds the swings back too
+  ---
+  duration_ms: 3.84
+  ...
+# Subtest: with the location spent and no buff left, the swings come back
+ok 367 - with the location spent and no buff left, the swings come back
+  ---
+  duration_ms: 1.6288
+  ...
+# Subtest: game2 T5 prefers expendable shield pop with a funded Rush finisher
+ok 368 - game2 T5 prefers expendable shield pop with a funded Rush finisher
+  ---
+  duration_ms: 276.6507
+  ...
+# Subtest: unknown deathrattle is an observation boundary, not a reason to omit the shield-pop option
+ok 369 - unknown deathrattle is an observation boundary, not a reason to omit the shield-pop option
+  ---
+  duration_ms: 138.0246
+  ...
+# Subtest: narrative includes a minion played and killed within the same plan
+ok 370 - narrative includes a minion played and killed within the same plan
+  ---
+  duration_ms: 1.0577
+  ...
+# Subtest: changed names/ids and attack stats generalize, surviving high attacker remains a comparison
+ok 371 - changed names/ids and attack stats generalize, surviving high attacker remains a comparison
+  ---
+  duration_ms: 256.9726
+  ...
+# Subtest: frozen/sleeping/zero-Attack/absent legal attacks cannot become shield-pop intents
+ok 372 - frozen/sleeping/zero-Attack/absent legal attacks cannot become shield-pop intents
+  ---
+  duration_ms: 1.6346
+  ...
+# Subtest: no shield means no synthetic shield option; damage cannot be counted as a guaranteed shield hit
+ok 373 - no shield means no synthetic shield option; damage cannot be counted as a guaranteed shield hit
+  ---
+  duration_ms: 221.5364
+  ...
+# Subtest: packet damage requires legal affordable full text; missing option and unknown added clauses are not invented
+ok 374 - packet damage requires legal affordable full text; missing option and unknown added clauses are not invented
+  ---
+  duration_ms: 2.3385
+  ...
+# Subtest: shield alternatives do not restore premature attacks ahead of a beneficial buff
+ok 375 - shield alternatives do not restore premature attacks ahead of a beneficial buff
+  ---
+  duration_ms: 57.8213
+  ...
+# Subtest: visible lethal retains priority over low-Attack alternatives
+ok 376 - visible lethal retains priority over low-Attack alternatives
+  ---
+  duration_ms: 27.2819
+  ...
+# Subtest: previous turn-order engine remains frozen while current adds both alternatives
+ok 377 - previous turn-order engine remains frozen while current adds both alternatives
+  ---
+  duration_ms: 328.7908
+  ...
+# Subtest: setup uses full text, low Attack, affordable observed finisher and no queued random outcome
+ok 378 - setup uses full text, low Attack, affordable observed finisher and no queued random outcome
+  ---
+  duration_ms: 24.2065
+  ...
+# Subtest: insufficient follow-up mana, missing finisher and modified strong body do not force shield setup
+ok 379 - insufficient follow-up mana, missing finisher and modified strong body do not force shield setup
+  ---
+  duration_ms: 21.4907
+  ...
+# Subtest: source damage, healing, unknown deathrattle and sleeping bodies require separate comparison
+ok 380 - source damage, healing, unknown deathrattle and sleeping bodies require separate comparison
+  ---
+  duration_ms: 3.4622
+  ...
+# Subtest: enemy engine, secrets, extra enemies, self-lethal exposure and missing shield do not hard prefer setup
+ok 381 - enemy engine, secrets, extra enemies, self-lethal exposure and missing shield do not hard prefer setup
+  ---
+  duration_ms: 3.3491
+  ...
+# Subtest: after playing Rush finisher the stale high-Attack pop is blocked and low pop stays first
+ok 382 - after playing Rush finisher the stale high-Attack pop is blocked and low pop stays first
+  ---
+  duration_ms: 194.6484
+  ...
+# Subtest: Silverfish tactical reference: walking-before-buff
+ok 383 - Silverfish tactical reference: walking-before-buff
+  ---
+  duration_ms: 20.4206
+  ...
+# Subtest: Silverfish tactical reference: golem-before-buff
+ok 384 - Silverfish tactical reference: golem-before-buff
+  ---
+  duration_ms: 3.1026
+  ...
+# Subtest: Silverfish tactical reference: egg-before-buff
+ok 385 - Silverfish tactical reference: egg-before-buff
+  ---
+  duration_ms: 2.0695
+  ...
+# Subtest: Silverfish tactical reference: egg-one-slot
+ok 386 - Silverfish tactical reference: egg-one-slot
+  ---
+  duration_ms: 7.644
+  ...
+# Subtest: Silverfish tactical reference: walking-full-board
+ok 387 - Silverfish tactical reference: walking-full-board
+  ---
+  duration_ms: 1.3321
+  ...
+# Subtest: Silverfish tactical reference: duke-on-board-lethal
+ok 388 - Silverfish tactical reference: duke-on-board-lethal
+  ---
+  duration_ms: 34.0849
+  ...
+# Subtest: Silverfish tactical reference: claws-grow-duke-lethal
+ok 389 - Silverfish tactical reference: claws-grow-duke-lethal
+  ---
+  duration_ms: 3.8136
+  ...
+# Subtest: Silverfish tactical reference: grow-hand-duke-open-taunt
+ok 390 - Silverfish tactical reference: grow-hand-duke-open-taunt
+  ---
+  duration_ms: 30.4068
+  ...
+# Subtest: search key preserves attack budget, readiness, card stats and resource history
+ok 391 - search key preserves attack budget, readiness, card stats and resource history
+  ---
+  duration_ms: 2.4909
+  ...
+# Subtest: lowest/highest cost ties never invent a specific discarded card or continue
+ok 392 - lowest/highest cost ties never invent a specific discarded card or continue
+  ---
+  duration_ms: 2.1266
+  ...
+# Subtest: random summons/damage and draws end the plan, including an inexact apparent lethal
+ok 393 - random summons/damage and draws end the plan, including an inexact apparent lethal
+  ---
+  duration_ms: 2.0075
+  ...
+# Subtest: a friendly summon engine prevents an exact multi-step prediction
+ok 394 - a friendly summon engine prevents an exact multi-step prediction
+  ---
+  duration_ms: 0.6838
+  ...
+# Subtest: Duke historical tags are not counted twice; discard grows hand and board copies once
+ok 395 - Duke historical tags are not counted twice; discard grows hand and board copies once
+  ---
+  duration_ms: 0.8395
+  ...
+# Subtest: the new combo is selectable through prepare/resolve without any ready attacker
+ok 396 - the new combo is selectable through prepare/resolve without any ready attacker
+  ---
+  duration_ms: 19.7865
+  ...
+# Subtest: search enforces a deterministic node budget and exposes truncation
+ok 397 - search enforces a deterministic node budget and exposes truncation
+  ---
+  duration_ms: 5.564
+  ...
+# Subtest: ordinary discard is not a combo intent that displaces the ruled setup buff
+ok 398 - ordinary discard is not a combo intent that displaces the ruled setup buff
+  ---
+  duration_ms: 18.7754
+  ...
+# Subtest: discarding Duke or Soulfire costs a card; mentioning discard is not a payoff
+ok 399 - discarding Duke or Soulfire costs a card; mentioning discard is not a payoff
+  ---
+  duration_ms: 0.7242
+  ...
+# Subtest: seeded exhaustive combat oracle: damage maximum and lethal proof agree
+ok 400 - seeded exhaustive combat oracle: damage maximum and lethal proof agree
+  ---
+  duration_ms: 699.4204
+  ...
+# Subtest: new50 game9 T2: hold buff on one sleeping body even with no affordable Tap
+ok 401 - new50 game9 T2: hold buff on one sleeping body even with no affordable Tap
+  ---
+  duration_ms: 87.7438
+  ...
+# Subtest: holding early idle single-body buff does not ban a Temporary buff, multiple targets or immediate lethal
+ok 402 - holding early idle single-body buff does not ban a Temporary buff, multiple targets or immediate lethal
+  ---
+  duration_ms: 24.8709
+  ...
+# Subtest: recorded one-body board: Occultist discards Walking Dead instead of forced single-body buff
+ok 403 - recorded one-body board: Occultist discards Walking Dead instead of forced single-body buff
+  ---
+  duration_ms: 84.6969
+  ...
+# Subtest: low-board priority requires affordable source, payoff, full room, and mutually exclusive mana
+ok 404 - low-board priority requires affordable source, payoff, full room, and mutually exclusive mana
+  ---
+  duration_ms: 1.1321
+  ...
+# Subtest: single-body buff lethal and free information still precede ordinary development
+ok 405 - single-body buff lethal and free information still precede ordinary development
+  ---
+  duration_ms: 28.1196
+  ...
+# Subtest: prospective schedule is reproducible, balanced within each time block
+ok 406 - prospective schedule is reproducible, balanced within each time block
+  ---
+  duration_ms: 5.2003
+  ...
+# Subtest: zero/all wins get bounded non-degenerate uncertainty; equal groups are inconclusive
+ok 407 - zero/all wins get bounded non-degenerate uncertainty; equal groups are inconclusive
+  ---
+  duration_ms: 0.5994
+  ...
+# Subtest: in-game failures are non-wins; pending games cannot establish an improvement
+ok 408 - in-game failures are non-wins; pending games cannot establish an improvement
+  ---
+  duration_ms: 1.3606
+  ...
+# Subtest: duplicated games and mixed evaluation conditions are rejected
+ok 409 - duplicated games and mixed evaluation conditions are rejected
+  ---
+  duration_ms: 0.757
+  ...
+# Subtest: completed subsets cannot pass for the registered full experiment
+ok 410 - completed subsets cannot pass for the registered full experiment
+  ---
+  duration_ms: 1.7224
+  ...
+# Subtest: live version switch uses the new engine and rejects typos
+ok 411 - live version switch uses the new engine and rejects typos
+  ---
+  duration_ms: 547.0471
+  ...
+# Subtest: game 51: tapping from six to four exposes exactly lethal existing board damage
+ok 412 - game 51: tapping from six to four exposes exactly lethal existing board damage
+  ---
+  duration_ms: 29.0578
+  ...
+# Subtest: one extra Health, armour, or a prior removal can make the tap available after re-observation
+ok 413 - one extra Health, armour, or a prior removal can make the tap available after re-observation
+  ---
+  duration_ms: 3.6705
+  ...
+# Subtest: guaranteed known draw damage counts in post-tap survival too
+ok 414 - guaranteed known draw damage counts in post-tap survival too
+  ---
+  duration_ms: 0.9976
+  ...
+# Subtest: Eswin T3: verified Temporary 325 waits for free expiry, leaving safe Life Tap available
+ok 415 - Eswin T3: verified Temporary 325 waits for free expiry, leaving safe Life Tap available
+  ---
+  duration_ms: 87.1534
+  ...
+# Subtest: Discover note distinguishes free turn-end payoff from the affordable printed cost
+ok 416 - Discover note distinguishes free turn-end payoff from the affordable printed cost
+  ---
+  duration_ms: 7.4765
+  ...
+# Subtest: exact-text self-summon generalizes across name/id/stat changes
+ok 417 - exact-text self-summon generalizes across name/id/stat changes
+  ---
+  duration_ms: 8.3196
+  ...
+# Subtest: non-temporary, wrong expiry, untrusted enchantment and unknown appended clauses retain the cast
+ok 418 - non-temporary, wrong expiry, untrusted enchantment and unknown appended clauses retain the cast
+  ---
+  duration_ms: 112.3448
+  ...
+# Subtest: an affordable follow-up buff or immediate attack preserves the paid-play comparison
+ok 419 - an affordable follow-up buff or immediate attack preserves the paid-play comparison
+  ---
+  duration_ms: 134.7999
+  ...
+# Subtest: summon-trigger engine preserves immediate value; spent Battlecry alone does not
+ok 420 - summon-trigger engine preserves immediate value; spent Battlecry alone does not
+  ---
+  duration_ms: 8.8392
+  ...
+# Subtest: highest-cost weapon setup is left to existing weapon rules rather than this expiry gate
+ok 421 - highest-cost weapon setup is left to existing weapon rules rather than this expiry gate
+  ---
+  duration_ms: 0.838
+  ...
+# Subtest: reserve all known expiring body slots and reject unknown competing expiry outcomes
+ok 422 - reserve all known expiring body slots and reject unknown competing expiry outcomes
+  ---
+  duration_ms: 1.0202
+  ...
+# Subtest: spare mana never overrides lethal self-damage, overdraw or fatigue draw gates
+ok 423 - spare mana never overrides lethal self-damage, overdraw or fatigue draw gates
+  ---
+  duration_ms: 15.8391
+  ...
+# Subtest: no draw option still permits attacks and ending without spending on the expiring body
+ok 424 - no draw option still permits attacks and ending without spending on the expiring body
+  ---
+  duration_ms: 5.0135
+  ...
+# Subtest: after attacks, safe spare mana draws even while the free expiring body remains in hand
+ok 425 - after attacks, safe spare mana draws even while the free expiring body remains in hand
+  ---
+  duration_ms: 7.6414
+  ...
+# Subtest: current queued guard rejects raw hard-cast too; previous shield engine remains frozen
+ok 426 - current queued guard rejects raw hard-cast too; previous shield engine remains frozen
+  ---
+  duration_ms: 85.8933
+  ...
+# Subtest: new50 game10 T1: Temporary Party develops without Coin; full pipeline retains the ruling
+ok 427 - new50 game10 T1: Temporary Party develops without Coin; full pipeline retains the ruling
+  ---
+  duration_ms: 78.3245
+  ...
+# Subtest: expiry alone cannot force self-damage, an illegal card, crowded board or a regular non-Temporary Party
+ok 428 - expiry alone cannot force self-damage, an illegal card, crowded board or a regular non-Temporary Party
+  ---
+  duration_ms: 0.9652
+  ...
+# Subtest: real Temporary enchantment survives parsing and vanishes when removed or card leaves hand
+ok 429 - real Temporary enchantment survives parsing and vanishes when removed or card leaves hand
+  ---
+  duration_ms: 8.3397
+  ...
+# Subtest: game 4 T6: random damage plus development reserves six total mana without claiming kills
+ok 430 - game 4 T6: random damage plus development reserves six total mana without claiming kills
+  ---
+  duration_ms: 174.1737
+  ...
+# Subtest: safe draw remains a competing information intent with four mana and an observation boundary
+ok 431 - safe draw remains a competing information intent with four mana and an observation boundary
+  ---
+  duration_ms: 79.708
+  ...
+# Subtest: conditional minion death link is distinct from automatic end-of-turn expiry
+ok 432 - conditional minion death link is distinct from automatic end-of-turn expiry
+  ---
+  duration_ms: 111.4398
+  ...
+# Subtest: otherwise equivalent Dukes use the threatened copy in direct choices, plans and queue guards
+ok 433 - otherwise equivalent Dukes use the threatened copy in direct choices, plans and queue guards
+  ---
+  duration_ms: 142.1754
+  ...
+# Subtest: equivalent-copy ruling generalizes across minion names, card IDs and common stat changes
+ok 434 - equivalent-copy ruling generalizes across minion names, card IDs and common stat changes
+  ---
+  duration_ms: 0.996
+  ...
+# Subtest: different costs, stats, effects, enchantments and positional mechanics retain separate comparisons
+ok 435 - different costs, stats, effects, enchantments and positional mechanics retain separate comparisons
+  ---
+  duration_ms: 2.7117
+  ...
+# Subtest: unpayable threatened copy cannot remove a legal safe copy
+ok 436 - unpayable threatened copy cannot remove a legal safe copy
+  ---
+  duration_ms: 2.8838
+  ...
+# Subtest: another positional hand card prevents collapsing distinct copy positions
+ok 437 - another positional hand card prevents collapsing distinct copy positions
+  ---
+  duration_ms: 0.7981
+  ...
+# Subtest: structured discard link requires its active exact-text source and strong evidence
+ok 438 - structured discard link requires its active exact-text source and strong evidence
+  ---
+  duration_ms: 3.7924
+  ...
+# Subtest: narration warns about a linked card left in hand when Platysaur dies
+ok 439 - narration warns about a linked card left in hand when Platysaur dies
+  ---
+  duration_ms: 74.5986
+  ...
+# Subtest: random damage development intent does not spend unavailable mana or overflow the board
+ok 440 - random damage development intent does not spend unavailable mana or overflow the board
+  ---
+  duration_ms: 1.7784
+  ...
+# Subtest: damage-plus-development intent uses full text rather than fixed card names or IDs
+ok 441 - damage-plus-development intent uses full text rather than fixed card names or IDs
+  ---
+  duration_ms: 0.5545
+  ...
+# Subtest: alternative draw guidance cannot bypass self-lethal, fatigue or full-hand gates
+ok 442 - alternative draw guidance cannot bypass self-lethal, fatigue or full-hand gates
+  ---
+  duration_ms: 171.0625
+  ...
+# Subtest: previous engine remains frozen with both copies; current engine admits all three user comparisons
+ok 443 - previous engine remains frozen with both copies; current engine admits all three user comparisons
+  ---
+  duration_ms: 129.6805
+  ...
+# Subtest: spend-first keeps a buff-then-attack plan available to Jev rather than discarding the plan
+ok 444 - spend-first keeps a buff-then-attack plan available to Jev rather than discarding the plan
+  ---
+  duration_ms: 75.5024
+  ...
+# Subtest: drawing is a terminal optional intent with known costs, not invented cards or a compulsory choice
+ok 445 - drawing is a terminal optional intent with known costs, not invented cards or a compulsory choice
+  ---
+  duration_ms: 45.1395
+  ...
+# Subtest: draw-spell plans stop for new information and explain affordable buff continuation conditionally
+ok 446 - draw-spell plans stop for new information and explain affordable buff continuation conditionally
+  ---
+  duration_ms: 34.9554
+  ...
+# Subtest: buff planning includes a ready zero-Attack egg, but never a sleeping/new egg
+ok 447 - buff planning includes a ready zero-Attack egg, but never a sleeping/new egg
+  ---
+  duration_ms: 8.9787
+  ...
+# Subtest: Eswin T2: the first buff does not authorize attacks ahead of the second buff
+ok 448 - Eswin T2: the first buff does not authorize attacks ahead of the second buff
+  ---
+  duration_ms: 293.301
+  ...
+# Subtest: all recorded intermediate attack prefixes, including the screenshot, still require the remaining buff
+ok 449 - all recorded intermediate attack prefixes, including the screenshot, still require the remaining buff
+  ---
+  duration_ms: 99.1319
+  ...
+# Subtest: second buff discards the random payoff and stops before any invented summons or queued attacks
+ok 450 - second buff discards the random payoff and stops before any invented summons or queued attacks
+  ---
+  duration_ms: 19.0807
+  ...
+# Subtest: missing or unaffordable second buff does not block attacks solely because its card is visible
+ok 451 - missing or unaffordable second buff does not block attacks solely because its card is visible
+  ---
+  duration_ms: 30.1836
+  ...
+# Subtest: second-buff order and random boundary use card text rather than names or entity ids
+ok 452 - second-buff order and random boundary use card text rather than names or entity ids
+  ---
+  duration_ms: 17.5789
+  ...
+# Subtest: this replay was played by the old engine; current queued ordering rejects its first attack
+ok 453 - this replay was played by the old engine; current queued ordering rejects its first attack
+  ---
+  duration_ms: 154.5095
+  ...
+# Subtest: the card we dragged left the hand
+ok 454 - the card we dragged left the hand
+  ---
+  duration_ms: 1.9417
+  ...
+# Subtest: its neighbour left the hand instead: misfire, not success
+ok 455 - its neighbour left the hand instead: misfire, not success
+  ---
+  duration_ms: 0.3918
+  ...
+# Subtest: a draw alone is not the play we asked for
+ok 456 - a draw alone is not the play we asked for
+  ---
+  duration_ms: 1.0948
+  ...
+# Subtest: the right attacker hit the right target
+ok 457 - the right attacker hit the right target
+  ---
+  duration_ms: 0.7676
+  ...
+# Subtest: the swing landed on the minion next door
+ok 458 - the swing landed on the minion next door
+  ---
+  duration_ms: 0.281
+  ...
+# Subtest: the other minion attacked
+ok 459 - the other minion attacked
+  ---
+  duration_ms: 0.3066
+  ...
+# Subtest: an attacker that died trading still counts as having swung
+ok 460 - an attacker that died trading still counts as having swung
+  ---
+  duration_ms: 0.2837
+  ...
+# Subtest: hero power, end turn, choices
+ok 461 - hero power, end turn, choices
+  ---
+  duration_ms: 0.341
+  ...
+# Subtest: a location that opens its pick-one prompt has fired
+ok 462 - a location that opens its pick-one prompt has fired
+  ---
+  duration_ms: 0.5348
+  ...
+# Subtest: an attack that played a hand card instead is a misfire
+ok 463 - an attack that played a hand card instead is a misfire
+  ---
+  duration_ms: 0.4888
+  ...
+# Subtest: an attack on a hero whose weapon soaks the damage still hit
+ok 464 - an attack on a hero whose weapon soaks the damage still hit
+  ---
+  duration_ms: 0.2845
+  ...
+# Subtest: a moving weapon or hero is no proof of a wrong target
+ok 465 - a moving weapon or hero is no proof of a wrong target
+  ---
+  duration_ms: 0.2011
+  ...
+# Subtest: game 179 turn 1: inspect Catacombs before spending the mana for a Temporary card
+ok 466 - game 179 turn 1: inspect Catacombs before spending the mana for a Temporary card
+  ---
+  duration_ms: 70.4354
+  ...
+# Subtest: game 179 turn 3: safe Tap before Whispers can change its forced weapon discard
+ok 467 - game 179 turn 3: safe Tap before Whispers can change its forced weapon discard
+  ---
+  duration_ms: 27.8353
+  ...
+# Subtest: information preference respects mana, lethal, hand space, fatigue and self-damage
+ok 468 - information preference respects mana, lethal, hand space, fatigue and self-damage
+  ---
+  duration_ms: 7.5298
+  ...
+# Subtest: game18 T5: five mana pays weapon and buff; discard summon costs zero
+ok 469 - game18 T5: five mana pays weapon and buff; discard summon costs zero
+  ---
+  duration_ms: 71.1785
+  ...
+# Subtest: after equip, hero swings before buff, then random summon requires observation
+ok 470 - after equip, hero swings before buff, then random summon requires observation
+  ---
+  duration_ms: 11.6403
+  ...
+# Subtest: case2: four mana keeps weapon-only and direct summon+buff alternatives
+ok 471 - case2: four mana keeps weapon-only and direct summon+buff alternatives
+  ---
+  duration_ms: 15.1746
+  ...
+# Subtest: case3: other highest-cost payoff and a 3/4-health trade are exposed for comparison
+ok 472 - case3: other highest-cost payoff and a 3/4-health trade are exposed for comparison
+  ---
+  duration_ms: 14.0876
+  ...
+# Subtest: ties, frozen/exhausted heroes, secret uncertainty and insufficient slots are not forced
+ok 473 - ties, frozen/exhausted heroes, secret uncertainty and insufficient slots are not forced
+  ---
+  duration_ms: 16.5306
+  ...
+# Subtest: visible buff lethal remains available before weapon development
+ok 474 - visible buff lethal remains available before weapon development
+  ---
+  duration_ms: 55.4935
+  ...
+# Subtest: unaffordable weapon does not prevent direct summon+buff ordering
+ok 475 - unaffordable weapon does not prevent direct summon+buff ordering
+  ---
+  duration_ms: 3.6363
+  ...
+# Subtest: recorded game1 turn4 plays observed 8/8 before spending all mana on Chronoclaws
+ok 476 - recorded game1 turn4 plays observed 8/8 before spending all mana on Chronoclaws
+  ---
+  duration_ms: 110.1573
+  ...
+# Subtest: a fresh equipped zero-mana state holds nonlethal face swing; queued plans use the same rule
+ok 477 - a fresh equipped zero-mana state holds nonlethal face swing; queued plans use the same rule
+  ---
+  duration_ms: 6.166
+  ...
+# Subtest: visible face lethal wins even when it discards the valuable minion
+ok 478 - visible face lethal wins even when it discards the valuable minion
+  ---
+  duration_ms: 5.3724
+  ...
+# Subtest: generic observed valuable body and changed costs/entity ids generalize
+ok 479 - generic observed valuable body and changed costs/entity ids generalize
+  ---
+  duration_ms: 9.6831
+  ...
+# Subtest: ties are logged and cannot promise Walking Dead after an intervening draw
+ok 480 - ties are logged and cannot promise Walking Dead after an intervening draw
+  ---
+  duration_ms: 1.667
+  ...
+# Subtest: discard payoff body, draw or random summons remain eligible weapon intents
+ok 481 - discard payoff body, draw or random summons remain eligible weapon intents
+  ---
+  duration_ms: 1.2815
+  ...
+# Subtest: small bodies and unknown Battlecries are comparisons, not forced 6/7-mana claims
+ok 482 - small bodies and unknown Battlecries are comparisons, not forced 6/7-mana claims
+  ---
+  duration_ms: 2.0508
+  ...
+# Subtest: missing legal play, unaffordable development and full board never invent a body action
+ok 483 - missing legal play, unaffordable development and full board never invent a body action
+  ---
+  duration_ms: 2.1864
+  ...
+# Subtest: hero attack availability is checked before treating equipping as an immediate discard route
+ok 484 - hero attack availability is checked before treating equipping as an immediate discard route
+  ---
+  duration_ms: 2.0836
+  ...
+# Subtest: necessary removal, secrets, active friendly engines and near lethal stay in full comparison
+ok 485 - necessary removal, secrets, active friendly engines and near lethal stay in full comparison
+  ---
+  duration_ms: 47.0324
+  ...
+# Subtest: do not force passing while another legal resource/card/removal action remains
+ok 486 - do not force passing while another legal resource/card/removal action remains
+  ---
+  duration_ms: 1.2229
+  ...
+# Subtest: free information can precede commitment without spending the protected development mana
+ok 487 - free information can precede commitment without spending the protected development mana
+  ---
+  duration_ms: 0.5082
+  ...
+# Subtest: equipped affordable body uses same evidence; new draw and attack buffs are rechecked
+ok 488 - equipped affordable body uses same evidence; new draw and attack buffs are rechecked
+  ---
+  duration_ms: 1.5115
+  ...
+# Subtest: chamber engine is frozen, current version adds the ruling without mutating historical behavior
+ok 489 - chamber engine is frozen, current version adds the ruling without mutating historical behavior
+  ---
+  duration_ms: 154.8836
+  ...
+# Subtest: recorded game3 turn6 swings the 1-durability Chronoclaws before equipping the second copy
+ok 490 - recorded game3 turn6 swings the 1-durability Chronoclaws before equipping the second copy
+  ---
+  duration_ms: 74.9565
+  ...
+# Subtest: user contrast: with only the new weapon in hand, swinging first would discard it, so both orders stay
+ok 491 - user contrast: with only the new weapon in hand, swinging first would discard it, so both orders stay
+  ---
+  duration_ms: 11.7933
+  ...
+# Subtest: same-cost tie that includes the new weapon is a different discard set and is compared
+ok 492 - same-cost tie that includes the new weapon is a different discard set and is compared
+  ---
+  duration_ms: 0.9808
+  ...
+# Subtest: tie of payoffs without the new weapon keeps the proof; every tied card must pay
+ok 493 - tie of payoffs without the new weapon keeps the proof; every tied card must pay
+  ---
+  duration_ms: 1.4087
+  ...
+# Subtest: a new weapon that hits harder makes equip-first a different swing and is compared
+ok 494 - a new weapon that hits harder makes equip-first a different swing and is compared
+  ---
+  duration_ms: 1.2743
+  ...
+# Subtest: a top card that does not pay in full is left to comparison
+ok 495 - a top card that does not pay in full is left to comparison
+  ---
+  duration_ms: 4.1293
+  ...
+# Subtest: overdraw, fatigue and a full board for body payoffs keep both orders
+ok 496 - overdraw, fatigue and a full board for body payoffs keep both orders
+  ---
+  duration_ms: 2.551
+  ...
+# Subtest: no free face swing, secrets, hero unable to swing or windfury leave the orders to comparison
+ok 497 - no free face swing, secrets, hero unable to swing or windfury leave the orders to comparison
+  ---
+  duration_ms: 3.2737
+  ...
+# Subtest: only the known Chronoclaws discard text is modelled; mana, legality and choices are checked
+ok 498 - only the known Chronoclaws discard text is modelled; mana, legality and choices are checked
+  ---
+  duration_ms: 1.7259
+  ...
+# Subtest: visible lethal still wins before the replacement veto
+ok 499 - visible lethal still wins before the replacement veto
+  ---
+  duration_ms: 6.7933
+  ...
+# Subtest: replacement swing damage counts the equipped weapon once, keeping only the hero bonus
+ok 500 - replacement swing damage counts the equipped weapon once, keeping only the hero bonus
+  ---
+  duration_ms: 21.1243
+  ...
+# Subtest: validated-turn-intents engine is frozen; current version adds the veto
+ok 501 - validated-turn-intents engine is frozen; current version adds the veto
+  ---
+  duration_ms: 162.3166
+  ...
+1..501
+# tests 501
+# suites 0
+# pass 501
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7058.6333

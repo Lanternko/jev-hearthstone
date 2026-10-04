@@ -1,0 +1,217 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-29T19:04:05.701Z"
+ },
+ "state": {
+  "gameNumber": 34,
+  "turn": 14,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 6,
+   "maxMana": 7,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 2,
+   "deckCount": 11,
+   "board": [
+    {
+     "entityId": 62,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "ATK": 4,
+     "HEALTH": 30,
+     "DAMAGE": 24,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 55,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 126,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 43,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 52,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "PALADIN",
+   "mana": 1,
+   "maxMana": 7,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 15,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_04w",
+     "name": "Sir Finley Mrrgglton",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 18,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_04wbp",
+     "name": "Reinforce",
+     "text": "<b>Hero Power</b>\nSummon a {0} Silver Hand Recruit.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 96,
+     "cardId": "WW_051t",
+     "name": "Outlaw",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 7,
+     "HEALTH": 5,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0,
+     "RUSH": 1
+    },
+    {
+     "entityId": 4,
+     "cardId": "TOY_882",
+     "name": "Trinket Artist",
+     "text": "<b>Battlecry:</b> Draw a <b>Divine Shield</b> minion\nand an Aura.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 123,
+     "cardId": "CS2_101t2",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ]
+  },
+  "optionsId": 55,
+  "fingerprint": "b5f8ffa8641abcee95ce",
+  "decisionFingerprint": "6f5907f3ef16171742bc"
+ },
+ "options": [
+  {
+   "option": 1,
+   "entityId": 43,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2"
+  }
+ ]
+}

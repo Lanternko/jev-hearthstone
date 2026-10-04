@@ -85,7 +85,7 @@ test('Chamber requires a real offered summoning discard and Duke uses actual tag
 
 test('previous version loads its own policy; new default labels matchup objective distinctly',async()=>{
  const current=await loadDecisionEngine(),old=await loadDecisionEngine('silverfish-v1-opening-burst-v1');
- assert.equal(current.version,'silverfish-v1-fodder-hold-v1');
+ assert.equal(current.version,'silverfish-v1-rule-release-v1');
  const s=board(refillState()),acts=options(s);
  assert.ok(current.constrainActions(s,acts).some(a=>a.id==='tap'));
  assert.ok(!old.constrainActions(s,acts).some(a=>a.id==='tap'));

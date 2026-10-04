@@ -366,7 +366,7 @@ export function menu(state,actions,base,{admission=combinationAdmission(state,ac
 
 // The live option that carries out one planned step, or null if the game no longer offers it.
 export const actionFor=(actions,step)=>actions.find(a=>a.entityId===step.id
-  &&(step.kind==='attack'?a.targetId===step.targetId:a.targetId==null));
+  &&(step.kind==='attack'||step.targetId!=null?a.targetId===step.targetId:a.targetId==null));
 
 // Incomplete development alternatives (no buff reserve or a different discard
 // target) are comparison options, never combo proofs. They come from the same

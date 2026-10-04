@@ -3,6 +3,7 @@
 - 批次 runtime/ranked-2026-10-04T18-36-19-969Z/。我方 2/2、2/2，對面 3/2、2/1、2/1（攻擊合計 7），Jev 打 Entropic Continuity 加 buff，再點抽牌。使用者：「應該要 occultist + 靈魂彈幕（對面滿地雜毛）、325 也可以接受」。
 - 根因是 policy.mjs 的 boardFirstDiscard：我方場上 ≤2 隻時，只留「棄了會召喚」的魔眼目標，所以把棄彈幕也砍掉了，Jev 只剩「棄 325」可以和 buff+抽牌比。現在對面成群（至少 3 隻 ≤2 血，或這些小怪攻擊合計 ≥5，跟 splitBurnWaits 共用 swarmed()）時，分攤傷害的棄牌目標保留。
 - 新規則 swarmOccultist：我方 ≤2 隻、對面成群、對手血量 >12、而且魔眼能棄分攤傷害牌時，出牌只留「魔眼棄彈幕」和「魔眼棄召喚類」，其他卡、英雄技能和結束回合先擱著，攻擊不受限。重播後選單是 o1t1、o1t4 加四個攻擊。測試 test/swarm-occultist.test.mjs（fixture user-rulings/swarm-occultist-barrage.json），全套 539/539。
+- **使用者追問：「就算只比較這兩個」，魔眼棄 325 約 6 費價值，buff+抽牌不到 3 費，為何還輸？** 第二個根因是 sim.mjs 根本不模擬「魔眼選牌棄掉」：fromState 只把無目標的出牌當成可打，所以魔眼（選項帶 hand targetId）從未進入搜尋，p1–p4 全是 buff 線，Jev 只能拿沒估值的裸選項 o1t4 跟有分數的計畫比。現在 cardModel 認得「Battlecry: Choose a card in your hand to discard」（chooseDiscard），moves() 對每張手牌各產生一步 {play,id,targetId}，applyStep 落地後用 discard(s,'pick',id) 棄掉指定牌（325 照樣召喚 2/5 嘲諷）。plan.mjs actionFor 與 combo-admission.mjs firstAction 改成帶 targetId 的 play 也要比對目標。重播：魔眼棄 325 20.5 分，buff+交換+抽牌 7.3 分。test/swarm-occultist.test.mjs 加一題，全套 540/540。
 
 # 2026-10-05 實戰小批第 2 輪第 1 場：暫時牌、毒性誤讀、搶臉不解場、落後時丟古爾丹
 

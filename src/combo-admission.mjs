@@ -9,7 +9,7 @@ const HIGH=/^after your hero attacks, discard your highest cost card\.?$/i;
 const live=s=>s.me.filter(b=>b.type==='MINION'&&!b.dormant&&b.hp>0).length;
 const room=s=>7-s.me.filter(b=>b.type==='MINION').length-s.locations;
 const firstAction=(actions,m)=>actions.find(a=>a.entityId===m.id
-  &&(m.kind==='attack'?a.targetId===m.targetId:a.targetId==null));
+  &&(m.kind==='attack'||m.targetId!=null?a.targetId===m.targetId:a.targetId==null));
 const threat=s=>s.opp.filter(b=>b.type==='MINION'&&!b.dormant&&!b.frozen).reduce((n,b)=>n+b.atk,0);
 
 export function combinationAdmission(state,actions,{maxNodes=256,depth=4}={}){

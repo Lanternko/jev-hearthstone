@@ -79,6 +79,9 @@ export function fromState(state,actions=[]){
     b.maxAttacks=b.windfury?2:1;
   }
   const plays=new Set(actions.filter(a=>a.targetId==null&&(state.me.hand??[]).some(c=>c.entityId===a.entityId)).map(a=>a.entityId));
+  // A battlecry that discards a chosen card is offered once per hand target.
+  const inHand=id=>(state.me.hand??[]).some(c=>c.entityId===id);
+  for(const a of actions)if(a.targetId!=null&&inHand(a.entityId)&&inHand(a.targetId))plays.add(a.entityId);
   // Game 19 (2026-09-29), turn 14: on a full board the game offers no minion from hand, so Duke of
   // Below, 16/16 Rush, was never searched; a 1/1 popping Taelan's shield would have made the room.
   // A minion the mana covers is playable once a death frees a slot (moves() checks the room).
@@ -115,6 +118,7 @@ const DISCARD_LOW=/^discard your lowest cost card\.?$/i;
 // random or conditional clause -- leaves the minion unmodelled.
 const COUNT={a:1,an:1,one:1,two:2,three:3};
 const SUMMON=/^battlecry: summon (a|an|one|two|three) (\d+)\/(\d+) [a-z' -]+?(?: with ((?:(?:taunt|rush|divine shield|poisonous|lifesteal|windfury|stealth)(?:,? and |, | )?)+))?\.?$/i;
+const CHOOSE_DISCARD=/battlecry: choose a card in your hand to discard\.?/i;
 const SELF_HIT=/^deal (\d+) damage to your hero\.?$/i;
 export function cardModel(c){
   if(c.type==='SPELL'&&/^gain 1 mana crystal this turn only\.?$/i.test(c.text))return {kind:'mana',gain:1};
@@ -133,6 +137,9 @@ export function cardModel(c){
     // Duke of Below: the growth is already in the tags, so it is a statline, not an effect.
     let text=c.text.replace(/\b(?:has|gains) \+\d+\/\+\d+ for each card you'?ve discarded this game\.?/i,'');
     if(discardModel(c).kind==='body')text=text.replace(/If you discard this minion, summon it\.?/i,'');
+    // Ocular Occultist: the discard is the player's pick, carried by the step's targetId.
+    const pick=CHOOSE_DISCARD.test(text);
+    text=text.replace(CHOOSE_DISCARD,'');
     for(const p of text.split(/(?<=\.)\s+/).filter(Boolean)){
       const m=/\b(?:for|each|if|random|opponent)\b/i.test(p)?null:SUMMON.exec(p);
       if(m&&!summon){summon={n:COUNT[m[1].toLowerCase()],atk:Number(m[2]),hp:Number(m[3]),with:(m[4]??'').toLowerCase()};continue}
@@ -140,7 +147,7 @@ export function cardModel(c){
       if(h){selfHit+=Number(h[1]);continue}
       if(p.replace(KEYWORDS,'').replace(/[\s.,]/g,''))return null;
     }
-    return {kind:'minion',...(summon?{summon}:{}),...(selfHit?{selfHit}:{})};
+    return {kind:'minion',...(summon?{summon}:{}),...(selfHit?{selfHit}:{}),...(pick?{chooseDiscard:true}:{})};
   }
   if(c.type!=='SPELL')return null;
   if(/^draw (?:a|an|one|two|three|\d+) cards?\.(?: they are temporary\.| at the end of turn, discard them\.)?$/i.test(c.text))
@@ -188,12 +195,14 @@ function summonDiscard(s,c){
 }
 
 // Mutates only a cloned planning state. No arbitrary first-card surrogate for ties.
-function discard(s,mode){
+function discard(s,mode,pickId){
   // Past an additive draw (search pastAdditive) the hand holds unknown cards; any could be the one.
   if(s.drawnUnknown>0){s.uncertainDiscard=[{unknown:true}];return {exact:false,note:'discard after an unknown draw; no particular outcome assumed'}}
   if(!s.hand.length)return {exact:true,note:''};
+  const picked=mode==='pick'?s.hand.find(c=>c.id===pickId):null;
+  if(mode==='pick'&&!picked)return {exact:true,note:''};
   const extreme=(mode==='low'?Math.min:Math.max)(...s.hand.map(c=>c.cost));
-  const tied=s.hand.filter(c=>c.cost===extreme);
+  const tied=picked?[picked]:s.hand.filter(c=>c.cost===extreme);
   if(tied.length>1){
     s.uncertainDiscard=tied.map(c=>({id:c.id,name:c.name,cost:c.cost}));
     return {exact:false,note:`random ${mode==='low'?'lowest':'highest'}-cost discard among ${tied.map(c=>c.name).join(', ')}; no particular outcome assumed`};
@@ -258,6 +267,10 @@ export function moves(s){
     if(!c.playable||c.cost>s.mana)continue;
     const m=modelOf(s,c);
     if(!m||(m.kind==='minion'&&free<=0))continue;
+    if(m.chooseDiscard){
+      const picks=s.hand.filter(x=>x.id!==c.id);
+      if(picks.length){for(const x of picks)out.push({kind:'play',id:c.id,targetId:x.id});continue}
+    }
     out.push({kind:'play',id:c.id});
   }
   return out;
@@ -348,6 +361,10 @@ function applyStep(s0,m){
       // A fresh body has no targets from the game's options; charge/rush may hit what is open.
       if(b.canAttack)for(const t of s.opp)b.targets.add(t.id);
       s.me.push(b);
+      if(model.chooseDiscard&&m.targetId!=null){
+        const r=discard(s,'pick',m.targetId);
+        if(!r.exact)return {s,exact:false,note:r.note};
+      }
       if(model.summon){
         const t=model.summon.with,count=Math.min(model.summon.n,room(s));
         // Tokens have no entity id until the game makes them; the plan's next step is then

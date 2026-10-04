@@ -157,6 +157,16 @@ export function shortlist(plans,start,k=5){
   add([...attacksOnly].sort((a,b)=>b.s.faceDealt-a.s.faceDealt||b.score-a.score)[0]);
   const trade=p=>(boardValue(start.opp)-boardValue(p.s.opp))-(boardValue(start.me)-boardValue(p.s.me));
   add([...attacksOnly].sort((a,b)=>trade(b)-trade(a)||b.score-a.score)[0]);
+  // User ruling (10-05 batch, game 1, turn 4): with 2/2s against their fresh 3/2, the face plan (8
+  // damage, 3/2 left alive) sat next to the better-scoring "a 2/2 kills the 3/2" plan, and Jev raced.
+  // The 3/2 then killed Platysaur, whose Deathrattle threw away the Occultist it had drawn. Out of
+  // finishing range, a plan that leaves alive a minion a profitable trade kills is not a choice to
+  // offer -- unless it out-scores every such trade by more than the 2 face damage given up.
+  const finishing=hpOf(hero(start,'opp'))<=12;
+  const kills=p=>start.opp.filter(b=>b.type==='MINION'&&!p.s.opp.some(x=>x.id===b.id&&x.hp>0)).map(b=>b.id);
+  const outTraded=p=>!finishing&&p.score<1e4&&out.some(q=>q!==p&&q.score>=p.score-1&&trade(q)>0
+    &&trade(q)>trade(p)&&kills(p).every(id=>kills(q).includes(id))&&kills(q).length>kills(p).length);
+  for(let i=out.length-1;i>=0;i--)if(outTraded(out[i]))out.splice(i,1);
   // Draw is a competing turn intent, not a prerequisite imposed on every play.
   const draw=plans.find(p=>p.steps.length===1&&p.s.drawnUnknown>0);
   if(draw&&!out.includes(draw)){

@@ -44,46 +44,38 @@ test('non-temporary, wrong expiry, untrusted enchantment and unknown appended cl
  }
 });
 
-test('an affordable follow-up buff or immediate attack preserves the paid-play comparison',()=>{
- for(const mode of ['buff','rush','charge']){
-  const c=fixture();
-  if(mode==='buff'){
-   c.state.me.mana=4;c.state.me.maxMana=4;
-   c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:1,text:'Give your minions +1/+1.'});
-   c.options.push({id:'buff',type:'POWER',entityId:900});
-  }else c.state.me.hand[0][mode.toUpperCase()]=1;
-  assert.equal(temporaryDiscardAssessments(c.state,c.options)[0].deferHardCast,false);
-  assert.ok(pipeline(c).full.some(a=>a.entityId===18));
- }
-});
-
-test('summon-trigger engine preserves immediate value; spent Battlecry alone does not',()=>{
- const c=fixture();c.state.me.board.find(c=>c.entityId===116).text='After you summon a minion, deal 1 damage to a random enemy.';
+// 2026-10-05 ruling: Temporary discard fodder is never hand-cast, unless the mana also covers a board
+// buff played with it. Rush, play/summon engines, the weapon discard and slot doubts no longer exempt it.
+test('only an affordable follow-up buff preserves the paid play of Temporary fodder',()=>{
+ const c=fixture();
+ c.state.me.mana=4;c.state.me.maxMana=4;
+ c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:1,text:'Give your minions +1/+1.'});
+ c.options.push({id:'buff',type:'POWER',entityId:900});
  assert.equal(temporaryDiscardAssessments(c.state,c.options)[0].deferHardCast,false);
  assert.ok(pipeline(c).full.some(a=>a.entityId===18));
- assert.equal(temporaryDiscardAssessments(fixture().state,fixture().options)[0].playEngine,false);
 });
 
-test('highest-cost weapon setup is left to existing weapon rules rather than this expiry gate',()=>{
- const c=fixture();c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:2,text:'When you play or discard this, draw 3 cards.'});
- c.state.me.board.push({entityId:901,CARDTYPE:'WEAPON',ATK:4,HEALTH:3,text:'After your hero attacks, discard your highest Cost card.'});
- const i=temporaryDiscardAssessments(c.state,c.options)[0];
- assert.equal(i.changesWeaponDiscard,true);assert.equal(i.deferHardCast,false);
- assert.equal(i.playActionId,'o1');
-});
-
-test('reserve all known expiring body slots and reject unknown competing expiry outcomes',()=>{
- for(const mode of ['full','two-bodies-one-slot','unknown']){
-  const c=fixture();
-  if(mode==='unknown')c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:0,text:'If you discard this, summon mysterious things.',temporary:{expires:'end_of_own_turn',confidence:1}});
-  else{
-   const target=mode==='full'?7:6;
-   while(c.state.me.board.filter(c=>c.CARDTYPE==='MINION').length<target)c.state.me.board.push({entityId:900+c.state.me.board.length,CARDTYPE:'MINION',ATK:1,HEALTH:1,EXHAUSTED:1});
-   if(mode!=='full')c.state.me.hand.push({...structuredClone(c.state.me.hand[0]),entityId:950});
-  }
-  const i=temporaryDiscardAssessments(c.state,c.options)[0];
-  assert.equal(i.fits,false);assert.equal(i.deferHardCast,false);
+test('rush, charge, summon engines, weapon setup and slot doubts no longer exempt Temporary fodder',()=>{
+ const mutations=[
+  c=>c.state.me.hand[0].RUSH=1,c=>c.state.me.hand[0].CHARGE=1,
+  c=>c.state.me.board.find(c=>c.entityId===116).text='After you summon a minion, deal 1 damage to a random enemy.',
+  c=>{c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:2,text:'When you play or discard this, draw 3 cards.'});
+   c.state.me.board.push({entityId:901,CARDTYPE:'WEAPON',ATK:4,HEALTH:3,text:'After your hero attacks, discard your highest Cost card.'})},
+  c=>c.state.me.hand.push({entityId:900,CARDTYPE:'SPELL',COST:0,text:'If you discard this, summon mysterious things.',temporary:{expires:'end_of_own_turn',confidence:1}}),
+ ];
+ for(const mutate of mutations){
+  const c=fixture();mutate(c);
+  assert.equal(temporaryDiscardAssessments(c.state,c.options)[0].deferHardCast,true);
  }
+});
+
+test('Temporary Boneweb Egg is fodder too (game 1 of the 10-05 batch, turn 3)',()=>{
+ const c=fixture(),egg=c.state.me.hand[0];
+ Object.assign(egg,{name:'Boneweb Egg',COST:2,ATK:0,HEALTH:2,
+  text:'Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.'});
+ assert.equal(temporaryPayoff(egg).kind,'spiders');
+ assert.equal(temporaryDiscardAssessments(c.state,c.options)[0].deferHardCast,true);
+ assert.ok(!pipeline(c).full.some(a=>a.entityId===18));
 });
 
 test('spare mana never overrides lethal self-damage, overdraw or fatigue draw gates',()=>{

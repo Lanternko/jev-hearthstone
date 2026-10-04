@@ -21,8 +21,12 @@ const num=v=>Number(v??0);
 const cost=c=>num(c?.COST??c?.baseCost);
 const silenced=c=>on(c,'SILENCED');
 // A keyword counts when the tag says so, or -- for a card whose tags are not set yet -- its text.
+// Only the keyword list the text opens with is the card's own: Sickly Grimewalker's "give it
+// Poisonous" made the 2/4 itself Poisonous, so the Duke never attacked it (10-05 batch, game 1,
+// turn 5). Power.log omits tags whose value is 0, so on the board this fallback is the common case.
+const OWN_KEYWORDS=/^(?:\s*(?:taunt|rush|charge|divine shield|windfury|mega-windfury|stealth|poisonous|lifesteal|reborn|elusive|magnetic|tradeable|echo|twinspell|spell damage \+\d+|colossal \+\d+)\s*[.,]?\s*(?:and\b)?)+/i;
 const kw=(c,tag,word)=>c?.[tag]!=null?on(c,tag):(!silenced(c)&&new RegExp(`\\b${word}\\b`,'i')
-  .test(flat(c?.text).replace(/all friendly attacks ignore taunt\.?/i,'')));
+  .test(flat(c?.text).replace(/all friendly attacks ignore taunt\.?/i,'').match(OWN_KEYWORDS)?.[0]??''));
 
 // Things that happen in combat the model does not follow. Any of them on a participant makes the
 // swing inexact. Deathrattle and Reborn only matter when the body actually dies.

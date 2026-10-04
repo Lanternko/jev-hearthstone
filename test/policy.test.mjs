@@ -729,3 +729,25 @@ test('mustSpend keeps END_TURN when only burn or an Egg is left to spend',()=>{
   const dev=[BOLT,FILLER(1)];
   assert.ok(!spendFirst(st(dev),menu(dev)).some(a=>a.id==='end'));
 });
+
+test('behind on board with a full hand, Hand of Gul\'dan waits for the bodies (10-05 batch, game 1, turn 6)',()=>{
+ const hand=[
+  {entityId:32,name:'Soul Barrage',CARDTYPE:'SPELL',COST:4,text:'Deal 6 damage randomly split among all enemies. When you discard this, cast it.'},
+  {entityId:26,name:'Soul Barrage',CARDTYPE:'SPELL',COST:4,text:'Deal 6 damage randomly split among all enemies. When you discard this, cast it.'},
+  {entityId:9,name:'Hand of Gul\'dan',CARDTYPE:'SPELL',COST:6,text:'When you play or discard this, draw 3 cards.'},
+  {entityId:8,name:'Silverware Golem',CARDTYPE:'MINION',COST:3,ATK:3,HEALTH:3,text:'If you discard this minion, summon it.'},
+  {entityId:23,name:'Walking Dead',CARDTYPE:'MINION',COST:3,ATK:3,HEALTH:3,text:'Taunt. If you discard this minion, summon it.'},
+  {entityId:30,name:'Boneweb Egg',CARDTYPE:'MINION',COST:2,ATK:0,HEALTH:2,text:'Deathrattle: Summon two 2/1 Spiders. If you discard this, trigger its Deathrattle.'}];
+ const ghoul=i=>({entityId:60+i,CARDTYPE:'MINION',name:'Risen Ghoul',ATK:2,HEALTH:2});
+ const state={turn:12,me:{current:true,mana:6,hand,deckCount:18,board:[{entityId:1,CARDTYPE:'HERO',name:'Gul\'dan',HEALTH:23},
+   {entityId:40,CARDTYPE:'MINION',name:'Boneweb Egg',ATK:0,HEALTH:2,EXHAUSTED:1}]},
+  opponent:{board:[{entityId:2,CARDTYPE:'HERO',name:'Lich',HEALTH:26},
+   {entityId:50,CARDTYPE:'MINION',name:'Sickly Grimewalker',ATK:2,HEALTH:4},ghoul(1),ghoul(2),ghoul(3)]}};
+ const actions=[{id:'o0',type:'END_TURN'},...hand.map((c,i)=>({id:`o${i+1}`,type:'POWER',entityId:c.entityId}))];
+ const ids=constrainActions(state,actions).map(a=>a.id);
+ assert.ok(!ids.includes('o3'),'Hand of Gul\'dan is held');
+ assert.ok(ids.includes('o4')&&ids.includes('o5'),'the bodies stay on the menu');
+ // Ahead on board, the same hand may cast it.
+ const ahead={...state,opponent:{board:[state.opponent.board[0]]}};
+ assert.ok(constrainActions(ahead,actions).some(a=>a.id==='o3'));
+});

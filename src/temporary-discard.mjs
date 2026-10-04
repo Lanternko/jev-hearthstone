@@ -29,7 +29,12 @@ export function temporaryDiscardAssessments(state,actions=[]){
    &&hand.some(h=>h.entityId!==c.entityId&&h.CARDTYPE!=='WEAPON')
    &&cost(c)>=Math.max(...hand.filter(h=>h.CARDTYPE!=='WEAPON').map(cost));
   const fits=!uncertainSlots&&slots>=pending&&slots>=1;
-  const deferHardCast=payoff.kind==='body'&&fits&&cost(c)>0&&!buffNow&&!immediateAttack&&!playEngine&&!changesWeaponDiscard;
+  // 2026-10-05 ruling: a Temporary card with a discard payoff is fodder -- it pays out at end of turn
+  // for free, so never hand-cast it, unless the mana also covers a board buff played with it.
+  // (Game 1 of the 10-05 batch: turn 3, 3 mana, Catacombs gave a Temporary Boneweb Egg and we paid 2
+  // to play it.) The earlier exceptions -- rush, play/summon engines, the weapon discard -- are gone.
+  const fodder=['body','spiders','randomBodies','draw'].includes(payoff.kind);
+  const deferHardCast=fodder&&cost(c)>0&&!buffNow;
   return {version:'temporary-discard-v1',entityId:c.entityId,name:c.name,confidence:c.temporary.confidence,
    sourceEntityId:c.temporary.sourceEntityId,expires:c.temporary.expires,playActionId:action?.id??null,
    payoff,pendingBodySlots:pending,uncertainSlots,slots,fits,castCost:cost(c),endTurnManaCost:0,

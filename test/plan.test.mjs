@@ -215,3 +215,38 @@ test('on a full board a 1/1 pops the shield to make room for Duke of Below (game
  const best=search(state,acts).plans[0].steps.map(s=>[s.kind,s.id]);
  assert.deepEqual(best.slice(0,3),[['attack',9],['play',23],['attack',23]]);
 });
+
+test('a keyword the text gives away is not the card\'s own (10-05 batch, game 1, turn 5)',()=>{
+  // Sickly Grimewalker 2/4 "After you summon an Undead, give it Poisonous." has no POISONOUS tag
+  // in the log; reading the word from its text made it Poisonous, so the 13/13 Duke never hit it
+  // and the Egg went face instead of finishing the 2/1. Ruling: Egg kills the 2/1, Duke the 2/4.
+  const {state,actions:all}=board({
+    mine:[{name:'Boneweb Egg',ATK:1,HEALTH:3,text:'<b>Deathrattle:</b> Summon two 2/1 Spiders.'},
+      {name:'Duke of Below',ATK:13,HEALTH:13,RUSH:1,text:'<b>Rush</b>\nHas +2/+2 for each card you\'ve discarded this game.'}],
+    theirs:[{name:'Necrotic Mortician',ATK:2,HEALTH:1,EXHAUSTED:1},
+      {name:'Sickly Grimewalker',ATK:2,HEALTH:4,EXHAUSTED:1,text:'After you summon an Undead, give it <b>Poisonous</b>.'}]});
+  const actions=all.filter(a=>!(a.entityId===11&&a.targetId===2));   // Rush: no face that turn
+  const s=fromState(state,actions);
+  assert.equal(s.opp.find(b=>b.id===51).poison,false);
+  assert.equal(s.me.find(b=>b.id===11).rush,true,'a keyword the text opens with still counts');
+  const best=search(state,actions).plans[0];
+  const hits=Object.fromEntries(best.steps.filter(m=>m.kind==='attack').map(m=>[m.id,m.targetId]));
+  assert.deepEqual(hits,{10:50,11:51});
+});
+
+test('no racing past a minion a cheap trade kills (10-05 batch, game 1, turn 4)',()=>{
+  // Four 2-attack minions against their fresh 3/2. Jev picked "all face" over "a 2/2 kills the 3/2",
+  // and the 3/2 then killed Platysaur, whose Deathrattle discarded the Occultist it had drawn.
+  const {state,actions}=board({heroHp:30,
+    mine:[{name:'Felbeast',ATK:2,HEALTH:2},{name:'Party Fiend',ATK:2,HEALTH:2},{name:'Felbeast',ATK:2,HEALTH:2},
+      {name:'Platysaur',ATK:2,HEALTH:3,text:'<b>Deathrattle:</b> Draw a card.'}],
+    theirs:[{name:'Cult Neophyte',ATK:3,HEALTH:2,EXHAUSTED:1}]});
+  const {criteria,plans}=menu(state,actions,{});
+  const offered=Object.keys(criteria).filter(k=>/^p\d+$/.test(k)).length;
+  assert.ok(offered>0);
+  const s=fromState(state,actions);
+  for(const [id,steps] of Object.entries(plans)){
+    const end=steps.reduce((x,m)=>apply(x,m).s,s);
+    assert.ok(!end.opp.some(b=>b.id===50&&b.hp>0),`offered a plan that leaves the 3/2: ${criteria[id].description}`);
+  }
+});

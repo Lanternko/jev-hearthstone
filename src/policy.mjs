@@ -787,6 +787,23 @@ function overdrawWaits(state){
  };
 }
 
+// User ruling (10-05 batch, game 1, turn 6): 「場面落後，手牌充足 不應該丟古爾丹」. Behind on board with
+// five other cards in hand, Hand of Gul'dan spent the whole turn drawing while Silverware Golem and
+// Walking Dead -- the bodies the board needed -- stayed in hand. While behind, a hand of four or
+// more other cards, and a minion that fits the mana, the draw waits; Gul'dan is still a discard target.
+const HAND_OF_GULDAN=/^hand of gul'?dan$/i;
+function guldanWaits(state,actions){
+ const hand=state.me?.hand??[],mana=Number(state.me?.mana??0);
+ const minions=s=>(s?.board??[]).filter(c=>c.CARDTYPE==='MINION');
+ const worth=s=>minions(s).reduce((n,c)=>n+Number(c.ATK??0)+Number(c.HEALTH??0)-Number(c.DAMAGE??0),0);
+ const behind=worth(state.opponent)>worth(state.me)||minions(state.opponent).length>minions(state.me).length;
+ const guldan=a=>a.targetId==null&&HAND_OF_GULDAN.test(hand.find(c=>c.entityId===a.entityId)?.name??'');
+ if(!behind||!actions.some(guldan)||hand.filter(c=>!HAND_OF_GULDAN.test(c.name??'')).length<4)return actions;
+ const develops=actions.some(a=>{const c=hand.find(c=>c.entityId===a.entityId);
+  return c?.CARDTYPE==='MINION'&&a.targetId==null&&costOf(c)<=mana;});
+ return develops?actions.filter(a=>!guldan(a)):actions;
+}
+
 function buffBeforeTap(state,actions){
  const hand=state.me?.hand??[],board=state.me?.board??[];
  const buffs=actions.map(a=>hand.find(c=>c.entityId===a.entityId)).filter(c=>valuableBuff(state,c));
@@ -994,6 +1011,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  {const burn=wastedBurn(state,actions);prefer('wastedBurn',out.filter(a=>!burn(a)));}
  {const split=splitToFace(state);prefer('splitToFace',out.filter(a=>!split(a)));}
  {const od=overdrawWaits(state);prefer('overdrawWaits',out.filter(a=>!od(a)));}
+ prefer('guldanWaits',guldanWaits(state,out));
  if(!isDH(state))prefer('weaponFirst',weaponFirst(state,out));
  let released=null;
  if(wasted.size){

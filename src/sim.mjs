@@ -37,6 +37,11 @@ const ON_DEATH=/\bdeathrattle\b|\breborn\b/i;
 // Text a card hands to others sits in quotes: Braingill's Battlecry gives Murlocs "Deathrattle:
 // Draw a card." and has none itself. Reading it as its own Deathrattle cut every plan that killed it.
 const ownText=t=>(t??'').replace(/"[^"]*"/g,'');
+// An enemy whose every effect is "draw a card" only grows their hand: the board stays exact.
+// Treating Chillfallen Baron and Acolyte of Death as unpredictable ended every plan at the first
+// kill, so the menu never held the clear "1/1 Rush takes one, Duke the other" (10-05, game 5, turn 6).
+const DRAW_CLAUSE=/(?:(?:battlecry and )?deathrattle|battlecry|(?:after|whenever) [^.,:]*):?,?\s*draw (?:a|\d+) cards?\.?/gi;
+const enemyDrawOnly=b=>{const t=ownText(b?.text);return b?.side==='opp'&&!!t.match(DRAW_CLAUSE)&&!t.replace(DRAW_CLAUSE,'').trim()};
 // Chronoclaws: the swing is plain arithmetic; only the hand changes, and predictably so.
 const DISCARD_HIGH=/^after your hero attacks, discard your highest cost card\.?$/i;
 
@@ -305,7 +310,7 @@ function applyStep(s0,m){
   if(m.kind==='attack'){
     const a=s.me.find(b=>b.id===m.id),t=s.opp.find(b=>b.id===m.targetId);
     let exact=true;const notes=[];
-    if(COMBAT_TRIGGER.test(a.text)||COMBAT_TRIGGER.test(t.text)){exact=false;notes.push('a combat trigger fires')}
+    if(COMBAT_TRIGGER.test(a.text)||COMBAT_TRIGGER.test(t.text)&&!enemyDrawOnly(t)){exact=false;notes.push('a combat trigger fires')}
     // After-attack discards resolve after combat and death frees board space.
     const afterWeapon=a.type==='HERO'&&s.weapon?.text?s.weapon.text:null;
     const before=hpOf(t);
@@ -318,7 +323,7 @@ function applyStep(s0,m){
       s.weapon.durability--;
       if(s.weapon.durability<=0){a.atk=Math.max(0,a.atk-s.weapon.atk);s.weapon=null;}
     }
-    for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
+    for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))&&!enemyDrawOnly(b)){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
     s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
     if(afterWeapon){
       if(DISCARD_HIGH.test(afterWeapon)&&a.hp>0){const r=discard(s,'high');exact&&=r.exact;if(r.note)notes.push(r.note)}

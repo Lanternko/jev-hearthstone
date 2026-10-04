@@ -34,11 +34,16 @@ export function temporaryDiscardAssessments(state,actions=[]){
   // (Game 1 of the 10-05 batch: turn 3, 3 mana, Catacombs gave a Temporary Boneweb Egg and we paid 2
   // to play it.) The earlier exceptions -- rush, play/summon engines, the weapon discard -- are gone.
   const fodder=['body','spiders','randomBodies','draw'].includes(payoff.kind);
-  const deferHardCast=fodder&&cost(c)>0&&!buffNow;
+  // 2026-10-05 ruling (game 5, turn 9): with no other card to play and the mana idle anyway, cast a
+  // draw payoff now -- the cards land while there is still mana to follow up, not at end of turn.
+  const handIds=new Set(hand.map(h=>h.entityId));
+  const drawNow=payoff.kind==='draw'&&!!action&&cost(c)<=mana
+   &&!actions.some(a=>a.entityId!==c.entityId&&handIds.has(a.entityId));
+  const deferHardCast=fodder&&cost(c)>0&&!buffNow&&!drawNow;
   return {version:'temporary-discard-v1',entityId:c.entityId,name:c.name,confidence:c.temporary.confidence,
    sourceEntityId:c.temporary.sourceEntityId,expires:c.temporary.expires,playActionId:action?.id??null,
    payoff,pendingBodySlots:pending,uncertainSlots,slots,fits,castCost:cost(c),endTurnManaCost:0,
-   buffNow,immediateAttack,playEngine,changesWeaponDiscard,deferHardCast,
+   buffNow,immediateAttack,playEngine,changesWeaponDiscard,deferHardCast,drawNow,
    guidance:'Verified Temporary expiration discards this card at the end of your own turn. Its discard payoff is separate from paying its mana cost. For a known self-summoning body with room, conserve mana unless playing now enables an immediate attack, an affordable buff or a play/summon trigger. Consider a safe draw with spare mana, or other useful plays; drawing is optional. Reserve slots for expiring summons and recheck after every action. End-of-turn order and unknown triggers are not simulated; do not assume survival, random identities or attack readiness.'};
  });
 }

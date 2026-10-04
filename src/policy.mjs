@@ -1025,6 +1025,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  // Verified expiring self-summons pay out without spending their printed mana.
  const deferred=new Set(temporaryDiscardAssessments(state,out).filter(c=>c.deferHardCast).map(c=>c.playActionId));
  prefer('deferHardCast',out.filter(a=>!deferred.has(a.id)));
+ if(temporaryDiscardAssessments(state,out).some(c=>c.drawNow))prefer('temporaryDrawNow',out.filter(a=>a.type!=='END_TURN'));
  const saferCopies=new Set(handRetentionAssessment(state,out).copyPreferences.flatMap(p=>p.deferredEntityIds));
  prefer('saferCopies',out.filter(a=>a.targetId!=null||!saferCopies.has(a.entityId)));
  prefer('freezeThreatFirst',freezeThreatFirst(state,out));

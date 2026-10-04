@@ -1,3 +1,12 @@
+# 2026-10-05 實戰小批第 3 輪第 3 場（敗）：第六回合彈幕選錯張、解場只解一半；第九回合閒置費用不打暫時古爾丹
+
+- 批次 runtime/ranked-2026-10-04T18-36-19-969Z/ 第 3 場（全域 game 5）。本批 4 場 3 勝 1 敗（這批跑的是修正前的程式）。
+- **第六回合：「就算要打彈幕，也應該打左邊的那張，因為右邊的那張是鴨嘴龍抽到的『暫時』牌」**：根因是 hand-retention.mjs copyPreferences 原本只處理手下，而且一律先打「有危險的那張」。現在「棄掉會觸發」的牌（If you discard this / When you discard this，例如靈魂彈幕）若有一張綁在鴨嘴龍死亡之聲上，就保留這張等死亡時免費觸發，改打沒綁定的那張。重播後保留 o1，移除 o4。contrast.test.mjs 的 saferCopies 對照改成移除 o2（Boneweb Egg fixture 中被綁定的彈幕 52）。
+- **同回合：「對面右邊的效果怪只剩 1 血，應該由 11 的衝刺怪去撞」**：根因是 sim.mjs 把 Chillfallen Baron、Acolyte of Death 這類「效果只有抽牌」的敵方手下當成不可預測，計畫在第一次擊殺就結束，選單裡根本沒有「1/1 衝刺解一隻、公爵解另一隻」的完整計畫。現在敵方手下的效果若全是抽牌（戰吼／死亡之聲／after…draw），攻擊與死亡都視為精確。重播首選計畫 a41>18 a110>10 a44>64（3.3 分）。
+- **第九回合：「沒有其他牌可以出、費用又有多餘，應該先打古爾丹之手，看能不能有後續出牌」**：根因是 temporary-discard.mjs 的 deferHardCast 一律延後硬出暫時素材。現在抽牌類暫時牌在「費用夠、手上沒有其他可出的牌」時標為 drawNow，不延後；policy.mjs 新增 temporaryDrawNow，這時只留出牌（拿掉結束回合）。重播後選單只剩 o1（古爾丹之手）。
+- 使用者同時提到這局證實先前可以出墓穴（墓穴可找直傷或 buff），此點為確認，無程式變更。
+- 測試：test/game5-turn-rulings.test.mjs 三題（fixtures linked-barrage-copy、draw-only-trades、temporary-guldan-idle-mana），全套 543/543。
+
 # 2026-10-05 實戰小批第 3 輪第 2 場第三回合：滿地雜毛時魔眼棄靈魂彈幕
 
 - 批次 runtime/ranked-2026-10-04T18-36-19-969Z/。我方 2/2、2/2，對面 3/2、2/1、2/1（攻擊合計 7），Jev 打 Entropic Continuity 加 buff，再點抽牌。使用者：「應該要 occultist + 靈魂彈幕（對面滿地雜毛）、325 也可以接受」。

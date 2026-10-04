@@ -49,7 +49,7 @@ const PAIRS=[
  ['overflowWaits','o3',E.dropMine('Felbeast'),'one more free slot: all bodies fit'],
  ['passiveEggCoin','o2',E.mana(1),'one more mana: the Coin buys more than a lone Egg'],
  ['pricedOut','o3',E.mana(1),'one more mana: the tap no longer prices out a card'],
- ['saferCopies','o1',E.dropMine('Platysaur'),'no Platysaur: neither Egg copy is endangered'],
+ ['saferCopies','o2',E.dropMine('Platysaur'),'no Platysaur: neither Egg copy is endangered'],
  ['setupFirst','o1t0',E.dropMine('Chamber of Viscidus'),'no location to set up before the swings'],
  ['splitToFace','o1',E.addFoe(2,2),'an enemy minion for the split damage to hit'],
  ['tapOnlyEnd','o0',E.all(E.myHp(6),E.addFoe(5,5)),'6 Health facing 5 Attack: tapping is not free'],

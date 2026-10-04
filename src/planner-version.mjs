@@ -1,8 +1,10 @@
 // Freeze-aware switch for prospective A/B games. Never silently substitute the
 // current engine when a requested baseline is missing.
-export async function loadDecisionEngine(version=process.env.JEV_SEARCH_VERSION??'silverfish-v1-weapon-replacement-v1'){
-  if(!['silverfish-v1-weapon-replacement-v1','silverfish-v1-validated-turn-intents-v1','silverfish-v1-turn-alternatives-v1','silverfish-v1-temporary-discard-v1','silverfish-v1-shield-alternatives-v1','silverfish-v1-turn-order-v1','silverfish-v1-weapon-preservation-v1','silverfish-v1-chamber-intent-v1','silverfish-v1-combo-admission-v2','silverfish-v1-combo-admission-v1','silverfish-v1-class-prior-v1','silverfish-v1','silverfish-v1-execution-v2','silverfish-v1-opening-burst-v1','silverfish-v1-matchup-objective-v1','baseline-before-opening-burst-20261002','baseline-20261001'].includes(version))throw Error(`Unknown JEV_SEARCH_VERSION: ${version}`);
-  const url=version==='silverfish-v1-validated-turn-intents-v1'
+export async function loadDecisionEngine(version=process.env.JEV_SEARCH_VERSION??'silverfish-v1-fodder-hold-v1'){
+  if(!['silverfish-v1-fodder-hold-v1','silverfish-v1-weapon-replacement-v1','silverfish-v1-validated-turn-intents-v1','silverfish-v1-turn-alternatives-v1','silverfish-v1-temporary-discard-v1','silverfish-v1-shield-alternatives-v1','silverfish-v1-turn-order-v1','silverfish-v1-weapon-preservation-v1','silverfish-v1-chamber-intent-v1','silverfish-v1-combo-admission-v2','silverfish-v1-combo-admission-v1','silverfish-v1-class-prior-v1','silverfish-v1','silverfish-v1-execution-v2','silverfish-v1-opening-burst-v1','silverfish-v1-matchup-objective-v1','baseline-before-opening-burst-20261002','baseline-20261001'].includes(version))throw Error(`Unknown JEV_SEARCH_VERSION: ${version}`);
+  const url=version==='silverfish-v1-weapon-replacement-v1'
+    ?new URL('../eval/runs/weapon-replacement-20261004/candidate/src/choose.mjs',import.meta.url)
+    :version==='silverfish-v1-validated-turn-intents-v1'
     ?new URL('../eval/runs/validated-turn-intents-20261004/candidate/src/choose.mjs',import.meta.url)
     :version==='silverfish-v1-turn-alternatives-v1'
     ?new URL('../eval/runs/turn-alternatives-20261004/candidate/src/choose.mjs',import.meta.url)

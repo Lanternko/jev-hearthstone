@@ -4,12 +4,14 @@ import {isCoin} from './power.mjs';
 import {deckFor} from './deck.mjs';
 import {immediateDraws,heroAttackGain,heroCanSwing} from './mechanics.mjs';
 import {drawImpact} from './draw-risk.mjs';
-import {resourceDrawWindow} from './matchup-objective.mjs';
+import {resourceDrawWindow,OBJECTIVE_WEIGHTS} from './matchup-objective.mjs';
 import {combinationAdmission,admittedFirstIds,admittedLines,admissionEvidence,comparisonFirstIds} from './combo-admission.mjs';
 import {weaponBuffAssessment} from './weapon-buff.mjs';
 import {divineShieldAssessment} from './divine-shield.mjs';
 import {temporaryDiscardAssessments} from './temporary-discard.mjs';
 import {handRetentionAssessment} from './hand-retention.mjs';
+import {search,score,actionFor} from './plan.mjs';
+import {FODDER_HOLD_VERSION,holdValue} from './fodder-hold.mjs';
 const isDH=state=>deckFor(state).name==='dh-void';
 
 // Explicit user correction: early tempo takes precedence over speculative combos.
@@ -497,6 +499,28 @@ function protectedFodder(state,c){
 export const wastedFodder=state=>new Set(
  (state?.me?.hand??[]).filter(c=>isFodder(c)&&protectedFodder(state,c)).map(c=>c.entityId));
 
+// Step 2 of the rule-tier plan (user, 2026-10-04). The delete above stays the default: prose did
+// not move Jev. It is lifted for one cast only when the search, now charging every cast fodder the
+// discard payoff it forfeits (fodder-hold.mjs), still ranks that cast as the strictly best first
+// step -- better than every line that starts elsewhere and than doing nothing. Step 1 found the
+// cases this exists for: Silverware Golem held while their board was lethal (morning g1 T16, g2 T15).
+export function fodderRelease(state,actions,wasted=wastedFodder(state)){
+ if(state.choice||!actions.some(a=>wasted.has(a.entityId)))return null;
+ const {start,plans}=search(state,actions,{fodderHold:[...wasted]});
+ const first=p=>actionFor(actions,p.steps[0]);
+ const best=plans[0],a=best&&first(best);
+ if(!a||!wasted.has(a.entityId))return null;
+ const rival=plans.find(p=>{const x=first(p);return x&&!wasted.has(x.entityId);});
+ const idle=score(start,start),floor=Math.max(rival?.score??-Infinity,idle);
+ if(!(best.score>floor))return null;
+ const card=start.hand.find(c=>c.id===a.entityId),raw=(state.me.hand??[]).find(c=>c.entityId===a.entityId);
+ const w=start.objective?.weights??OBJECTIVE_WEIGHTS.unknown;
+ return {version:FODDER_HOLD_VERSION,actionId:a.id,entityId:a.entityId,name:card?.name,
+  outlet:reliableOutletFor(state,raw)?.name??null,holdValue:card?holdValue(card,w):0,
+  score:best.score,rivalScore:rival?.score??null,idleScore:idle,
+  steps:best.steps.map(m=>({kind:m.kind,id:m.id,targetId:m.targetId??null}))};
+}
+
 // User ruling (2026-09-25, game 4, turn 3): Occultist with nothing of ours on the board, and Jev
 // discarded Hand of Gul'dan (draw 3) over Acolytes and Boneweb Egg. With no board, board beats
 // hand: while some target summons something when discarded, targets that do not are cut.
@@ -884,11 +908,14 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  {const rest=locationResting(state);const kept=out.filter(a=>!rest(a));if(kept.length)out=kept;}
  if(!isDH(state))out=weaponFirst(state,out);
  const wasted=wastedFodder(state);
+ let released=null;
  if(wasted.size){
   // Development may make a buff valuable even when the current board is thin.
   const setups=new Set((state.me.hand??[]).filter(pureBoardBuff)
    .flatMap(b=>buffDevelopmentActions(state,out,b)).map(a=>a.entityId));
-  out=out.filter(a=>!wasted.has(a.entityId)||setups.has(a.entityId)||comboFirst.has(a.id));
+  const kept=a=>!wasted.has(a.entityId)||setups.has(a.entityId)||comboFirst.has(a.id);
+  if(out.some(a=>!kept(a)))released=fodderRelease(state,out,wasted);
+  out=out.filter(a=>kept(a)||a.id===released?.actionId);
   if(!out.length)out=actions;
  }
  out=occultistPick(state,boardFirstDiscard(state,doomedPick(state,out)));
@@ -957,6 +984,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
    &&!singleBuffTradeGain(state,c,out)&&!canFinish);
  });
  if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,safe);
+  trace.fodderRelease=released;
   trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&safe.some(x=>x.id===a.id)).map(a=>a.id);}
  return safe;
 }

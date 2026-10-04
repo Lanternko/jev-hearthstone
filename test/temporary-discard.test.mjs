@@ -118,7 +118,7 @@ test('after attacks, safe spare mana draws even while the free expiring body rem
 test('current queued guard rejects raw hard-cast too; previous shield engine remains frozen',async()=>{
  const c=fixture(),action=c.options.find(a=>a.entityId===18);
  const old=await loadDecisionEngine('silverfish-v1-shield-alternatives-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-weapon-replacement-v1');
+ assert.equal(now.version,'silverfish-v1-fodder-hold-v1');
  assert.equal(old.allowsPlanContinuation(c.state,c.options,action),true);
  assert.equal(allowsPlanContinuation(c.state,c.options,action),false);
  assert.ok(old.constrainActions(c.state,c.options).some(a=>a.entityId===18));

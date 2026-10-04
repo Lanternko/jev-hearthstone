@@ -1,0 +1,59 @@
+17-42-01-535Z/0001 T2 mana 1 hp 30  Disposable Acolytes | sim The Coin | actual Platysaur | release null  17ms
+17-42-01-535Z/0001 T4 mana 3 hp 30 [simBest deleted] Disposable Acolytes+Walking Dead | sim Walking Dead | actual Ocular Occultist→Disposable Acolytes | release null  6ms
+17-42-01-535Z/0001 T4 mana 0 hp 30  Walking Dead | sim Walking Dead→Yogg-Ramen | actual Walking Dead→Yogg-Ramen | release null  1ms
+17-42-01-535Z/0001 T6 mana 3 hp 30 [simBest deleted] Walking Dead | sim Walking Dead | actual Ocular Occultist→Yogg-Ramen | release null  3ms
+17-42-01-535Z/0001 T6 mana 3 hp 30 [simBest deleted] Walking Dead | sim Walking Dead | actual Soulfire→Yogg-Ramen | release null  2ms
+17-42-01-535Z/0001 T10 mana 5 hp 30  Walking Dead | sim Walking Dead | actual Walking Dead | release null o1,p1 5ms
+17-42-01-535Z/0001 T12 mana 6 hp 30  Soul Barrage | sim Walking Dead→Water Elemental | actual Walking Dead→Water Elemental | release null  2ms
+17-42-01-535Z/0001 T12 mana 6 hp 30  Soul Barrage | sim Life Tap | actual Life Tap | release null  1ms
+17-42-01-535Z/0001 T14 mana 7 hp 30 [simBest deleted] Silverware Golem | sim Silverware Golem | actual END | release null  2ms
+17-42-01-535Z/0001 T16 mana 6 hp 30 [simBest deleted] Silverware Golem | sim Silverware Golem | actual Platysaur | release null  1ms
+17-42-01-535Z/0002 T13 mana 5 hp 30 [simBest deleted] Boneweb Egg+Silverware Golem | sim Silverware Golem | actual Ocular Occultist→Boneweb Egg | release null  1ms
+17-42-01-535Z/0002 T15 mana 7 hp 30 [simBest deleted] Silverware Golem | sim Silverware Golem | actual Chamber of Viscidus | release null  1ms
+17-42-01-535Z/0004 T14 mana 5 hp 30 [simBest deleted] Soul Barrage+Hand of Gul'dan+Silverware Golem | sim Silverware Golem | actual Ocular Occultist→Silverware Golem | release null  2ms
+17-42-01-535Z/0005 T3 mana 2 hp 30  Walking Dead | sim Frequency Oscillator→The Lich King | actual Frequency Oscillator→The Lich King | release null  1ms
+17-42-01-535Z/0005 T3 mana 2 hp 30  Walking Dead | sim Wicked Whispers | actual Platysaur | release null  1ms
+17-42-01-535Z/0005 T9 mana 5 hp 30  Hand of Gul'dan | sim Entropic Continuity | actual Chronoclaws | release null  2ms
+17-42-01-535Z/0005 T9 mana 1 hp 30  Hand of Gul'dan | sim Entropic Continuity | actual Entropic Continuity | release null  1ms
+17-42-01-535Z/0005 T11 mana 6 hp 30  Soul Barrage+Hand of Gul'dan+Soul Barrage | sim Duke of Below | actual Duke of Below | release null  4ms
+17-42-01-535Z/0005 T13 mana 7 hp 30 [simBest deleted] Soul Barrage+Soul Barrage+Walking Dead | sim Walking Dead | actual Ocular Occultist→Walking Dead | release null  2ms
+17-42-01-535Z/0005 T13 mana 4 hp 30  Soul Barrage+Soul Barrage | sim The Soularium | actual Ocular Occultist→Soul Barrage | release null  1ms
+17-42-01-535Z/0005 T13 mana 1 hp 30  Soul Barrage | sim Gul'dan→Necrotic Mortician | actual Gul'dan→Risen Ghoul | release null  0ms
+17-42-01-535Z/0005 T17 mana 6 hp 30  Boneweb Egg+Disposable Acolytes | sim Entropic Continuity | actual Entropic Continuity | release null  4ms
+17-42-01-535Z/0005 T17 mana 5 hp 30  Boneweb Egg+Disposable Acolytes | sim Felbeast→Gnome Muncher | actual END | release null  2ms
+17-42-01-535Z/0006 T11 mana 6 hp 30  Hand of Gul'dan | sim Felbeast→Thor Thorim | actual Ocular Occultist→Hand of Gul'dan | release null  1ms
+17-42-01-535Z/0006 T11 mana 3 hp 30  Soul Barrage | sim Felbeast→Thor Thorim | actual Felbeast→Thor Thorim | release null  0ms
+17-42-01-535Z/0006 T11 mana 3 hp 30  Soul Barrage | sim END | actual END | release null  0ms
+17-42-01-535Z/0006 T13 mana 7 hp 30  Soul Barrage+Disposable Acolytes | sim Ocular Occultist→Thor Thorim | actual Chronoclaws | release null  2ms
+17-42-01-535Z/0006 T13 mana 3 hp 30  Disposable Acolytes | sim Ocular Occultist→Thor Thorim | actual Chamber of Viscidus | release null  1ms
+17-42-01-535Z/0006 T13 mana 0 hp 30  Disposable Acolytes | sim Ocular Occultist→Thor Thorim | actual END | release null  0ms
+17-42-01-535Z/0006 T15 mana 8 hp 30  Disposable Acolytes | sim END | actual Chamber of Viscidus | release null  2ms
+17-42-01-535Z/0006 T15 mana 6 hp 30  Hand of Gul'dan | sim Entropic Continuity | actual Platysaur | release null  2ms
+17-42-01-535Z/0006 T15 mana 5 hp 30  Hand of Gul'dan | sim Entropic Continuity | actual Entropic Continuity | release null  1ms
+17-42-01-535Z/0006 T15 mana 4 hp 30  Hand of Gul'dan+Disposable Acolytes | sim Wicked Whispers | actual Wicked Whispers | release null  1ms
+17-42-01-535Z/0006 T15 mana 3 hp 30  Hand of Gul'dan | sim END | actual END | release null  0ms
+21-59-42-214Z/0002 T2 mana 1 hp 30  Walking Dead | sim The Coin | actual The Coin | release null  1ms
+21-59-42-214Z/0002 T2 mana 2 hp 30  Walking Dead | sim Life Tap | actual Life Tap | release null  0ms
+21-59-42-214Z/0002 T2 mana 0 hp 30  Walking Dead | sim END | actual END | release null  0ms
+21-59-42-214Z/0002 T4 mana 0 hp 30  Walking Dead | sim END | actual END | release null  0ms
+21-59-42-214Z/0002 T6 mana 3 hp 30 [simBest deleted] Walking Dead+Soul Barrage | sim Walking Dead | actual Chamber of Viscidus | release null  2ms
+21-59-42-214Z/0002 T8 mana 4 hp 30 [simBest deleted] Walking Dead+Boneweb Egg | sim Walking Dead | actual Duke of Below | release null  3ms
+21-59-42-214Z/0002 T10 mana 5 hp 30  Walking Dead+Boneweb Egg | sim Walking Dead | actual Chamber of Viscidus | release null o4,o5 4ms
+21-59-42-214Z/0002 T10 mana 5 hp 30  Hand of Gul'dan | sim Walking Dead | actual Chronoclaws | release null  4ms
+21-59-42-214Z/0002 T10 mana 1 hp 30  Hand of Gul'dan | sim Party Fiend | actual Entropic Continuity | release null  2ms
+21-59-42-214Z/0002 T10 mana 0 hp 30  Hand of Gul'dan | sim Boneweb Egg→Mastermind Vanessa | actual Nemesis Gul'dan→Mastermind Vanessa | release null  1ms
+21-59-42-214Z/0003 T1 mana 1 hp 30  Soul Barrage | sim END | actual Cursed Catacombs | release null  1ms
+21-59-42-214Z/0003 T1 mana 1 hp 30  Soul Barrage | sim END | actual Cursed Catacombs | release null  0ms
+21-59-42-214Z/0003 T1 mana 1 hp 30  Soul Barrage | sim END | actual END | release null  0ms
+21-59-42-214Z/0003 T3 mana 2 hp 30  Soul Barrage+Boneweb Egg | sim Wicked Whispers | actual Wicked Whispers | release null  2ms
+21-59-42-214Z/0003 T3 mana 1 hp 30  Soul Barrage | sim Silverware Golem→E.T.C. | actual Silverware Golem→E.T.C. | release null  0ms
+21-59-42-214Z/0003 T3 mana 1 hp 30  Soul Barrage | sim END | actual END | release null  0ms
+21-59-42-214Z/0003 T5 mana 3 hp 30  Soul Barrage | sim Silverware Golem→Southsea Captain | actual Disposable Acolytes | release null  1ms
+21-59-42-214Z/0003 T5 mana 1 hp 30  Soul Barrage | sim Silverware Golem→Southsea Captain | actual Silverware Golem→Southsea Captain | release null  1ms
+21-59-42-214Z/0003 T5 mana 1 hp 30  Soul Barrage | sim END | actual END | release null  0ms
+21-59-42-214Z/0003 T7 mana 4 hp 30  Soul Barrage | sim Chronoclaws | actual Chronoclaws | release null  1ms
+21-59-42-214Z/0003 T9 mana 5 hp 30  Boneweb Egg | sim Nemesis Gul'dan→Tuskarrrr Trawler | actual Nemesis Gul'dan→Tuskarrrr Trawler | release null o2 1ms
+21-59-42-214Z/0003 T9 mana 2 hp 30  Hand of Gul'dan | sim END | actual END | release null  0ms
+21-59-42-214Z/0003 T11 mana 6 hp 30  Hand of Gul'dan | sim Nemesis Gul'dan→Parachute Brigand | actual Chronoclaws | release null  1ms
+21-59-42-214Z/0003 T11 mana 2 hp 30  Hand of Gul'dan | sim Nemesis Gul'dan→Parachute Brigand | actual Nemesis Gul'dan→Parachute Brigand | release null  0ms
+rows 58 released 0 of simBest-deleted 11 total ms 100 max 17

@@ -2,7 +2,7 @@
 // bridge.mjs drives it live; eval-score.mjs drives the same code over labelled positions, so the
 // offline score measures exactly the pipeline that plays.
 import {ask} from './jev.mjs';
-import {forcedAction,spendFirst,setupFirst,dhTempoActions,buffSetupActions,lowBoardDiscardActions,boardRecoveryActions} from './policy.mjs';
+import {forcedAction,wastedFodder,reliableOutletFor,spendFirst,setupFirst,dhTempoActions,buffSetupActions,lowBoardDiscardActions,boardRecoveryActions} from './policy.mjs';
 import {criteria,bodies,buffImpact} from './describe.mjs';
 import {menu,actionFor,developmentMenu} from './plan.mjs';
 import {dhTacticalAction} from './dh-tactics.mjs';
@@ -22,6 +22,8 @@ import {divineShieldAssessment,preferredShieldSetup} from './divine-shield.mjs';
 import {temporaryDiscardAssessments} from './temporary-discard.mjs';
 import {handRetentionAssessment} from './hand-retention.mjs';
 import {turnAlternatives} from './turn-alternatives.mjs';
+import {holdValue,holdGuidance} from './fodder-hold.mjs';
+import {fromState} from './sim.mjs';
 
 // A queued nonlethal plan must pass the same fresh-state preservation ruling.
 // Historical engines omit this hook; the bridge keeps their behavior frozen.
@@ -69,11 +71,28 @@ export function prepare(state,full,{planner=true,admission=combinationAdmission(
  if(p.crit)for(const intent of alternatives){const id=intent.firstActionId;if(p.crit[id])p.crit[id]={...p.crit[id],
   turnAlternatives:[...(p.crit[id].turnAlternatives??[]),intent],description:p.crit[id].description+' '+intent.guidance};}
  if(p.crit)for(const r of retention.risks){const a=full.find(a=>a.entityId===r.entityId&&a.targetId==null);if(a&&p.crit[a.id])p.crit[a.id]={...p.crit[a.id],description:p.crit[a.id].description+' '+r.guidance};}
+ if(p.crit)fodderHoldNotes(state,full,p);
  return {...p,turnAlternatives:alternatives,handRetention:retention,temporaryDiscard:temporaryDiscardAssessments(state,full),divineShield:divineShieldAssessment(state,full),turnOrder:turnOrderAssessment(state,full,{admission}),weaponPreservation:preservation,weaponReplacement:replacement,chamberIntents:chamber,combinationEvidence:admissionEvidence(admission,p.acts??full),
   decisionPolicy:{version:'turn-intent-v2',source:p.lethal?.source??p.forced?.source??'compare_intents',
    weaponProofKey:p.weaponBuff?.proofKey??null,
    priority:['legal/survival gates','visible lethal','expiring development','chosen information preserving setup mana',
     'valuable body before costly discard weapon','swing equipped weapon before same-discard replacement','proved user weapon ruling','guaranteed safe location development','opening/tactical/recovery rulings','compare feasible development and buff intents']}};
+}
+// A protected fodder cast that reached the menu (search release, buff setup or combo proof)
+// carries the payoff it forfeits, on the option and on every plan that starts with it.
+function fodderHoldNotes(state,full,p){
+ const wasted=wastedFodder(state);
+ if(!wasted.size)return;
+ const start=fromState(state,full),w=start.objective?.weights;
+ for(const a of full.filter(a=>wasted.has(a.entityId)&&a.targetId==null)){
+  const c=start.hand.find(x=>x.id===a.entityId),raw=(state.me.hand??[]).find(x=>x.entityId===a.entityId);
+  if(!c||!w)continue;
+  const v=holdValue(c,w),note=holdGuidance(c,v,reliableOutletFor(state,raw)?.name??'the outlet');
+  for(const id of Object.keys(p.crit)){
+   const first=p.plans?.[id]?actionFor(full,p.plans[id][0]):full.find(x=>x.id===id);
+   if(first?.id===a.id)p.crit[id]={...p.crit[id],fodderHold:{entityId:a.entityId,holdValue:v},description:p.crit[id].description+' '+note};
+  }
+ }
 }
 function prepareDecision(state,full,{planner,admission,chamber,preservation,replacement}){
  // Kills are looked for on the full menu; only then are the attacks held back until the hand

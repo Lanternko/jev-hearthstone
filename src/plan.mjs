@@ -15,6 +15,7 @@ import {isCoin} from './power.mjs';
 import {combinationAdmission,admittedLines} from './combo-admission.mjs';
 import {divineShieldAssessment} from './divine-shield.mjs';
 import {handRetentionAssessment} from './hand-retention.mjs';
+import {fodderHoldPenalty} from './fodder-hold.mjs';
 
 const linkedHandRisks=s=>handRetentionAssessment({me:{hand:s.hand.map(c=>c.raw),
  board:s.me.map(b=>({entityId:b.id,CARDTYPE:b.type,HEALTH:b.hp,text:b.text,DORMANT:b.dormant?1:0}))}}).risks;
@@ -49,6 +50,8 @@ export function score(start,s){
   // Fixed summon payoffs are already represented in boardValue. Do not award
   // them a second generic discard bonus, especially when the board is full.
   for(const c of s.discarded??[])v-=/if you discard this|when you (?:play or )?discard this/i.test(c.text)?0:c.cost;
+  // Fodder a reliable outlet would discard for free: casting it forfeits that payoff (fodder-hold.mjs).
+  v-=fodderHoldPenalty(start,s,w);
   // Health is a resource while it is plentiful: a weapon soaking a big minion's hit keeps our
   // board, and the board is what wins. Low, every point counts as much as a minion's.
   const hurt=hpOf(hero(start,'me'))-hpOf(me);
@@ -81,10 +84,11 @@ export function wastedChip(start,steps){
 
 // Beam search over exact steps. A node whose last step was inexact is terminal: the plan ends
 // there and the turn is re-planned from what really happened.
-export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searchSignature}={}){
+export function search(state,actions,{beam=300,depth=12,maxNodes=24000,key=searchSignature,fodderHold}={}){
   if(!Number.isInteger(beam)||beam<1||!Number.isInteger(depth)||depth<1||!Number.isInteger(maxNodes)||maxNodes<1)
     throw Error('search budgets must be positive integers');
   const start=fromState(state,actions);
+  if(fodderHold?.length)start.fodderHold=fodderHold;
   let frontier=[{s:start,steps:[],open:true}];
   const done=new Map();                           // final signature -> best node
   const stats={expanded:0,generated:0,deduplicated:0,beamPruned:0,depthReached:0,nodeLimit:false,depthLimit:false};

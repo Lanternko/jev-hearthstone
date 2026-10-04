@@ -116,7 +116,7 @@ test('equipped affordable body uses same evidence; new draw and attack buffs are
 
 test('chamber engine is frozen, current version adds the ruling without mutating historical behavior',async()=>{
  const previous=await loadDecisionEngine('silverfish-v1-chamber-intent-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-weapon-replacement-v1');assert.notEqual(previous.prepare,now.prepare);
+ assert.equal(now.version,'silverfish-v1-fodder-hold-v1');assert.notEqual(previous.prepare,now.prepare);
  const c=fixture();assert.notEqual(previous.prepare(c.state,previous.constrainActions(c.state,c.options)).forced?.source,'weapon_preservation');
  assert.equal(pipeline(c).forced.source,'weapon_preservation');
  assert.equal(previous.allowsWeaponContinuation,undefined);

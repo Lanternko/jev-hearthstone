@@ -1,0 +1,1621 @@
+{
+  "files": 90,
+  "rowsScanned": 4129,
+  "rowsWithChangedSwingDamage": 124,
+  "uniqueChanged": 104,
+  "forcedDecisionDiffs": 0,
+  "changed": [
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 864,
+      "createdAt": "2026-09-28T18:25:18.881Z",
+      "dup": false,
+      "diff": [
+        [
+          30,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 865,
+      "createdAt": "2026-09-28T18:25:27.306Z",
+      "dup": false,
+      "diff": [
+        [
+          30,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1408,
+      "createdAt": "2026-09-29T15:19:50.162Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1409,
+      "createdAt": "2026-09-29T15:20:27.395Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1410,
+      "createdAt": "2026-09-29T15:20:49.597Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1411,
+      "createdAt": "2026-09-29T15:20:58.384Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1412,
+      "createdAt": "2026-09-29T15:21:01.404Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1413,
+      "createdAt": "2026-09-29T15:21:40.435Z",
+      "dup": false,
+      "diff": [
+        [
+          64,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1447,
+      "createdAt": "2026-09-29T15:33:03.670Z",
+      "dup": false,
+      "diff": [
+        [
+          9,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1449,
+      "createdAt": "2026-09-29T15:33:13.186Z",
+      "dup": false,
+      "diff": [
+        [
+          9,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1450,
+      "createdAt": "2026-09-29T15:33:16.861Z",
+      "dup": false,
+      "diff": [
+        [
+          9,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1451,
+      "createdAt": "2026-09-29T15:33:20.289Z",
+      "dup": false,
+      "diff": [
+        [
+          9,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1501,
+      "createdAt": "2026-09-29T16:08:08.524Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1502,
+      "createdAt": "2026-09-29T16:08:17.007Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1503,
+      "createdAt": "2026-09-29T16:08:33.997Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1504,
+      "createdAt": "2026-09-29T16:08:49.539Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1505,
+      "createdAt": "2026-09-29T16:09:22.995Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1506,
+      "createdAt": "2026-09-29T16:09:26.752Z",
+      "dup": false,
+      "diff": [
+        [
+          62,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1555,
+      "createdAt": "2026-09-29T16:55:43.352Z",
+      "dup": false,
+      "diff": [
+        [
+          23,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1556,
+      "createdAt": "2026-09-29T16:56:30.694Z",
+      "dup": false,
+      "diff": [
+        [
+          23,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1597,
+      "createdAt": "2026-09-29T17:07:05.070Z",
+      "dup": false,
+      "diff": [
+        [
+          25,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1598,
+      "createdAt": "2026-09-29T17:07:13.583Z",
+      "dup": false,
+      "diff": [
+        [
+          25,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1642,
+      "createdAt": "2026-09-29T17:22:11.872Z",
+      "dup": false,
+      "diff": [
+        [
+          43,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1796,
+      "createdAt": "2026-09-29T18:05:43.719Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1797,
+      "createdAt": "2026-09-29T18:05:52.226Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1798,
+      "createdAt": "2026-09-29T18:06:25.838Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1918,
+      "createdAt": "2026-09-29T18:38:30.151Z",
+      "dup": false,
+      "diff": [
+        [
+          24,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1919,
+      "createdAt": "2026-09-29T18:38:38.664Z",
+      "dup": false,
+      "diff": [
+        [
+          24,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1920,
+      "createdAt": "2026-09-29T18:39:01.276Z",
+      "dup": false,
+      "diff": [
+        [
+          24,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1921,
+      "createdAt": "2026-09-29T18:39:11.834Z",
+      "dup": false,
+      "diff": [
+        [
+          24,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 1922,
+      "createdAt": "2026-09-29T18:39:15.798Z",
+      "dup": false,
+      "diff": [
+        [
+          24,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2366,
+      "createdAt": "2026-09-30T03:06:45.896Z",
+      "dup": false,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2367,
+      "createdAt": "2026-09-30T03:06:50.556Z",
+      "dup": false,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2397,
+      "createdAt": "2026-09-30T03:09:55.405Z",
+      "dup": false,
+      "diff": [
+        [
+          18,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2398,
+      "createdAt": "2026-09-30T03:10:13.631Z",
+      "dup": false,
+      "diff": [
+        [
+          18,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2399,
+      "createdAt": "2026-09-30T03:10:20.215Z",
+      "dup": false,
+      "diff": [
+        [
+          18,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2400,
+      "createdAt": "2026-09-30T03:10:26.771Z",
+      "dup": false,
+      "diff": [
+        [
+          18,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2402,
+      "createdAt": "2026-09-30T03:10:40.248Z",
+      "dup": false,
+      "diff": [
+        [
+          18,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2657,
+      "createdAt": "2026-09-30T04:11:42.361Z",
+      "dup": false,
+      "diff": [
+        [
+          11,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2766,
+      "createdAt": "2026-09-30T05:01:03.590Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2788,
+      "createdAt": "2026-09-30T05:11:44.725Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2789,
+      "createdAt": "2026-09-30T05:11:56.979Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2790,
+      "createdAt": "2026-09-30T05:12:18.888Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2791,
+      "createdAt": "2026-09-30T05:12:30.630Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2792,
+      "createdAt": "2026-09-30T05:12:44.991Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2793,
+      "createdAt": "2026-09-30T05:12:57.641Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 2794,
+      "createdAt": "2026-09-30T05:13:18.141Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3207,
+      "createdAt": "2026-09-30T06:16:27.018Z",
+      "dup": false,
+      "diff": [
+        [
+          30,
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3212,
+      "createdAt": "2026-09-30T06:17:35.165Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3213,
+      "createdAt": "2026-09-30T06:17:40.583Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3214,
+      "createdAt": "2026-09-30T06:17:46.502Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3215,
+      "createdAt": "2026-09-30T06:18:21.485Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3351,
+      "createdAt": "2026-09-30T06:42:30.839Z",
+      "dup": false,
+      "diff": [
+        [
+          17,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3576,
+      "createdAt": "2026-09-30T07:04:06.023Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3577,
+      "createdAt": "2026-09-30T07:04:14.859Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3578,
+      "createdAt": "2026-09-30T07:04:22.698Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3579,
+      "createdAt": "2026-09-30T07:04:34.340Z",
+      "dup": false,
+      "diff": [
+        [
+          31,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3635,
+      "createdAt": "2026-09-30T07:09:41.068Z",
+      "dup": false,
+      "diff": [
+        [
+          26,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 3820,
+      "createdAt": "2026-09-30T18:52:24.740Z",
+      "dup": false,
+      "diff": [
+        [
+          49,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4105,
+      "createdAt": "2026-09-30T20:22:44.203Z",
+      "dup": false,
+      "diff": [
+        [
+          60,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4106,
+      "createdAt": "2026-09-30T20:22:48.451Z",
+      "dup": false,
+      "diff": [
+        [
+          60,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4107,
+      "createdAt": "2026-09-30T20:22:54.184Z",
+      "dup": false,
+      "diff": [
+        [
+          60,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4528,
+      "createdAt": "2026-09-30T22:26:50.992Z",
+      "dup": false,
+      "diff": [
+        [
+          61,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4529,
+      "createdAt": "2026-09-30T22:27:13.095Z",
+      "dup": false,
+      "diff": [
+        [
+          61,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4530,
+      "createdAt": "2026-09-30T22:27:27.487Z",
+      "dup": false,
+      "diff": [
+        [
+          61,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4531,
+      "createdAt": "2026-09-30T22:27:41.662Z",
+      "dup": false,
+      "diff": [
+        [
+          61,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4532,
+      "createdAt": "2026-09-30T22:27:48.636Z",
+      "dup": false,
+      "diff": [
+        [
+          61,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4565,
+      "createdAt": "2026-09-30T22:34:55.424Z",
+      "dup": false,
+      "diff": [
+        [
+          66,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4668,
+      "createdAt": "2026-09-30T22:57:37.256Z",
+      "dup": false,
+      "diff": [
+        [
+          38,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4994,
+      "createdAt": "2026-10-01T08:43:21.517Z",
+      "dup": false,
+      "diff": [
+        [
+          4,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 4995,
+      "createdAt": "2026-10-01T08:43:28.847Z",
+      "dup": false,
+      "diff": [
+        [
+          4,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5235,
+      "createdAt": "2026-10-01T09:49:32.912Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5236,
+      "createdAt": "2026-10-01T09:49:43.261Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5237,
+      "createdAt": "2026-10-01T09:49:47.115Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5238,
+      "createdAt": "2026-10-01T09:49:57.133Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5239,
+      "createdAt": "2026-10-01T09:50:10.929Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5321,
+      "createdAt": "2026-10-01T10:07:24.802Z",
+      "dup": false,
+      "diff": [
+        [
+          33,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5322,
+      "createdAt": "2026-10-01T10:07:39.697Z",
+      "dup": false,
+      "diff": [
+        [
+          33,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5366,
+      "createdAt": "2026-10-01T10:18:16.689Z",
+      "dup": false,
+      "diff": [
+        [
+          85,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5397,
+      "createdAt": "2026-10-01T10:29:10.035Z",
+      "dup": false,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5398,
+      "createdAt": "2026-10-01T10:29:20.306Z",
+      "dup": false,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5571,
+      "createdAt": "2026-10-01T11:09:19.628Z",
+      "dup": false,
+      "diff": [
+        [
+          50,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5572,
+      "createdAt": "2026-10-01T11:09:42.125Z",
+      "dup": false,
+      "diff": [
+        [
+          50,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 5573,
+      "createdAt": "2026-10-01T11:09:51.308Z",
+      "dup": false,
+      "diff": [
+        [
+          50,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6392,
+      "createdAt": "2026-10-01T17:03:28.917Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6393,
+      "createdAt": "2026-10-01T17:03:35.240Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6394,
+      "createdAt": "2026-10-01T17:04:04.321Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6395,
+      "createdAt": "2026-10-01T17:04:13.955Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6396,
+      "createdAt": "2026-10-01T17:04:22.923Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6397,
+      "createdAt": "2026-10-01T17:04:43.771Z",
+      "dup": false,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6522,
+      "createdAt": "2026-10-01T22:31:36.438Z",
+      "dup": false,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6523,
+      "createdAt": "2026-10-01T22:31:46.943Z",
+      "dup": false,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6524,
+      "createdAt": "2026-10-01T22:31:52.630Z",
+      "dup": false,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6525,
+      "createdAt": "2026-10-01T22:32:33.227Z",
+      "dup": false,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6587,
+      "createdAt": "2026-10-01T22:54:08.797Z",
+      "dup": false,
+      "diff": [
+        [
+          15,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6837,
+      "createdAt": "2026-10-02T00:00:28.635Z",
+      "dup": false,
+      "diff": [
+        [
+          16,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6838,
+      "createdAt": "2026-10-02T00:00:37.443Z",
+      "dup": false,
+      "diff": [
+        [
+          16,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 6867,
+      "createdAt": "2026-10-02T18:13:06.110Z",
+      "dup": false,
+      "diff": [
+        [
+          32,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 7265,
+      "createdAt": "2026-10-02T18:57:53.722Z",
+      "dup": false,
+      "diff": [
+        [
+          6,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 7266,
+      "createdAt": "2026-10-02T18:58:02.612Z",
+      "dup": false,
+      "diff": [
+        [
+          6,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 7527,
+      "createdAt": "2026-10-02T19:39:07.851Z",
+      "dup": false,
+      "diff": [
+        [
+          45,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 8017,
+      "createdAt": "2026-10-02T20:35:31.598Z",
+      "dup": false,
+      "diff": [
+        [
+          30,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 8265,
+      "createdAt": "2026-10-02T21:05:18.575Z",
+      "dup": false,
+      "diff": [
+        [
+          78,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/decisions.jsonl",
+      "row": 8752,
+      "createdAt": "2026-10-03T22:18:38.991Z",
+      "dup": false,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 25,
+      "createdAt": "2026-10-01T17:03:28.917Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 26,
+      "createdAt": "2026-10-01T17:03:35.240Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 27,
+      "createdAt": "2026-10-01T17:04:04.321Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 28,
+      "createdAt": "2026-10-01T17:04:13.955Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 29,
+      "createdAt": "2026-10-01T17:04:22.923Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T15-41-25-602Z/game-0014-decisions.jsonl",
+      "row": 30,
+      "createdAt": "2026-10-01T17:04:43.771Z",
+      "dup": true,
+      "diff": [
+        [
+          12,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0002-decisions.jsonl",
+      "row": 9,
+      "createdAt": "2026-10-01T22:31:36.438Z",
+      "dup": true,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0002-decisions.jsonl",
+      "row": 10,
+      "createdAt": "2026-10-01T22:31:46.943Z",
+      "dup": true,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0002-decisions.jsonl",
+      "row": 11,
+      "createdAt": "2026-10-01T22:31:52.630Z",
+      "dup": true,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0002-decisions.jsonl",
+      "row": 12,
+      "createdAt": "2026-10-01T22:32:33.227Z",
+      "dup": true,
+      "diff": [
+        [
+          43,
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0005-decisions.jsonl",
+      "row": 14,
+      "createdAt": "2026-10-01T22:54:08.797Z",
+      "dup": true,
+      "diff": [
+        [
+          15,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0014-decisions.jsonl",
+      "row": 32,
+      "createdAt": "2026-10-02T00:00:28.635Z",
+      "dup": true,
+      "diff": [
+        [
+          16,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-01T22-17-09-425Z/game-0014-decisions.jsonl",
+      "row": 33,
+      "createdAt": "2026-10-02T00:00:37.443Z",
+      "dup": true,
+      "diff": [
+        [
+          16,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0001-decisions.jsonl",
+      "row": 28,
+      "createdAt": "2026-10-02T18:13:06.110Z",
+      "dup": true,
+      "diff": [
+        [
+          32,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0007-decisions.jsonl",
+      "row": 88,
+      "createdAt": "2026-10-02T18:57:53.722Z",
+      "dup": true,
+      "diff": [
+        [
+          6,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0007-decisions.jsonl",
+      "row": 89,
+      "createdAt": "2026-10-02T18:58:02.612Z",
+      "dup": true,
+      "diff": [
+        [
+          6,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0013-decisions.jsonl",
+      "row": 86,
+      "createdAt": "2026-10-02T19:39:07.851Z",
+      "dup": true,
+      "diff": [
+        [
+          45,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0022-decisions.jsonl",
+      "row": 72,
+      "createdAt": "2026-10-02T20:35:31.598Z",
+      "dup": true,
+      "diff": [
+        [
+          30,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-02T18-07-53-110Z/game-0026-decisions.jsonl",
+      "row": 21,
+      "createdAt": "2026-10-02T21:05:18.575Z",
+      "dup": true,
+      "diff": [
+        [
+          78,
+          8,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "runtime/ranked-2026-10-03T21-59-42-214Z/game-0003-decisions.jsonl",
+      "row": 80,
+      "createdAt": "2026-10-03T22:18:38.991Z",
+      "dup": true,
+      "diff": [
+        [
+          5,
+          8,
+          4
+        ]
+      ]
+    }
+  ]
+}

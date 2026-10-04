@@ -1,0 +1,72 @@
+{
+  "output": "D:\\Projects\\jev-hearthstone\\eval\\runs\\fodder-hold-20261004\\combo",
+  "summary": {
+    "baseline": {
+      "cases": 42,
+      "wholeIntentsAvailable": 42,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 32,
+      "medianMs": 0.788599999999974,
+      "p95Ms": 1.2409999999999854,
+      "maxMs": 50.99279999999999
+    },
+    "candidate": {
+      "cases": 42,
+      "wholeIntentsAvailable": 42,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 32,
+      "medianMs": 0.7499000000000251,
+      "p95Ms": 1.3722000000000207,
+      "maxMs": 47.331399999999974
+    },
+    "withoutAdmission": {
+      "cases": 42,
+      "wholeIntentsAvailable": 0,
+      "preferredFirstAvailable": 38,
+      "preferredFirstCases": 38,
+      "comboMenuCases": 0,
+      "medianMs": 0.5164000000000897,
+      "p95Ms": 0.8917999999999893,
+      "maxMs": 37.51420000000007
+    }
+  },
+  "safety": [
+    {
+      "id": "frozen",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "exhausted",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "tie",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "secret",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "clipped",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "no-buff-mana",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    },
+    {
+      "id": "unmodelled-summon-engine",
+      "weaponProofs": 0,
+      "queuedAfterUnknown": 0
+    }
+  ]
+}

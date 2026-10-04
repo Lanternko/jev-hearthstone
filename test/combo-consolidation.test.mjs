@@ -120,7 +120,7 @@ test('an unmodelled chosen-discard alternative is compared before assuming the t
 test('the previous combo engine remains frozen after consolidation',async()=>{
  const old=await loadDecisionEngine('silverfish-v1-combo-admission-v1'),now=await loadDecisionEngine();
  assert.notEqual(old.prepare,now.prepare);assert.notEqual(old.constrainActions,now.constrainActions);
- assert.equal(now.version,'silverfish-v1-weapon-replacement-v1');
+ assert.equal(now.version,'silverfish-v1-fodder-hold-v1');
  const c=fixture();c.state.me.board.push({entityId:999,CARDTYPE:'MINION',ATK:1,HEALTH:2,
   text:'After you summon a minion, deal 1 damage to a random enemy.'});
  const trace={},actions=old.constrainActions(c.state,c.actions,{trace});

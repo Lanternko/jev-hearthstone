@@ -1,0 +1,897 @@
+[
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 2,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "The Coin",
+  "actual": "Platysaur",
+  "release": null,
+  "notes": [],
+  "ms": 17
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 4,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Disposable Acolytes",
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Ocular Occultist→Disposable Acolytes",
+  "release": null,
+  "notes": [],
+  "ms": 6
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 4,
+  "mana": 0,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Walking Dead→Yogg-Ramen",
+  "actual": "Walking Dead→Yogg-Ramen",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 6,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Ocular Occultist→Yogg-Ramen",
+  "release": null,
+  "notes": [],
+  "ms": 3
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 6,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Soulfire→Yogg-Ramen",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 10,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Walking Dead",
+  "actual": "Walking Dead",
+  "release": null,
+  "notes": [
+   "o1",
+   "p1"
+  ],
+  "ms": 5
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 12,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Walking Dead→Water Elemental",
+  "actual": "Walking Dead→Water Elemental",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 12,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Life Tap",
+  "actual": "Life Tap",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 14,
+  "mana": 7,
+  "hp": 30,
+  "wasted": [
+   "Silverware Golem"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Silverware Golem",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0001",
+  "turn": 16,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Silverware Golem"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Silverware Golem",
+  "actual": "Platysaur",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0002",
+  "turn": 13,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Boneweb Egg",
+   "Silverware Golem"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Silverware Golem",
+  "actual": "Ocular Occultist→Boneweb Egg",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0002",
+  "turn": 15,
+  "mana": 7,
+  "hp": 30,
+  "wasted": [
+   "Silverware Golem"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Silverware Golem",
+  "actual": "Chamber of Viscidus",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0004",
+  "turn": 14,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Hand of Gul'dan",
+   "Silverware Golem"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Silverware Golem",
+  "actual": "Ocular Occultist→Silverware Golem",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 3,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Frequency Oscillator→The Lich King",
+  "actual": "Frequency Oscillator→The Lich King",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 3,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Wicked Whispers",
+  "actual": "Platysaur",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 9,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Entropic Continuity",
+  "actual": "Chronoclaws",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 9,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Entropic Continuity",
+  "actual": "Entropic Continuity",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 11,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Hand of Gul'dan",
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Duke of Below",
+  "actual": "Duke of Below",
+  "release": null,
+  "notes": [],
+  "ms": 4
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 13,
+  "mana": 7,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Soul Barrage",
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Ocular Occultist→Walking Dead",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 13,
+  "mana": 4,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "The Soularium",
+  "actual": "Ocular Occultist→Soul Barrage",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 13,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Gul'dan→Necrotic Mortician",
+  "actual": "Gul'dan→Risen Ghoul",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 17,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Boneweb Egg",
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Entropic Continuity",
+  "actual": "Entropic Continuity",
+  "release": null,
+  "notes": [],
+  "ms": 4
+ },
+ {
+  "game": "17-42-01-535Z/0005",
+  "turn": 17,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Boneweb Egg",
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Felbeast→Gnome Muncher",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 11,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Felbeast→Thor Thorim",
+  "actual": "Ocular Occultist→Hand of Gul'dan",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 11,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Felbeast→Thor Thorim",
+  "actual": "Felbeast→Thor Thorim",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 11,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 13,
+  "mana": 7,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Ocular Occultist→Thor Thorim",
+  "actual": "Chronoclaws",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 13,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Ocular Occultist→Thor Thorim",
+  "actual": "Chamber of Viscidus",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 13,
+  "mana": 0,
+  "hp": 30,
+  "wasted": [
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Ocular Occultist→Thor Thorim",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 15,
+  "mana": 8,
+  "hp": 30,
+  "wasted": [
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "Chamber of Viscidus",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 15,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Entropic Continuity",
+  "actual": "Platysaur",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 15,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Entropic Continuity",
+  "actual": "Entropic Continuity",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 15,
+  "mana": 4,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan",
+   "Disposable Acolytes"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Wicked Whispers",
+  "actual": "Wicked Whispers",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "17-42-01-535Z/0006",
+  "turn": 15,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 2,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "The Coin",
+  "actual": "The Coin",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 2,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Life Tap",
+  "actual": "Life Tap",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 2,
+  "mana": 0,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 4,
+  "mana": 0,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 6,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead",
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Chamber of Viscidus",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 8,
+  "mana": 4,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead",
+   "Boneweb Egg"
+  ],
+  "simBestDeletedByFodder": true,
+  "simBest": "Walking Dead",
+  "actual": "Duke of Below",
+  "release": null,
+  "notes": [],
+  "ms": 3
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 10,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Walking Dead",
+   "Boneweb Egg"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Walking Dead",
+  "actual": "Chamber of Viscidus",
+  "release": null,
+  "notes": [
+   "o4",
+   "o5"
+  ],
+  "ms": 4
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 10,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Walking Dead",
+  "actual": "Chronoclaws",
+  "release": null,
+  "notes": [],
+  "ms": 4
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 10,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Party Fiend",
+  "actual": "Entropic Continuity",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "21-59-42-214Z/0002",
+  "turn": 10,
+  "mana": 0,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Boneweb Egg→Mastermind Vanessa",
+  "actual": "Nemesis Gul'dan→Mastermind Vanessa",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 1,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "Cursed Catacombs",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 1,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "Cursed Catacombs",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 1,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 3,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage",
+   "Boneweb Egg"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Wicked Whispers",
+  "actual": "Wicked Whispers",
+  "release": null,
+  "notes": [],
+  "ms": 2
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 3,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Silverware Golem→E.T.C.",
+  "actual": "Silverware Golem→E.T.C.",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 3,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 5,
+  "mana": 3,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Silverware Golem→Southsea Captain",
+  "actual": "Disposable Acolytes",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 5,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Silverware Golem→Southsea Captain",
+  "actual": "Silverware Golem→Southsea Captain",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 5,
+  "mana": 1,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 7,
+  "mana": 4,
+  "hp": 30,
+  "wasted": [
+   "Soul Barrage"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Chronoclaws",
+  "actual": "Chronoclaws",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 9,
+  "mana": 5,
+  "hp": 30,
+  "wasted": [
+   "Boneweb Egg"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Nemesis Gul'dan→Tuskarrrr Trawler",
+  "actual": "Nemesis Gul'dan→Tuskarrrr Trawler",
+  "release": null,
+  "notes": [
+   "o2"
+  ],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 9,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "END",
+  "actual": "END",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 11,
+  "mana": 6,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Nemesis Gul'dan→Parachute Brigand",
+  "actual": "Chronoclaws",
+  "release": null,
+  "notes": [],
+  "ms": 1
+ },
+ {
+  "game": "21-59-42-214Z/0003",
+  "turn": 11,
+  "mana": 2,
+  "hp": 30,
+  "wasted": [
+   "Hand of Gul'dan"
+  ],
+  "simBestDeletedByFodder": false,
+  "simBest": "Nemesis Gul'dan→Parachute Brigand",
+  "actual": "Nemesis Gul'dan→Parachute Brigand",
+  "release": null,
+  "notes": [],
+  "ms": 0
+ }
+]

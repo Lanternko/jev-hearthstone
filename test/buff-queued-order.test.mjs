@@ -134,7 +134,7 @@ test('pure drawing is optional and does not cause the buff gate without any buff
 
 test('old weapon version remains frozen, new default adds shared queue ordering and discard-buff admission',async()=>{
  const old=await loadDecisionEngine('silverfish-v1-weapon-preservation-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-weapon-replacement-v1');assert.equal(old.allowsPlanContinuation,undefined);
+ assert.equal(now.version,'silverfish-v1-fodder-hold-v1');assert.equal(old.allowsPlanContinuation,undefined);
  const c=fixture();const p=old.prepare(c.state,old.constrainActions(c.state,c.options));
  assert.ok(!Object.values(p.plans??{}).some(steps=>steps[0].id===10&&steps[1]?.id===32));
  assert.ok(Object.values(pipeline(c).p.plans??{}).some(steps=>steps[0].id===10&&steps[1]?.id===32));

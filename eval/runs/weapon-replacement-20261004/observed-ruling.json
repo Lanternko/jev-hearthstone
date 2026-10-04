@@ -1,0 +1,140 @@
+{
+  "scope": "offline deterministic replay of the recorded decision row; no Jev call, no win-rate evidence",
+  "source": "runtime/ranked-2026-10-03T21-59-42-214Z/game-0003-decisions.jsonl",
+  "row": 80,
+  "ownTurn": 6,
+  "createdAt": "2026-10-03T22:18:38.991Z",
+  "recordedAction": {
+    "option": 2,
+    "entityId": 5,
+    "type": "POWER",
+    "id": "o2"
+  },
+  "userRuling": {
+    "reviewStatus": "implemented_weapon-replacement-v1",
+    "vetoedEntityId": 5,
+    "vetoedActionId": "o2",
+    "expectedEntityId": 64,
+    "expectedSource": "hero swing with equipped weapon",
+    "reason": "User ruling (HSReplay): the equipped Chronoclaws still has 1 durability, so attack first and discard Hand of Gul'dan; the Duke drawn afterwards was the comeback, but equipping the second Chronoclaws first spent the mana and lost. Equipping destroys the remaining durability; both orders discard the same highest-cost Hand of Gul'dan, so swing first and decide the equip after the draw. Contrast (user): if the new weapon itself is the highest card, swinging first would discard it, so that order is compared instead."
+  },
+  "before": {
+    "version": "silverfish-v1-validated-turn-intents-v1",
+    "acts": [
+      "o0",
+      "o2",
+      "o3t0",
+      "o3t1",
+      "o3t2",
+      "o3t3",
+      "o3t4",
+      "o4"
+    ],
+    "forced": null,
+    "menu": [
+      "o0",
+      "o2",
+      "o4",
+      "p1"
+    ],
+    "plans": {
+      "p1": [
+        {
+          "id": 64,
+          "kind": "attack",
+          "entityId": 64,
+          "targetId": 46
+        }
+      ]
+    },
+    "annotated": [],
+    "weaponReplacement": null,
+    "decisionPolicy": {
+      "version": "turn-intent-v2",
+      "source": "compare_intents",
+      "weaponProofKey": null,
+      "priority": [
+        "legal/survival gates",
+        "visible lethal",
+        "expiring development",
+        "chosen information preserving setup mana",
+        "valuable body before costly discard weapon",
+        "proved user weapon ruling",
+        "guaranteed safe location development",
+        "opening/tactical/recovery rulings",
+        "compare feasible development and buff intents"
+      ]
+    }
+  },
+  "after": {
+    "version": "silverfish-v1-weapon-replacement-v1",
+    "acts": [
+      "o3t0",
+      "o3t1",
+      "o3t2",
+      "o3t3",
+      "o3t4",
+      "o4"
+    ],
+    "forced": null,
+    "menu": [
+      "o4",
+      "p1"
+    ],
+    "plans": {
+      "p1": [
+        {
+          "id": 64,
+          "kind": "attack",
+          "entityId": 64,
+          "targetId": 46
+        }
+      ]
+    },
+    "annotated": [
+      "p1"
+    ],
+    "weaponReplacement": {
+      "equipActionId": "o2",
+      "proof": {
+        "oldAttack": 4,
+        "newAttack": 4,
+        "oldDurability": 1,
+        "newCost": 4,
+        "mana": 6,
+        "sameDiscardSet": [
+          {
+            "entityId": 10,
+            "name": "Hand of Gul'dan",
+            "cost": 6,
+            "kind": "draw",
+            "draws": 3,
+            "bodies": 0
+          }
+        ],
+        "handAfterSwing": 4,
+        "deckCount": 21,
+        "freeSlots": 6,
+        "faceSwing": "o3t0"
+      },
+      "guidance": "Swing the equipped Chronoclaws before equipping Chronoclaws: equipping destroys its remaining durability, the swing hits as hard, and both orders discard from the same highest-cost payoff set (Hand of Gul'dan). Observe the payoff, then decide whether to equip with the remaining mana."
+    },
+    "decisionPolicy": {
+      "version": "turn-intent-v2",
+      "source": "compare_intents",
+      "weaponProofKey": null,
+      "priority": [
+        "legal/survival gates",
+        "visible lethal",
+        "expiring development",
+        "chosen information preserving setup mana",
+        "valuable body before costly discard weapon",
+        "swing equipped weapon before same-discard replacement",
+        "proved user weapon ruling",
+        "guaranteed safe location development",
+        "opening/tactical/recovery rulings",
+        "compare feasible development and buff intents"
+      ]
+    }
+  }
+}

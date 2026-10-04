@@ -129,7 +129,7 @@ test('alternative draw guidance cannot bypass self-lethal, fatigue or full-hand 
 
 test('previous engine remains frozen with both copies; current engine admits all three user comparisons',async()=>{
  const c=fixture(),old=await loadDecisionEngine('silverfish-v1-temporary-discard-v1'),now=await loadDecisionEngine();
- assert.equal(now.version,'silverfish-v1-weapon-replacement-v1');
+ assert.equal(now.version,'silverfish-v1-fodder-hold-v1');
  assert.ok(old.constrainActions(c.state,c.options).some(a=>a.entityId===56));
  const {p}=pipeline(c),first=routes(p).map(r=>r.action.entityId);
  for(const id of [60,61,67,57])assert.ok(first.includes(id));

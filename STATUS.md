@@ -1085,3 +1085,7 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 485/485測試通過（新增12項）；42組合、192戰鬥、80斬殺、16人類裁定與上一版相同。歷史90檔重播只在2個不重複盤面觸發：原錯誤，以及一個本來就先揮刀的09-30盤面；其餘多為新刀本身最高費或並列。發現menu()會把攻擊折進計畫，已把說明改附在先揮的計畫上。詳見docs/weapon-replacement-20261004.md及eval/runs/weapon-replacement-20261004/。未呼叫Jev、未重開排位，尚無勝率證據；未commit。
 
 同日修正weapon-preservation替換刀傷害重複計算：英雄ATK已含裝備中武器，替換刀改為「新刀攻擊＋max(0, 英雄ATK−舊刀攻擊)」，row80由8改為4。此值只用於斬殺範圍跳過判斷，而有舊刀時兩個強制分支本來就不會觸發；4129列歷史重播中104個不重複盤面的Jev證據改變（8→4共92、Fiery War Axe 7→4共8、Imbued Axe 7→5共4），強制決策差異0。修正併入尚未實戰的weapon-replacement-v1並重整候選封存。
+
+### 2026-10-04 棄牌素材改為計分（規則分層第2步）
+
+新預設silverfish-v1-fodder-hold-v1，weapon-replacement-v1凍結到既有candidate。wastedFodder仍預設刪除。搜尋改為扣掉素材的免費棄牌收益（holdValue，不打折）後，只有打出素材仍嚴格最佳時才解除該動作，並在說明附上放棄的收益。今早11個「模擬最佳被刪」計入收益後全部不再選打出；g1 T16、g2 T15的Golem無嘲諷，打不打都會被斬殺，不是規則錯誤。全歷史8524決策中有32個可重播候選，解除0次；合成「Walking Dead嘲諷擋斬殺」會解除，沒有威脅或擋不住時不解除。494/494測試通過（新增7項），組合與戰鬥對照與上一版相同。詳見docs/fodder-hold-20261004.md及eval/runs/fodder-hold-20261004/。未呼叫Jev、未開排位、未commit。

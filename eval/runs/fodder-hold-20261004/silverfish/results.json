@@ -1,0 +1,6548 @@
+{
+  "schema": 1,
+  "createdAt": "2026-10-04T08:27:50.423Z",
+  "node": "v22.12.0",
+  "platform": "win32",
+  "scope": "offline search capability, exact synthetic oracle, existing ruling regressions; no model calls or win-rate evidence",
+  "baseline": "eval\\runs\\weapon-replacement-20261004\\candidate",
+  "sourceHashes": {
+    "baseline": {
+      "src/await-game.mjs": "3aca7745de8da700a733b1ab9433b49fa38c0ce1f70e8e47e4cafad126975d1d",
+      "src/bridge.mjs": "5112d8d0d10848fbffb2e3ecc519517455a86e80c06531228b266ab0f30c1c1e",
+      "src/build-opponent-prior.mjs": "73d3cac752aca13a6ba90a808b71b9b54edd2b58d8445b50e0164ae14df182c9",
+      "src/calibrate.mjs": "9e9779932ea8a6e9cc88c171dc107245610960ee0a74a8fd3875e0111e89b626",
+      "src/chamber-intent.mjs": "791a343a811faf467949d897aad93d12b80dd30cf2b6080d59021cb7ca4f786d",
+      "src/choose.mjs": "c170384986fa892453295d214e25f56464c10029d17143f4e6dc6663d4c50d8b",
+      "src/combo-admission.mjs": "8c87684cad83393ffc31d83b60a98eaa8a17ba59333b0ba41ec17986349fbdc3",
+      "src/dead-skip.mjs": "90e6b4c8883ea72bb476665a29c9624469a9485e4e9fe23f27b9521568f0f1c0",
+      "src/decide.mjs": "3fab0dfb4e1e0663d025c3fa5fdfb498e1e2cf39014898d0f6e50ccee00c30af",
+      "src/decision-benchmark.mjs": "3cc3d802b5be3dc78a5ec2e4ea0273e1209212c0124880028370c9dd5d6d50bc",
+      "src/deck.mjs": "bc5ae287353a406b9d28b2ac42c93879e416dc502c7c816e7f9cb1f762365881",
+      "src/describe.mjs": "44bafe2b4b42c48e8d68bfc018959e5108242cf198e14db08af9446948e034f0",
+      "src/dh-tactics.mjs": "89949418252e9a3cf5c8a4db403b75abbdf78283490c6929f842aaa70c2f9e50",
+      "src/discard-model.mjs": "91be82092bd257323685d7a18ddbde357ee722f127efa7e12378761769679311",
+      "src/divine-shield.mjs": "664696c58cef45422564d718bf7fa008d240a29da230e5842fdadf314b103da9",
+      "src/draw-risk.mjs": "faf488a95bd955756cba22ba753cb6186ebbc5ebc8aaedfb428428fb68a6e259",
+      "src/dump.mjs": "71a15442baf242bb573f538a44e5ab1ffc8cb4f248834565acd0654b6a595f33",
+      "src/early-coin.mjs": "24af4dbab2ce6ec599f6200f73021f526f5f4f9b4c401ee11c96aed0ccb238d8",
+      "src/effect-state.mjs": "8e10830a8dc314c9ea1aabf2d3ea4ff3ab68f912b25a94763053ec0bf78da4e5",
+      "src/eval-buff-failures.mjs": "247252ec243b25bcb02c22143d01b363fa10d7226d3c0d99b9ebfe6ab19863da",
+      "src/eval-combo-admission.mjs": "a33934c92ba43b81d58b695f504022970840de0e72bc9d2de2f66690a63a1099",
+      "src/eval-control-tools.mjs": "6f98ebd2641ccd37dff1ba119c2e9c5ac6bb990579f135dd1ae3257c28f5a9bb",
+      "src/eval-early-opening.mjs": "61e02c0f7c9115efe79c3deb32f0c92994dd73003cdec6e060dd400baa6034c2",
+      "src/eval-history-quadrants.mjs": "cd3815667e448f05a20ccc9d6325a5be181313154981341bbfde27c7c39cde31",
+      "src/eval-label-text.mjs": "cb43e48d7eee3e2e02d3a3c8ca58fb6f20ab9614b086dbcd19eb2afaccf4f8bc",
+      "src/eval-label.mjs": "e40ee4ea587fb581f462614c11de36c9ce63547ca0b32fed0ed3ac11b174498f",
+      "src/eval-matchup-objective.mjs": "1dabce93c6e07248cf515d155595290686db181e4c755b7593917c1d06f3dca4",
+      "src/eval-model-pair.mjs": "65783f286574d45022c4298cd3a412bae049b36f426bef06239a63a68671dd98",
+      "src/eval-mulligan-cohorts.mjs": "1a41d7b9d88964920af9a384a5c682c2d4d8c283ecc61a8b579806292d79a60f",
+      "src/eval-opening-burst.mjs": "3b30e0cf0b88ae6db8065e1fc4fae88fa32b386b3845db60314faf6ea3f42e7d",
+      "src/eval-opening-winrates.mjs": "2df4483f2e0e5b445e48578e9bc7f4ad76b3bb873ab505903e830a1bbc5f477e",
+      "src/eval-opponent-prior.mjs": "baea9505a5e962dad03b45ec8b9c8f6dc21894c6272d8e7a649b40b2e686e0fd",
+      "src/eval-pick.mjs": "80e5af5eaffdde80800f1f025e184f5e435b495e24872437a4e126dc33704392",
+      "src/eval-rulings.mjs": "edc2fc193cd3898cacc1785bb78812f597c04983c72cb325608687c1eaef39d9",
+      "src/eval-score.mjs": "1e54a076eeef0cb8e4b9d63ad91a8ad596bcc5e6f93dee1ccaf78f31adf35f0e",
+      "src/eval-silverfish.mjs": "212077c8522464f134d2899fecc36ec75b07122e13ee493f13d8b15b51f1e4f4",
+      "src/eval-strength.mjs": "38d5916d5d4a87d61f6018395d8eacf1e2e81ab17891b02d46a3a09fc42f0a5d",
+      "src/execute.mjs": "7ec3c19fb3a0afb26247b3dffa07cb49b24cfc14dd77003b5e8f00b168aeb215",
+      "src/experiment.mjs": "a4c499c4fcf4296513b621201504f84a49259384724a5f48d05345304e118b00",
+      "src/game-health.mjs": "8efe9ecf0fdb3c1fd4c22ec803c768dcc4ed38c2aebfeae41cd096719b00b8a8",
+      "src/gesture-report.mjs": "b71faec4d1e86f401cd4230e1b38a303f7788ec45ab5f1bc1775e7adf21d494b",
+      "src/hand-retention.mjs": "80d2f9b2eaaf93907289c9fb1f878eca0265865f85f7d135f27db93e0689572c",
+      "src/history-matchup.mjs": "bde35fa50c736c01c27d473f7aa9c1fcda45408f4138c13661cd74eaf8a67848",
+      "src/input-worker.ps1": "0dfd3fada5bdf40a9e58632b8a18cec3d09f80093e5b10e1bfd70dc321471197",
+      "src/jev-recovery.mjs": "b0c2e139e3fd42f202d4bdc0e68f0587a54294d8d9a4fb6efe69659749c8c804",
+      "src/jev.mjs": "960fd1d7817be7f447204816d7643b13ebf5938fa3a9f6cbce4bac4a91137677",
+      "src/layout.mjs": "7103333d5a29883c4b64c7c85e580bce7d2c35dc43c317cb0c22fa69e1a44349",
+      "src/lethal.mjs": "480e17a80bb9d7ba1da6866295fc4ae4c85a48b3e3b572379c9dda4a085f5f1f",
+      "src/loop.mjs": "c5339668b93a07292b81aadb62195c0a13b66d3a5c711e216ca861c7a220d142",
+      "src/matchup-objective.mjs": "2fa812d25ae59b8611317626862e0ed3136e0de7a0ab0e886f4946040a50fa79",
+      "src/mechanics.mjs": "7047577387fed362a480153c51cf082cb023badb0240d38300b42d7b658b09bc",
+      "src/mulligan-cohort.mjs": "e3854a8eb8274283bf8ddce8a1843ef8fe83494e2e797fcb29930c141ed380c1",
+      "src/mulligan-matchup.mjs": "351e9feb4bbcc769158f12602e34cb4ed657f197e294e6e1dbc0b08d4156a840",
+      "src/mulligan-recovery.mjs": "9d3d4e1332dbc3be0b09cd6f8d484888504f5bbed3bb3995752fb798596a1086",
+      "src/mulligan-retry.mjs": "1f04e61792b191dc0b40cd9b9d0cc060273e54c691d73ed74939f3b9a82ebf3c",
+      "src/opening-burst.mjs": "b477b8495de49ba5dbd588524251fb10edcc45d114e36c2a5fe733c2e1ae4f15",
+      "src/opening-card-stats.mjs": "4c8a587784d562e77801b5009bbf6a69eafc0ac4d6e7589e4237ff45c03f1b6f",
+      "src/opponent-prior.mjs": "d996a56af972c43b0506bcd053f2aaaf93fbd0f3e6fc2137b0b91c01f3ac6ef7",
+      "src/override.mjs": "4b9d3806d9d52a38d09414d0d567de54c9e5a77297f906ff86407b631fe84fdf",
+      "src/plan.mjs": "4fdb060f421efdfe3ee390b81b4a6417b05fb4a66d3f24b4c8b032e73604382e",
+      "src/planner-version.mjs": "2a24cb986dc9045ba4889286109225c76f3cc6e6aeedc048591d37a964df39d3",
+      "src/play.mjs": "cd984bae030d5fb2c980974a2a4b88221d1f15433e3da09feb071d040691253b",
+      "src/policy.mjs": "871fdafcbdf7faaa1d56c984f90999a7120313f7a061fe3b60e31c6decbd29ac",
+      "src/power.mjs": "4b3edce225f4a16e13774a3c936eba7ad742c8f9e4106f1be5c915e05c4727d0",
+      "src/replay-review.mjs": "7d50cc1ec47a2ced104169d6a0f9638839e1aaa7225881be1c636bf942014529",
+      "src/report-control-second.mjs": "347abaa165973826255e484ef06d78c2303fa81dcffdfb2eeada0182bbd47e22",
+      "src/report-control-tools.mjs": "40050e54ad894811fa767810505375e25866855678c8c28fbe2e9053e694c8e2",
+      "src/report-history-quadrants.mjs": "32c850d56fc613bc1895c025ba2c4ada05164e66c431a69a048443e190902a30",
+      "src/review-control-second.mjs": "16f025f2795bc60db890246f731564c993867095d9bfcc6143d5c2ac8c71399f",
+      "src/service.mjs": "9d133cf599d92bf2142e829c3e41e6701bb1e337c671a5eb9e350a62e0da87aa",
+      "src/sim.mjs": "b4392a9e3bd32dd265e1eb5c634c74085df3baf78d1cd8de954b05c726099d62",
+      "src/smoke.mjs": "79f70758411160bf5eae2f0fde19f1689c8e81558075bcf312ca38bf46acd7e8",
+      "src/temporary-discard.mjs": "5fe0ade2ac70678960a3da68b88c97f9d630806f5760ddf8919097cdea7b6325",
+      "src/temporary-opening.mjs": "34db85b0b461749db116eef8e8450223d9f75db4695f0c4a5bbb95f579b60a75",
+      "src/turn-alternatives.mjs": "ec625e12b22165b70b6145302d58ff38b43345f508eb6b8b60a3b2cbe27cbf57",
+      "src/verify-decision.mjs": "d0cd05bdecadcf8937e8116cde7f393dc2a92c8c0db2d25fe57b87b116ff04b1",
+      "src/verify.mjs": "d848ab896cb6b72174bd94936090b0b75f802c66f05573d2fd58e2ec0bc0f0a5",
+      "src/warlock-information.mjs": "e65432b99bbe625e3c5bb058694fa4bcefc70827765953c8c8b8c8080c68d173",
+      "src/weapon-buff.mjs": "b90783d4e90319cf7bbe47285d32dd76681006a1c97da103f85cb2314bcd8bba",
+      "src/weapon-preservation.mjs": "7cbf205dc0f92fc9812187e444af34be02fbca9d3ab337fa09db38c4de31873c",
+      "src/weapon-replacement.mjs": "b6a05005274155799225c16c745ca1c875bbed89f52114f0c6c4e015b44bec49",
+      "src/win.mjs": "27a01fbfd0257af98ba7b2787cf747b0576920f222dcdb493b3ee2bbb8770f2f",
+      "decks/dh-void/mulligan.json": "66c308f4fa8da1cb682541fb1b32d52e099fc23299d2a5b3d0d71c2e40760b8d",
+      "decks/dh-void/strategy.md": "69029472a0426b1778c122571b0df889da2485ec3f0a5d032cab2fbeb7c43b55",
+      "decks/warlock-discard/mulligan.json": "02f902fa82d3c79e6ef49690c7ae757257e136af611d89e8d1ca81a963b4b1c3",
+      "decks/warlock-discard/strategy.md": "7111307caad6704900f39a547d65b3bb88eed139f52e0502cea190ef26da2a95"
+    },
+    "candidate": {
+      "src/await-game.mjs": "3aca7745de8da700a733b1ab9433b49fa38c0ce1f70e8e47e4cafad126975d1d",
+      "src/bridge.mjs": "5112d8d0d10848fbffb2e3ecc519517455a86e80c06531228b266ab0f30c1c1e",
+      "src/build-opponent-prior.mjs": "73d3cac752aca13a6ba90a808b71b9b54edd2b58d8445b50e0164ae14df182c9",
+      "src/calibrate.mjs": "9e9779932ea8a6e9cc88c171dc107245610960ee0a74a8fd3875e0111e89b626",
+      "src/chamber-intent.mjs": "791a343a811faf467949d897aad93d12b80dd30cf2b6080d59021cb7ca4f786d",
+      "src/choose.mjs": "77313432427216e24a49cbc0073e5d52166aa8f1d323a2993146a738bc606d93",
+      "src/combo-admission.mjs": "8c87684cad83393ffc31d83b60a98eaa8a17ba59333b0ba41ec17986349fbdc3",
+      "src/dead-skip.mjs": "90e6b4c8883ea72bb476665a29c9624469a9485e4e9fe23f27b9521568f0f1c0",
+      "src/decide.mjs": "3fab0dfb4e1e0663d025c3fa5fdfb498e1e2cf39014898d0f6e50ccee00c30af",
+      "src/decision-benchmark.mjs": "3cc3d802b5be3dc78a5ec2e4ea0273e1209212c0124880028370c9dd5d6d50bc",
+      "src/deck.mjs": "bc5ae287353a406b9d28b2ac42c93879e416dc502c7c816e7f9cb1f762365881",
+      "src/describe.mjs": "44bafe2b4b42c48e8d68bfc018959e5108242cf198e14db08af9446948e034f0",
+      "src/dh-tactics.mjs": "89949418252e9a3cf5c8a4db403b75abbdf78283490c6929f842aaa70c2f9e50",
+      "src/discard-model.mjs": "91be82092bd257323685d7a18ddbde357ee722f127efa7e12378761769679311",
+      "src/divine-shield.mjs": "664696c58cef45422564d718bf7fa008d240a29da230e5842fdadf314b103da9",
+      "src/draw-risk.mjs": "faf488a95bd955756cba22ba753cb6186ebbc5ebc8aaedfb428428fb68a6e259",
+      "src/dump.mjs": "71a15442baf242bb573f538a44e5ab1ffc8cb4f248834565acd0654b6a595f33",
+      "src/early-coin.mjs": "24af4dbab2ce6ec599f6200f73021f526f5f4f9b4c401ee11c96aed0ccb238d8",
+      "src/effect-state.mjs": "8e10830a8dc314c9ea1aabf2d3ea4ff3ab68f912b25a94763053ec0bf78da4e5",
+      "src/eval-buff-failures.mjs": "247252ec243b25bcb02c22143d01b363fa10d7226d3c0d99b9ebfe6ab19863da",
+      "src/eval-combo-admission.mjs": "a33934c92ba43b81d58b695f504022970840de0e72bc9d2de2f66690a63a1099",
+      "src/eval-control-tools.mjs": "6f98ebd2641ccd37dff1ba119c2e9c5ac6bb990579f135dd1ae3257c28f5a9bb",
+      "src/eval-early-opening.mjs": "61e02c0f7c9115efe79c3deb32f0c92994dd73003cdec6e060dd400baa6034c2",
+      "src/eval-history-quadrants.mjs": "cd3815667e448f05a20ccc9d6325a5be181313154981341bbfde27c7c39cde31",
+      "src/eval-label-text.mjs": "cb43e48d7eee3e2e02d3a3c8ca58fb6f20ab9614b086dbcd19eb2afaccf4f8bc",
+      "src/eval-label.mjs": "e40ee4ea587fb581f462614c11de36c9ce63547ca0b32fed0ed3ac11b174498f",
+      "src/eval-matchup-objective.mjs": "1dabce93c6e07248cf515d155595290686db181e4c755b7593917c1d06f3dca4",
+      "src/eval-model-pair.mjs": "65783f286574d45022c4298cd3a412bae049b36f426bef06239a63a68671dd98",
+      "src/eval-mulligan-cohorts.mjs": "1a41d7b9d88964920af9a384a5c682c2d4d8c283ecc61a8b579806292d79a60f",
+      "src/eval-opening-burst.mjs": "3b30e0cf0b88ae6db8065e1fc4fae88fa32b386b3845db60314faf6ea3f42e7d",
+      "src/eval-opening-winrates.mjs": "2df4483f2e0e5b445e48578e9bc7f4ad76b3bb873ab505903e830a1bbc5f477e",
+      "src/eval-opponent-prior.mjs": "baea9505a5e962dad03b45ec8b9c8f6dc21894c6272d8e7a649b40b2e686e0fd",
+      "src/eval-pick.mjs": "80e5af5eaffdde80800f1f025e184f5e435b495e24872437a4e126dc33704392",
+      "src/eval-rulings.mjs": "edc2fc193cd3898cacc1785bb78812f597c04983c72cb325608687c1eaef39d9",
+      "src/eval-score.mjs": "1e54a076eeef0cb8e4b9d63ad91a8ad596bcc5e6f93dee1ccaf78f31adf35f0e",
+      "src/eval-silverfish.mjs": "212077c8522464f134d2899fecc36ec75b07122e13ee493f13d8b15b51f1e4f4",
+      "src/eval-strength.mjs": "38d5916d5d4a87d61f6018395d8eacf1e2e81ab17891b02d46a3a09fc42f0a5d",
+      "src/execute.mjs": "7ec3c19fb3a0afb26247b3dffa07cb49b24cfc14dd77003b5e8f00b168aeb215",
+      "src/experiment.mjs": "a4c499c4fcf4296513b621201504f84a49259384724a5f48d05345304e118b00",
+      "src/fodder-hold.mjs": "c67c4a614032170e50aa1d71c3facda3d29ebc54bdc03c4349a25f12f7674528",
+      "src/game-health.mjs": "8efe9ecf0fdb3c1fd4c22ec803c768dcc4ed38c2aebfeae41cd096719b00b8a8",
+      "src/gesture-report.mjs": "b71faec4d1e86f401cd4230e1b38a303f7788ec45ab5f1bc1775e7adf21d494b",
+      "src/hand-retention.mjs": "80d2f9b2eaaf93907289c9fb1f878eca0265865f85f7d135f27db93e0689572c",
+      "src/history-matchup.mjs": "bde35fa50c736c01c27d473f7aa9c1fcda45408f4138c13661cd74eaf8a67848",
+      "src/input-worker.ps1": "0dfd3fada5bdf40a9e58632b8a18cec3d09f80093e5b10e1bfd70dc321471197",
+      "src/jev-recovery.mjs": "b0c2e139e3fd42f202d4bdc0e68f0587a54294d8d9a4fb6efe69659749c8c804",
+      "src/jev.mjs": "960fd1d7817be7f447204816d7643b13ebf5938fa3a9f6cbce4bac4a91137677",
+      "src/layout.mjs": "7103333d5a29883c4b64c7c85e580bce7d2c35dc43c317cb0c22fa69e1a44349",
+      "src/lethal.mjs": "480e17a80bb9d7ba1da6866295fc4ae4c85a48b3e3b572379c9dda4a085f5f1f",
+      "src/loop.mjs": "c5339668b93a07292b81aadb62195c0a13b66d3a5c711e216ca861c7a220d142",
+      "src/matchup-objective.mjs": "2fa812d25ae59b8611317626862e0ed3136e0de7a0ab0e886f4946040a50fa79",
+      "src/mechanics.mjs": "7047577387fed362a480153c51cf082cb023badb0240d38300b42d7b658b09bc",
+      "src/mulligan-cohort.mjs": "e3854a8eb8274283bf8ddce8a1843ef8fe83494e2e797fcb29930c141ed380c1",
+      "src/mulligan-matchup.mjs": "351e9feb4bbcc769158f12602e34cb4ed657f197e294e6e1dbc0b08d4156a840",
+      "src/mulligan-recovery.mjs": "9d3d4e1332dbc3be0b09cd6f8d484888504f5bbed3bb3995752fb798596a1086",
+      "src/mulligan-retry.mjs": "1f04e61792b191dc0b40cd9b9d0cc060273e54c691d73ed74939f3b9a82ebf3c",
+      "src/opening-burst.mjs": "b477b8495de49ba5dbd588524251fb10edcc45d114e36c2a5fe733c2e1ae4f15",
+      "src/opening-card-stats.mjs": "4c8a587784d562e77801b5009bbf6a69eafc0ac4d6e7589e4237ff45c03f1b6f",
+      "src/opponent-prior.mjs": "d996a56af972c43b0506bcd053f2aaaf93fbd0f3e6fc2137b0b91c01f3ac6ef7",
+      "src/override.mjs": "4b9d3806d9d52a38d09414d0d567de54c9e5a77297f906ff86407b631fe84fdf",
+      "src/plan.mjs": "9b60267281c42b8bcbb47b50a3a17dc12d01d6f19fd38b5b72f387edfdbf5166",
+      "src/planner-version.mjs": "1cebb76afba4a75bc74884aaec78f795f57f50a1b1855222abc2383c5041a3f2",
+      "src/play.mjs": "cd984bae030d5fb2c980974a2a4b88221d1f15433e3da09feb071d040691253b",
+      "src/policy.mjs": "08a52c1a8127ddb7feecedf09300d21c60f1b136c2e74b6cf009f33ad4e7a98b",
+      "src/power.mjs": "4b3edce225f4a16e13774a3c936eba7ad742c8f9e4106f1be5c915e05c4727d0",
+      "src/replay-review.mjs": "7d50cc1ec47a2ced104169d6a0f9638839e1aaa7225881be1c636bf942014529",
+      "src/report-control-second.mjs": "347abaa165973826255e484ef06d78c2303fa81dcffdfb2eeada0182bbd47e22",
+      "src/report-control-tools.mjs": "40050e54ad894811fa767810505375e25866855678c8c28fbe2e9053e694c8e2",
+      "src/report-history-quadrants.mjs": "32c850d56fc613bc1895c025ba2c4ada05164e66c431a69a048443e190902a30",
+      "src/review-control-second.mjs": "16f025f2795bc60db890246f731564c993867095d9bfcc6143d5c2ac8c71399f",
+      "src/service.mjs": "9d133cf599d92bf2142e829c3e41e6701bb1e337c671a5eb9e350a62e0da87aa",
+      "src/sim.mjs": "b4392a9e3bd32dd265e1eb5c634c74085df3baf78d1cd8de954b05c726099d62",
+      "src/smoke.mjs": "79f70758411160bf5eae2f0fde19f1689c8e81558075bcf312ca38bf46acd7e8",
+      "src/temporary-discard.mjs": "5fe0ade2ac70678960a3da68b88c97f9d630806f5760ddf8919097cdea7b6325",
+      "src/temporary-opening.mjs": "34db85b0b461749db116eef8e8450223d9f75db4695f0c4a5bbb95f579b60a75",
+      "src/turn-alternatives.mjs": "ec625e12b22165b70b6145302d58ff38b43345f508eb6b8b60a3b2cbe27cbf57",
+      "src/verify-decision.mjs": "d0cd05bdecadcf8937e8116cde7f393dc2a92c8c0db2d25fe57b87b116ff04b1",
+      "src/verify.mjs": "d848ab896cb6b72174bd94936090b0b75f802c66f05573d2fd58e2ec0bc0f0a5",
+      "src/warlock-information.mjs": "e65432b99bbe625e3c5bb058694fa4bcefc70827765953c8c8b8c8080c68d173",
+      "src/weapon-buff.mjs": "b90783d4e90319cf7bbe47285d32dd76681006a1c97da103f85cb2314bcd8bba",
+      "src/weapon-preservation.mjs": "7cbf205dc0f92fc9812187e444af34be02fbca9d3ab337fa09db38c4de31873c",
+      "src/weapon-replacement.mjs": "b6a05005274155799225c16c745ca1c875bbed89f52114f0c6c4e015b44bec49",
+      "src/win.mjs": "27a01fbfd0257af98ba7b2787cf747b0576920f222dcdb493b3ee2bbb8770f2f",
+      "decks/dh-void/mulligan.json": "66c308f4fa8da1cb682541fb1b32d52e099fc23299d2a5b3d0d71c2e40760b8d",
+      "decks/dh-void/strategy.md": "69029472a0426b1778c122571b0df889da2485ec3f0a5d032cab2fbeb7c43b55",
+      "decks/warlock-discard/mulligan.json": "02f902fa82d3c79e6ef49690c7ae757257e136af611d89e8d1ca81a963b4b1c3",
+      "decks/warlock-discard/strategy.md": "7111307caad6704900f39a547d65b3bb88eed139f52e0502cea190ef26da2a95"
+    }
+  },
+  "corpusHashes": {
+    "cases": "8e8587ab3c8d771f82c3cf4ac5515eb6c4b79ec8be5c64e6b53695f6a5aa7df6",
+    "oracle": "68f189d3c07ff61ea38ac2859e4763b295dee4cc7e7a4f40910833bb6984f3e6",
+    "positions": "5a614e643671e13ea8e416f2f6fa92fc41c5eb884e44edca63ffbbdcc73e0363",
+    "labels": "97eac2a4aa68f56ab42ff95990a6294a9cde54924851212eaa09de6332d08bc3",
+    "packageLock": "fa74e9fead99febbb5fed2d7173c5ba86d1d762fc3080d97c66ea7cd2088978c"
+  },
+  "summary": {
+    "baseline": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.3148999999993976,
+      "fixtureMaxMedianMs": 2288.972600000001
+    },
+    "candidate": {
+      "tacticalCovered": 8,
+      "tacticalOffered": 8,
+      "tacticalTotal": 8,
+      "combatOptimal": 192,
+      "combatTotal": 192,
+      "lethalRecall": 80,
+      "lethalTotal": 80,
+      "falseLethals": 0,
+      "rulingBestAvailable": 16,
+      "rulingTotal": 16,
+      "ruleFallbackPoints": 10.5,
+      "fixtureMedianMs": 2.0727999999999156,
+      "fixtureMaxMedianMs": 2255.8942000000025
+    }
+  },
+  "regression": {
+    "lostTactics": [],
+    "lostCombat": [],
+    "lostRulingAvailability": [],
+    "worseFallback": []
+  },
+  "tactical": [
+    {
+      "id": "walking-before-buff",
+      "expect": {
+        "bodies": 2,
+        "attack": 5,
+        "health": 8
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 7.630200000000002,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 4.131999999999977,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "golem-before-buff",
+      "expect": {
+        "bodies": 2,
+        "attack": 6,
+        "health": 7
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.5848000000000013,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.6337000000000046,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "egg-before-buff",
+      "expect": {
+        "bodies": 3,
+        "attack": 8,
+        "health": 6
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.6432999999999822,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.4451000000000249,
+        "stats": {
+          "expanded": 5,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "egg-one-slot",
+      "expect": {
+        "bodies": 7,
+        "attack": 15,
+        "health": 14
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.29659999999998377,
+        "stats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.24960000000001514,
+        "stats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          }
+        ]
+      }
+    },
+    {
+      "id": "walking-full-board",
+      "expect": {
+        "bodies": 7,
+        "attack": 14,
+        "health": 14
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.213799999999992,
+        "stats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.21750000000000114,
+        "stats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          }
+        ]
+      }
+    },
+    {
+      "id": "duke-on-board-lethal",
+      "expect": {
+        "lethal": true
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 1.206700000000012,
+        "stats": {
+          "expanded": 4,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.3824999999999932,
+        "stats": {
+          "expanded": 4,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "claws-grow-duke-lethal",
+      "expect": {
+        "lethal": true
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.5334000000000003,
+        "stats": {
+          "expanded": 4,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "attack",
+            "id": 1,
+            "targetId": 2
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 0.3365000000000009,
+        "stats": {
+          "expanded": 4,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "attack",
+            "id": 1,
+            "targetId": 2
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "grow-hand-duke-open-taunt",
+      "expect": {
+        "lethal": true
+      },
+      "baseline": {
+        "covered": true,
+        "offered": true,
+        "ms": 3.0016999999999996,
+        "stats": {
+          "expanded": 26,
+          "generated": 34,
+          "deduplicated": 7,
+          "beamPruned": 0,
+          "depthReached": 5,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 82
+          },
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 82,
+            "targetId": 50
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      },
+      "candidate": {
+        "covered": true,
+        "offered": true,
+        "ms": 2.2620000000000005,
+        "stats": {
+          "expanded": 26,
+          "generated": 34,
+          "deduplicated": 7,
+          "beamPruned": 0,
+          "depthReached": 5,
+          "nodeLimit": false,
+          "depthLimit": false
+        },
+        "matchingSteps": [
+          {
+            "kind": "play",
+            "id": 82
+          },
+          {
+            "kind": "play",
+            "id": 80
+          },
+          {
+            "kind": "attack",
+            "id": 82,
+            "targetId": 50
+          },
+          {
+            "kind": "attack",
+            "id": 10,
+            "targetId": 2
+          }
+        ]
+      }
+    }
+  ],
+  "combat": [
+    {
+      "id": "development/combat-0",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 3
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.20250000000001478
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1407999999999845
+      }
+    },
+    {
+      "id": "development/combat-1",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3178000000000054
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.316599999999994
+      }
+    },
+    {
+      "id": "development/combat-2",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 8,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.16929999999999268
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.169399999999996
+      }
+    },
+    {
+      "id": "development/combat-3",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 22
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.1110999999999933
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.5149000000000115
+      }
+    },
+    {
+      "id": "development/combat-4",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 43
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.0778999999999996
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.496200000000016
+      }
+    },
+    {
+      "id": "development/combat-5",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 7
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.35139999999998395
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.23759999999998627
+      }
+    },
+    {
+      "id": "development/combat-6",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 39
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.756699999999995
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.8682000000000016
+      }
+    },
+    {
+      "id": "development/combat-7",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 25
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7567000000000235
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8213000000000079
+      }
+    },
+    {
+      "id": "development/combat-8",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.6306000000000154
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.28069999999996753
+      }
+    },
+    {
+      "id": "development/combat-9",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.332300000000032
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4057999999999993
+      }
+    },
+    {
+      "id": "development/combat-10",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3220999999999776
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3201000000000249
+      }
+    },
+    {
+      "id": "development/combat-11",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16620000000000346
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.17950000000001864
+      }
+    },
+    {
+      "id": "development/combat-12",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15109999999998536
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14769999999998618
+      }
+    },
+    {
+      "id": "development/combat-13",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.47280000000000655
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.46550000000002
+      }
+    },
+    {
+      "id": "development/combat-14",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4071999999999889
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.42109999999996717
+      }
+    },
+    {
+      "id": "development/combat-15",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 9,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4370999999999867
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.430499999999995
+      }
+    },
+    {
+      "id": "development/combat-16",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.21889999999996235
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.17590000000001282
+      }
+    },
+    {
+      "id": "development/combat-17",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1590999999999667
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14639999999997144
+      }
+    },
+    {
+      "id": "development/combat-18",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6894000000000347
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4239000000000033
+      }
+    },
+    {
+      "id": "development/combat-19",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 7
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2898000000000138
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2787999999999897
+      }
+    },
+    {
+      "id": "development/combat-20",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.20310000000000628
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16900000000003956
+      }
+    },
+    {
+      "id": "development/combat-21",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 8,
+        "lethal": true,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.24169999999998026
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.25139999999998963
+      }
+    },
+    {
+      "id": "development/combat-22",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.6365999999999872
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.25790000000000646
+      }
+    },
+    {
+      "id": "development/combat-23",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.26780000000002246
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5466999999999871
+      }
+    },
+    {
+      "id": "development/combat-24",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 106
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.3817999999999984
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 2.157800000000009
+      }
+    },
+    {
+      "id": "development/combat-25",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 41
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.352800000000002
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.8127000000000066
+      }
+    },
+    {
+      "id": "development/combat-26",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.48850000000004457
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4440000000000168
+      }
+    },
+    {
+      "id": "development/combat-27",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.160000000000025
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1473999999999478
+      }
+    },
+    {
+      "id": "development/combat-28",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2857000000000198
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2840999999999667
+      }
+    },
+    {
+      "id": "development/combat-29",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 15
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.398900000000026
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3453000000000088
+      }
+    },
+    {
+      "id": "development/combat-30",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 25
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5300999999999476
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8696000000000481
+      }
+    },
+    {
+      "id": "development/combat-31",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 20
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8489000000000146
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5196000000000254
+      }
+    },
+    {
+      "id": "development/combat-32",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 214
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 3.240000000000009
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 3.9348999999999705
+      }
+    },
+    {
+      "id": "development/combat-33",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 8
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2965000000000373
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.5141000000000417
+      }
+    },
+    {
+      "id": "development/combat-34",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 192
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 4.017699999999991
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 3.2958000000000993
+      }
+    },
+    {
+      "id": "development/combat-35",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 8,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3048000000000002
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.20219999999994798
+      }
+    },
+    {
+      "id": "development/combat-36",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 24
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5793999999999642
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5617999999999483
+      }
+    },
+    {
+      "id": "development/combat-37",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5615000000000236
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.0069999999999482
+      }
+    },
+    {
+      "id": "development/combat-38",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4432000000000471
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.31950000000006185
+      }
+    },
+    {
+      "id": "development/combat-39",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4008000000000038
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6661000000000286
+      }
+    },
+    {
+      "id": "development/combat-40",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5197999999999183
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.43899999999996453
+      }
+    },
+    {
+      "id": "development/combat-41",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.23670000000004165
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.20289999999999964
+      }
+    },
+    {
+      "id": "development/combat-42",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7332000000000107
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.34600000000000364
+      }
+    },
+    {
+      "id": "development/combat-43",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.29690000000005057
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.22929999999996653
+      }
+    },
+    {
+      "id": "development/combat-44",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 8,
+        "lethal": true,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.24919999999997344
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.355199999999968
+      }
+    },
+    {
+      "id": "development/combat-45",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 20
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.9072999999999638
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.7708000000000084
+      }
+    },
+    {
+      "id": "development/combat-46",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18459999999993215
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16189999999994598
+      }
+    },
+    {
+      "id": "development/combat-47",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 10,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3226999999999407
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3248999999999569
+      }
+    },
+    {
+      "id": "development/combat-48",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4236999999999398
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4107000000000198
+      }
+    },
+    {
+      "id": "development/combat-49",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.20219999999994798
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.19089999999994234
+      }
+    },
+    {
+      "id": "development/combat-50",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 17
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4035000000000082
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.40639999999996235
+      }
+    },
+    {
+      "id": "development/combat-51",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1936999999999216
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3051999999998998
+      }
+    },
+    {
+      "id": "development/combat-52",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3873999999999569
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2737999999999374
+      }
+    },
+    {
+      "id": "development/combat-53",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 11,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 11,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2600999999999658
+      },
+      "candidate": {
+        "damage": 11,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27109999999993306
+      }
+    },
+    {
+      "id": "development/combat-54",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.129099999999994
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.13649999999995543
+      }
+    },
+    {
+      "id": "development/combat-55",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 9,
+        "lethal": false,
+        "visited": 200
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 3.1867999999999483
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 2.2674999999999272
+      }
+    },
+    {
+      "id": "development/combat-56",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6865999999999985
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6466000000000349
+      }
+    },
+    {
+      "id": "development/combat-57",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 71
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.8378000000000156
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 2.0167000000000144
+      }
+    },
+    {
+      "id": "development/combat-58",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 21
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4615000000000009
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4358999999999469
+      }
+    },
+    {
+      "id": "development/combat-59",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27109999999993306
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.9095999999999549
+      }
+    },
+    {
+      "id": "development/combat-60",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 9,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27340000000003783
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27350000000001273
+      }
+    },
+    {
+      "id": "development/combat-61",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3321000000000822
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27920000000005984
+      }
+    },
+    {
+      "id": "development/combat-62",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 34
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7328999999999724
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7124999999999773
+      }
+    },
+    {
+      "id": "development/combat-63",
+      "split": "development",
+      "seed": 20261001,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 21
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.46490000000005693
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4198000000000093
+      }
+    },
+    {
+      "id": "held-out/combat-0",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.17390000000000327
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16950000000008458
+      }
+    },
+    {
+      "id": "held-out/combat-1",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 9,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.42069999999989705
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.28899999999998727
+      }
+    },
+    {
+      "id": "held-out/combat-2",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1632000000000744
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16249999999990905
+      }
+    },
+    {
+      "id": "held-out/combat-3",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15459999999995944
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1492999999999256
+      }
+    },
+    {
+      "id": "held-out/combat-4",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.23500000000001364
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3484000000000833
+      }
+    },
+    {
+      "id": "held-out/combat-5",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 25
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.39809999999999945
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4855999999999767
+      }
+    },
+    {
+      "id": "held-out/combat-6",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16970000000003438
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14480000000003201
+      }
+    },
+    {
+      "id": "held-out/combat-7",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.32569999999998345
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3184999999999718
+      }
+    },
+    {
+      "id": "held-out/combat-8",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 3
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.098700000000008
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.10550000000000637
+      }
+    },
+    {
+      "id": "held-out/combat-9",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.48090000000001965
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2717999999999847
+      }
+    },
+    {
+      "id": "held-out/combat-10",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": false,
+        "visited": 20
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.44479999999998654
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.46870000000001255
+      }
+    },
+    {
+      "id": "held-out/combat-11",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.22130000000004202
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2037000000000262
+      }
+    },
+    {
+      "id": "held-out/combat-12",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3806999999999334
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.32939999999996417
+      }
+    },
+    {
+      "id": "held-out/combat-13",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 10,
+        "lethal": true,
+        "visited": 14
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.24149999999997362
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.23129999999991924
+      }
+    },
+    {
+      "id": "held-out/combat-14",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1309999999999718
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.22930000000008022
+      }
+    },
+    {
+      "id": "held-out/combat-15",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1449999999999818
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2604999999999791
+      }
+    },
+    {
+      "id": "held-out/combat-16",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2960999999999103
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2767000000000053
+      }
+    },
+    {
+      "id": "held-out/combat-17",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.27060000000005857
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.26289999999994507
+      }
+    },
+    {
+      "id": "held-out/combat-18",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3483999999999696
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.697400000000016
+      }
+    },
+    {
+      "id": "held-out/combat-19",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8386000000000422
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4011000000000422
+      }
+    },
+    {
+      "id": "held-out/combat-20",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.21509999999989304
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.15089999999997872
+      }
+    },
+    {
+      "id": "held-out/combat-21",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 67
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.3503999999999223
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.1416000000000395
+      }
+    },
+    {
+      "id": "held-out/combat-22",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5076999999999998
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.45889999999997144
+      }
+    },
+    {
+      "id": "held-out/combat-23",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 218
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 4.663899999999899
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 2.743400000000065
+      }
+    },
+    {
+      "id": "held-out/combat-24",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 34
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7391000000000076
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7128999999999905
+      }
+    },
+    {
+      "id": "held-out/combat-25",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 12,
+        "lethal": true,
+        "visited": 57
+      },
+      "baseline": {
+        "damage": 12,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.4849000000000387
+      },
+      "candidate": {
+        "damage": 12,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.3443999999999505
+      }
+    },
+    {
+      "id": "held-out/combat-26",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 6
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.21019999999998618
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18189999999992779
+      }
+    },
+    {
+      "id": "held-out/combat-27",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 31
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4599000000000615
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.539299999999912
+      }
+    },
+    {
+      "id": "held-out/combat-28",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 22
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.41440000000000055
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.38800000000003365
+      }
+    },
+    {
+      "id": "held-out/combat-29",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.29529999999999745
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.26159999999993033
+      }
+    },
+    {
+      "id": "held-out/combat-30",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.23269999999990887
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.226099999999974
+      }
+    },
+    {
+      "id": "held-out/combat-31",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15589999999997417
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.20310000000006312
+      }
+    },
+    {
+      "id": "held-out/combat-32",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 37
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.0419000000000551
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.755800000000022
+      }
+    },
+    {
+      "id": "held-out/combat-33",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 9,
+        "lethal": true,
+        "visited": 14
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.32320000000004256
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.24360000000001492
+      }
+    },
+    {
+      "id": "held-out/combat-34",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2907000000000153
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.28449999999998
+      }
+    },
+    {
+      "id": "held-out/combat-35",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1250999999999749
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.12019999999995434
+      }
+    },
+    {
+      "id": "held-out/combat-36",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.21500000000003183
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5052000000000589
+      }
+    },
+    {
+      "id": "held-out/combat-37",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14220000000000255
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.13350000000002638
+      }
+    },
+    {
+      "id": "held-out/combat-38",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 23
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6888000000000147
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.39210000000002765
+      }
+    },
+    {
+      "id": "held-out/combat-39",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": false,
+        "visited": 7
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18439999999998236
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18020000000001346
+      }
+    },
+    {
+      "id": "held-out/combat-40",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 9
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.18449999999995725
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.17269999999996344
+      }
+    },
+    {
+      "id": "held-out/combat-41",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.26930000000004384
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.25260000000002947
+      }
+    },
+    {
+      "id": "held-out/combat-42",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 8
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.16609999999991487
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.171100000000024
+      }
+    },
+    {
+      "id": "held-out/combat-43",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 9,
+        "lethal": false,
+        "visited": 21
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4653000000000702
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.33600000000001273
+      }
+    },
+    {
+      "id": "held-out/combat-44",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.25240000000007967
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2865999999999076
+      }
+    },
+    {
+      "id": "held-out/combat-45",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 8
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1734000000000151
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.16020000000003165
+      }
+    },
+    {
+      "id": "held-out/combat-46",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 11,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 11,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.21810000000004948
+      },
+      "candidate": {
+        "damage": 11,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2340000000000373
+      }
+    },
+    {
+      "id": "held-out/combat-47",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.134900000000016
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.13049999999998363
+      }
+    },
+    {
+      "id": "held-out/combat-48",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.23509999999998854
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5599000000000842
+      }
+    },
+    {
+      "id": "held-out/combat-49",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.40239999999994325
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14779999999996107
+      }
+    },
+    {
+      "id": "held-out/combat-50",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 10,
+        "lethal": true,
+        "visited": 49
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.5630999999999631
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.0013000000000147
+      }
+    },
+    {
+      "id": "held-out/combat-51",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 10,
+        "lethal": false,
+        "visited": 57
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.2052999999999656
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7737000000000762
+      }
+    },
+    {
+      "id": "held-out/combat-52",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.39230000000009113
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2518999999999778
+      }
+    },
+    {
+      "id": "held-out/combat-53",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 6
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.19060000000001764
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.20269999999993615
+      }
+    },
+    {
+      "id": "held-out/combat-54",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.21739999999999782
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.21899999999993724
+      }
+    },
+    {
+      "id": "held-out/combat-55",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.47059999999999036
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2948999999999842
+      }
+    },
+    {
+      "id": "held-out/combat-56",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.12819999999999254
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.11400000000003274
+      }
+    },
+    {
+      "id": "held-out/combat-57",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6455999999999449
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.35810000000003583
+      }
+    },
+    {
+      "id": "held-out/combat-58",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.26169999999990523
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.22910000000001673
+      }
+    },
+    {
+      "id": "held-out/combat-59",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3248999999998432
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4721999999999298
+      }
+    },
+    {
+      "id": "held-out/combat-60",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.23240000000009786
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.14419999999995525
+      }
+    },
+    {
+      "id": "held-out/combat-61",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3423000000000229
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2617999999999938
+      }
+    },
+    {
+      "id": "held-out/combat-62",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 2,
+        "lethal": true,
+        "visited": 7
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.17990000000008877
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.19410000000016225
+      }
+    },
+    {
+      "id": "held-out/combat-63",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2602999999999156
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.19929999999999382
+      }
+    },
+    {
+      "id": "held-out/combat-64",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2962999999999738
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.29739999999992506
+      }
+    },
+    {
+      "id": "held-out/combat-65",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 10,
+        "lethal": false,
+        "visited": 49
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6908999999998287
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7545999999999822
+      }
+    },
+    {
+      "id": "held-out/combat-66",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.27769999999986794
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.28089999999997417
+      }
+    },
+    {
+      "id": "held-out/combat-67",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 154
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.7153000000000702
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.7747999999999138
+      }
+    },
+    {
+      "id": "held-out/combat-68",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3667000000000371
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.31749999999988177
+      }
+    },
+    {
+      "id": "held-out/combat-69",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15059999999994034
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.12750000000005457
+      }
+    },
+    {
+      "id": "held-out/combat-70",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.11279999999987922
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.10940000000005057
+      }
+    },
+    {
+      "id": "held-out/combat-71",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.22880000000009204
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.22610000000008768
+      }
+    },
+    {
+      "id": "held-out/combat-72",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 4,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.10490000000004329
+      },
+      "candidate": {
+        "damage": 4,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.11100000000010368
+      }
+    },
+    {
+      "id": "held-out/combat-73",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 77
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.9234000000001288
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.898200000000088
+      }
+    },
+    {
+      "id": "held-out/combat-74",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 182
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 1.9792999999999665
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 2.4295999999999367
+      }
+    },
+    {
+      "id": "held-out/combat-75",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.16499999999996362
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.13439999999991414
+      }
+    },
+    {
+      "id": "held-out/combat-76",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.13010000000008404
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15240000000017062
+      }
+    },
+    {
+      "id": "held-out/combat-77",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1168999999999869
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.10830000000009932
+      }
+    },
+    {
+      "id": "held-out/combat-78",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.47850000000016735
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2213000000001557
+      }
+    },
+    {
+      "id": "held-out/combat-79",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 11
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.20280000000002474
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1935000000000855
+      }
+    },
+    {
+      "id": "held-out/combat-80",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.09999999999990905
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.09829999999988104
+      }
+    },
+    {
+      "id": "held-out/combat-81",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.12840000000005602
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1957999999999629
+      }
+    },
+    {
+      "id": "held-out/combat-82",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 9,
+        "lethal": false,
+        "visited": 73
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8832999999999629
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.921100000000024
+      }
+    },
+    {
+      "id": "held-out/combat-83",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.603800000000092
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.5082999999999629
+      }
+    },
+    {
+      "id": "held-out/combat-84",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15760000000000218
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.11969999999996617
+      }
+    },
+    {
+      "id": "held-out/combat-85",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 40
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6097999999999502
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7997000000000298
+      }
+    },
+    {
+      "id": "held-out/combat-86",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 160
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 2.3268000000000484
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 2.572499999999991
+      }
+    },
+    {
+      "id": "held-out/combat-87",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 20
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.8670999999999367
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.45040000000017244
+      }
+    },
+    {
+      "id": "held-out/combat-88",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.31090000000017426
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3138000000001284
+      }
+    },
+    {
+      "id": "held-out/combat-89",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.24470000000019354
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.30529999999998836
+      }
+    },
+    {
+      "id": "held-out/combat-90",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": true,
+        "visited": 23
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.48420000000010077
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3831000000000131
+      }
+    },
+    {
+      "id": "held-out/combat-91",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 10,
+        "lethal": false,
+        "visited": 34
+      },
+      "baseline": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5055999999999585
+      },
+      "candidate": {
+        "damage": 10,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5445999999999458
+      }
+    },
+    {
+      "id": "held-out/combat-92",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 10
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.22679999999991196
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.19420000000013715
+      }
+    },
+    {
+      "id": "held-out/combat-93",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.27130000000011023
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2762000000000171
+      }
+    },
+    {
+      "id": "held-out/combat-94",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.24859999999989668
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2397000000000844
+      }
+    },
+    {
+      "id": "held-out/combat-95",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1168999999999869
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.11209999999982756
+      }
+    },
+    {
+      "id": "held-out/combat-96",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 65
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.79950000000008
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8095000000000709
+      }
+    },
+    {
+      "id": "held-out/combat-97",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1510000000000673
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1488000000001648
+      }
+    },
+    {
+      "id": "held-out/combat-98",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 22
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.41380000000003747
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.33320000000003347
+      }
+    },
+    {
+      "id": "held-out/combat-99",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.28609999999980573
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.4517000000000735
+      }
+    },
+    {
+      "id": "held-out/combat-100",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.6656000000000404
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3085999999998421
+      }
+    },
+    {
+      "id": "held-out/combat-101",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3087000000000444
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2581000000000131
+      }
+    },
+    {
+      "id": "held-out/combat-102",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 45
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.9869000000001051
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.5903000000000702
+      }
+    },
+    {
+      "id": "held-out/combat-103",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.47529999999983374
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3105000000000473
+      }
+    },
+    {
+      "id": "held-out/combat-104",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 6,
+        "lethal": false,
+        "visited": 23
+      },
+      "baseline": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3545999999998912
+      },
+      "candidate": {
+        "damage": 6,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3500000000001364
+      }
+    },
+    {
+      "id": "held-out/combat-105",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.542699999999968
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2844000000000051
+      }
+    },
+    {
+      "id": "held-out/combat-106",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 40
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.49520000000006803
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.6048000000000684
+      }
+    },
+    {
+      "id": "held-out/combat-107",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 4
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.13799999999991996
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1147000000000844
+      }
+    },
+    {
+      "id": "held-out/combat-108",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": false,
+        "visited": 7
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.22510000000011132
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1776999999999589
+      }
+    },
+    {
+      "id": "held-out/combat-109",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1371999999998934
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.12149999999996908
+      }
+    },
+    {
+      "id": "held-out/combat-110",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 13
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2317000000000462
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.22630000000003747
+      }
+    },
+    {
+      "id": "held-out/combat-111",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.10439999999994143
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.1069999999999709
+      }
+    },
+    {
+      "id": "held-out/combat-112",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.10539999999991778
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.10269999999991342
+      }
+    },
+    {
+      "id": "held-out/combat-113",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 47
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.9257000000000062
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.257799999999861
+      }
+    },
+    {
+      "id": "held-out/combat-114",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 7,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3163999999999305
+      },
+      "candidate": {
+        "damage": 7,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2512000000001535
+      }
+    },
+    {
+      "id": "held-out/combat-115",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 5,
+        "lethal": true,
+        "visited": 22
+      },
+      "baseline": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.338799999999992
+      },
+      "candidate": {
+        "damage": 5,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.3367999999998119
+      }
+    },
+    {
+      "id": "held-out/combat-116",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.22829999999999018
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1494000000000142
+      }
+    },
+    {
+      "id": "held-out/combat-117",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": true,
+        "visited": 31
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.5382000000001881
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.4676999999999225
+      }
+    },
+    {
+      "id": "held-out/combat-118",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 8,
+        "lethal": false,
+        "visited": 16
+      },
+      "baseline": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.36410000000000764
+      },
+      "candidate": {
+        "damage": 8,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.2601999999999407
+      }
+    },
+    {
+      "id": "held-out/combat-119",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 3,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.15960000000018226
+      },
+      "candidate": {
+        "damage": 3,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.12160000000017135
+      }
+    },
+    {
+      "id": "held-out/combat-120",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.13179999999988468
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1307000000001608
+      }
+    },
+    {
+      "id": "held-out/combat-121",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 6
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18499999999994543
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.16219999999998436
+      }
+    },
+    {
+      "id": "held-out/combat-122",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": false,
+        "visited": 39
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.8005999999998039
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.7491999999999734
+      }
+    },
+    {
+      "id": "held-out/combat-123",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 2,
+        "lethal": false,
+        "visited": 18
+      },
+      "baseline": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.35349999999994
+      },
+      "candidate": {
+        "damage": 2,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.573699999999917
+      }
+    },
+    {
+      "id": "held-out/combat-124",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 12
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.39400000000000546
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.3708999999998923
+      }
+    },
+    {
+      "id": "held-out/combat-125",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 1,
+        "lethal": true,
+        "visited": 9
+      },
+      "baseline": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.2159999999998945
+      },
+      "candidate": {
+        "damage": 1,
+        "optimal": true,
+        "lethal": true,
+        "proof": true,
+        "ms": 0.20309999999994943
+      }
+    },
+    {
+      "id": "held-out/combat-126",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 0,
+        "lethal": false,
+        "visited": 5
+      },
+      "baseline": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.18489999999997053
+      },
+      "candidate": {
+        "damage": 0,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 0.1333999999999378
+      }
+    },
+    {
+      "id": "held-out/combat-127",
+      "split": "held-out",
+      "seed": 20261002,
+      "oracle": {
+        "maximum": 9,
+        "lethal": false,
+        "visited": 172
+      },
+      "baseline": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.7573999999999614
+      },
+      "candidate": {
+        "damage": 9,
+        "optimal": true,
+        "lethal": false,
+        "proof": false,
+        "ms": 1.9612999999999374
+      }
+    }
+  ],
+  "rulings": [
+    {
+      "id": "g6t1r425",
+      "label": {
+        "best": [
+          "xface"
+        ],
+        "ok": [
+          "o0"
+        ],
+        "skip": false,
+        "note": "09-25 #6: 要攻擊選擇對手的臉 -- a damage spell never aims at our own hero"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1t0",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 8.812999999999874
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1t0",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 7.95679999999993
+      }
+    },
+    {
+      "id": "g7t1r436",
+      "label": {
+        "best": [
+          "m6"
+        ],
+        "ok": [
+          "m7"
+        ],
+        "skip": false,
+        "note": "09-25 #7: Soul Barrage (kept by 18% of players) is tossed in the mulligan"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "m4",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.6875999999999749
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "m4",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.5697999999999865
+      }
+    },
+    {
+      "id": "g7t5r440",
+      "label": {
+        "best": [
+          "c3e85"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-25 #7: 應該是要棄掉行尸（因為場面低）"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "c3e85",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.9710999999999785
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "c3e85",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.7573999999999614
+      }
+    },
+    {
+      "id": "g8t6r447",
+      "label": {
+        "best": [
+          "o4",
+          "o5"
+        ],
+        "ok": [
+          "o1",
+          "o2"
+        ],
+        "skip": false,
+        "note": "09-25 #8: 應該是打手下，而不是離斬殺很遠還用法術打臉 -- Soul Barrage into an empty board at 30 hp"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 0.5,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 4.7193999999999505
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 0.5,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 2.804800000000114
+      }
+    },
+    {
+      "id": "g1t7r515",
+      "label": {
+        "best": [
+          "xtap",
+          "o1",
+          "o2",
+          "o4"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #10, our turn 4: 應該先抽牌再出牌 or 打 1+3 費"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 6.285200000000032
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 4.525499999999965
+      }
+    },
+    {
+      "id": "g1t13r530",
+      "label": {
+        "best": [
+          "o5"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #10: 先抽牌才對。白白浪費一個魔眼"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o5",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.1983999999999924
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o5",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.034599999999955
+      }
+    },
+    {
+      "id": "g1t15r534",
+      "label": {
+        "best": [
+          "o3"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #10: 一樣要先抽牌再打 buff"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o2",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 2.202199999999948
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o2",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 2.1717000000001008
+      }
+    },
+    {
+      "id": "g2t7r560",
+      "label": {
+        "best": [
+          "o1t0"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #11, our turn 4: 應該先用武器攻擊，以維持場面的血量"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1t0",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.234000000000151
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1t0",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 4.283200000000079
+      }
+    },
+    {
+      "id": "g3t7r586",
+      "label": {
+        "best": [
+          "o1"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #12, our turn 4: 應該打連鎖。因為打完連鎖，最低費變成魔像"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.553100000000086
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 2.919300000000021
+      }
+    },
+    {
+      "id": "g4t7r616",
+      "label": {
+        "best": [
+          "o7t6"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #13, our turn 4: 應該棄掉靈魂彈幕，因為 325 本來就會在鴨嘴龍死掉後棄置"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o6",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 17.745099999999866
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o6",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 15.213899999999967
+      }
+    },
+    {
+      "id": "g4t9r621",
+      "label": {
+        "best": [
+          "o1",
+          "o4"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-26 #13, our turn 5: 先打公爵，確保隨機棄牌不會棄掉有價值的公爵"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 8.124099999999999
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o1",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 11.063599999999951
+      }
+    },
+    {
+      "id": "g4t11r1187",
+      "label": {
+        "best": [
+          "xplay"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-29 #15, our turn 6: Frozen hero: Chronoclaws cannot discard this turn, so the Eggs are played, not kept"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "xplay",
+        "ruleFallbackPoints": 1,
+        "forced": true,
+        "source": "forced_spend",
+        "ms": 2.5892999999998665
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "xplay",
+        "ruleFallbackPoints": 1,
+        "forced": true,
+        "source": "forced_spend",
+        "ms": 2.1685999999999694
+      }
+    },
+    {
+      "id": "g1t20r1242",
+      "label": {
+        "best": [
+          "o1"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-29 #16, turn 20: 遇到聖盾手下，應該先讓低攻擊的人先破盾 -- Occultist before the hero swings into the shield"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o2t0",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 1.9540999999999258
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o2t0",
+        "ruleFallbackPoints": 0,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 1.8599999999999
+      }
+    },
+    {
+      "id": "g4t10r1308",
+      "label": {
+        "best": [
+          "xplay"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-29 #19, turn 10: 為何一直不打地獄公爵？明明就成長到很大了"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "xplay",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.6960999999998876
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "xplay",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 3.775100000000066
+      }
+    },
+    {
+      "id": "g4t14r1313",
+      "label": {
+        "best": [
+          "o5t0",
+          "o8t0"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-29 #19, turn 14: 沒有自殺 1/1 以打出公爵 / 11 撞掉聖盾 再用公爵衝刺最佳"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "o8t0",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 279.0454
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "o8t0",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 252.86080000000015
+      }
+    },
+    {
+      "id": "g6t8r1359",
+      "label": {
+        "best": [
+          "c4e142"
+        ],
+        "ok": [],
+        "skip": false,
+        "note": "09-29 #21, turn 8: 應該棄靈魂彈幕。然後 0 費繼續找牌"
+      },
+      "baseline": {
+        "availableBest": true,
+        "ruleFallbackPick": "c4e142",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.5688000000000102
+      },
+      "candidate": {
+        "availableBest": true,
+        "ruleFallbackPick": "c4e142",
+        "ruleFallbackPoints": 1,
+        "forced": false,
+        "source": "rule_fallback",
+        "ms": 0.4933000000000902
+      }
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "dormant-buff-tap.json",
+      "expected": {
+        "card": "Life Tap",
+        "forbidden": "Entropic Continuity"
+      },
+      "baseline": {
+        "pick": "o2",
+        "entityId": 77,
+        "source": "rule_fallback",
+        "medianMs": 1.0966000000003078,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 2,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o2",
+        "entityId": 77,
+        "source": "rule_fallback",
+        "medianMs": 1.6954000000000633,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 2,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "g4-body-before-buff.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o2",
+        "entityId": 39,
+        "source": "forced_spend",
+        "medianMs": 1.1768999999999323,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o2",
+        "entityId": 39,
+        "source": "forced_spend",
+        "medianMs": 1.0274999999996908,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "g4-occultist-barrage.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o7",
+        "entityId": 57,
+        "source": "rule_fallback",
+        "medianMs": 1.8172000000004118,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 3,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o7",
+        "entityId": 57,
+        "source": "rule_fallback",
+        "medianMs": 1.9158000000002176,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 3,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "game120-turn2-coin-occultist.json",
+      "expected": {
+        "sequence": [
+          "The Coin",
+          "Ocular Occultist",
+          "discard Walking Dead or Silverware Golem"
+        ],
+        "reason": "Coin develops two attacking bodies now; the other three-cost minion provides a known next-turn play. Bare Egg has zero attack and no immediate activation.",
+        "payoffPreference": "Not resolved between Walking Dead and Silverware Golem for this control matchup."
+      },
+      "baseline": {
+        "pick": "coin",
+        "entityId": 68,
+        "source": "early_coin_development",
+        "medianMs": 1.5050999999998567,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "coin",
+        "entityId": 68,
+        "source": "early_coin_development",
+        "medianMs": 2.0857999999998356,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "game137-ongoing-effect-trade.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o2t0",
+        "entityId": 61,
+        "targetId": 5,
+        "source": "rule_fallback",
+        "medianMs": 3.54529999999977,
+        "searchStats": {
+          "expanded": 16,
+          "generated": 26,
+          "deduplicated": 7,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o2t0",
+        "entityId": 61,
+        "targetId": 5,
+        "source": "rule_fallback",
+        "medianMs": 3.7133999999996377,
+        "searchStats": {
+          "expanded": 16,
+          "generated": 26,
+          "deduplicated": 7,
+          "beamPruned": 0,
+          "depthReached": 3,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "game148-board-before-draw.json",
+      "expected": {
+        "discard": "Walking Dead"
+      },
+      "baseline": {
+        "pick": "o4",
+        "entityId": 77,
+        "source": "rule_fallback",
+        "medianMs": 1.4586000000003878,
+        "searchStats": {
+          "expanded": 1,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 1,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o4",
+        "entityId": 77,
+        "source": "rule_fallback",
+        "medianMs": 1.1700000000000728,
+        "searchStats": {
+          "expanded": 1,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 1,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "game153-ectoplasm.json",
+      "expected": {
+        "play": "Ectoplasm"
+      },
+      "baseline": {
+        "pick": "o1",
+        "entityId": 113,
+        "source": "board_recovery",
+        "medianMs": 0.6206999999999425,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 113,
+        "source": "board_recovery",
+        "medianMs": 0.6511999999997897,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "game175-engine-removal.json",
+      "expected": {
+        "inactive": 37,
+        "active": 47
+      },
+      "baseline": {
+        "pick": "o6t1",
+        "entityId": 80,
+        "targetId": 47,
+        "source": "rule_fallback",
+        "medianMs": 23.211300000000392,
+        "searchStats": {
+          "expanded": 52,
+          "generated": 181,
+          "deduplicated": 78,
+          "beamPruned": 0,
+          "depthReached": 4,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o6t1",
+        "entityId": 80,
+        "targetId": 47,
+        "source": "rule_fallback",
+        "medianMs": 24.06140000000005,
+        "searchStats": {
+          "expanded": 52,
+          "generated": 181,
+          "deduplicated": 78,
+          "beamPruned": 0,
+          "depthReached": 4,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "game179-discover-first.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 70,
+        "source": "free_discover_first",
+        "medianMs": 1.2010999999997694,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 70,
+        "source": "free_discover_first",
+        "medianMs": 1.2872000000002117,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "game179-draw-before-whispers.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o2",
+        "entityId": 77,
+        "source": "draw_before_weapon_discard",
+        "medianMs": 2.827400000000125,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o2",
+        "entityId": 77,
+        "source": "draw_before_weapon_discard",
+        "medianMs": 2.9670999999998457,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "game46-draw-risk.json",
+      "expected": {
+        "forbiddenCardNames": [
+          "Life Tap"
+        ],
+        "drawDamage": 7,
+        "selfDamage": 2,
+        "usableCards": 0
+      },
+      "baseline": {
+        "pick": "o5t0",
+        "entityId": 85,
+        "targetId": 197,
+        "source": "rule_fallback",
+        "medianMs": 2169.7887,
+        "searchStats": {
+          "expanded": 732,
+          "generated": 24000,
+          "deduplicated": 12825,
+          "beamPruned": 8457,
+          "depthReached": 5,
+          "nodeLimit": true,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o5t0",
+        "entityId": 85,
+        "targetId": 197,
+        "source": "rule_fallback",
+        "medianMs": 2132.3994999999995,
+        "searchStats": {
+          "expanded": 732,
+          "generated": 24000,
+          "deduplicated": 12825,
+          "beamPruned": 8457,
+          "depthReached": 5,
+          "nodeLimit": true,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "game46-opening",
+      "expected": {
+        "replaceNames": [
+          "Chronoclaws",
+          "Boneweb Egg",
+          "Entropic Continuity",
+          "Soul Barrage"
+        ]
+      },
+      "baseline": {
+        "pick": "m13",
+        "source": "rule_fallback",
+        "medianMs": 0.2529999999987922,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "m13",
+        "source": "rule_fallback",
+        "medianMs": 0.3443999999999505,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "game46-turn1-coin",
+      "expected": {
+        "forbiddenCardNames": [
+          "The Coin"
+        ]
+      },
+      "baseline": {
+        "pick": "o2",
+        "entityId": 94,
+        "source": "rule_fallback",
+        "medianMs": 0.7686000000012427,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o2",
+        "entityId": 94,
+        "source": "rule_fallback",
+        "medianMs": 1.0718999999990046,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "morning-g1-t16-golem-under-lethal.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o3",
+        "entityId": 67,
+        "source": "rule_fallback",
+        "medianMs": 1.6418000000012398,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 3,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o3",
+        "entityId": 67,
+        "source": "rule_fallback",
+        "medianMs": 2.2641999999996187,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 3,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "new50-game10-acolytes-buff.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o3",
+        "entityId": 38,
+        "source": "buff_setup",
+        "medianMs": 2.683899999999994,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o3",
+        "entityId": 38,
+        "source": "buff_setup",
+        "medianMs": 1.6719000000011874,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "new50-game10-temporary-party.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o3",
+        "entityId": 40,
+        "source": "temporary_opening_development",
+        "medianMs": 2.5583000000005995,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o3",
+        "entityId": 40,
+        "source": "temporary_opening_development",
+        "medianMs": 1.6676000000006752,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "new50-game18-original-options",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 59,
+        "source": "weapon_discard_buff",
+        "medianMs": 118.28459999999905,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 59,
+        "source": "weapon_discard_buff",
+        "medianMs": 109.9951000000001,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "new50-game3-swing-before-replace",
+      "expected": null,
+      "baseline": {
+        "pick": "o3t4",
+        "entityId": 64,
+        "targetId": 46,
+        "source": "rule_fallback",
+        "medianMs": 2.3148999999993976,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 13,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o3t4",
+        "entityId": 64,
+        "targetId": 46,
+        "source": "rule_fallback",
+        "medianMs": 1.778600000001461,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 13,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "new50-game9-fatal-party.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 51,
+        "source": "rule_fallback",
+        "medianMs": 1.2613000000001193,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 51,
+        "source": "rule_fallback",
+        "medianMs": 1.2678000000014435,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 4,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "new50-game9-single-buff.json",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 48,
+        "source": "rule_fallback",
+        "medianMs": 1.1287000000011176,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 48,
+        "source": "rule_fallback",
+        "medianMs": 1.0036999999992986,
+        "searchStats": {
+          "expanded": 2,
+          "generated": 1,
+          "deduplicated": 0,
+          "beamPruned": 0,
+          "depthReached": 2,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "single-body-occultist.json",
+      "expected": {
+        "card": "Ocular Occultist",
+        "discard": "Walking Dead"
+      },
+      "baseline": {
+        "pick": "o1t0",
+        "entityId": 34,
+        "targetId": 40,
+        "source": "low_board_discard",
+        "medianMs": 4.7739999999994325,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1t0",
+        "entityId": 34,
+        "targetId": 40,
+        "source": "low_board_discard",
+        "medianMs": 5.386499999998705,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "validation10-game1-chamber-walking-dead",
+      "expected": {
+        "firstEntityId": 24,
+        "firstActionId": "o1",
+        "source": "chamber_development"
+      },
+      "baseline": {
+        "pick": "o1",
+        "entityId": 24,
+        "source": "chamber_development",
+        "medianMs": 1.1309000000001106,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 24,
+        "source": "chamber_development",
+        "medianMs": 1.2800000000006548,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "validation10-game1-preserve-duke-before-weapon",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 19,
+        "source": "weapon_preservation",
+        "medianMs": 2.289600000000064,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 19,
+        "source": "weapon_preservation",
+        "medianMs": 2.0727999999999156,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "validation10-game2-buff-before-queued-attacks",
+      "expected": null,
+      "baseline": {
+        "pick": "o5",
+        "entityId": 10,
+        "source": "rule_fallback",
+        "medianMs": 2288.972600000001,
+        "searchStats": {
+          "expanded": 372,
+          "generated": 1044,
+          "deduplicated": 481,
+          "beamPruned": 0,
+          "depthReached": 7,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o5",
+        "entityId": 10,
+        "source": "rule_fallback",
+        "medianMs": 2255.8942000000025,
+        "searchStats": {
+          "expanded": 372,
+          "generated": 1044,
+          "deduplicated": 481,
+          "beamPruned": 0,
+          "depthReached": 7,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "validation10-game2-shield-pop-alternatives",
+      "expected": null,
+      "baseline": {
+        "pick": "o6t0",
+        "entityId": 80,
+        "targetId": 46,
+        "source": "shield_setup",
+        "medianMs": 35.15169999999853,
+        "searchStats": null
+      },
+      "candidate": {
+        "pick": "o6t0",
+        "entityId": 80,
+        "targetId": 46,
+        "source": "shield_setup",
+        "medianMs": 37.39730000000054,
+        "searchStats": null
+      }
+    },
+    {
+      "id": "validation10-game3-temporary-free-325",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 18,
+        "source": "rule_fallback",
+        "medianMs": 4.73609999999826,
+        "searchStats": {
+          "expanded": 16,
+          "generated": 40,
+          "deduplicated": 17,
+          "beamPruned": 0,
+          "depthReached": 5,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 18,
+        "source": "rule_fallback",
+        "medianMs": 5.434700000001612,
+        "searchStats": {
+          "expanded": 16,
+          "generated": 40,
+          "deduplicated": 17,
+          "beamPruned": 0,
+          "depthReached": 5,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "validation10-game3-two-buffs-before-queued-attacks",
+      "expected": null,
+      "baseline": {
+        "pick": "o3",
+        "entityId": 23,
+        "source": "rule_fallback",
+        "medianMs": 171.40450000000055,
+        "searchStats": {
+          "expanded": 112,
+          "generated": 304,
+          "deduplicated": 113,
+          "beamPruned": 0,
+          "depthReached": 6,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o3",
+        "entityId": 23,
+        "source": "rule_fallback",
+        "medianMs": 173.98419999999896,
+        "searchStats": {
+          "expanded": 112,
+          "generated": 304,
+          "deduplicated": 113,
+          "beamPruned": 0,
+          "depthReached": 6,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    },
+    {
+      "id": "validation10-game4-barrage-acolytes-linked-duke",
+      "expected": null,
+      "baseline": {
+        "pick": "o1",
+        "entityId": 60,
+        "source": "rule_fallback",
+        "medianMs": 54.69210000000021,
+        "searchStats": {
+          "expanded": 61,
+          "generated": 292,
+          "deduplicated": 39,
+          "beamPruned": 0,
+          "depthReached": 6,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      },
+      "candidate": {
+        "pick": "o1",
+        "entityId": 60,
+        "source": "rule_fallback",
+        "medianMs": 55.4842000000026,
+        "searchStats": {
+          "expanded": 61,
+          "generated": 292,
+          "deduplicated": 39,
+          "beamPruned": 0,
+          "depthReached": 6,
+          "nodeLimit": false,
+          "depthLimit": false
+        }
+      }
+    }
+  ]
+}

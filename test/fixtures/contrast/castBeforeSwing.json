@@ -1,0 +1,229 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-28T18:57:53.236Z"
+ },
+ "state": {
+  "gameNumber": 8,
+  "turn": 11,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 4,
+   "maxMana": 6,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 2,
+   "deckCount": 18,
+   "board": [
+    {
+     "entityId": 59,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "ATK": 4,
+     "HEALTH": 30,
+     "DAMAGE": 8,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 90,
+     "cardId": "YOP_032",
+     "name": "Armor Vendor",
+     "text": "<b>Battlecry:</b> Give 4 Armor to each hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 101,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 62,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 100,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 34,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 36,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "LOCATION"
+    }
+   ],
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 1,
+   "maxMana": 5,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 8,
+   "deckCount": 16,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_11",
+     "name": "The Lich King",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 7,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_11bp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 32,
+     "cardId": "CORE_RLK_121",
+     "name": "Acolyte of Death",
+     "text": "After a friendly Undead dies, draw a card.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 5,
+     "HEALTH": 4,
+     "DAMAGE": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    }
+   ]
+  },
+  "optionsId": 39,
+  "fingerprint": "c63bd4170388f2766522",
+  "decisionFingerprint": "dbdcb35e180d672a801d"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 2,
+   "entityId": 36,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 66,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 64
+  },
+  {
+   "option": 3,
+   "entityId": 66,
+   "type": "POWER",
+   "id": "o3t1",
+   "targetId": 32
+  }
+ ],
+ "chosen": "o2"
+}

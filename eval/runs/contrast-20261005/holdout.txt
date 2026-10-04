@@ -1,0 +1,674 @@
+112 firings, 21 removed the chosen action
+
+[CHOSEN REMOVED] developBeforeBuff | T7 mana 4 hp 24 vs 40 deck 17
+  hand: Wicked Whispers(1), Duke of Below(4), Entropic Continuity(1), Soul Barrage(4), Entropic Continuity(1), Walking Dead(3), Walking Dead(3), Chamber of Viscidus(3)
+  mine: Ocular Occultist3/6
+  foe: 
+  removed: Entropic Continuity | Entropic Continuity
+  chosen: Entropic Continuity   final: Duke of Below | Walking Dead | Walking Dead | Chamber of Viscidus
+[CHOSEN REMOVED] newBodyBuffWaits | T3 mana 1 hp 30 vs 30 deck 24
+  hand: Entropic Continuity(1), Walking Dead(3), Walking Dead(3), Chamber of Viscidus(3), Ocular Occultist(3)
+  mine: Platysaur1/2z
+  foe: 
+  removed: Entropic Continuity
+  chosen: Entropic Continuity   final: END
+[CHOSEN REMOVED] developBeforeBuff | T19 mana 10 hp 11 vs 24 deck 8
+  hand: Boneweb Egg(2), Soul Barrage(4), Entropic Continuity(1)
+  mine: Party Fiend1/1, Rangari Scout1/2, Grave Defiler2/1, Boneweb Eggundefined/2
+  foe: Battlecruiser1/3, Healing Totemundefined/2z
+  removed: Entropic Continuity
+  chosen: Entropic Continuity   final: Boneweb Egg
+[CHOSEN REMOVED] boardFirstDiscard | T5 mana 3 hp 28 vs 25 deck 23
+  hand: Hand of Gul'dan(6), Ocular Occultist(3), Duke of Below(4), Disposable Acolytes(2), Boneweb Egg(2), Disposable Acolytes(2), Hand of Gul'dan(6)
+  mine: 
+  foe: Soulbound Ashtongue1/4, Ornery Tortoise3/5z
+  removed: Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Duke of Below | Ocular Occultist>Hand of Gul'dan
+  chosen: Ocular Occultist>Hand of Gul'dan   final: Ocular Occultist>Disposable Acolytes | Ocular Occultist>Boneweb Egg | Ocular Occultist>Disposable Acolytes | Life Tap
+[CHOSEN REMOVED] weaponFirst | T9 mana 0 hp 25 vs 13 deck 14
+  hand: Disposable Acolytes(2), Boneweb Egg(2), Disposable Acolytes(2), Soul Barrage(4), Walking Dead(3), Soul Barrage(4), Duke of Below(4)
+  mine: Ocular Occultist4/5, Silverware Golem4/2, Duke of Below11/11
+  foe: 
+  removed: Ocular Occultist>Jaina Proudmoore | Silverware Golem>Jaina Proudmoore
+  chosen: Ocular Occultist>Jaina Proudmoore   final: END | Nemesis Gul'dan>Jaina Proudmoore
+[CHOSEN REMOVED] setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Silverware Golem>Patches the Pirate   final: Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Silverware Golem>Patches the Pirate   final: Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Silverware Golem>Patches the Pirate   final: Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Silverware Golem>Patches the Pirate   final: Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Silverware Golem>Patches the Pirate   final: Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T15 mana 6 hp 11 vs 30 deck 14
+  hand: Disposable Acolytes(2), Wicked Whispers(1)
+  mine: Vilefin Inquisitor1/1, Duke of Below12/12, Silverware Golem3/4, Boneweb Spider2/1, Boneweb Spider2/1
+  foe: Hollow Hound5/3z
+  removed: Nemesis Gul'dan>Hakkar the Houndmaster | Nemesis Gul'dan>Hollow Hound
+  chosen: Nemesis Gul'dan>Hollow Hound   final: Wicked Whispers | Nemesis Gul'dan>Hakkar the Houndmaster | Nemesis Gul'dan>Hollow Hound
+[CHOSEN REMOVED] tempoBuffPick | T4 mana 2 hp 24 vs 40 deck 24
+  hand: Entropic Continuity(1), Boneweb Egg(2), Soul Barrage(4)
+  mine: Party Fiend1/1, Felbeast1/1, Felbeast1/1, Party Fiend1/1, Felbeast1/1
+  foe: Pharaoh Cat1/1z, Maestra, Mask Merchant3/2z
+  removed: CHOICE | CHOICE
+  chosen: CHOICE   final: CHOICE
+[CHOSEN REMOVED] occultistPick | T6 mana 3 hp 22 vs 37 deck 21
+  hand: Entropic Continuity(1), Soul Barrage(4), Disposable Acolytes(2), Ocular Occultist(3)
+  mine: Party Fiend1/1, Party Fiend1/1, Felbeast1/1, Boneweb Spider2/1, Boneweb Eggundefined/2
+  foe: Dirty Rat2/6z
+  removed: Ocular Occultist>Soul Barrage
+  chosen: Ocular Occultist>Soul Barrage   final: Entropic Continuity | Ocular Occultist>Entropic Continuity | Ocular Occultist>Disposable Acolytes
+[CHOSEN REMOVED] overflowWaits | T10 mana 3 hp 18 vs 27 deck 16
+  hand: Entropic Continuity(1), Disposable Acolytes(2), Platysaur(1), Ocular Occultist(3)
+  mine: Party Fiend1/1, Boneweb Eggundefined/2, Ocular Occultist3/2, Jade Swarmer1/1, Selfless Hero2/1
+  foe: Malignant Horror2/4z, Malignant Horror2/4z
+  removed: Ocular Occultist>Disposable Acolytes
+  chosen: Ocular Occultist>Disposable Acolytes   final: END | Platysaur | Ocular Occultist>Entropic Continuity | Ocular Occultist>Platysaur | Party Fiend>Nightslayer Valeera | Party Fiend>Malignant Horror | Party Fiend>Malignant Horror | Ocular Occultist>Nightslayer Valeera | Ocular Occultist>Malignant Horror | Ocular Occultist>Malignant Horror | Jade Swarmer>Nightslayer Valeera | Jade Swarmer>Malignant Horror | Jade Swarmer>Malignant Horror | Selfless Hero>Nightslayer Valeera | Selfless Hero>Malignant Horror | Selfless Hero>Malignant Horror
+[CHOSEN REMOVED] setupFirst | T14 mana 1 hp 14 vs 40 deck 7
+  hand: Platysaur(1), Wicked Whispers(1), Silverware Golem(3), Duke of Below(4), Wicked Whispers(1)
+  mine: Boneweb Egg1/1, Jade Swarmer2/2, Selfless Hero3/2, Imprisoned Homunculus2/5z, Duke of Below18/18
+  foe: Malignant Horror2/1z, Malignant Horror2/1z, Double Agent3/1z, Reno Jackson4/6z, Swashburglar1/2z
+  removed: Boneweb Egg>Nightslayer Valeera | Boneweb Egg>Double Agent | Boneweb Egg>Malignant Horror | Boneweb Egg>Reno Jackson | Boneweb Egg>Swashburglar | Boneweb Egg>Malignant Horror | Jade Swarmer>Nightslayer Valeera | Jade Swarmer>Double Agent | Jade Swarmer>Malignant Horror | Jade Swarmer>Reno Jackson | Jade Swarmer>Swashburglar | Jade Swarmer>Malignant Horror | Selfless Hero>Nightslayer Valeera | Selfless Hero>Double Agent | Selfless Hero>Malignant Horror | Selfless Hero>Reno Jackson | Selfless Hero>Swashburglar | Selfless Hero>Malignant Horror | Duke of Below>Double Agent | Duke of Below>Malignant Horror | Duke of Below>Reno Jackson | Duke of Below>Swashburglar | Duke of Below>Malignant Horror
+  chosen: Duke of Below>Reno Jackson   final: Platysaur | Wicked Whispers | Wicked Whispers
+[CHOSEN REMOVED] setupFirst | T16 mana 4 hp 6 vs 41 deck 6
+  hand: Silverware Golem(3), Wicked Whispers(1), Hand of Gul'dan(6)
+  mine: Duke of Below20/20
+  foe: Malignant Horror2/1z, Malignant Horror2/1z, Double Agent3/1z
+  removed: Duke of Below>Double Agent | Duke of Below>Malignant Horror | Duke of Below>Malignant Horror
+  chosen: Duke of Below>Double Agent   final: END | Wicked Whispers
+[CHOSEN REMOVED] developBeforeBuff | T4 mana 2 hp 29 vs 40 deck 24
+  hand: Soul Barrage(4), Silverware Golem(3), Entropic Continuity(1), Hand of Gul'dan(6), Platysaur(1)
+  mine: Wand Thief1/2, X-21 Repairbot1/3
+  foe: Platysaur1/2z
+  removed: Entropic Continuity
+  chosen: Entropic Continuity   final: Platysaur
+[CHOSEN REMOVED] occultistPick | T8 mana 4 hp 27 vs 39 deck 22
+  hand: Soul Barrage(4), Silverware Golem(3), Hand of Gul'dan(6), Walking Dead(3), Chamber of Viscidus(3), Ocular Occultist(3), Party Fiend(1)
+  mine: Wand Thief0/2, X-21 Repairbot0/4, Platysaur0/2
+  foe: Kaldorei Priestess3/3z
+  removed: Ocular Occultist>Soul Barrage
+  chosen: Ocular Occultist>Soul Barrage   final: Chamber of Viscidus | Ocular Occultist>Silverware Golem | Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Walking Dead | Ocular Occultist>Party Fiend | Party Fiend | Life Tap
+[CHOSEN REMOVED] bodyBeforeBuff | T11 mana 6 hp 25 vs 24 deck 12
+  hand: Chronoclaws(4), Hand of Gul'dan(6), Ocular Occultist(3), Entropic Continuity(1)
+  mine: Duke of Below14/6, Boneweb Eggundefined/2
+  foe: P1CK-P0K3T2/3z, Drakkari Enchanter1/5z
+  removed: Entropic Continuity
+  chosen: Entropic Continuity   final: Chronoclaws | Ocular Occultist>Chronoclaws | Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Entropic Continuity | Life Tap
+[CHOSEN REMOVED] bodyBeforeBuff | T10 mana 4 hp 6 vs 25 deck 21
+  hand: Hand of Gul'dan(6), Entropic Continuity(1), Ocular Occultist(3)
+  mine: Felbeast1/1z, Party Fiend1/1z, Felbeast1/1z
+  foe: Wrath of Air Totem4/4z, Healing Totem4/5z, Anchored Totem2/3z, The Stonewright7/4z, Flametongue Totem2/3z, Healing Totem4/2z, Thing from Below5/5z
+  removed: Entropic Continuity
+  chosen: Entropic Continuity   final: Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Entropic Continuity
+[CHOSEN REMOVED] boardFirstDiscard | T6 mana 3 hp 30 vs 24 deck 22
+  hand: Ocular Occultist(3), Walking Dead(3), Ocular Occultist(3), Silverware Golem(3), Hand of Gul'dan(6)
+  mine: Boneweb Spider2/1z, Boneweb Spider2/1z
+  foe: 
+  removed: Ocular Occultist>Ocular Occultist | Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Ocular Occultist | Ocular Occultist>Hand of Gul'dan
+  chosen: Ocular Occultist>Hand of Gul'dan   final: END | Ocular Occultist>Walking Dead | Ocular Occultist>Silverware Golem | Ocular Occultist>Walking Dead | Ocular Occultist>Silverware Golem | Life Tap
+whispersEatsPlayable | T3 mana 2 hp 30 vs 30 deck 24
+  hand: Disposable Acolytes(2), Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4)
+  mine: Platysaur1/2
+  foe: 
+  removed: Wicked Whispers
+  chosen: Disposable Acolytes   final: Disposable Acolytes | Soulfire>Escape Artist Millhouse | Soulfire>Platysaur
+pricedOut | T3 mana 2 hp 30 vs 30 deck 24
+  hand: Disposable Acolytes(2), Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4)
+  mine: Platysaur1/2
+  foe: 
+  removed: Life Tap
+  chosen: Disposable Acolytes   final: Disposable Acolytes | Soulfire>Escape Artist Millhouse | Soulfire>Platysaur
+mustSpendEnd | T3 mana 2 hp 30 vs 30 deck 24
+  hand: Disposable Acolytes(2), Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4)
+  mine: Platysaur1/2
+  foe: 
+  removed: END
+  chosen: Disposable Acolytes   final: Disposable Acolytes | Soulfire>Escape Artist Millhouse | Soulfire>Platysaur
+mustSpend | T3 mana 2 hp 30 vs 30 deck 24
+  hand: Disposable Acolytes(2), Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4)
+  mine: Platysaur1/2
+  foe: 
+  removed: Platysaur>Escape Artist Millhouse
+  chosen: Disposable Acolytes   final: Disposable Acolytes | Soulfire>Escape Artist Millhouse | Soulfire>Platysaur
+wastedBurn | T5 mana 3 hp 30 vs 29 deck 23
+  hand: Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1
+  foe: Bitterbloom Knight2/3z
+  removed: Soulfire>Escape Artist Millhouse
+  chosen: Walking Dead   final: Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Bitterbloom Knight | Walking Dead | Wicked Whispers
+whispersWorthCasting | T5 mana 3 hp 30 vs 29 deck 23
+  hand: Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1
+  foe: Bitterbloom Knight2/3z
+  removed: END
+  chosen: Walking Dead   final: Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Bitterbloom Knight | Walking Dead | Wicked Whispers
+pricedOut | T5 mana 3 hp 30 vs 29 deck 23
+  hand: Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1
+  foe: Bitterbloom Knight2/3z
+  removed: Life Tap
+  chosen: Walking Dead   final: Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Bitterbloom Knight | Walking Dead | Wicked Whispers
+mustSpend | T5 mana 3 hp 30 vs 29 deck 23
+  hand: Soulfire(1), Walking Dead(3), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1
+  foe: Bitterbloom Knight2/3z
+  removed: Platysaur>Escape Artist Millhouse | Platysaur>Bitterbloom Knight | Vibrant Squirrel>Escape Artist Millhouse | Vibrant Squirrel>Bitterbloom Knight
+  chosen: Walking Dead   final: Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Bitterbloom Knight | Walking Dead | Wicked Whispers
+wastedBurn | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: Soulfire>Escape Artist Millhouse
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+counterFirst | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Bitterbloom Knight | Soulfire>Walking Dead
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+whispersWaits | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: Wicked Whispers
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+pricedOut | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: Life Tap
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+mustSpendEnd | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: END
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+mustSpend | T7 mana 4 hp 30 vs 26 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4), Walking Dead(3)
+  mine: Platysaur1/2, Twilight Eggundefined/2, Vibrant Squirrel2/1, Walking Dead2/3
+  foe: Bitterbloom Knight2/1z
+  removed: Platysaur>Escape Artist Millhouse | Platysaur>Bitterbloom Knight | Vibrant Squirrel>Escape Artist Millhouse | Vibrant Squirrel>Bitterbloom Knight | Walking Dead>Escape Artist Millhouse | Walking Dead>Bitterbloom Knight
+  chosen: Walking Dead   final: Soul Barrage | Duke of Below | Walking Dead
+whispersWorthCasting | T7 mana 1 hp 30 vs 23 deck 22
+  hand: Soulfire(1), Wicked Whispers(1), Soul Barrage(4), Duke of Below(4)
+  mine: Platysaur1/2z, Twilight Eggundefined/2, Vibrant Squirrel2/1z, Walking Dead2/1z, Walking Dead2/5z
+  foe: 
+  removed: END
+  chosen: Wicked Whispers   final: Soulfire>Escape Artist Millhouse | Soulfire>Platysaur | Soulfire>Twilight Egg | Soulfire>Vibrant Squirrel | Soulfire>Walking Dead | Soulfire>Walking Dead | Wicked Whispers
+overflowWaits | T9 mana 5 hp 30 vs 22 deck 21
+  hand: Soul Barrage(4), Duke of Below(4), Boneweb Egg(2)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/6
+  foe: Flutterwing Guardian4/4z
+  removed: Boneweb Egg
+  chosen: Duke of Below   final: Soul Barrage | Duke of Below | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+pricedOut | T9 mana 5 hp 30 vs 22 deck 21
+  hand: Soul Barrage(4), Duke of Below(4), Boneweb Egg(2)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/6
+  foe: Flutterwing Guardian4/4z
+  removed: Life Tap
+  chosen: Duke of Below   final: Soul Barrage | Duke of Below | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+mustSpendEnd | T9 mana 5 hp 30 vs 22 deck 21
+  hand: Soul Barrage(4), Duke of Below(4), Boneweb Egg(2)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/6
+  foe: Flutterwing Guardian4/4z
+  removed: END
+  chosen: Duke of Below   final: Soul Barrage | Duke of Below | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+overflowWaits | T11 mana 6 hp 30 vs 13 deck 20
+  hand: Soul Barrage(4), Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/2
+  foe: Flutterwing Guardian4/4z
+  removed: Boneweb Egg | Party Fiend
+  chosen: Soul Barrage   final: END | Soul Barrage | Life Tap | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+overflowWaits | T11 mana 2 hp 30 vs 10 deck 20
+  hand: Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/2
+  foe: Flutterwing Guardian4/3z
+  removed: Boneweb Egg | Party Fiend
+  chosen: Walking Dead>Flutterwing Guardian   final: Life Tap | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+tapOnlyEnd | T11 mana 2 hp 30 vs 10 deck 20
+  hand: Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3, Twilight Egg1/3, Vibrant Squirrel3/2, Walking Dead3/2, Walking Dead3/2
+  foe: Flutterwing Guardian4/3z
+  removed: END
+  chosen: Walking Dead>Flutterwing Guardian   final: Life Tap | Platysaur>Flutterwing Guardian | Twilight Egg>Flutterwing Guardian | Vibrant Squirrel>Flutterwing Guardian | Walking Dead>Flutterwing Guardian | Walking Dead>Flutterwing Guardian
+pricedOut | T11 mana 2 hp 30 vs 4 deck 20
+  hand: Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3z, Twilight Egg1/3z, Vibrant Squirrel3/2z, Walking Dead3/2
+  foe: 
+  removed: Life Tap
+  chosen: Party Fiend   final: Boneweb Egg | Party Fiend
+mustSpendEnd | T11 mana 2 hp 30 vs 4 deck 20
+  hand: Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3z, Twilight Egg1/3z, Vibrant Squirrel3/2z, Walking Dead3/2
+  foe: 
+  removed: END
+  chosen: Party Fiend   final: Boneweb Egg | Party Fiend
+mustSpend | T11 mana 2 hp 30 vs 4 deck 20
+  hand: Boneweb Egg(2), Party Fiend(1)
+  mine: Platysaur2/3z, Twilight Egg1/3z, Vibrant Squirrel3/2z, Walking Dead3/2
+  foe: 
+  removed: Walking Dead>Escape Artist Millhouse
+  chosen: Party Fiend   final: Boneweb Egg | Party Fiend
+mustSpendEnd | T13 mana 7 hp 24 vs 1 deck 23
+  hand: Boneweb Egg(2), Silverware Golem(3)
+  mine: 
+  foe: Holotechnician3/4z, Tour Guide1/1z, Wisp1/1z, Wisp1/1z, Wisp1/1z
+  removed: END
+  chosen: Life Tap   final: Boneweb Egg | Silverware Golem | Life Tap
+wastedFodder | T13 mana 5 hp 22 vs 1 deck 22
+  hand: Boneweb Egg(2), Silverware Golem(3), Ocular Occultist(3)
+  mine: 
+  foe: Holotechnician3/4z, Tour Guide1/1z, Wisp1/1z, Wisp1/1z, Wisp1/1z
+  removed: Boneweb Egg | Silverware Golem
+  chosen: Ocular Occultist>Boneweb Egg   final: END | Ocular Occultist>Boneweb Egg | Ocular Occultist>Silverware Golem
+mustSpendEnd | T15 mana 8 hp 6 vs 1 deck 21
+  hand: Silverware Golem(3), Platysaur(1)
+  mine: 
+  foe: Holotechnician3/4z, Tour Guide1/1z, Wisp1/1z, Wisp1/1z, Wisp1/1z, Wisprider4/4z, Wisp1/1z
+  removed: END
+  chosen: Platysaur   final: Silverware Golem | Platysaur
+wastedFodder | T15 mana 7 hp 6 vs 1 deck 19
+  hand: Silverware Golem(3), Chamber of Viscidus(3)
+  mine: Platysaur1/2z, Satisfied Squirrel2/1z
+  foe: Holotechnician3/4z, Tour Guide1/1z, Wisp1/1z, Wisp1/1z, Wisp1/1z, Wisprider4/4z, Wisp1/1z
+  removed: Silverware Golem
+  chosen: Chamber of Viscidus   final: END | Chamber of Viscidus
+mustSpendEnd | T15 mana 4 hp 6 vs 1 deck 19
+  hand: Silverware Golem(3)
+  mine: Platysaur1/2z, Satisfied Squirrel2/1z
+  foe: Holotechnician3/4z, Tour Guide1/1z, Wisp1/1z, Wisp1/1z, Wisp1/1z, Wisprider4/4z, Wisp1/1z
+  removed: END
+  chosen: Silverware Golem   final: Silverware Golem | Chamber of Viscidus
+deadWhispers | T2 mana 1 hp 30 vs 30 deck 25
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), The Coin(undefined), Chamber of Viscidus(3)
+  mine: 
+  foe: 
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: The Coin   final: END | The Coin
+deadWhispers | T2 mana 2 hp 30 vs 30 deck 25
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3)
+  mine: 
+  foe: 
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: Life Tap   final: Life Tap
+tapOnlyEnd | T2 mana 2 hp 30 vs 30 deck 25
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3)
+  mine: 
+  foe: 
+  removed: END
+  chosen: Life Tap   final: Life Tap
+deadWhispers | T4 mana 2 hp 27 vs 30 deck 23
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3), Duke of Below(4), Boneweb Egg(2)
+  mine: 
+  foe: 
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: Boneweb Egg   final: END | Boneweb Egg
+pricedOut | T4 mana 2 hp 27 vs 30 deck 23
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3), Duke of Below(4), Boneweb Egg(2)
+  mine: 
+  foe: 
+  removed: Life Tap
+  chosen: Boneweb Egg   final: END | Boneweb Egg
+wastedFodder | T6 mana 3 hp 26 vs 30 deck 22
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3), Duke of Below(4), Soul Barrage(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: Walking Dead
+  chosen: Chamber of Viscidus   final: END | Wicked Whispers | Ocular Occultist>Walking Dead | Wicked Whispers | Chamber of Viscidus | Life Tap
+boardFirstDiscard | T6 mana 3 hp 26 vs 30 deck 22
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Chamber of Viscidus(3), Duke of Below(4), Soul Barrage(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Duke of Below | Ocular Occultist>Soul Barrage
+  chosen: Chamber of Viscidus   final: END | Wicked Whispers | Ocular Occultist>Walking Dead | Wicked Whispers | Chamber of Viscidus | Life Tap
+discardPick | T6 mana 0 hp 26 vs 30 deck 22
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Soul Barrage(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: CHOICE | CHOICE
+  chosen: CHOICE   final: CHOICE
+discardPick | T6 mana 0 hp 26 vs 30 deck 22
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Soul Barrage(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: CHOICE | CHOICE
+  chosen: CHOICE   final: CHOICE
+wastedFodder | T8 mana 4 hp 26 vs 25 deck 19
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: Walking Dead | Boneweb Egg
+  chosen: Duke of Below   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Duke of Below | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Duke of Below | Party Fiend | Chronoclaws
+whispersWaits | T8 mana 4 hp 26 vs 25 deck 19
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: Duke of Below   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Duke of Below | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Duke of Below | Party Fiend | Chronoclaws
+pricedOut | T8 mana 4 hp 26 vs 25 deck 19
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: Life Tap
+  chosen: Duke of Below   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Duke of Below | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Duke of Below | Party Fiend | Chronoclaws
+mustSpendEnd | T8 mana 4 hp 26 vs 25 deck 19
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Duke of Below(4), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4)
+  mine: Boneweb Eggundefined/2
+  foe: 
+  removed: END
+  chosen: Duke of Below   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Duke of Below | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Duke of Below | Party Fiend | Chronoclaws
+overdrawWaits | T10 mana 5 hp 26 vs 25 deck 14
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Life Tap
+  chosen: Chamber of Viscidus   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Ocular Occultist>Entropic Continuity | Ocular Occultist>Platysaur | Ocular Occultist>Platysaur | Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur | Chamber of Viscidus
+whispersWaits | T10 mana 5 hp 26 vs 25 deck 14
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: Chamber of Viscidus   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Ocular Occultist>Entropic Continuity | Ocular Occultist>Platysaur | Ocular Occultist>Platysaur | Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur | Chamber of Viscidus
+developBeforeBuff | T10 mana 5 hp 26 vs 25 deck 14
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Entropic Continuity
+  chosen: Chamber of Viscidus   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Ocular Occultist>Entropic Continuity | Ocular Occultist>Platysaur | Ocular Occultist>Platysaur | Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur | Chamber of Viscidus
+mustSpendEnd | T10 mana 5 hp 26 vs 25 deck 14
+  hand: Wicked Whispers(1), Ocular Occultist(3), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: END
+  chosen: Chamber of Viscidus   final: Ocular Occultist>Wicked Whispers | Ocular Occultist>Wicked Whispers | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Party Fiend | Ocular Occultist>Chronoclaws | Ocular Occultist>Entropic Continuity | Ocular Occultist>Platysaur | Ocular Occultist>Platysaur | Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur | Chamber of Viscidus
+overdrawWaits | T10 mana 5 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Life Tap
+  chosen: Chronoclaws   final: Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur
+whispersWaits | T10 mana 5 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Wicked Whispers | Wicked Whispers
+  chosen: Chronoclaws   final: Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur
+developBeforeBuff | T10 mana 5 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Entropic Continuity
+  chosen: Chronoclaws   final: Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur
+mustSpendEnd | T10 mana 5 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Chronoclaws(4), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: END
+  chosen: Chronoclaws   final: Walking Dead | Boneweb Egg | Party Fiend | Chronoclaws | Platysaur | Platysaur
+mustSpendEnd | T10 mana 1 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: END
+  chosen: Entropic Continuity   final: Wicked Whispers | Wicked Whispers | Party Fiend | Entropic Continuity | Platysaur | Platysaur
+mustSpend | T10 mana 1 hp 26 vs 25 deck 12
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Entropic Continuity(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Eggundefined/1
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Nemesis Gul'dan>Mastermind Vanessa | Nemesis Gul'dan>Barrens Trapper | Nemesis Gul'dan>Sonya Shadowdancer | Nemesis Gul'dan>Disguised Operator
+  chosen: Entropic Continuity   final: Wicked Whispers | Wicked Whispers | Party Fiend | Entropic Continuity | Platysaur | Platysaur
+weaponFirst | T10 mana 0 hp 26 vs 25 deck 14
+  hand: Wicked Whispers(1), Wicked Whispers(1), Walking Dead(3), Boneweb Egg(2), Party Fiend(1), Platysaur(1), Platysaur(1), Hand of Gul'dan(6)
+  mine: Boneweb Egg1/2
+  foe: Barrens Trapper2/4z, Sonya Shadowdancer2/2z, Disguised Operator1/1z
+  removed: Boneweb Egg>Mastermind Vanessa | Boneweb Egg>Barrens Trapper | Boneweb Egg>Sonya Shadowdancer | Boneweb Egg>Disguised Operator
+  chosen: Nemesis Gul'dan>Mastermind Vanessa   final: END | Nemesis Gul'dan>Mastermind Vanessa | Nemesis Gul'dan>Barrens Trapper | Nemesis Gul'dan>Sonya Shadowdancer | Nemesis Gul'dan>Disguised Operator
+weaponFirst | T7 mana 0 hp 28 vs 22 deck 18
+  hand: Duke of Below(4), Disposable Acolytes(2), Boneweb Egg(2), Disposable Acolytes(2), Hand of Gul'dan(6), Soul Barrage(4), Walking Dead(3)
+  mine: Ocular Occultist3/5, Silverware Golem3/4
+  foe: Soulbound Ashtongue1/1z, Ornery Tortoise3/5
+  removed: Ocular Occultist>Jaina Proudmoore | Ocular Occultist>Soulbound Ashtongue | Ocular Occultist>Ornery Tortoise | Silverware Golem>Jaina Proudmoore | Silverware Golem>Soulbound Ashtongue | Silverware Golem>Ornery Tortoise
+  chosen: Nemesis Gul'dan>Ornery Tortoise   final: END | Nemesis Gul'dan>Jaina Proudmoore | Nemesis Gul'dan>Soulbound Ashtongue | Nemesis Gul'dan>Ornery Tortoise
+splitToFace | T9 mana 5 hp 25 vs 13 deck 14
+  hand: Duke of Below(4), Disposable Acolytes(2), Boneweb Egg(2), Disposable Acolytes(2), Soul Barrage(4), Walking Dead(3), Party Fiend(1), Soul Barrage(4), Wicked Whispers(1), Duke of Below(4)
+  mine: Ocular Occultist3/4, Silverware Golem3/1
+  foe: 
+  removed: Soul Barrage | Soul Barrage
+  chosen: Duke of Below   final: Duke of Below | Walking Dead | Party Fiend | Duke of Below
+buffBeforeTap | T7 mana 2 hp 31 vs 24 deck 18
+  hand: Walking Dead(3), Hand of Gul'dan(6), Wicked Whispers(1)
+  mine: Walking Dead2/3, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2, Party Fiend1/1, Felbeast1/1
+  foe: Ley Walker4/2z
+  removed: Life Tap
+  chosen: Wicked Whispers   final: Wicked Whispers
+developBeforeBuff | T8 mana 2 hp 25 vs 33 deck 17
+  hand: Soul Barrage(4), Wicked Whispers(1), Disposable Acolytes(2), Chronoclaws(4), Silverware Golem(3), Hand of Gul'dan(6), Walking Dead(3), Entropic Continuity(1), Chronoclaws(4), Party Fiend(1)
+  mine: Boneweb Spider2/1
+  foe: Frothing Berserker6/1z, Plated Beetle2/3z, Annoy-o-Tron1/2z
+  removed: Entropic Continuity
+  chosen: Party Fiend   final: Disposable Acolytes | Party Fiend
+setupFirst | T10 mana 1 hp 12 vs 33 deck 18
+  hand: Soul Barrage(4), Wicked Whispers(1), Disposable Acolytes(2), Chronoclaws(4), Silverware Golem(3), Hand of Gul'dan(6), Walking Dead(3)
+  mine: Boneweb Spider3/1, Party Fiend2/2, Felbeast2/2, Duke of Below6/6
+  foe: Frothing Berserker10/1z, Plated Beetle2/1z, Sen'jin Shieldmasta3/5z
+  removed: Boneweb Spider>Sen'jin Shieldmasta | Party Fiend>Sen'jin Shieldmasta | Felbeast>Sen'jin Shieldmasta | Duke of Below>Sen'jin Shieldmasta
+  chosen: Wicked Whispers   final: Wicked Whispers
+occultistPick | T14 mana 7 hp 5 vs 27 deck 6
+  hand: Soul Barrage(4), Silverware Golem(3), Walking Dead(3), Walking Dead(3), Boneweb Egg(2), Duke of Below(4), Soulfire(1), Disposable Acolytes(2), Ocular Occultist(3), Soul Barrage(4)
+  mine: Felbeast3/2, Duke of Below15/6, Sanguine Soldier3/2
+  foe: Ravaging Ghoul3/3z
+  removed: Ocular Occultist>Soul Barrage | Ocular Occultist>Soul Barrage
+  chosen: Duke of Below   final: Duke of Below | Ocular Occultist>Silverware Golem | Ocular Occultist>Walking Dead | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Duke of Below | Ocular Occultist>Soulfire | Ocular Occultist>Disposable Acolytes
+wastedBurn | T14 mana 3 hp 5 vs 27 deck 6
+  hand: Soul Barrage(4), Silverware Golem(3), Walking Dead(3), Walking Dead(3), Boneweb Egg(2), Soulfire(1), Disposable Acolytes(2), Ocular Occultist(3), Soul Barrage(4)
+  mine: Felbeast3/2, Duke of Below15/6, Sanguine Soldier3/2, Duke of Below14/14
+  foe: Ravaging Ghoul3/3z
+  removed: Soulfire>Garrosh Hellscream
+  chosen: Gul'dan>Ravaging Ghoul   final: END | Soulfire>Felbeast | Soulfire>Duke of Below | Soulfire>Sanguine Soldier | Soulfire>Ravaging Ghoul | Soulfire>Duke of Below | Ocular Occultist>Silverware Golem | Ocular Occultist>Walking Dead | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Soulfire | Ocular Occultist>Disposable Acolytes | Gul'dan>Garrosh Hellscream | Gul'dan>Ravaging Ghoul
+occultistPick | T14 mana 3 hp 5 vs 27 deck 6
+  hand: Soul Barrage(4), Silverware Golem(3), Walking Dead(3), Walking Dead(3), Boneweb Egg(2), Soulfire(1), Disposable Acolytes(2), Ocular Occultist(3), Soul Barrage(4)
+  mine: Felbeast3/2, Duke of Below15/6, Sanguine Soldier3/2, Duke of Below14/14
+  foe: Ravaging Ghoul3/3z
+  removed: Ocular Occultist>Soul Barrage | Ocular Occultist>Soul Barrage
+  chosen: Gul'dan>Ravaging Ghoul   final: END | Soulfire>Felbeast | Soulfire>Duke of Below | Soulfire>Sanguine Soldier | Soulfire>Ravaging Ghoul | Soulfire>Duke of Below | Ocular Occultist>Silverware Golem | Ocular Occultist>Walking Dead | Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | Ocular Occultist>Soulfire | Ocular Occultist>Disposable Acolytes | Gul'dan>Garrosh Hellscream | Gul'dan>Ravaging Ghoul
+developBeforeBuff | T5 mana 3 hp 30 vs 28 deck 16
+  hand: Walking Dead(3), Silverware Golem(3), Entropic Continuity(1), Soul Barrage(4), Soul Barrage(4), Party Fiend(1), Chronoclaws(4), Boneweb Egg(2)
+  mine: Boneweb Spider2/1
+  foe: Prize Vendor2/3z
+  removed: Entropic Continuity
+  chosen: Party Fiend   final: Walking Dead | Silverware Golem | Party Fiend | Boneweb Egg
+developBeforeBuff | T7 mana 4 hp 27 vs 26 deck 15
+  hand: Walking Dead(3), Silverware Golem(3), Entropic Continuity(1), Soul Barrage(4), Soul Barrage(4), Chronoclaws(4), Entropic Continuity(1)
+  mine: Felbeast1/1, Party Fiend1/1, Felbeast1/1, Boneweb Eggundefined/2
+  foe: Prize Vendor2/1z, Clumsy Steward2/4z
+  removed: Entropic Continuity | Entropic Continuity
+  chosen: Chronoclaws   final: Walking Dead | Silverware Golem | Chronoclaws
+wastedBurn | T11 mana 6 hp 23 vs 11 deck 4
+  hand: Walking Dead(3), Silverware Golem(3), Entropic Continuity(1), Wicked Whispers(1), Disposable Acolytes(2), Wicked Whispers(1), Soulfire(1), Ocular Occultist(3), Duke of Below(4), Party Fiend(1)
+  mine: Felbeast1/1, Party Fiend1/1, Felbeast1/1, Boneweb Eggundefined/2, Platysaur1/2, Duke of Below18/16, Guardian Augmerchant2/1
+  foe: Prize Vendor2/3z, Prize Vendor2/3z, Gnawing Greenfin2/2z
+  removed: Soulfire>Uther Lightbringer
+  chosen: Soulfire>Prize Vendor   final: Entropic Continuity | Wicked Whispers | Wicked Whispers | Soulfire>Party Fiend | Soulfire>Felbeast | Soulfire>Felbeast | Soulfire>Boneweb Egg | Soulfire>Platysaur | Soulfire>Duke of Below | Soulfire>Guardian Augmerchant | Soulfire>Prize Vendor | Soulfire>Prize Vendor | Soulfire>Gnawing Greenfin
+buffBeforeTap | T11 mana 4 hp 23 vs 11 deck 3
+  hand: Walking Dead(3), Silverware Golem(3), Disposable Acolytes(2), Wicked Whispers(1), Ocular Occultist(3), Duke of Below(4), Walking Dead(3)
+  mine: Felbeast2/2, Party Fiend2/2, Felbeast2/2, Boneweb Egg1/3, Platysaur2/3, Duke of Below23/21, Guardian Augmerchant3/2
+  foe: Prize Vendor2/3z, Gnawing Greenfin2/2z
+  removed: Life Tap
+  chosen: Wicked Whispers   final: Wicked Whispers
+passiveEggCoin | T2 mana 1 hp 30 vs 30 deck 25
+  hand: Wicked Whispers(1), Boneweb Egg(2), Cursed Catacombs(undefined), Duke of Below(4), The Coin(undefined), Soul Barrage(4)
+  mine: 
+  foe: Patches the Pirate1/1z, Patches the Pirate1/1z
+  removed: The Coin
+  chosen: Cursed Catacombs   final: Cursed Catacombs
+passiveEggCoin | T2 mana 1 hp 30 vs 30 deck 25
+  hand: Wicked Whispers(1), Boneweb Egg(2), Cursed Catacombs(undefined), Duke of Below(4), The Coin(undefined), Soul Barrage(4)
+  mine: 
+  foe: Patches the Pirate1/1z, Patches the Pirate1/1z
+  removed: The Coin
+  chosen: Cursed Catacombs   final: Cursed Catacombs
+setupFirst | T6 mana 1 hp 26 vs 30 deck 16
+  hand: Wicked Whispers(1), Boneweb Egg(2), Duke of Below(4), Soul Barrage(4)
+  mine: Silverware Golem3/2, Walking Dead2/5, Boneweb Spider2/1, Boneweb Spider2/1, Platysaur1/2z
+  foe: Patches the Pirate1/1, Patches the Pirate1/1
+  removed: Silverware Golem>Shadow Draka | Silverware Golem>Patches the Pirate | Silverware Golem>Patches the Pirate | Walking Dead>Shadow Draka | Walking Dead>Patches the Pirate | Walking Dead>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate | Boneweb Spider>Shadow Draka | Boneweb Spider>Patches the Pirate | Boneweb Spider>Patches the Pirate
+  chosen: Wicked Whispers   final: Wicked Whispers
+developBeforeBuff | T13 mana 7 hp 21 vs 21 deck 12
+  hand: Barrel of Sludge(3), Party Fiend(1), Ocular Occultist(3), Entropic Continuity(1)
+  mine: Duke of Below16/12
+  foe: Bloated Leechundefined/2z, Hideous Husk3/5z, Bloated Leechundefined/2z
+  removed: Entropic Continuity
+  chosen: Barrel of Sludge   final: Barrel of Sludge | Party Fiend | Ocular Occultist>Barrel of Sludge | Ocular Occultist>Party Fiend | Ocular Occultist>Entropic Continuity | Life Tap
+developBeforeBuff | T13 mana 4 hp 21 vs 21 deck 12
+  hand: Party Fiend(1), Ocular Occultist(3), Entropic Continuity(1)
+  mine: Duke of Below16/12
+  foe: Hideous Husk3/5z, Bloated Leechundefined/2z
+  removed: Entropic Continuity
+  chosen: Ocular Occultist>Party Fiend   final: Party Fiend | Ocular Occultist>Party Fiend | Ocular Occultist>Entropic Continuity | Life Tap
+boardFirstDiscard | T5 mana 3 hp 24 vs 28 deck 23
+  hand: Disposable Acolytes(3), Chamber of Viscidus(3), Party Fiend(1), Ocular Occultist(3), Ocular Occultist(3), Chronoclaws(4)
+  mine: Felbeast1/1
+  foe: Cult Neophyte3/2z
+  removed: Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Party Fiend | Ocular Occultist>Ocular Occultist | Ocular Occultist>Chronoclaws | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Party Fiend | Ocular Occultist>Ocular Occultist | Ocular Occultist>Chronoclaws
+  chosen: Ocular Occultist>Disposable Acolytes   final: Chamber of Viscidus | Ocular Occultist>Disposable Acolytes | Ocular Occultist>Disposable Acolytes | Life Tap
+setupFirst | T9 mana 2 hp 18 vs 24 deck 18
+  hand: Chronoclaws(4), Disposable Acolytes(2), Wicked Whispers(1), Soulfire(1), Platysaur(1)
+  mine: Ocular Occultist3/3, Party Fiend1/1
+  foe: Sketch Artist3/3z, Sizzling Cinder2/1z
+  removed: Ocular Occultist>Gul'dan | Ocular Occultist>Sketch Artist | Ocular Occultist>Sizzling Cinder | Party Fiend>Gul'dan | Party Fiend>Sketch Artist | Party Fiend>Sizzling Cinder
+  chosen: Chamber of Viscidus   final: END | Platysaur | Chamber of Viscidus
+developBeforeBuff | T3 mana 2 hp 30 vs 30 deck 24
+  hand: Disposable Acolytes(2), Wicked Whispers(1), Entropic Continuity(1), Chamber of Viscidus(3), Party Fiend(1)
+  mine: Platysaur1/2
+  foe: 
+  removed: Entropic Continuity
+  chosen: Party Fiend   final: Disposable Acolytes | Party Fiend
+buffBeforeTap | T5 mana 3 hp 26 vs 29 deck 25
+  hand: Disposable Acolytes(2), Wicked Whispers(1), Chamber of Viscidus(3), Soul Barrage(4)
+  mine: Platysaur2/3, Felbeast2/2, Party Fiend2/2, Felbeast2/2
+  foe: 
+  removed: Life Tap
+  chosen: Wicked Whispers   final: Wicked Whispers | Chamber of Viscidus
+setupFirst | T7 mana 1 hp 21 vs 17 deck 22
+  hand: Soul Barrage(4), The Soularium(2), Party Fiend(1)
+  mine: Platysaur3/4, Felbeast3/3, Party Fiend3/3, Felbeast3/3, Runic Egg1/3, Spirit of the Raptor1/4
+  foe: 
+  removed: Platysaur>Winter Queen | Party Fiend>Winter Queen | Felbeast>Winter Queen | Felbeast>Winter Queen | Runic Egg>Winter Queen | Spirit of the Raptor>Winter Queen
+  chosen: Chamber of Viscidus   final: END | Chamber of Viscidus
+setupFirst | T15 mana 6 hp 6 vs 30 deck 14
+  hand: Wicked Whispers(1)
+  mine: Vilefin Inquisitor1/1, Duke of Below14/14, Silverware Golem3/4, Boneweb Spider2/1, Boneweb Spider2/1, Scourge Troll1/3z, Spacerock Collector2/1z
+  foe: 
+  removed: Vilefin Inquisitor>Hakkar the Houndmaster | Duke of Below>Hakkar the Houndmaster | Silverware Golem>Hakkar the Houndmaster | Boneweb Spider>Hakkar the Houndmaster | Boneweb Spider>Hakkar the Houndmaster
+  chosen: Wicked Whispers   final: Wicked Whispers
+passiveEggCoin | T2 mana 1 hp 30 vs 30 deck 25
+  hand: Ocular Occultist(3), Soulfire(1), Chronoclaws(4), Chamber of Viscidus(3), The Coin(undefined), Boneweb Egg(2)
+  mine: 
+  foe: Skeletal Sidekick1/2z
+  removed: The Coin
+  chosen: Soulfire>Skeletal Sidekick   final: END | Soulfire>Skeletal Sidekick
+boardFirstDiscard | T4 mana 3 hp 30 vs 30 deck 23
+  hand: Ocular Occultist(3), Chronoclaws(4), Chamber of Viscidus(3), Silverware Golem(3)
+  mine: Boneweb Spider2/1, Boneweb Spider2/1
+  foe: Battlefield Necromancer2/2z, Risen Footman1/3z
+  removed: Ocular Occultist>Chronoclaws | Ocular Occultist>Chamber of Viscidus
+  chosen: Ocular Occultist>Silverware Golem   final: Ocular Occultist>Silverware Golem | Chamber of Viscidus | Life Tap
+setupFirst | T6 mana 0 hp 30 vs 30 deck 22
+  hand: Chronoclaws(4), Soul Barrage(4)
+  mine: Ocular Occultist3/3, Silverware Golem3/4
+  foe: Battlefield Necromancer2/2, Risen Footman1/3z, Skeletal Sidekick1/2z
+  removed: Ocular Occultist>Risen Footman | Silverware Golem>Risen Footman
+  chosen: Chamber of Viscidus   final: END | Chamber of Viscidus
+buffBeforeTap | T12 mana 6 hp 27 vs 22 deck 11
+  hand: Chronoclaws(4), Soul Barrage(4), Entropic Continuity(1), Boneweb Egg(2), Wicked Whispers(1), Walking Dead(3), Duke of Below(4)
+  mine: Silverware Golem3/2, Duke of Below12/7, Walking Dead2/5, Platysaur1/2
+  foe: Falric2/4z, Battlefield Necromancer2/2z, Risen Footman1/3z
+  removed: Life Tap
+  chosen: Duke of Below   final: Chronoclaws | Soul Barrage | Boneweb Egg | Walking Dead | Duke of Below
+developBeforeBuff | T12 mana 6 hp 27 vs 22 deck 11
+  hand: Chronoclaws(4), Soul Barrage(4), Entropic Continuity(1), Boneweb Egg(2), Wicked Whispers(1), Walking Dead(3), Duke of Below(4)
+  mine: Silverware Golem3/2, Duke of Below12/7, Walking Dead2/5, Platysaur1/2
+  foe: Falric2/4z, Battlefield Necromancer2/2z, Risen Footman1/3z
+  removed: Entropic Continuity
+  chosen: Duke of Below   final: Chronoclaws | Soul Barrage | Boneweb Egg | Walking Dead | Duke of Below
+setupFirst | T12 mana 1 hp 27 vs 22 deck 13
+  hand: Chronoclaws(4), Soul Barrage(4), Boneweb Egg(2), Wicked Whispers(1), Walking Dead(3)
+  mine: Silverware Golem4/3, Duke of Below13/8, Walking Dead3/6, Platysaur2/3, Duke of Below13/13
+  foe: Falric2/4z, Battlefield Necromancer2/2z, Risen Footman1/3z
+  removed: Gul'dan>Risen Footman
+  chosen: Wicked Whispers   final: Wicked Whispers | Gul'dan>Risen Footman
+passiveEggCoin | T2 mana 1 hp 30 vs 40 deck 25
+  hand: Entropic Continuity(1), Party Fiend(1), Boneweb Egg(2), Soul Barrage(4), The Coin(undefined), Party Fiend(1)
+  mine: 
+  foe: Pharaoh Cat1/2z
+  removed: The Coin
+  chosen: Party Fiend   final: Party Fiend | Party Fiend
+buffBeforeTap | T6 mana 3 hp 22 vs 37 deck 21
+  hand: Entropic Continuity(1), Soul Barrage(4), Disposable Acolytes(2), Ocular Occultist(3)
+  mine: Party Fiend1/1, Party Fiend1/1, Felbeast1/1, Boneweb Spider2/1, Boneweb Eggundefined/2
+  foe: Dirty Rat2/6z
+  removed: Life Tap
+  chosen: Ocular Occultist>Soul Barrage   final: Entropic Continuity | Ocular Occultist>Entropic Continuity | Ocular Occultist>Disposable Acolytes
+occultistPick | T7 mana 4 hp 26 vs 40 deck 21
+  hand: Walking Dead(3), Ocular Occultist(3), Ocular Occultist(3), Duke of Below(4), Chronoclaws(4), Boneweb Egg(2), Soul Barrage(4)
+  mine: Cryofrozen Champion3/2, Cogmaster2/3
+  foe: 
+  removed: Ocular Occultist>Soul Barrage | Ocular Occultist>Soul Barrage
+  chosen: Duke of Below   final: Ocular Occultist>Walking Dead | Ocular Occultist>Ocular Occultist | Ocular Occultist>Duke of Below | Ocular Occultist>Chronoclaws | Ocular Occultist>Boneweb Egg | Ocular Occultist>Walking Dead | Ocular Occultist>Ocular Occultist | Ocular Occultist>Duke of Below | Ocular Occultist>Chronoclaws | Ocular Occultist>Boneweb Egg | Duke of Below | Chronoclaws
+occultistPick | T9 mana 5 hp 26 vs 35 deck 20
+  hand: Walking Dead(3), Ocular Occultist(3), Ocular Occultist(3), Chronoclaws(4), Boneweb Egg(2), Soul Barrage(4), Chamber of Viscidus(3)
+  mine: Cryofrozen Champion3/2, Cogmaster2/3
+  foe: 
+  removed: Ocular Occultist>Soul Barrage | Ocular Occultist>Soul Barrage
+  chosen: Cryofrozen Champion>Yogg-Ramen   final: END | Ocular Occultist>Walking Dead | Ocular Occultist>Ocular Occultist | Ocular Occultist>Chronoclaws | Ocular Occultist>Boneweb Egg | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Walking Dead | Ocular Occultist>Ocular Occultist | Ocular Occultist>Chronoclaws | Ocular Occultist>Boneweb Egg | Ocular Occultist>Chamber of Viscidus | Chronoclaws | Chamber of Viscidus | Life Tap | Cryofrozen Champion>Yogg-Ramen | Cogmaster>Yogg-Ramen
+developBeforeBuff | T15 mana 8 hp 24 vs 12 deck 5
+  hand: Boneweb Egg(2), Elder Nadox(4), Entropic Continuity(1), Boneweb Egg(2), Party Fiend(1), Silverware Golem(3), The Soularium(2), Duke of Below(4), Party Fiend(1), Soul Barrage(4)
+  mine: Cogmaster2/2, Walking Dead2/5, Platysaur1/2, Walking Dead2/5
+  foe: Varden Dawngrasp3/3z
+  removed: Entropic Continuity
+  chosen: Duke of Below   final: Elder Nadox>Walking Dead | Elder Nadox>Walking Dead | Silverware Golem | Duke of Below | Soul Barrage
+boardFirstDiscard | T6 mana 3 hp 23 vs 30 deck 23
+  hand: Walking Dead(3), Ocular Occultist(3), The Coin(undefined), Boneweb Egg(2), Chamber of Viscidus(3), Cursed Catacombs(undefined)
+  mine: Party Fiend1/1, Hot Air Balloon1/3
+  foe: Voodoo Doctor2/1z
+  removed: Ocular Occultist>The Coin | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Cursed Catacombs
+  chosen: Ocular Occultist>Boneweb Egg   final: Ocular Occultist>Walking Dead | Ocular Occultist>Boneweb Egg | The Coin | Chamber of Viscidus | Cursed Catacombs | Life Tap
+boardFirstDiscard | T6 mana 3 hp 30 vs 28 deck 22
+  hand: Ocular Occultist(3), Walking Dead(3), Ocular Occultist(3), Silverware Golem(3), Hand of Gul'dan(6)
+  mine: Boneweb Spider2/1, Boneweb Spider2/1
+  foe: 
+  removed: Ocular Occultist>Ocular Occultist | Ocular Occultist>Hand of Gul'dan | Ocular Occultist>Ocular Occultist | Ocular Occultist>Hand of Gul'dan
+  chosen: Boneweb Spider>Illidan Stormrage   final: END | Ocular Occultist>Walking Dead | Ocular Occultist>Silverware Golem | Ocular Occultist>Walking Dead | Ocular Occultist>Silverware Golem | Life Tap | Boneweb Spider>Illidan Stormrage | Boneweb Spider>Illidan Stormrage
+boardFirstDiscard | T4 mana 3 hp 30 vs 30 deck 23
+  hand: Ocular Occultist(3), Ocular Occultist(3), Chamber of Viscidus(3), Chronoclaws(4), Soul Barrage(4), Silverware Golem(3)
+  mine: Platysaur1/2
+  foe: Lunarwing Messenger3/2z
+  removed: Ocular Occultist>Ocular Occultist | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Chronoclaws | Ocular Occultist>Ocular Occultist | Ocular Occultist>Chamber of Viscidus | Ocular Occultist>Chronoclaws
+  chosen: Ocular Occultist>Silverware Golem   final: END | Ocular Occultist>Silverware Golem | Ocular Occultist>Silverware Golem | Chamber of Viscidus | Life Tap | Platysaur>Prophet Velen | Platysaur>Lunarwing Messenger
+boardFirstDiscard | T5 mana 3 hp 30 vs 25 deck 22
+  hand: Silverware Golem(3), Anduin's Gift(1), Ocular Occultist(3), Boneweb Egg(2)
+  mine: Platysaur2/2, Platysaur2/3
+  foe: 
+  removed: Ocular Occultist>Anduin's Gift
+  chosen: Ocular Occultist>Boneweb Egg   final: Anduin's Gift | Ocular Occultist>Silverware Golem | Ocular Occultist>Boneweb Egg | Life Tap

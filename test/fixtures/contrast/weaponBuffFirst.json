@@ -1,0 +1,394 @@
+{
+ "source": {
+  "file": "ranked-2026-10-02T18-07-53-110Z/game-0018-decisions.jsonl",
+  "createdAt": "2026-10-02T20:07:06.196Z"
+ },
+ "state": {
+  "gameNumber": 18,
+  "turn": 9,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 5,
+   "maxMana": 5,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 22,
+   "board": [
+    {
+     "entityId": 70,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 71,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 106,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 67,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 4,
+     "DAMAGE": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0,
+     "RUSH": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 59,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 52,
+     "cardId": "EX1_308",
+     "name": "Soulfire",
+     "text": "[x]Deal $4 damage.\nDiscard a random card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 48,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 57,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "PALADIN",
+   "mana": 0,
+   "maxMana": 4,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 32,
+   "board": [
+    {
+     "entityId": 68,
+     "cardId": "HERO_04",
+     "name": "Uther Lightbringer",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 83,
+     "cardId": "HERO_04bp2",
+     "name": "The Silver Hand",
+     "text": "<b>Hero Power</b>\nSummon two {0} Recruits.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 130,
+     "cardId": "CS2_091",
+     "name": "Light's Justice",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 4,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 4,
+     "DAMAGE": 1,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 121,
+     "cardId": "CS2_101t5",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 124,
+     "cardId": "CS2_101t5",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 127,
+     "cardId": "CS2_101t8",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 132,
+     "cardId": "CS2_101t8",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 135,
+     "cardId": "CS2_101t",
+     "name": "Silver Hand Recruit",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 1,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 34,
+     "cardId": "SCH_312",
+     "name": "Tour Guide",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "<b>Battlecry:</b> Your next Hero Power costs (0)."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 79,
+     "cardId": "MEND_800",
+     "name": "Brash Battlemaster",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 1,
+     "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 80,
+     "cardId": "MEND_800",
+     "name": "Brash Battlemaster",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 1,
+     "text": "[x]<b>Rush</b>\n <b>Deathrattle:</b> Give your\nSilver Hand Recruits\n+1 Attack this game."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 6,
+     "cardId": "UNG_960",
+     "name": "Lost in the Jungle",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Summon two {0} Silver Hand Recruits."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 7,
+     "cardId": "CORE_GVG_061",
+     "name": "Muster for Battle",
+     "CARDTYPE": "SPELL",
+     "COST": 3,
+     "text": "Summon three {0} Silver Hand Recruits. Equip a 1/4 Weapon."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 82,
+     "cardId": "GAME_005",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    }
+   ]
+  },
+  "optionsId": 30,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    46
+   ],
+   "complete": true
+  },
+  "fingerprint": "e1eaa6c9a049a27b5233",
+  "decisionFingerprint": "55e1f0525e572f9e49f1"
+ },
+ "options": [
+  {
+   "option": 1,
+   "entityId": 59,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t2",
+   "targetId": 106
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t3",
+   "targetId": 67
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t4",
+   "targetId": 121
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t5",
+   "targetId": 124
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t6",
+   "targetId": 127
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t7",
+   "targetId": 132
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2t8",
+   "targetId": 135
+  },
+  {
+   "option": 4,
+   "entityId": 57,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 71,
+   "type": "POWER",
+   "id": "o5"
+  }
+ ],
+ "chosen": "o4"
+}

@@ -1,0 +1,187 @@
+{
+ "source": {
+  "file": "ranked-2026-10-01T12-42-04-012Z/game-0011-decisions.jsonl",
+  "createdAt": "2026-10-01T14:12:31.722Z"
+ },
+ "state": {
+  "gameNumber": 11,
+  "turn": 2,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 1,
+   "maxMana": 1,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 24,
+   "board": [
+    {
+     "entityId": 76,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 77,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 61,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 57,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 70,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 46,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 49,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 55,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "doomed": true
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "MAGE",
+   "mana": 1,
+   "maxMana": 1,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 36,
+   "board": [
+    {
+     "entityId": 74,
+     "cardId": "HERO_08af",
+     "name": "Witch Jaina",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 75,
+     "cardId": "HERO_08fbp",
+     "name": "Fireblast",
+     "text": "<b>Hero Power</b>\nDeal $1 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ]
+  },
+  "optionsId": 4,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    57,
+    61
+   ],
+   "complete": true
+  },
+  "fingerprint": "1fc7ba1a3a75a5ff5fd6",
+  "decisionFingerprint": "e377a71f03fb999c5d89"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 49,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 55,
+   "type": "POWER",
+   "id": "o2"
+  }
+ ],
+ "chosen": "o2"
+}

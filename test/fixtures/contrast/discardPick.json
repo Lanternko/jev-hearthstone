@@ -1,0 +1,248 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-25T10:17:40.281Z"
+ },
+ "state": {
+  "gameNumber": 7,
+  "turn": 5,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "mana": 0,
+   "maxMana": 3,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 5,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 15,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 20,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "LOCATION"
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 18,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 11,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 6,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 26,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 19,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION"
+    }
+   ]
+  },
+  "opponent": {
+   "playerId": 2,
+   "mana": 0,
+   "maxMana": 2,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 7,
+   "deckCount": 21,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07e",
+     "name": "Felheart Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 7,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ]
+  },
+  "optionsId": 14,
+  "choice": {
+   "id": 3,
+   "playerId": 1,
+   "type": "GENERAL",
+   "min": 1,
+   "max": 1,
+   "entities": [
+    {
+     "entityId": 85,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 88,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 91,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "revision": 54938,
+   "sourceId": 20,
+   "source": {
+    "entityId": 20,
+    "cardId": "WON_103",
+    "name": "Chamber of Viscidus",
+    "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+    "baseCost": 3,
+    "baseHealth": 2,
+    "COST": 3,
+    "HEALTH": 2,
+    "ZONE_POSITION": 2,
+    "CARDTYPE": "LOCATION"
+   }
+  },
+  "fingerprint": "f601b5861a9450a2077d",
+  "decisionFingerprint": "c083d37ef1b9b6c187e3"
+ },
+ "options": [
+  {
+   "id": "c3e85",
+   "type": "CHOICE",
+   "choiceId": 3,
+   "entityId": 85
+  },
+  {
+   "id": "c3e88",
+   "type": "CHOICE",
+   "choiceId": 3,
+   "entityId": 88
+  },
+  {
+   "id": "c3e91",
+   "type": "CHOICE",
+   "choiceId": 3,
+   "entityId": 91
+  }
+ ],
+ "chosen": "c3e88"
+}

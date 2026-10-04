@@ -1,0 +1,305 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-25T10:53:33.365Z"
+ },
+ "state": {
+  "gameNumber": 9,
+  "turn": 12,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "mana": 6,
+   "maxMana": 6,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 10,
+   "deckCount": 10,
+   "board": [
+    {
+     "entityId": 77,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 15,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 78,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 19,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 9,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 17,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 12,
+     "HEALTH": 12,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 31,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 125,
+     "cardId": "TSC_955t",
+     "name": "Abyssal Curse",
+     "text": "[x]At the start of your turn,\ntake {0} damage. Each Curse\nis worse than the last.\n<i>({1} turn remaining).</i>",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 13,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 4,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 8,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 7,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 5,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 8,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 18,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 9,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 25,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 12,
+     "HEALTH": 12,
+     "ZONE_POSITION": 10,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    }
+   ]
+  },
+  "opponent": {
+   "playerId": 2,
+   "mana": 0,
+   "maxMana": 6,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 31,
+   "board": [
+    {
+     "entityId": 47,
+     "cardId": "SW_003",
+     "name": "Runed Mithril Rod",
+     "text": "[x]After you draw 4 cards,\nreduce the Cost of cards\nin your hand by (1).\nLose 1 Durability.",
+     "baseCost": 5,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 5,
+     "HEALTH": 2,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 79,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "DAMAGE": 19,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 80,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ]
+  },
+  "optionsId": 39,
+  "fingerprint": "8ba4bb4d0f4d0cdab826",
+  "decisionFingerprint": "3c8f779fbbd0c26b05bc"
+ },
+ "options": [
+  {
+   "option": 2,
+   "entityId": 17,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 31,
+   "type": "POWER",
+   "id": "o3"
+  },
+  {
+   "option": 4,
+   "entityId": 125,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 13,
+   "type": "POWER",
+   "id": "o5"
+  },
+  {
+   "option": 6,
+   "entityId": 4,
+   "type": "POWER",
+   "id": "o6"
+  },
+  {
+   "option": 7,
+   "entityId": 8,
+   "type": "POWER",
+   "id": "o7"
+  },
+  {
+   "option": 8,
+   "entityId": 5,
+   "type": "POWER",
+   "id": "o8"
+  },
+  {
+   "option": 9,
+   "entityId": 18,
+   "type": "POWER",
+   "id": "o9"
+  },
+  {
+   "option": 10,
+   "entityId": 25,
+   "type": "POWER",
+   "id": "o10"
+  },
+  {
+   "option": 11,
+   "entityId": 78,
+   "type": "POWER",
+   "id": "o11"
+  }
+ ],
+ "chosen": "o2"
+}

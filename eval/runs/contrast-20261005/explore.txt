@@ -1,0 +1,30 @@
+boardFirstDiscard: removed o3t1,o3t2 | variant keeps o3t1,o3t2 | rule still no | chosen o3t0 in pos true var true | vetoes 
+bodyBeforeBuff: removed o1 | variant keeps o1 | rule still no | chosen o3 in pos true var true | vetoes suicide:o4t0,suicide:o4t1,drawKills:o5
+castBeforeSwing: removed o3t0,o3t1 | variant keeps o3t0,o3t1 | rule still no | chosen o2 in pos true var false | vetoes 
+deferHardCast: removed o1 | variant keeps o1 | rule still no | chosen o1 in pos false var true | vetoes 
+developBeforeBuff: removed o2 | variant keeps o2 | rule still no | chosen o2 in pos false var true | vetoes 
+freezeThreatFirst: removed o2t0 | variant keeps o2t0 | rule still no | chosen o1 in pos true var true | vetoes 
+overdrawWaits: removed o11 | variant keeps o11 | rule still no | chosen o2 in pos true var true | vetoes 
+overflowWaits: removed o3 | variant keeps o3 | rule still no | chosen o5t1 in pos true var false | vetoes 
+passiveEggCoin: removed o2 | variant keeps o2 | rule still no | chosen o3 in pos true var true | vetoes 
+pricedOut: removed o3 | variant keeps o3 | rule still no | chosen o2 in pos true var true | vetoes 
+setupFirst: removed o1t0,o1t1 | variant keeps o1t0,o1t1 | rule still no | chosen o0 in pos true var true | vetoes 
+wastedBurn: removed o3t0 | variant keeps o3t0 | rule still no | chosen o1 in pos true var true | vetoes burnOwnHero:o3t1
+weaponBuffFirst: removed o4 | variant keeps o4 | rule still no | chosen o4 in pos false var true | vetoes boardLethalTap:o5
+weaponFirst: removed o3t0,o3t1,o3t2,o3t3,o3t4 | variant keeps o3t0,o3t1,o3t2,o3t3,o3t4 | rule still no | chosen o1t1 in pos true var true | vetoes 
+whispersEatsPlayable: removed o1 | variant keeps - | rule still no | chosen o3 in pos true var true | vetoes 
+whispersWorthCasting: removed o0 | variant keeps o0 | rule still no | chosen o1 in pos true var true | vetoes suicide:o4t0,suicide:o4t1,drawKills:o5
+buffBeforeTap: removed o4 | variant keeps - | rule still o4 | chosen o3 in pos true var true | vetoes 
+buffBeforeTap2: removed o4 | variant keeps - | rule still no | chosen o3 in pos true var true | vetoes 
+counterFirst: removed o5t2,o5t3,o5t4,o5t5 | variant keeps o5t2,o5t3,o5t4,o5t5 | rule still no | chosen o5t5 in pos false var true | vetoes burnOwnHero:o5t1
+deadWhispers: removed o3 | variant keeps o3 | rule still no | chosen o1t1 in pos true var true | vetoes burnOwnHero:o1t0
+discardPick: removed c3e88,c3e91 | variant keeps c3e88 | rule still c3e85,c3e91 | chosen c3e88 in pos false var true | vetoes 
+occultistPick: removed o2t2 | variant keeps o2t2 | rule still no | chosen o2t2 in pos false var true | vetoes 
+saferCopies: removed o1 | variant keeps o1 | rule still no | chosen o1 in pos false var true | vetoes 
+splitToFace: removed o1 | variant keeps o1 | rule still no | chosen o3 in pos true var true | vetoes 
+mustSpend: removed o4t0 | variant keeps o4t0 | rule still no | chosen o2 in pos true var true | vetoes 
+mustSpendEnd: removed o0 | variant keeps o0 | rule still no | chosen o2 in pos true var true | vetoes 
+newBodyBuffWaits: removed o1 | variant keeps o1 | rule still no | chosen o2 in pos true var true | vetoes 
+tapOnlyEnd: removed o0 | variant keeps o0 | rule still no | chosen o1 in pos true var true | vetoes 
+wastedFodder: removed o1,o4 | variant keeps o1 | rule still no | chosen o3t0 in pos true var false | vetoes 
+whispersWaits: removed o2 | variant keeps - | rule still no | chosen o5t0 in pos true var true | vetoes 

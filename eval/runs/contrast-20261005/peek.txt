@@ -1,0 +1,79 @@
+## buffBeforeTap T3 mana 2 deck 24
+ hand: Wicked Whispers#5(1), Disposable Acolytes#24(2), Entropic Continuity#23(1)
+ mine: Gul'dan#80[H/30-3], Life Tap#81[H/], Felbeast#101[M1/1], Party Fiend#29[M1/1], Felbeast#100[M1/1], Walking Dead#102[M2/5]
+ foe: Stormpike Expedition Tavish#82[H/40], Steady Shot#83[H/], Sidewinder#105[M1/1], Sidewinder#106[M1/1]
+ opts: o0:END_TURN o1:POWER5 o2:POWER24 o3:POWER23 o4:POWER81 o5t0:POWER29>82 o6t0:POWER100>82 o7t0:POWER101>82 o8t0:POWER102>82
+ chosen: "o3"  prefs: [{"rule":"whispersEatsPlayable","removed":["o1"]},{"rule":"buffBeforeTap","removed":["o4"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o6t0","o7t0","o8t0"]}]  final: o2 o3
+## counterFirst T9 mana 5 deck 18
+ hand: Soul Barrage#50(4), Duke of Below#63(4), Silverware Golem#51(3), Soul Barrage#77(4), Soulfire#49(1), The Soularium#68(2)
+ mine: Chronoclaws#48[W4/3-1], Gul'dan#80[H4/30-2], Life Tap#81[H/], Platysaur#75[M2/3], Shivering Sorceress#101[M2/2], Rangari Scout#102[M1/2]
+ foe: Thassarian Arthas#78[H/40-11], Ghoul Charge#79[H/], Eliza Goreblade#24[M4/3]
+ opts: o1:POWER50 o2:POWER63 o3:POWER51 o4:POWER77 o5t1:POWER49>80 o5t2:POWER49>75 o5t3:POWER49>101 o5t4:POWER49>102 o5t5:POWER49>24 o6:POWER68
+ chosen: "o5t5"  prefs: [{"rule":"counterFirst","removed":["o5t2","o5t3","o5t4","o5t5"]}]  final: o1 o2 o3 o4 o6
+## deadWhispers T1 mana 1 deck 26
+ hand: Chamber of Viscidus#4(3), Soulfire#23(1), Entropic Continuity#25(1), Wicked Whispers#20(1)
+ mine: Gul'dan#72[H/30], Life Tap#73[H/]
+ foe: King Bone Krusher#74[H/30], Ghoul Charge#75[H/]
+ opts: o0:END_TURN o1t0:POWER23>72 o1t1:POWER23>74 o2:POWER25 o3:POWER20
+ chosen: "o1t1"  prefs: [{"rule":"deadWhispers","removed":["o3"]}]  final: o0 o1t1
+## discardPick T5 mana 0 deck 23
+ hand: Walking Dead#18(3), Soul Barrage#11(4), Duke of Below#6(4), Soul Barrage#26(4), Platysaur#19(1)
+ mine: Nemesis Gul'dan#64[H/30-5], Life Tap#65[H/], Party Fiend#15[M1/1], Chamber of Viscidus#20[L/2]
+ foe: Felheart Gul'dan#66[H/30-7], Life Tap#67[H/]
+ choice: Chamber of Viscidus Walking Dead#85, Soul Barrage#88, Platysaur#91
+ opts: c3e85:CHOICE85 c3e88:CHOICE88 c3e91:CHOICE91
+ chosen: "c3e88"  prefs: [{"rule":"discardPick","removed":["c3e88","c3e91"]}]  final: c3e85
+## occultistPick T8 mana 4 deck 18
+ hand: Walking Dead#61(3), Ocular Occultist#36(3), Silverware Golem#57(3), Soul Barrage#35(4), Party Fiend#44(1), Entropic Continuity#52(1)
+ mine: Gul'dan#66[H/30-2], Life Tap#67[H/], Platysaur#46[M2/3-2], Boneweb Egg#54[M1/3], Gullible Guard#95[M2/4-2], Pharaoh Cat#96[M2/3]
+ foe: Ragnaros the Firelord#64[H/30-2], Armor Up!#65[H/], Cannoneer#102[M1/1], Cannoneer#103[M1/1]
+ opts: o2t0:POWER36>61 o2t2:POWER36>35 o2t3:POWER36>44 o2t4:POWER36>52 o5:POWER44 o6:POWER52 o7:POWER67
+ chosen: "o2t2"  prefs: [{"rule":"occultistPick","removed":["o2t2"]},{"rule":"buffBeforeTap","removed":["o7"]},{"rule":"developBeforeBuff","removed":["o6"]}]  final: o2t0 o2t3 o2t4 o5
+## saferCopies T3 mana 2 deck 24
+ hand: Disposable Acolytes#41(3), The Soularium#60(3), Boneweb Egg#39(2), Boneweb Egg#52(2), Entropic Continuity#48(2)
+ mine: Nemesis Gul'dan#66[H/30], Life Tap#67[H/], Platysaur#57[M1/2]
+ foe: The Lich King#64[H/30], Ghoul Charge#65[H/], Cult Neophyte#31[M3/2]
+ opts: o1:POWER39 o2:POWER52
+ chosen: "o1"  prefs: [{"rule":"saferCopies","removed":["o1"]}]  final: o2
+## splitToFace T7 mana 4 deck 22
+ hand: Soul Barrage#50(4), Duke of Below#63(4), Hand of Gul'dan#61(6), Chronoclaws#48(4)
+ mine: Gul'dan#80[H/30-2], Life Tap#81[H/], Platysaur#75[M2/3], Shivering Sorceress#101[M2/2], Rangari Scout#102[M1/2]
+ foe: Thassarian Arthas#78[H/40-2], Ghoul Charge#79[H/]
+ opts: o1:POWER50 o2:POWER63 o3:POWER48
+ chosen: "o3"  prefs: [{"rule":"splitToFace","removed":["o1"]}]  final: o2 o3
+## mustSpend T4 mana 2 deck 23
+ hand: Disposable Acolytes#10(2), Duke of Below#19(4), Chamber of Viscidus#24(3), The Coin#70(undefined), Ocular Occultist#22(3), Walking Dead#15(3)
+ mine: Gul'dan#66[H/30], Life Tap#67[H/], Walking Dead#86[M2/5]
+ foe: Yogg-Ramen#68[H/30], Fireblast#69[H/]
+ opts: o0:END_TURN o1:POWER10 o2:POWER70 o3:POWER67 o4t0:POWER86>68
+ chosen: "o2"  prefs: [{"rule":"pricedOut","removed":["o3"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o4t0"]}]  final: o1 o2
+## mustSpendEnd T4 mana 2 deck 23
+ hand: Disposable Acolytes#10(2), Duke of Below#19(4), Chamber of Viscidus#24(3), The Coin#70(undefined), Ocular Occultist#22(3), Walking Dead#15(3)
+ mine: Gul'dan#66[H/30], Life Tap#67[H/], Walking Dead#86[M2/5]
+ foe: Yogg-Ramen#68[H/30], Fireblast#69[H/]
+ opts: o0:END_TURN o1:POWER10 o2:POWER70 o3:POWER67 o4t0:POWER86>68
+ chosen: "o2"  prefs: [{"rule":"pricedOut","removed":["o3"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o4t0"]}]  final: o1 o2
+## newBodyBuffWaits T2 mana 1 deck 24
+ hand: Walking Dead#57(3), Chronoclaws#70(4), Boneweb Egg#46(2), Entropic Continuity#49(1), Platysaur#55(1)
+ mine: Nemesis Gul'dan#76[H/30], Life Tap#77[H/], Platysaur#61[M1/2z]
+ foe: Witch Jaina#74[H/40], Fireblast#75[H/]
+ opts: o0:END_TURN o1:POWER49 o2:POWER55
+ chosen: "o2"  prefs: [{"rule":"newBodyBuffWaits","removed":["o1"]}]  final: o0 o2
+## tapOnlyEnd T6 mana 2 deck 22
+ hand: Duke of Below#19(4), Walking Dead#15(3)
+ mine: Gul'dan#66[H/30], Life Tap#67[H/], Walking Dead#86[M2/5z], Ocular Occultist#22[M3/6z], Toxfin#89[M1/2z]
+ foe: Yogg-Ramen#68[H/30-12], Fireblast#69[H/]
+ opts: o0:END_TURN o1:POWER67
+ chosen: "o1"  prefs: [{"rule":"tapOnlyEnd","removed":["o0"]}]  final: o1
+## wastedFodder T4 mana 3 deck 23
+ hand: Disposable Acolytes#10(2), Duke of Below#19(4), Chamber of Viscidus#24(3), Ocular Occultist#22(3), Walking Dead#15(3)
+ mine: Gul'dan#66[H/30], Life Tap#67[H/], Walking Dead#86[M2/5]
+ foe: Yogg-Ramen#68[H/30], Fireblast#69[H/]
+ opts: o0:END_TURN o1:POWER10 o2:POWER24 o3t0:POWER22>10 o3t1:POWER22>24 o3t2:POWER22>19 o3t3:POWER22>15 o4:POWER15 o5:POWER67 o6t0:POWER86>68
+ chosen: "o3t0"  prefs: [{"rule":"wastedFodder","removed":["o1","o4"]},{"rule":"boardFirstDiscard","removed":["o3t1","o3t2"]}]  final: o0 o2 o3t0 o3t3 o5 o6t0
+## whispersWaits T3 mana 2 deck 23
+ hand: Walking Dead#52(3), Hand of Gul'dan#44(6), Platysaur#57(1), Wicked Whispers#40(1)
+ mine: Gul'dan#66[H/30], Life Tap#67[H/], Platysaur#63[M1/2], Frequency Oscillator#84[M2/1], Sanguine Reveler#85[M1/1]
+ foe: The Lich King#64[H/30], Ghoul Charge#65[H/], Murmy#27[M3/1], Skeletal Sidekick#28[M1/2]
+ opts: o0:END_TURN o1:POWER57 o2:POWER40 o3:POWER67 o4t0:POWER63>64 o4t1:POWER63>27 o4t2:POWER63>28 o5t0:POWER84>64 o5t1:POWER84>27 o5t2:POWER84>28 o6t0:POWER85>64 o6t1:POWER85>27 o6t2:POWER85>28
+ chosen: "o5t0"  prefs: [{"rule":"whispersWaits","removed":["o2"]},{"rule":"pricedOut","removed":["o3"]}]  final: o0 o1 o4t0 o4t1 o4t2 o5t0 o5t1 o5t2 o6t0 o6t1 o6t2

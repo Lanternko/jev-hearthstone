@@ -1,0 +1,212 @@
+{
+ "source": {
+  "file": "ranked-2026-10-02T18-07-53-110Z/game-0005-decisions.jsonl",
+  "createdAt": "2026-10-02T18:37:47.758Z"
+ },
+ "state": {
+  "gameNumber": 5,
+  "turn": 3,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 2,
+   "maxMana": 2,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 24,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 57,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 41,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 60,
+     "cardId": "BOT_568",
+     "name": "The Soularium",
+     "text": "Draw 3 cards.\nThey are <b>Temporary</b>.",
+     "baseCost": 2,
+     "COST": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 39,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 52,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "doomed": true
+    },
+    {
+     "entityId": 48,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 1,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 25,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_11",
+     "name": "The Lich King",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_11bp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 31,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "text": "<b>Battlecry:</b> Your opponent's spells cost (1) more next turn.",
+     "baseCost": 2,
+     "baseAttack": 3,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 68,
+     "cardId": "GAME_005",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 31,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Your opponent's spells cost (1) more next turn."
+    }
+   ]
+  },
+  "optionsId": 6,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    57
+   ],
+   "complete": true
+  },
+  "fingerprint": "82316e867e1e29c9dd82",
+  "decisionFingerprint": "3877dcceb2cd15f55eab"
+ },
+ "options": [
+  {
+   "option": 1,
+   "entityId": 39,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o2"
+  }
+ ],
+ "chosen": "o1"
+}

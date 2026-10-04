@@ -1,0 +1,301 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-26T07:38:14.736Z"
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 8,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "mana": 4,
+   "maxMana": 4,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 18,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 46,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 3,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 54,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 95,
+     "cardId": "JAIL_703",
+     "name": "Gullible Guard",
+     "text": "<b>Deathrattle:</b> You can say Sorry this game.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 4,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 96,
+     "cardId": "ULD_186",
+     "name": "Pharaoh Cat",
+     "text": "<b>Battlecry:</b> Add a random <b>Reborn</b> minion to your hand.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 3,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 61,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 36,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 57,
+     "cardId": "KAR_205",
+     "name": "Silverware Golem",
+     "text": "If you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "doomed": true
+    },
+    {
+     "entityId": 35,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 44,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 52,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "mana": 0,
+   "maxMana": 4,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 7,
+   "deckCount": 26,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_01bb",
+     "name": "Ragnaros the Firelord",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "ARMOR": 1,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_01bbhp",
+     "name": "Armor Up!",
+     "text": "<b>Hero Power</b>\nGain $d2 Armor.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 102,
+     "cardId": "CAP_107t",
+     "name": "Cannoneer",
+     "text": "[x]At the end of your turn,\ndeal 1 damage to a\nrandom enemy.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 103,
+     "cardId": "CAP_107t",
+     "name": "Cannoneer",
+     "text": "[x]At the end of your turn,\ndeal 1 damage to a\nrandom enemy.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ]
+  },
+  "optionsId": 23,
+  "fingerprint": "94f9f004941513643d1e",
+  "decisionFingerprint": "7570d269f7683e6b1822"
+ },
+ "options": [
+  {
+   "option": 2,
+   "entityId": 36,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 61
+  },
+  {
+   "option": 2,
+   "entityId": 36,
+   "type": "POWER",
+   "id": "o2t2",
+   "targetId": 35
+  },
+  {
+   "option": 2,
+   "entityId": 36,
+   "type": "POWER",
+   "id": "o2t3",
+   "targetId": 44
+  },
+  {
+   "option": 2,
+   "entityId": 36,
+   "type": "POWER",
+   "id": "o2t4",
+   "targetId": 52
+  },
+  {
+   "option": 5,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o5"
+  },
+  {
+   "option": 6,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o6"
+  },
+  {
+   "option": 7,
+   "entityId": 67,
+   "type": "POWER",
+   "id": "o7"
+  }
+ ],
+ "chosen": "o2t2"
+}

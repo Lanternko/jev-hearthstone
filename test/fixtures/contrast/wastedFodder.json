@@ -1,0 +1,250 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T17-42-01-535Z/game-0001-decisions.jsonl",
+  "createdAt": "2026-10-03T17:43:33.680Z"
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 4,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 3,
+   "maxMana": 2,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 86,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 10,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 19,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 24,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "LOCATION"
+    },
+    {
+     "entityId": 22,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 15,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "MAGE",
+   "mana": 0,
+   "maxMana": 2,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 25,
+   "board": [
+    {
+     "entityId": 68,
+     "cardId": "HERO_08de",
+     "name": "Yogg-Ramen",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 69,
+     "cardId": "HERO_08fbp",
+     "name": "Fireblast",
+     "text": "<b>Hero Power</b>\nDeal $1 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 3,
+     "entityId": 59,
+     "cardId": "AV_212",
+     "name": "Siphon Mana",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $2 damage.\n<b>Honorable Kill</b>: Reduce the Cost of spells in your hand by (1)."
+    }
+   ]
+  },
+  "optionsId": 7,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    10,
+    17,
+    24
+   ],
+   "complete": true
+  },
+  "fingerprint": "3529ec6216d44361c01c",
+  "decisionFingerprint": "2c7df7e34473429460d3"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 10,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 24,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 22,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 10
+  },
+  {
+   "option": 3,
+   "entityId": 22,
+   "type": "POWER",
+   "id": "o3t1",
+   "targetId": 24
+  },
+  {
+   "option": 3,
+   "entityId": 22,
+   "type": "POWER",
+   "id": "o3t2",
+   "targetId": 19
+  },
+  {
+   "option": 3,
+   "entityId": 22,
+   "type": "POWER",
+   "id": "o3t3",
+   "targetId": 15
+  },
+  {
+   "option": 4,
+   "entityId": 15,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 67,
+   "type": "POWER",
+   "id": "o5"
+  },
+  {
+   "option": 6,
+   "entityId": 86,
+   "type": "POWER",
+   "id": "o6t0",
+   "targetId": 68
+  }
+ ],
+ "chosen": "o3t0"
+}

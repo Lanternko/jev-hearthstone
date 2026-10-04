@@ -1,0 +1,3 @@
+whispersEatsPlayable o1 true {"menu":["o1","o2","o3"],"prefs":[{"rule":"whispersWorthCasting","removed":["o0"]},{"rule":"buffBeforeTap","removed":["o4"]},{"rule":"mustSpend","removed":["o5t0","o6t0","o7t0","o8t0"]}],"vetoes":[]}
+buffBeforeTap o4 true {"menu":["o2","o4"],"prefs":[{"rule":"whispersWaits","removed":["o1"]},{"rule":"developBeforeBuff","removed":["o3"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o8t0"]}],"vetoes":[]}
+whispersWaits o2 true {"menu":["o2"],"prefs":[{"rule":"whispersWorthCasting","removed":["o0"]},{"rule":"buffBeforeTap","removed":["o3"]},{"rule":"setupFirst","removed":["o4t0","o4t1","o4t2","o5t0","o5t1","o5t2","o6t0","o6t1","o6t2"]}],"vetoes":[]}

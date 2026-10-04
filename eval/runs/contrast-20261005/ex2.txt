@@ -1,0 +1,12 @@
+## whispersEatsPlayable mana 3 hand Wicked Whispers#5(1), Disposable Acolytes#24(2), Entropic Continuity#23(1)
+ opts o0: o1:5 o2:24 o3:23 o4:81 o5t0:29>82 o6t0:100>82 o7t0:101>82 o8t0:102>82
+ pos {"menu":["o2","o3"],"prefs":[{"rule":"whispersEatsPlayable","removed":["o1"]},{"rule":"buffBeforeTap","removed":["o4"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o6t0","o7t0","o8t0"]}],"vetoes":[],"rel":[]}
+ var {"menu":["o2","o3"],"prefs":[{"rule":"whispersWaits","removed":["o1"]},{"rule":"buffBeforeTap","removed":["o4"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o6t0","o7t0","o8t0"]}],"vetoes":[],"rel":[]}
+## buffBeforeTap mana 2 hand Wicked Whispers#5(1), Disposable Acolytes#24(2), Entropic Continuity#23(1)
+ opts o0: o1:5 o2:24 o3:23 o4:81 o5t0:29>82 o8t0:102>82
+ pos {"menu":["o2","o3"],"prefs":[{"rule":"whispersEatsPlayable","removed":["o1"]},{"rule":"buffBeforeTap","removed":["o4"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o6t0","o7t0","o8t0"]}],"vetoes":[],"rel":[]}
+ var {"menu":["o2","o3"],"prefs":[{"rule":"whispersEatsPlayable","removed":["o1"]},{"rule":"pricedOut","removed":["o4"]},{"rule":"mustSpendEnd","removed":["o0"]},{"rule":"mustSpend","removed":["o5t0","o8t0"]}],"vetoes":[],"rel":[]}
+## whispersWaits mana 1 hand Walking Dead#52(3), Hand of Gul'dan#44(6), Platysaur#57(1), Wicked Whispers#40(1)
+ opts o0: o1:57 o2:40 o3:67 o4t0:63>64 o4t1:63>27 o4t2:63>28 o5t0:84>64 o5t1:84>27 o5t2:84>28 o6t0:85>64 o6t1:85>27 o6t2:85>28
+ pos {"menu":["o0","o1","o4t0","o4t1","o4t2","o5t0","o5t1","o5t2","o6t0","o6t1","o6t2"],"prefs":[{"rule":"whispersWaits","removed":["o2"]},{"rule":"pricedOut","removed":["o3"]}],"vetoes":[],"rel":[]}
+ var {"menu":["o0","o1","o4t0","o4t1","o4t2","o5t0","o5t1","o5t2","o6t0","o6t1","o6t2"],"prefs":[{"rule":"whispersEatsPlayable","removed":["o2"]},{"rule":"pricedOut","removed":["o3"]}],"vetoes":[],"rel":[]}

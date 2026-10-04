@@ -1,0 +1,163 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T21-59-42-214Z/game-0001-decisions.jsonl",
+  "createdAt": "2026-10-03T22:00:23.549Z"
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 1,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 1,
+   "maxMana": 1,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 26,
+   "board": [
+    {
+     "entityId": 72,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 73,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 4,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "LOCATION"
+    },
+    {
+     "entityId": 23,
+     "cardId": "EX1_308",
+     "name": "Soulfire",
+     "text": "[x]Deal $4 damage.\nDiscard a random card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 25,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 20,
+     "cardId": "DMF_119",
+     "name": "Wicked Whispers",
+     "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 0,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 26,
+   "board": [
+    {
+     "entityId": 74,
+     "cardId": "HERO_11ao",
+     "name": "King Bone Krusher",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 75,
+     "cardId": "HERO_11cbp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": []
+  },
+  "optionsId": 1,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    4
+   ],
+   "complete": true
+  },
+  "fingerprint": "286b6d38dec7f988b133",
+  "decisionFingerprint": "58881d6b4ef243d7dd0a"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 23,
+   "type": "POWER",
+   "id": "o1t0",
+   "targetId": 72
+  },
+  {
+   "option": 1,
+   "entityId": 23,
+   "type": "POWER",
+   "id": "o1t1",
+   "targetId": 74
+  },
+  {
+   "option": 2,
+   "entityId": 25,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 20,
+   "type": "POWER",
+   "id": "o3"
+  }
+ ],
+ "chosen": "o1t1"
+}

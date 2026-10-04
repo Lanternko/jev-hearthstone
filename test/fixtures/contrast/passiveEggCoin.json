@@ -1,0 +1,168 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-28T18:47:31.432Z"
+ },
+ "state": {
+  "gameNumber": 7,
+  "turn": 2,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 1,
+   "maxMana": 1,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 25,
+   "board": [
+    {
+     "entityId": 77,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 78,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 61,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 60,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 51,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 68,
+     "cardId": "TLC_451",
+     "name": "Cursed Catacombs",
+     "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+     "baseCost": 0,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 79,
+     "cardId": "JAIL_COIN3",
+     "name": "The Coin",
+     "text": "Gain 1 Mana Crystal this turn only.",
+     "baseCost": 0,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 64,
+     "cardId": "SCH_147",
+     "name": "Boneweb Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon\ntwo 2/1 Spiders. If you\ndiscard this, trigger its\n<b>Deathrattle</b>.",
+     "baseCost": 2,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DRUID",
+   "mana": 1,
+   "maxMana": 1,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 26,
+   "board": [
+    {
+     "entityId": 75,
+     "cardId": "HERO_06ay",
+     "name": "Winter Queen",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 76,
+     "cardId": "HERO_06ayhp",
+     "name": "Shapeshift",
+     "text": "<b>Hero Power</b>\n+$a1 Attack this turn.\n+$d1 Armor.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ]
+  },
+  "optionsId": 2,
+  "fingerprint": "0aa23d76b233a54f4475",
+  "decisionFingerprint": "546bffd54c2338707f63"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 2,
+   "entityId": 79,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 61,
+   "type": "POWER",
+   "id": "o3"
+  }
+ ],
+ "chosen": "o3"
+}

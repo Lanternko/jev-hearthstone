@@ -1,0 +1,235 @@
+{
+ "files": 90,
+ "rows": 8524,
+ "split": {
+  "dev": 7204,
+  "holdout": 1320
+ },
+ "touched": 480,
+ "touchedPct": 5.63,
+ "chosenGone": 965,
+ "chosenGonePct": 11.32,
+ "vetoCount": {
+  "lethalSelfDamage": 7,
+  "burnOwnHero": 20,
+  "buffNobody": 12,
+  "boardLethalTap": 7,
+  "drawKills": 9,
+  "suicide": 15,
+  "tapExposesBoardLethal": 6
+ },
+ "errors": 0,
+ "rules": {
+  "mustSpendEnd": {
+   "fires": 133,
+   "dev": 121,
+   "holdout": 12,
+   "chosenRemoved": 3,
+   "released": 0
+  },
+  "developBeforeBuff": {
+   "fires": 80,
+   "dev": 67,
+   "holdout": 13,
+   "chosenRemoved": 17,
+   "released": 0
+  },
+  "mustSpend": {
+   "fires": 67,
+   "dev": 62,
+   "holdout": 5,
+   "chosenRemoved": 21,
+   "released": 0
+  },
+  "pricedOut": {
+   "fires": 64,
+   "dev": 57,
+   "holdout": 7,
+   "chosenRemoved": 2,
+   "released": 0
+  },
+  "boardFirstDiscard": {
+   "fires": 51,
+   "dev": 42,
+   "holdout": 9,
+   "chosenRemoved": 10,
+   "released": 0
+  },
+  "setupFirst": {
+   "fires": 51,
+   "dev": 36,
+   "holdout": 15,
+   "chosenRemoved": 19,
+   "released": 0
+  },
+  "tapOnlyEnd": {
+   "fires": 33,
+   "dev": 31,
+   "holdout": 2,
+   "chosenRemoved": 2,
+   "released": 0
+  },
+  "buffBeforeTap": {
+   "fires": 31,
+   "dev": 26,
+   "holdout": 5,
+   "chosenRemoved": 0,
+   "released": 0
+  },
+  "wastedFodder": {
+   "fires": 28,
+   "dev": 24,
+   "holdout": 4,
+   "chosenRemoved": 0,
+   "released": 0
+  },
+  "occultistPick": {
+   "fires": 23,
+   "dev": 17,
+   "holdout": 6,
+   "chosenRemoved": 11,
+   "released": 0
+  },
+  "weaponFirst": {
+   "fires": 16,
+   "dev": 13,
+   "holdout": 3,
+   "chosenRemoved": 10,
+   "released": 1
+  },
+  "bodyBeforeBuff": {
+   "fires": 16,
+   "dev": 14,
+   "holdout": 2,
+   "chosenRemoved": 6,
+   "released": 0
+  },
+  "overflowWaits": {
+   "fires": 14,
+   "dev": 10,
+   "holdout": 4,
+   "chosenRemoved": 2,
+   "released": 0
+  },
+  "wastedBurn": {
+   "fires": 12,
+   "dev": 8,
+   "holdout": 4,
+   "chosenRemoved": 2,
+   "released": 0
+  },
+  "whispersEatsPlayable": {
+   "fires": 9,
+   "dev": 6,
+   "holdout": 3,
+   "chosenRemoved": 3,
+   "released": 0
+  },
+  "whispersWaits": {
+   "fires": 9,
+   "dev": 5,
+   "holdout": 4,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "discardPick": {
+   "fires": 9,
+   "dev": 7,
+   "holdout": 2,
+   "chosenRemoved": 5,
+   "released": 0
+  },
+  "deadWhispers": {
+   "fires": 8,
+   "dev": 5,
+   "holdout": 3,
+   "chosenRemoved": 0,
+   "released": 0
+  },
+  "passiveEggCoin": {
+   "fires": 8,
+   "dev": 4,
+   "holdout": 4,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "saferCopies": {
+   "fires": 7,
+   "dev": 7,
+   "holdout": 0,
+   "chosenRemoved": 3,
+   "released": 0
+  },
+  "newBodyBuffWaits": {
+   "fires": 6,
+   "dev": 5,
+   "holdout": 1,
+   "chosenRemoved": 3,
+   "released": 0
+  },
+  "counterFirst": {
+   "fires": 5,
+   "dev": 4,
+   "holdout": 1,
+   "chosenRemoved": 2,
+   "released": 0
+  },
+  "overdrawWaits": {
+   "fires": 5,
+   "dev": 3,
+   "holdout": 2,
+   "chosenRemoved": 0,
+   "released": 0
+  },
+  "splitToFace": {
+   "fires": 4,
+   "dev": 3,
+   "holdout": 1,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "whispersWorthCasting": {
+   "fires": 3,
+   "dev": 2,
+   "holdout": 1,
+   "chosenRemoved": 0,
+   "released": 0
+  },
+  "freezeThreatFirst": {
+   "fires": 3,
+   "dev": 3,
+   "holdout": 0,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "castBeforeSwing": {
+   "fires": 2,
+   "dev": 2,
+   "holdout": 0,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "weaponBuffFirst": {
+   "fires": 1,
+   "dev": 1,
+   "holdout": 0,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "deferHardCast": {
+   "fires": 1,
+   "dev": 1,
+   "holdout": 0,
+   "chosenRemoved": 1,
+   "released": 0
+  },
+  "tempoBuffPick": {
+   "fires": 1,
+   "dev": 0,
+   "holdout": 1,
+   "chosenRemoved": 1,
+   "released": 0
+  }
+ },
+ "errorList": []
+}

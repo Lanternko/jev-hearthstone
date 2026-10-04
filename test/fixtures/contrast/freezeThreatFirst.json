@@ -1,0 +1,280 @@
+{
+ "source": {
+  "file": "decisions.jsonl",
+  "createdAt": "2026-09-27T04:28:58.102Z"
+ },
+ "state": {
+  "gameNumber": 3,
+  "turn": 7,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "DEMONHUNTER",
+   "mana": 4,
+   "maxMana": 4,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 7,
+   "deckCount": 22,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_10",
+     "name": "Illidan Stormrage",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 8,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_10bp",
+     "name": "Demon Claws",
+     "text": "[x]<b>Hero Power</b>\n+$a1 Attack this turn.",
+     "baseCost": 1,
+     "COST": 1,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 91,
+     "cardId": "EDR_840t1",
+     "name": "Crow Dreadseed",
+     "text": "<b>Elusive</b>\n[x]<b>Dormant</b> for 1 turn.",
+     "baseCost": 1,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "DORMANT": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 32,
+     "cardId": "JAIL_730",
+     "name": "Stardust Scythe",
+     "text": "After your hero attacks, get a Void Soul.",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 4,
+     "cardId": "CORE_UNG_205",
+     "name": "Glacial Shard",
+     "text": "<b>Battlecry:</b> <b>Freeze</b> an enemy.",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 15,
+     "cardId": "CATA_528",
+     "name": "Sigil of the Seas",
+     "text": "At the start of your\nnext turn, summon a 3/3 Naga with <b>Taunt</b>.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 82,
+     "cardId": "FIR_902",
+     "name": "Sigil of Cinder",
+     "text": "[x]At the start of your next\nturn, deal $6 damage\nrandomly split among\nall enemies.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 9,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "text": "<b>Battlecry:</b> Your opponent's spells cost (1) more next turn.",
+     "baseCost": 2,
+     "baseAttack": 3,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 33,
+     "cardId": "EDR_840",
+     "name": "Grim Harvest",
+     "text": "Draw a card.\nSummon a random <b>Dormant</b> Dreadseed.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 20,
+     "cardId": "TLC_900",
+     "name": "Hive Map",
+     "text": "[x]<b>Discover</b> a Fel spell.\nIf you play it this turn, also\npick one of the others.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 7,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "DEMONHUNTER",
+   "mana": 0,
+   "maxMana": 3,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 50,
+     "cardId": "JAIL_730",
+     "name": "Stardust Scythe",
+     "text": "After your hero attacks, get a Void Soul.",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 3,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 66,
+     "cardId": "HERO_10bc",
+     "name": "Broxigar",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 3,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_10bchp",
+     "name": "Demon Claws",
+     "text": "[x]<b>Hero Power</b>\n+$a1 Attack this turn.",
+     "baseCost": 1,
+     "COST": 1,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 93,
+     "cardId": "CATA_528t",
+     "name": "Naga Monstrosity",
+     "text": "<b>Taunt</b>",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    }
+   ]
+  },
+  "optionsId": 23,
+  "fingerprint": "573d2d87f5d8239c275a",
+  "decisionFingerprint": "8016c9ce0caa50d05fd3"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 32,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 4,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 66
+  },
+  {
+   "option": 2,
+   "entityId": 4,
+   "type": "POWER",
+   "id": "o2t1",
+   "targetId": 93
+  },
+  {
+   "option": 3,
+   "entityId": 15,
+   "type": "POWER",
+   "id": "o3"
+  },
+  {
+   "option": 4,
+   "entityId": 82,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 9,
+   "type": "POWER",
+   "id": "o5"
+  },
+  {
+   "option": 6,
+   "entityId": 33,
+   "type": "POWER",
+   "id": "o6"
+  },
+  {
+   "option": 7,
+   "entityId": 20,
+   "type": "POWER",
+   "id": "o7"
+  },
+  {
+   "option": 8,
+   "entityId": 65,
+   "type": "POWER",
+   "id": "o8"
+  }
+ ],
+ "chosen": "o1"
+}

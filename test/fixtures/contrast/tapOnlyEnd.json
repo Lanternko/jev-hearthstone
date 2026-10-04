@@ -1,0 +1,196 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T17-42-01-535Z/game-0001-decisions.jsonl",
+  "createdAt": "2026-10-03T17:44:17.391Z"
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 6,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 2,
+   "maxMana": 3,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 2,
+   "deckCount": 22,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 86,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 22,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 89,
+     "cardId": "DAL_077",
+     "name": "Toxfin",
+     "text": "<b>Battlecry:</b> Give a friendly Murloc <b>Poisonous</b>.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 19,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 8,
+     "HEALTH": 8,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 15,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "MAGE",
+   "mana": 1,
+   "maxMana": 3,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 24,
+   "board": [
+    {
+     "entityId": 68,
+     "cardId": "HERO_08de",
+     "name": "Yogg-Ramen",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 12,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 69,
+     "cardId": "HERO_08fbp",
+     "name": "Fireblast",
+     "text": "<b>Hero Power</b>\nDeal $1 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 3,
+     "entityId": 59,
+     "cardId": "AV_212",
+     "name": "Siphon Mana",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $2 damage.\n<b>Honorable Kill</b>: Reduce the Cost of spells in your hand by (1)."
+    }
+   ]
+  },
+  "optionsId": 16,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    10,
+    17,
+    24
+   ],
+   "complete": true
+  },
+  "fingerprint": "f9da93383db5317ff48f",
+  "decisionFingerprint": "e7da9ff2dc877aaee9e4"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 67,
+   "type": "POWER",
+   "id": "o1"
+  }
+ ],
+ "chosen": "o1"
+}

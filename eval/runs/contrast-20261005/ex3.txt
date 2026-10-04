@@ -1,0 +1,1 @@
+{"version":"matchup-objective-v2-class-prior","mode":"unknown","support":"insufficient public evidence","evidence":["public initial Health 40"],"weights":{"face":0.6,"finishFace":1.3,"draw":2.5,"mana":0.5,"coin":0},"deadlineTurn":null,"prior":{"version":"local-class-prior-v2","source":"audited histo current true win false

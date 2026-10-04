@@ -1,0 +1,299 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T17-42-01-535Z/game-0005-decisions.jsonl",
+  "createdAt": "2026-10-03T18:12:56.142Z"
+ },
+ "state": {
+  "gameNumber": 5,
+  "turn": 5,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 3,
+   "maxMana": 3,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 20,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 57,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 52,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 44,
+     "cardId": "BT_300",
+     "name": "Hand of Gul'dan",
+     "text": "When you play\nor discard this,\ndraw 3 cards.",
+     "baseCost": 6,
+     "COST": 6,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 40,
+     "cardId": "DMF_119",
+     "name": "Wicked Whispers",
+     "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 37,
+     "cardId": "EX1_308",
+     "name": "Soulfire",
+     "text": "[x]Deal $4 damage.\nDiscard a random card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 2,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 24,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_11",
+     "name": "The Lich King",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 4,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_11bp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 101,
+     "cardId": "CORE_ULD_723",
+     "name": "Murmy",
+     "text": "<b>Reborn</b>",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 28,
+     "cardId": "RLK_958",
+     "name": "Skeletal Sidekick",
+     "text": "<b>Battlecry:</b> Give a friendly Undead +2 Attack.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 68,
+     "cardId": "GAME_005",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 27,
+     "cardId": "CORE_ULD_723",
+     "name": "Murmy",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "<b>Reborn</b>"
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 28,
+     "cardId": "RLK_958",
+     "name": "Skeletal Sidekick",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Give a friendly Undead +2 Attack."
+    }
+   ]
+  },
+  "optionsId": 19,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    61,
+    63
+   ],
+   "complete": true
+  },
+  "fingerprint": "3decc84010b661fc10ad",
+  "decisionFingerprint": "b09b4d105dc9a2b680e9"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 40,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 37,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 64
+  },
+  {
+   "option": 3,
+   "entityId": 37,
+   "type": "POWER",
+   "id": "o3t1",
+   "targetId": 66
+  },
+  {
+   "option": 3,
+   "entityId": 37,
+   "type": "POWER",
+   "id": "o3t2",
+   "targetId": 28
+  },
+  {
+   "option": 3,
+   "entityId": 37,
+   "type": "POWER",
+   "id": "o3t3",
+   "targetId": 57
+  },
+  {
+   "option": 3,
+   "entityId": 37,
+   "type": "POWER",
+   "id": "o3t4",
+   "targetId": 101
+  },
+  {
+   "option": 4,
+   "entityId": 67,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 57,
+   "type": "POWER",
+   "id": "o5t0",
+   "targetId": 64
+  },
+  {
+   "option": 5,
+   "entityId": 57,
+   "type": "POWER",
+   "id": "o5t1",
+   "targetId": 28
+  },
+  {
+   "option": 5,
+   "entityId": 57,
+   "type": "POWER",
+   "id": "o5t2",
+   "targetId": 101
+  }
+ ],
+ "chosen": "o1"
+}

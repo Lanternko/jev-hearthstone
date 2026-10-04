@@ -1,0 +1,299 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T17-42-01-535Z/game-0006-decisions.jsonl",
+  "createdAt": "2026-10-03T18:24:34.924Z"
+ },
+ "state": {
+  "gameNumber": 6,
+  "turn": 13,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 0,
+   "maxMana": 7,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 1,
+   "deckCount": 16,
+   "board": [
+    {
+     "entityId": 9,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "ATK": 4,
+     "HEALTH": 30,
+     "DAMAGE": 29,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 68,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 23,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "DAMAGE": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 33,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "LOCATION"
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 17,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "SHAMAN",
+   "mana": 1,
+   "maxMana": 6,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 20,
+   "board": [
+    {
+     "entityId": 69,
+     "cardId": "HERO_02bb",
+     "name": "Thor Thorim",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 16,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 70,
+     "cardId": "HERO_02fbp",
+     "name": "Totemic Call",
+     "text": "<b>Hero Power</b>\nSummon a random basic Totem.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 119,
+     "cardId": "SC_999t",
+     "name": "Battlecruiser",
+     "text": "<b>Starship</b>\n<i>(Costs (5) Mana to launch.)</i>",
+     "baseCost": 0,
+     "baseAttack": 0,
+     "baseHealth": 0,
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 48,
+     "cardId": "SC_413t",
+     "name": "Siege Tank, Deployed",
+     "text": "<b>Battlecry:</b> Deal 10 damage to a random enemy minion. Excess damage hits the enemy hero.",
+     "baseCost": 5,
+     "baseAttack": 5,
+     "baseHealth": 5,
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 5,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 71,
+     "cardId": "GAME_005",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 53,
+     "cardId": "SC_409",
+     "name": "Missile Pod",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 1,
+     "HEALTH": 3,
+     "text": "[x]<b>Starship Piece</b>\n<b>Battlecry:</b> Deal 1 damage\nto all enemies. Also\ntriggers on launch."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 37,
+     "cardId": "SC_407",
+     "name": "Lock On",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Set a minion’s Health to 1. Your next <b>Starship</b>\nlaunch costs (2) less."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 59,
+     "cardId": "SC_401",
+     "name": "SCV",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> Your next <b>Starship</b> launch costs\n(2) less."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 55,
+     "cardId": "SC_401",
+     "name": "SCV",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> Your next <b>Starship</b> launch costs\n(2) less."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 51,
+     "cardId": "SC_403",
+     "name": "Starport",
+     "CARDTYPE": "LOCATION",
+     "COST": 2,
+     "HEALTH": 2,
+     "text": "[x]Summon a 2/1\n<b>Starship Piece</b> with an\neffect when launched."
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 41,
+     "cardId": "SC_413t",
+     "name": "Siege Tank, Deployed",
+     "CARDTYPE": "MINION",
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 5,
+     "text": "<b>Battlecry:</b> Deal 10 damage to a random enemy minion. Excess damage hits the enemy hero."
+    },
+    {
+     "public": true,
+     "engineTurn": 12,
+     "entityId": 48,
+     "cardId": "SC_413t",
+     "name": "Siege Tank, Deployed",
+     "CARDTYPE": "MINION",
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 5,
+     "text": "<b>Battlecry:</b> Deal 10 damage to a random enemy minion. Excess damage hits the enemy hero."
+    }
+   ]
+  },
+  "optionsId": 50,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    12,
+    27
+   ],
+   "complete": true
+  },
+  "fingerprint": "3db1e52889beb7985056",
+  "decisionFingerprint": "211ac48d29756677dd53"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 23,
+   "type": "POWER",
+   "id": "o1t0",
+   "targetId": 69
+  },
+  {
+   "option": 1,
+   "entityId": 23,
+   "type": "POWER",
+   "id": "o1t1",
+   "targetId": 48
+  },
+  {
+   "option": 2,
+   "entityId": 33,
+   "type": "POWER",
+   "id": "o2"
+  }
+ ],
+ "chosen": "o0"
+}

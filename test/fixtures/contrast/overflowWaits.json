@@ -1,0 +1,517 @@
+{
+ "source": {
+  "file": "ranked-2026-10-03T17-42-01-535Z/game-0005-decisions.jsonl",
+  "createdAt": "2026-10-03T18:17:32.415Z"
+ },
+ "state": {
+  "gameNumber": 5,
+  "turn": 17,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 9,
+   "maxMana": 9,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 9,
+   "board": [
+    {
+     "entityId": 66,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 30,
+     "DAMAGE": 19,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 67,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 41,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 134,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 46,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "DAMAGE": 3,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 143,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 60,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 55,
+     "cardId": "BOT_568",
+     "name": "The Soularium",
+     "text": "Draw 3 cards.\nThey are <b>Temporary</b>.",
+     "baseCost": 2,
+     "COST": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 34,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "LOCATION"
+    },
+    {
+     "entityId": 48,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 8,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 14,
+   "board": [
+    {
+     "entityId": 64,
+     "cardId": "HERO_11",
+     "name": "The Lich King",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 13,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 65,
+     "cardId": "HERO_11bp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 25,
+     "cardId": "RLK_720",
+     "name": "Gnome Muncher",
+     "text": "[x]<b>Taunt</b>, <b>Lifesteal</b>\nAt the end of your turn,\nattack the lowest Health\nenemy.",
+     "baseCost": 6,
+     "baseAttack": 5,
+     "baseHealth": 6,
+     "COST": 6,
+     "ATK": 5,
+     "HEALTH": 6,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 4,
+     "cardId": "RLK_061",
+     "name": "Battlefield Necromancer",
+     "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  ",
+     "baseCost": 2,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 146,
+     "cardId": "RLK_061t",
+     "name": "Risen Footman",
+     "text": "<b>Taunt</b>\n<i>Doesn't leave a <b>Corpse</b>.</i>",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 68,
+     "cardId": "GAME_005",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 27,
+     "cardId": "CORE_ULD_723",
+     "name": "Murmy",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "<b>Reborn</b>"
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 28,
+     "cardId": "RLK_958",
+     "name": "Skeletal Sidekick",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Give a friendly Undead +2 Attack."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 23,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Your opponent's spells cost (1) more next turn."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 7,
+     "cardId": "RLK_503",
+     "name": "Body Bagger",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "text": "<b>Battlecry</b>: Gain a <b>Corpse</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 17,
+     "cardId": "CORE_RLK_121",
+     "name": "Acolyte of Death",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 4,
+     "text": "After a friendly Undead dies, draw a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 14,
+     "cardId": "CORE_ULD_723",
+     "name": "Murmy",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "<b>Reborn</b>"
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 18,
+     "cardId": "RLK_060",
+     "name": "Army of the Dead",
+     "CARDTYPE": "SPELL",
+     "COST": 5,
+     "text": "Raise up to 5 <b>Corpses</b> as 2/2 Risen Ghouls with <b>Rush</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 12,
+     "entityId": 22,
+     "cardId": "CORE_RLK_116",
+     "name": "Necrotic Mortician",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> If a friendly Undead died after your\nlast turn, <b>Discover</b> an Unholy Rune card."
+    },
+    {
+     "public": true,
+     "engineTurn": 12,
+     "entityId": 32,
+     "cardId": "RLK_707",
+     "name": "Grave Strength",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "[x]Give your minions +1\nAttack. Spend 5 <b>Corpses</b>\nto give them +3 instead."
+    },
+    {
+     "public": true,
+     "engineTurn": 14,
+     "entityId": 16,
+     "cardId": "CORE_RLK_118",
+     "name": "Tomb Guardians",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "Summon two 2/2 Zombies with <b>Taunt</b>. Spend 4 <b>Corpses</b> to\ngive them <b>Reborn</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 14,
+     "entityId": 4,
+     "cardId": "RLK_061",
+     "name": "Battlefield Necromancer",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 2,
+     "text": "[x]At the end of your turn,\nraise a <b>Corpse</b> as a 1/3\n  Risen Footman with <b>Taunt</b>.  "
+    },
+    {
+     "public": true,
+     "engineTurn": 16,
+     "entityId": 25,
+     "cardId": "RLK_720",
+     "name": "Gnome Muncher",
+     "CARDTYPE": "MINION",
+     "COST": 6,
+     "ATK": 5,
+     "HEALTH": 6,
+     "text": "[x]<b>Taunt</b>, <b>Lifesteal</b>\nAt the end of your turn,\nattack the lowest Health\nenemy."
+    }
+   ]
+  },
+  "optionsId": 71,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    61,
+    63
+   ],
+   "complete": true
+  },
+  "fingerprint": "5910ffc0bd5133f8b14a",
+  "decisionFingerprint": "74e9ae4e8952f380b485"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 55,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 34,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 48,
+   "type": "POWER",
+   "id": "o3"
+  },
+  {
+   "option": 4,
+   "entityId": 67,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 41,
+   "type": "POWER",
+   "id": "o5t0",
+   "targetId": 25
+  },
+  {
+   "option": 5,
+   "entityId": 41,
+   "type": "POWER",
+   "id": "o5t1",
+   "targetId": 146
+  },
+  {
+   "option": 6,
+   "entityId": 134,
+   "type": "POWER",
+   "id": "o6t0",
+   "targetId": 25
+  },
+  {
+   "option": 6,
+   "entityId": 134,
+   "type": "POWER",
+   "id": "o6t1",
+   "targetId": 146
+  },
+  {
+   "option": 7,
+   "entityId": 46,
+   "type": "POWER",
+   "id": "o7t0",
+   "targetId": 25
+  },
+  {
+   "option": 7,
+   "entityId": 46,
+   "type": "POWER",
+   "id": "o7t1",
+   "targetId": 146
+  },
+  {
+   "option": 8,
+   "entityId": 60,
+   "type": "POWER",
+   "id": "o8t0",
+   "targetId": 25
+  },
+  {
+   "option": 8,
+   "entityId": 60,
+   "type": "POWER",
+   "id": "o8t1",
+   "targetId": 146
+  },
+  {
+   "option": 9,
+   "entityId": 143,
+   "type": "POWER",
+   "id": "o9t0",
+   "targetId": 25
+  },
+  {
+   "option": 9,
+   "entityId": 143,
+   "type": "POWER",
+   "id": "o9t1",
+   "targetId": 146
+  }
+ ],
+ "chosen": "o5t1"
+}

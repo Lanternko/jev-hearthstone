@@ -1,0 +1,258 @@
+{
+ "boardFirstDiscard": {
+  "clean": [
+   "drop hand Ocular Occultist",
+   "mana +1",
+   "foe hp 5"
+  ],
+  "dirty": [
+   "mana -1"
+  ]
+ },
+ "bodyBeforeBuff": {
+  "clean": [
+   "drop hand Platysaur",
+   "deck 0"
+  ],
+  "dirty": [
+   "drop hand Entropic Continuity",
+   "my hp full"
+  ]
+ },
+ "buffBeforeTap": {
+  "clean": [
+   "deck 0"
+  ],
+  "dirty": []
+ },
+ "castBeforeSwing": {
+  "clean": [
+   "drop hand Chamber of Viscidus",
+   "drop mine Chronoclaws"
+  ],
+  "dirty": []
+ },
+ "counterFirst": {
+  "clean": [
+   "drop hand Soulfire"
+  ],
+  "dirty": [
+   "drop hand Duke of Below"
+  ]
+ },
+ "deadWhispers": {
+  "clean": [
+   "drop hand Wicked Whispers",
+   "mana -1"
+  ],
+  "dirty": []
+ },
+ "deferHardCast": {
+  "clean": [
+   "drop hand Walking Dead",
+   "mana -1"
+  ],
+  "dirty": [
+   "not temporary Walking Dead"
+  ]
+ },
+ "developBeforeBuff": {
+  "clean": [
+   "drop hand Entropic Continuity",
+   "drop hand Disposable Acolytes",
+   "mana -1",
+   "foe hp 5"
+  ],
+  "dirty": []
+ },
+ "discardPick": {
+  "clean": [],
+  "dirty": []
+ },
+ "freezeThreatFirst": {
+  "clean": [
+   "drop hand Glacial Shard"
+  ],
+  "dirty": [
+   "drop foe Naga Monstrosity"
+  ]
+ },
+ "mustSpend": {
+  "clean": [
+   "drop mine Walking Dead",
+   "exhaust Walking Dead"
+  ],
+  "dirty": [
+   "drop hand Disposable Acolytes",
+   "drop hand Walking Dead",
+   "mana -1",
+   "mana +1"
+  ]
+ },
+ "mustSpendEnd": {
+  "clean": [],
+  "dirty": [
+   "drop hand Disposable Acolytes",
+   "drop hand Walking Dead",
+   "mana -1",
+   "mana +1"
+  ]
+ },
+ "newBodyBuffWaits": {
+  "clean": [
+   "drop hand Entropic Continuity",
+   "drop mine Platysaur",
+   "mana -1"
+  ],
+  "dirty": []
+ },
+ "occultistPick": {
+  "clean": [
+   "drop hand Walking Dead",
+   "drop hand Ocular Occultist",
+   "drop hand Soul Barrage"
+  ],
+  "dirty": [
+   "foe hp 5"
+  ]
+ },
+ "overdrawWaits": {
+  "clean": [
+   "drop hand Soul Barrage",
+   "drop hand Duke of Below",
+   "drop hand Chronoclaws",
+   "drop hand Abyssal Curse",
+   "drop hand Platysaur",
+   "drop hand Disposable Acolytes",
+   "drop hand Party Fiend",
+   "drop hand Walking Dead",
+   "drop hand Walking Dead",
+   "drop hand Duke of Below"
+  ],
+  "dirty": []
+ },
+ "overflowWaits": {
+  "clean": [
+   "drop hand Party Fiend"
+  ],
+  "dirty": [
+   "drop mine Ocular Occultist",
+   "drop mine Walking Dead",
+   "drop mine Ocular Occultist",
+   "drop mine Felbeast",
+   "drop mine Party Fiend"
+  ]
+ },
+ "passiveEggCoin": {
+  "clean": [
+   "drop hand The Coin",
+   "mana -1",
+   "mana +1"
+  ],
+  "dirty": []
+ },
+ "pricedOut": {
+  "clean": [
+   "deck 0"
+  ],
+  "dirty": [
+   "drop hand Disposable Acolytes",
+   "drop hand Walking Dead",
+   "mana +1"
+  ]
+ },
+ "saferCopies": {
+  "clean": [
+   "drop hand Boneweb Egg",
+   "drop hand Boneweb Egg",
+   "drop mine Platysaur",
+   "mana -1"
+  ],
+  "dirty": []
+ },
+ "setupFirst": {
+  "clean": [
+   "drop mine Ocular Occultist",
+   "drop mine Chamber of Viscidus",
+   "exhaust Ocular Occultist"
+  ],
+  "dirty": []
+ },
+ "splitToFace": {
+  "clean": [
+   "drop hand Soul Barrage",
+   "mana -1"
+  ],
+  "dirty": []
+ },
+ "tapOnlyEnd": {
+  "clean": [
+   "deck 0"
+  ],
+  "dirty": [
+   "mana -1"
+  ]
+ },
+ "wastedBurn": {
+  "clean": [
+   "foe hp 5"
+  ],
+  "dirty": [
+   "drop hand Wicked Whispers",
+   "drop hand Soulfire"
+  ]
+ },
+ "wastedFodder": {
+  "clean": [],
+  "dirty": [
+   "mana -1"
+  ]
+ },
+ "weaponBuffFirst": {
+  "clean": [
+   "drop hand Chronoclaws",
+   "drop hand Disposable Acolytes",
+   "drop hand Entropic Continuity",
+   "mana -1",
+   "my hp 6"
+  ],
+  "dirty": []
+ },
+ "weaponFirst": {
+  "clean": [
+   "drop mine Chronoclaws",
+   "drop mine Duke of Below",
+   "exhaust Duke of Below"
+  ],
+  "dirty": []
+ },
+ "whispersEatsPlayable": {
+  "clean": [
+   "drop hand Wicked Whispers"
+  ],
+  "dirty": [
+   "drop hand Disposable Acolytes",
+   "drop hand Entropic Continuity",
+   "mana +1"
+  ]
+ },
+ "whispersWaits": {
+  "clean": [],
+  "dirty": [
+   "drop hand Platysaur",
+   "drop hand Wicked Whispers",
+   "mana -1",
+   "deck 0"
+  ]
+ },
+ "whispersWorthCasting": {
+  "clean": [
+   "drop mine Charred Chameleon",
+   "drop mine Platysaur"
+  ],
+  "dirty": [
+   "drop hand Wicked Whispers",
+   "drop mine Animated Broomstick"
+  ]
+ }
+}

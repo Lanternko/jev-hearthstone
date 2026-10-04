@@ -635,6 +635,14 @@ test('Whispers waits while the card it would eat can be cast instead (game 12, t
  assert.deepEqual(constrainActions(game10([golem,guldan,duke,cont,whispers],1,board),acts).map(a=>a.id),['end','cont']);
  // Continuity gone: Whispers now eats the Golem, which is the point.
  assert.ok(constrainActions(game10([golem,guldan,duke,whispers],1,board),acts.filter(a=>a.id!=='cont')).some(a=>a.id==='wh'));
+ // User ruling (2026-10-05): with three bodies out, +1/+1 each beats a 1-mana card. Whispers
+ // eating Party Fiend goes ahead; eating Continuity (the same buff) still waits.
+ const fiend={entityId:46,name:'Party Fiend',CARDTYPE:'MINION',COST:1,ATK:1,HEALTH:1,text:''};
+ const three=[...board,{entityId:87,CARDTYPE:'MINION',ATK:3,HEALTH:2},{entityId:88,CARDTYPE:'MINION',ATK:2,HEALTH:2}];
+ const fa=[{id:'end',type:'END_TURN'},{id:'fiend',entityId:46},{id:'wh',entityId:43}];
+ assert.ok(constrainActions(game10([golem,guldan,duke,fiend,whispers],1,three),fa).some(a=>a.id==='wh'));
+ assert.ok(!constrainActions(game10([golem,guldan,duke,fiend,whispers],1,board),fa).some(a=>a.id==='wh'),'one body: the Fiend is cast first');
+ assert.deepEqual(constrainActions(game10([golem,guldan,duke,cont,whispers],1,three),acts).map(a=>a.id),['end','cont']);
 });
 
 // User ruling (2026-09-26, game 13, turn 4): Walking Dead was doomed by Platysaur's deathrattle, so

@@ -660,6 +660,11 @@ export const whispersEatsPlayable=(state,card,actions)=>{
  if(!eats.length||eats.some(isFodder))return false;
  const cast=eats.find(c=>actions.some(a=>a.entityId===c.entityId));
  if(!cast)return false;
+ // User ruling (2026-10-05, holdout T9, Whispers eating Party Fiend with three bodies out):
+ // 「+3+3的收益就大於派對了，因為三點傷害是立即生效，能打臉和解怪。後期通常棄掉 1 費牌不會可惜」.
+ // With three or more minions the buff outweighs the card it eats -- unless that card is itself
+ // a board buff (game 12's Continuity), which gives the same +1/+1 and keeps Whispers for later.
+ if(myMinions(state)>=3&&!givesBoardBuff(cast))return false;
  // Only when casting it hands Whispers a card worth eating next.
  const after={...state,me:{...state.me,hand:state.me.hand.filter(c=>c.entityId!==cast.entityId)}};
  const next=wouldDiscard(after,card);
@@ -952,13 +957,23 @@ function buffHolds(state,out,{admission}){
 export function constrainActions(state,actions,{trace,admission=combinationAdmission(state,actions)}={}){
  const comboFirst=admittedFirstIds(admission);
  if(state.choice?.type==='MULLIGAN')return mulliganConstraint(state,actions);
- if(state.choice)return discardPick(state,doomedPick(state,tempoBuffPick(state,temporaryPick(state,actions))));
+ if(state.choice){
+  const fired=[];let out=actions;
+  for(const [rule,pick] of [['temporaryPick',temporaryPick],['tempoBuffPick',tempoBuffPick],['doomedPick',doomedPick],['discardPick',discardPick]]){
+   const next=pick(state,out),k=new Set(next.map(a=>a.id)),gone=out.filter(a=>!k.has(a.id)).map(a=>a.id);
+   if(gone.length)fired.push({rule,removed:gone});out=next;}
+  if(trace)trace.preferences=fired;
+  return out;
+ }
  const veto=vetoes(state),vetoed=[];
  let out=actions.filter(a=>{const r=veto(a);if(r)vetoed.push({rule:r,actionId:a.id});return !r;});
  const wasted=wastedFodder(state);
- const releases=[],hold={fodderHold:[...wasted]};
+ const releases=[],hold={fodderHold:[...wasted]},fired=[];
+ // Step 4 (impact check): which rule took which actions off the menu, before any release.
+ const took=(rule,next)=>{const k=new Set(next.map(a=>a.id)),gone=out.filter(a=>!k.has(a.id)).map(a=>a.id);
+  if(gone.length)fired.push({rule,removed:gone});out=next;};
  // A preference only narrows a menu it leaves something on, and the simulator may undo it.
- const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)out=releasing(state,out,kept,rule,releases,hold);};
+ const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)took(rule,releasing(state,out,kept,rule,releases,hold));};
  // Verified expiring self-summons pay out without spending their printed mana.
  const deferred=new Set(temporaryDiscardAssessments(state,out).filter(c=>c.deferHardCast).map(c=>c.playActionId));
  prefer('deferHardCast',out.filter(a=>!deferred.has(a.id)));
@@ -980,7 +995,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
   if(out.some(a=>!kept(a)))released=fodderRelease(state,out,wasted);
   // Like every preference, it never empties the menu (no restore: it simply does not apply).
   const next=out.filter(a=>kept(a)||a.id===released?.actionId);
-  if(next.length)out=next;
+  if(next.length)took('wastedFodder',next);
  }
  prefer('doomedPick',doomedPick(state,out));
  prefer('boardFirstDiscard',boardFirstDiscard(state,out));
@@ -995,7 +1010,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  // reason there is nothing to stay for. An END_TURN removal, so it stays hard (see the doc).
  if(out.some(a=>whispersWorthCasting(state,held(a.entityId)))){
   const trimmed=out.filter(a=>a.type!=='END_TURN');
-  if(trimmed.length)out=trimmed;
+  if(trimmed.length)took('whispersWorthCasting',trimmed);
  }
  // Decide WHETHER to draw before ordering it. Availability alone is not a draw intent.
  if(!isDH(state))prefer('buffBeforeTap',buffBeforeTap(state,out));
@@ -1003,6 +1018,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  if(trace){trace.admission=admission;trace.evidence=admissionEvidence(admission,out);
   trace.fodderRelease=released;
   trace.ruleReleases=releases;
+  trace.preferences=fired;
   trace.vetoes=vetoed;
   trace.evidence.softHoldExemptions=actions.filter(a=>wasted.has(a.entityId)&&comboFirst.has(a.id)&&out.some(x=>x.id===a.id)).map(a=>a.id);}
  return out;
@@ -1098,8 +1114,11 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  const {cards,pricedOut}=mustSpend(state,actions);
  const hp=heroPowerOf(state);
  let out=actions;
- const own=['pricedOut','mustSpend','setupFirst','bodyBeforeBuff'],log=[],hold={fodderHold:[...wastedFodder(state)]};
- const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)out=releasing(state,out,kept,rule,log,hold);};
+ const own=['pricedOut','mustSpend','setupFirst','bodyBeforeBuff'],log=[],hold={fodderHold:[...wastedFodder(state)]},fired=[];
+ // Step 4 (impact check): which rule took which actions off the menu, before any release.
+ const took=(rule,next)=>{const k=new Set(next.map(a=>a.id)),gone=out.filter(a=>!k.has(a.id)).map(a=>a.id);
+  if(gone.length)fired.push({rule,removed:gone});out=next;};
+ const prefer=(rule,kept)=>{if(kept.length&&kept.length<out.length)took(rule,releasing(state,out,kept,rule,log,hold));};
  if(pricedOut)prefer('pricedOut',out.filter(a=>a.entityId!==hp.entityId));
  // Drawing is an optional intent, including Life Tap. It must not suppress
  // attacks or END_TURN merely because there is spare mana to pay for it.
@@ -1113,7 +1132,7 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  // burn spell or an Egg kept for a discard is a deliberate hold: when those are all that is left,
  // ending the turn is Jev's call. The attack half below still applies.
  const keepable=a=>{const c=(state?.me?.hand??[]).find(x=>x.entityId===a.entityId);return holdForLater(state,c);};
- if(cards.length){if(!cards.every(keepable))out=out.filter(a=>a.type!=='END_TURN');prefer('mustSpend',out.filter(a=>!isAttackAction(state,a)||trade(a)));}
+ if(cards.length){if(!cards.every(keepable))took('mustSpendEnd',out.filter(a=>a.type!=='END_TURN'));prefer('mustSpend',out.filter(a=>!isAttackAction(state,a)||trade(a)));}
  // User ruling (2026-09-30, game 58, turn 3): 「地標也沒有先抽卡，所以最後損失了 buff 的傷害」. Five
  // minions swung, then Chamber of Viscidus, the Coin and Wicked Whispers went down -- the +1/+1
  // landed on minions that had already attacked. A ready location and a whole-board buff (or the
@@ -1130,10 +1149,11 @@ export function spendFirst(state,actions,{admission=combinationAdmission(state,a
  const fromHand=out.some(a=>(state?.me?.hand??[]).some(c=>c.entityId===a.entityId));
  const tapOn=hp&&out.some(a=>a.entityId===hp.entityId);
  if(tapOn&&!fromHand&&drawCount(hp)>0&&!pricedOut
-  &&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state))out=out.filter(a=>a.type!=='END_TURN');
+  &&myHeroHp(state)-selfDamageCost(hp)>incomingDamage(state))took('tapOnlyEnd',out.filter(a=>a.type!=='END_TURN'));
  // Here, not in constrainActions: a lethal that needs the buff now is found on the full menu first.
  prefer('bodyBeforeBuff',bodyBeforeBuff(state,out));
- if(trace)trace.ruleReleases=[...(trace.ruleReleases??[]).filter(r=>!own.includes(r.rule)),...log];
+ if(trace){trace.ruleReleases=[...(trace.ruleReleases??[]).filter(r=>!own.includes(r.rule)),...log];
+  trace.preferences=[...(trace.preferences??[]).filter(r=>![...own,'mustSpendEnd','tapOnlyEnd'].includes(r.rule)),...fired];}
  // An attack that triggers the proved development is setup, not premature
  // combat. Restore only that game's offered first step, never arbitrary attacks.
  const first=admittedFirstIds({lines:admittedLines(admission,actions)});

@@ -712,7 +712,11 @@ function temporaryPick(state,actions){
  const mana=Number(state.me?.mana??0);
  const card=a=>(state.choice.entities??[]).find(c=>c.entityId===a.entityId);
  if(actions.some(a=>a.type==='CHOICE'&&costOf(card(a))<=mana))return actions;
- const paying=actions.filter(a=>a.type==='CHOICE'&&PAYS_ON_DISCARD.test(flat(card(a)?.text)));
+ let paying=actions.filter(a=>a.type==='CHOICE'&&PAYS_ON_DISCARD.test(flat(card(a)?.text)));
+ // User ruling (2026-10-05, game 8 turn 6): on a full board Catacombs offered Disposable Acolytes,
+ // Hand of Gul'dan and Duke of Below, and Jev took Acolytes. 「因為我們已經滿場。所以墓穴可以不出，
+ // 或是應該選擇古爾丹」: with no room, a discard that summons pays nothing, so the draw wins.
+ if(boardRoom(state)<=0){const draws=paying.filter(a=>!bodiesOnDiscard(card(a)));if(draws.length)paying=draws;}
  return paying.length?paying:actions;
 }
 

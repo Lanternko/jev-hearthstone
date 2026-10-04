@@ -1,0 +1,356 @@
+{
+ "state": {
+  "gameNumber": 8,
+  "turn": 11,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 0,
+   "maxMana": 6,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 14,
+   "board": [
+    {
+     "entityId": 84,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 7,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 85,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 33,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 8,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 108,
+     "cardId": "KAR_205",
+     "name": "Silverware Golem",
+     "text": "If you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 121,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 4,
+     "HEALTH": 7,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 24,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 4,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 8,
+     "cardId": "WON_103",
+     "name": "Chamber of Viscidus",
+     "text": "[x]Look at 3 cards in your\nhand and choose one to\ndiscard. Draw two cards.",
+     "baseCost": 3,
+     "baseHealth": 2,
+     "COST": 3,
+     "HEALTH": 2,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "LOCATION",
+     "EXHAUSTED": 1,
+     "LOCATION_ACTION_COOLDOWN": 1
+    },
+    {
+     "entityId": 144,
+     "cardId": "CORE_CS2_189",
+     "name": "Elven Archer",
+     "text": "<b>Battlecry:</b> Deal 1 damage.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 145,
+     "cardId": "BOT_020",
+     "name": "Skaterbot",
+     "text": "<b>Magnetic</b>\n<b>Rush</b>",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 7,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1,
+     "RUSH": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 31,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 19,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 7,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "PRIEST",
+   "mana": 1,
+   "maxMana": 5,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 32,
+   "board": [
+    {
+     "entityId": 86,
+     "cardId": "HERO_09an_Anduin_hnv",
+     "name": "Absolution Anduin",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "DAMAGE": 11,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 87,
+     "cardId": "HERO_09dbp",
+     "name": "Lesser Heal",
+     "text": "<b>Hero Power</b>\nRestore #2 Health.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 88,
+     "cardId": "JAIL_COIN2",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 69,
+     "cardId": "TTN_483",
+     "name": "Serenity",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "Give all enemy minions -2 Attack. Destroy any with 0 Attack."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 75,
+     "cardId": "TID_920",
+     "name": "Drown",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "Put an enemy minion on the bottom of your deck."
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 72,
+     "cardId": "AV_331",
+     "name": "Najak Hexxen",
+     "CARDTYPE": "MINION",
+     "COST": 4,
+     "ATK": 1,
+     "HEALTH": 4,
+     "text": "[x]<b>Battlecry:</b> Take control of\nan enemy minion.\n<b>Deathrattle:</b> Give the\nminion back."
+    }
+   ]
+  },
+  "optionsId": 43,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    33,
+    30
+   ],
+   "complete": true
+  },
+  "choice": {
+   "id": 5,
+   "playerId": 1,
+   "type": "GENERAL",
+   "min": 1,
+   "max": 1,
+   "entities": [
+    {
+     "entityId": 157,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 158,
+     "cardId": "BT_300",
+     "name": "Hand of Gul'dan",
+     "text": "When you play\nor discard this,\ndraw 3 cards.",
+     "baseCost": 6,
+     "COST": 6,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 156,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 2,
+     "HEALTH": 2,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    }
+   ],
+   "revision": 100430,
+   "offeredAt": "03:12:23.1495318",
+   "sourceId": 6,
+   "source": {
+    "entityId": 6,
+    "cardId": "TLC_451",
+    "name": "Cursed Catacombs",
+    "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+    "baseCost": 0,
+    "ZONE_POSITION": 0,
+    "CARDTYPE": "SPELL"
+   }
+  },
+  "fingerprint": "a359ebaa4e1ccdbfd31f",
+  "decisionFingerprint": "26bfd312e3f011459e8a"
+ },
+ "options": [
+  {
+   "id": "c5e157",
+   "type": "CHOICE",
+   "choiceId": 5,
+   "entityId": 157
+  },
+  {
+   "id": "c5e158",
+   "type": "CHOICE",
+   "choiceId": 5,
+   "entityId": 158
+  }
+ ]
+}

@@ -197,8 +197,7 @@ try{
       const hero=b=>(b??[]).find(c=>c.CARDTYPE==='HERO')?.cardId??null,offeredAt=d.state.choice?.offeredAt??null;
       await appendFile(MULLIGAN_TIMING,JSON.stringify({createdAt:new Date().toISOString(),gameNumber:d.state.gameNumber,
         offeredAt,offerMs:offeredAt?clockToday(offeredAt):null,steps:timing,verdict:after?.verdict??'dead',
-        kept:after?.s?.state?.mulliganResult?.kept??null,me:hero(d.state.me?.board),foe:hero(d.state.opponent?.board)})+'
-')
+        kept:after?.s?.state?.mulliganResult?.kept??null,me:hero(d.state.me?.board),foe:hero(d.state.opponent?.board)})+'\n')
         .catch(e=>console.log(`${stamp()} mulligan timing not recorded: ${e.message}`));
     }
     await record(gestures.map((g,i)=>({

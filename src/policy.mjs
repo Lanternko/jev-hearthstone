@@ -549,7 +549,11 @@ export function boardFirstDiscard(state,actions){
  if(count===0)return actions.filter(a=>!picks(a)||bodiesOnDiscard(inHand(a.targetId)));
  // User ruling, game 148 turn 3: after spending all mana on Occultist,
  // a draw-three payoff cannot develop this turn. Prefer a summon payoff on a low board.
+ // User ruling (2026-10-05, game 2, turn 3): against a swarm the split burn clears the board,
+ // which is worth more than a body, so it stays a pick (splitBurnWaits applies the same test).
+ const swarm=swarmed(state);
  return actions.filter(a=>!picks(a)||isCurse(inHand(a.targetId))
+  ||swarm&&splitBurn(inHand(a.targetId))
   ||bodiesOnDiscard(inHand(a.targetId))&&fits(a)
   ||Number(state.me?.mana??0)>costOf(inHand(a.entityId))
   ||!actions.some(b=>b.entityId===a.entityId&&picks(b)&&bodiesOnDiscard(inHand(b.targetId))&&fits(b)));
@@ -563,17 +567,35 @@ export function boardFirstDiscard(state,actions){
 // or with their hero in burn range.
 // `card(a)` names the card a discard option throws away.
 const SMALL_PUNCH=5;
+const splitBurn=c=>!!c&&PAYS_ON_DISCARD.test(flat(c.text))&&SPLITS_DAMAGE.test(flat(c.text));
+function swarmed(state){
+ const small=(state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION'&&hpOf(c)<=SMALL);
+ return small.length>=SWARM||small.reduce((n,c)=>n+Number(c.ATK??c.baseAttack??0),0)>=SMALL_PUNCH;
+}
 function splitBurnWaits(state,actions,card){
  const foe=enemyHero(state);
  if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
  // The user's addition: 「或是對面2血以下的怪 的攻擊力合 >= 5」 -- small minions hitting that hard
  // together are worth the gamble even when there are fewer than three.
- const small=(state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION'&&hpOf(c)<=SMALL);
- if(small.length>=SWARM||small.reduce((n,c)=>n+Number(c.ATK??c.baseAttack??0),0)>=SMALL_PUNCH)return actions;
- const split=a=>{const c=card(a);return !!c&&PAYS_ON_DISCARD.test(flat(c.text))&&SPLITS_DAMAGE.test(flat(c.text))};
+ if(swarmed(state))return actions;
+ const split=a=>splitBurn(card(a));
  if(!actions.some(a=>card(a)&&bodiesOnDiscard(card(a))))return actions;
  const kept=actions.filter(a=>!split(a));
  return kept.length?kept:actions;
+}
+// User ruling (2026-10-05, game 2, turn 3): two minions of ours against three small ones, and
+// Jev buffed with Entropic Continuity and Life Tapped. 「應該要 occultist + 靈魂彈幕（對面滿地雜毛）、
+// 325 也可以接受」: with a low board against a swarm, Occultist discarding the split burn (or a
+// body) is the turn; other cards and the Hero Power wait. Attacks stay free.
+export function swarmOccultist(state,actions){
+ if(myMinions(state)>LOW_BOARD||!swarmed(state))return actions;
+ const foe=enemyHero(state);
+ if(foe&&heroHp(foe)<=BURN_RANGE)return actions;
+ const hand=state?.me?.hand??[],inHand=id=>hand.find(c=>c.entityId===id);
+ const picks=a=>CHOOSES_DISCARD.test(flat(inHand(a.entityId)?.text))&&inHand(a.targetId);
+ const good=a=>picks(a)&&(splitBurn(inHand(a.targetId))||bodiesOnDiscard(inHand(a.targetId)));
+ if(!actions.some(a=>picks(a)&&splitBurn(inHand(a.targetId))))return actions;
+ return actions.filter(a=>good(a)||isAttackAction(state,a)&&!picks(a));
 }
 function occultistPick(state,actions){
  const hand=state?.me?.hand??[],inHand=id=>hand.find(c=>c.entityId===id);
@@ -1027,6 +1049,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  prefer('doomedPick',doomedPick(state,out));
  prefer('boardFirstDiscard',boardFirstDiscard(state,out));
  prefer('occultistPick',occultistPick(state,out));
+ prefer('swarmOccultist',swarmOccultist(state,out));
  prefer('counterFirst',counterFirst(state,out));
  {const ow=overflowWaits(state,out);prefer('overflowWaits',out.filter(a=>!ow(a)));}
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);

@@ -79,7 +79,11 @@ export function createParser(){
     if(m){
       const header=m[1].match(/^id=(\d+) Player=(.*?) EntitiesCount=(\d+)/);
       if(header){const id=Number(header[1]),offer=submitted.get(id)??choices.get(id);
-        chosenPacket={choiceId:id,playerId:offer?.playerId,type:offer?.type,count:Number(header[3]),kept:[]};chosenResults.set(id,chosenPacket);continue}
+        chosenPacket={choiceId:id,playerId:offer?.playerId,type:offer?.type,count:Number(header[3]),kept:[]};chosenResults.set(id,chosenPacket);
+        // 2026-10-05 batch game 48: the turn timer ran out with Catacombs' discover open, the server
+        // picked for us, and with no SendChoices of ours the stale choice was clicked until the stop.
+        // The server's result closes the choice whoever made it.
+        choices.delete(id);continue}
       const entry=m[1].match(/^Entities\[\d+\]=(.+)/);
       if(entry&&chosenPacket){const id=resolve(entry[1]);if(id!=null)chosenPacket.kept.push(id)}
       continue;

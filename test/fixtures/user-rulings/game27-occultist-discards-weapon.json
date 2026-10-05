@@ -1,0 +1,290 @@
+{
+ "source": "2026-10-05 batch game 27 turn 5, decision 87",
+ "state": {
+  "gameNumber": 29,
+  "turn": 5,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 3,
+   "maxMana": 3,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 25,
+   "board": [
+    {
+     "entityId": 74,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 3,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 75,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 94,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 14,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 93,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 27,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 15,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 19,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 2,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 24,
+   "board": [
+    {
+     "entityId": 76,
+     "cardId": "HERO_11w",
+     "name": "Icecream Sai",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 77,
+     "cardId": "HERO_11cbp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 39,
+     "cardId": "TOY_000",
+     "name": "Tar Slime",
+     "text": "<b>Taunt</b>\nHas +2 Attack during your opponent's turn.",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 46,
+     "cardId": "RLK_225",
+     "name": "Blightfang",
+     "text": "[x]<b>Battlecry:</b> Infect all enemy\nminions. When they die,\nyou summon a 2/2\nZombie with <b>Taunt</b>.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 39,
+     "cardId": "TOY_000",
+     "name": "Tar Slime",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 0,
+     "HEALTH": 3,
+     "text": "<b>Taunt</b>\nHas +2 Attack during your opponent's turn."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 78,
+     "cardId": "JAIL_COIN2",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 46,
+     "cardId": "RLK_225",
+     "name": "Blightfang",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "text": "[x]<b>Battlecry:</b> Infect all enemy\nminions. When they die,\nyou summon a 2/2\nZombie with <b>Taunt</b>."
+    }
+   ]
+  },
+  "optionsId": 11,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    14,
+    18
+   ],
+   "complete": true
+  },
+  "fingerprint": "2f5e0b782643fdd6b513",
+  "decisionFingerprint": "742138333651ab707fad"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 27,
+   "type": "POWER",
+   "id": "o1t0",
+   "targetId": 15
+  },
+  {
+   "option": 1,
+   "entityId": 27,
+   "type": "POWER",
+   "id": "o1t1",
+   "targetId": 19
+  },
+  {
+   "option": 2,
+   "entityId": 75,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 14,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 39
+  },
+  {
+   "option": 4,
+   "entityId": 93,
+   "type": "POWER",
+   "id": "o4t0",
+   "targetId": 39
+  },
+  {
+   "option": 5,
+   "entityId": 94,
+   "type": "POWER",
+   "id": "o5t0",
+   "targetId": 39
+  }
+ ]
+}

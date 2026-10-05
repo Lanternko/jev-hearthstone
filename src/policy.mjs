@@ -840,6 +840,40 @@ function guldanWaits(state,actions){
  return develops?actions.filter(a=>!guldan(a)):actions;
 }
 
+// User ruling (10-05 batch, game 27, turn 5): 3 mana unspent, Ocular Occultist and Life Tap on the
+// menu, and the turn passed. 「下魔眼 棄掉武器……雖然棄掉武器很可惜，但浪費三個水晶更糟」 and
+// 「抽牌也比空過好」: with the whole turn's mana unspent, a card play or hero power beats passing.
+// When mustSpend already counts a card play, mustSpendEnd decides (it keeps the earlier ruling that
+// a burn spell or an Egg held for a discard is a deliberate hold); this covers the turns it misses,
+// a targeted discard play or Life Tap alone.
+function noIdleTurn(state,actions){
+ const hand=state.me?.hand??[],board=state.me?.board??[],mana=Number(state.me?.mana??0);
+ if(mana<2||mana!==Number(state.me?.maxMana??-1))return actions;
+ if(mustSpend(state,actions).cards.length)return actions;
+ // Life Tap counts only while the draw is safe: a near-empty deck or a full hand makes it a cost.
+ const tapSafe=Number(state.me?.deckCount??0)>=5&&hand.length<10;
+ const spends=a=>tapSafe&&board.some(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER')
+  ||hand.some(c=>c.entityId===a.entityId&&!isCoin(c)&&costOf(c)<=mana);
+ return actions.some(spends)?actions.filter(a=>a.type!=='END_TURN'):actions;
+}
+
+// Same ruling: when a chosen discard is between a weapon and Duke of Below, the weapon goes if the
+// discard grows Duke to at least 6/6 (「公爵66 大於武器，如果小於66會保留武器」); otherwise Duke goes.
+const GROWS_ON_DISCARD=/\+2\/\+2 for each card you've discarded/i;
+function dukeOverWeapon(state,actions){
+ const hand=state.me?.hand??[],held=id=>hand.find(c=>c.entityId===id);
+ const drop=new Set();
+ for(const a of actions){
+  if(a.targetId==null||!hand.some(c=>c.entityId===a.entityId))continue;
+  const sib=actions.filter(b=>b.entityId===a.entityId&&b.option===a.option&&b.targetId!=null);
+  const weapon=sib.find(b=>held(b.targetId)?.CARDTYPE==='WEAPON');
+  const duke=sib.find(b=>GROWS_ON_DISCARD.test(flat(held(b.targetId)?.text)));
+  if(!weapon||!duke)continue;
+  drop.add(Number(held(duke.targetId).ATK??0)+2>=6?duke.id:weapon.id);
+ }
+ return actions.filter(a=>!drop.has(a.id));
+}
+
 function buffBeforeTap(state,actions){
  const hand=state.me?.hand??[],board=state.me?.board??[];
  const buffs=actions.map(a=>hand.find(c=>c.entityId===a.entityId)).filter(c=>valuableBuff(state,c));
@@ -1091,6 +1125,8 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  {const split=splitToFace(state);prefer('splitToFace',out.filter(a=>!split(a)));}
  {const od=overdrawWaits(state);prefer('overdrawWaits',out.filter(a=>!od(a)));}
  prefer('guldanWaits',guldanWaits(state,out));
+ prefer('noIdleTurn',noIdleTurn(state,out));
+ prefer('dukeOverWeapon',dukeOverWeapon(state,out));
  if(!isDH(state))prefer('weaponFirst',weaponFirst(state,out));
  let released=null;
  if(wasted.size){

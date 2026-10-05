@@ -1,0 +1,189 @@
+{
+ "note": "Batch 2026-10-04 game 34 turn 2: 1 mana, Coin would only pay for Life Tap; keep it for Ocular Occultist.",
+ "state": {
+  "gameNumber": 36,
+  "turn": 2,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 1,
+   "maxMana": 1,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 25,
+   "board": [
+    {
+     "entityId": 78,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 79,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 32,
+     "cardId": "EX1_308",
+     "name": "Soulfire",
+     "text": "[x]Deal $4 damage.\nDiscard a random card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 25,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 19,
+     "cardId": "CATA_490",
+     "name": "Ocular Occultist",
+     "text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Choose a card in\nyour hand to discard.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 6,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1
+    },
+    {
+     "entityId": 7,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "WEAPON"
+    },
+    {
+     "entityId": 82,
+     "cardId": "JAIL_COIN3",
+     "name": "The Coin",
+     "text": "Gain 1 Mana Crystal this turn only.",
+     "baseCost": 0,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 11,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "PRIEST",
+   "mana": 0,
+   "maxMana": 1,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 2,
+   "deckCount": 36,
+   "board": [
+    {
+     "entityId": 80,
+     "cardId": "HERO_09aa",
+     "name": "Champion Tyrande",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 81,
+     "cardId": "HERO_09dbp",
+     "name": "Lesser Heal",
+     "text": "<b>Hero Power</b>\nRestore #2 Health.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    }
+   ],
+   "secretCount": 2,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 1,
+     "entityId": 68,
+     "cardId": "TLC_817",
+     "name": "Reach Equilibrium",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "[x]<b>Quest:</b> Cast 4 Holy spells\n<b>Reward:</b> Life's Breath.\n<b>Quest:</b> Cast 4 Shadow spells.\n<b>Reward:</b> Death's Touch."
+    },
+    {
+     "public": true,
+     "engineTurn": 1,
+     "entityId": 71,
+     "cardId": "TSC_210",
+     "name": "Illuminate",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "<b>Dredge</b>. If it's a spell,\nreduce its Cost by (3)."
+    }
+   ]
+  },
+  "optionsId": 4,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [],
+   "complete": true
+  },
+  "fingerprint": "8577c50f4894ba44e7a6",
+  "decisionFingerprint": "427d96d5347502aec5e1"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 82,
+   "type": "POWER",
+   "id": "o1"
+  }
+ ]
+}

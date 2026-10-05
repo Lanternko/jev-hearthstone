@@ -365,6 +365,16 @@ export const spendableAt=(state,mana)=>{
   return hand.some(c=>(c.COST??c.baseCost??0)<=mana)||!!hpReady;
 };
 export const deadCoin=state=>!spendableAt(state,(state?.me?.mana??0)+1);
+// User ruling (2026-10-05, batch game 34, turn 2 on 1 mana): Coin -> Life Tap was played with
+// Ocular Occultist in hand. 「不要硬幣+抽牌。留著下魔眼」: when the crystal unlocks no card and only
+// pays for the hero power, keep the Coin for a real card on a later turn.
+export function coinOnlyTaps(state){
+ const mana=Number(state?.me?.mana??0);
+ const hand=(state?.me?.hand??[]).filter(c=>!isCoin(c));
+ if(hand.some(c=>(c.COST??c.baseCost??0)===mana+1))return false;
+ const hp=(state?.me?.board??[]).find(c=>c.CARDTYPE==='HERO_POWER');
+ return !!hp&&!(hp.EXHAUSTED===1||hp.EXHAUSTED==='1')&&(hp.COST??hp.baseCost??2)===mana+1;
+}
 // User ruling, game 46: turn-one Coin -> a lone 0/2 Egg is not productive tempo.
 export function passiveEggCoin(state){
  if(isDH(state)||Number(state?.me?.mana)!==1||myMinions(state)>0)return false;
@@ -978,6 +988,7 @@ export function dhTempoActions(state,actions){
 //     becomes) lethal. The user's 「天生技後被場攻斬殺」 category; not a strict proof, since a
 //     later clear could still save us, and named so in docs/veto-audit-20261004.md;
 //   locationResting -- the game refuses the click; deadCoin -- nothing to spend the crystal on;
+//   coinOnlyTaps -- user ruling, the crystal would only pay for the hero power;
 //   burnOwnHero -- user ruling, damage spells never aim at our own hero;
 //   buffNobody -- a pure board buff with no recipient; deadDraw -- a pure draw that can only
 //     burn or fatigue; idleHeroAttack -- hero attack gained with no swing to use it.
@@ -985,7 +996,7 @@ export function vetoes(state){
  const hand=state.me?.hand??[],board=state.me?.board??[];
  const dies=suicide(state),drawDeath=drawKills(state),resting=locationResting(state);
  const mine=board.find(c=>c.CARDTYPE==='HERO');
- const coinDead=deadCoin(state),boardLethal=forbidsSelfDamage(state);
+ const coinDead=deadCoin(state),coinTap=coinOnlyTaps(state),boardLethal=forbidsSelfDamage(state);
  const held=a=>hand.find(c=>c.entityId===a.entityId);
  const power=a=>board.find(c=>c.entityId===a.entityId&&c.CARDTYPE==='HERO_POWER');
  return a=>{
@@ -998,6 +1009,7 @@ export function vetoes(state){
   if(p&&tapExposesBoardLethal(state,p))return 'tapExposesBoardLethal';
   if(resting(a))return 'locationResting';
   if(h&&isCoin(h)&&coinDead)return 'deadCoin';
+  if(h&&isCoin(h)&&coinTap)return 'coinOnlyTaps';
   if(h?.CARDTYPE==='SPELL'&&mine&&a.targetId===mine.entityId&&BURN.test(flat(h.text)))return 'burnOwnHero';
   if(h&&pureBoardBuff(h)&&buffImpact(state,h)?.recipients===0)return 'buffNobody';
   const n=c?drawCount(c,state):0;

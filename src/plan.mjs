@@ -198,11 +198,17 @@ const combatKey=b=>[b.id,b.atk,b.hp,b.maxHp,b.armor,b.taunt,b.ds,b.stealth,b.poi
 // Only compare exact outcomes with a single equivalent survivor swapped; triggers,
 // Deathrattles, different stats/keywords, resources and lethal remain separate choices.
 export function ongoingTradePlans(start,plans){
-  const own=p=>JSON.stringify([p.s.me,p.s.hand,p.s.mana,p.s.weapon,p.s.locations,
-    p.s.discarded,p.s.drawnUnknown,p.s.faceDealt]);
+  // 2026-10-05 batch game 8 turn 12: comparing every pair and re-serialising both sides each time took
+  // 187s over ~7000 plans and timed out two whole turns. Keys are built once and only plans whose own
+  // side ended identical are compared -- the same answer as before.
+  const ownKey=new Map(),groups=new Map();
+  for(const p of plans){
+    const k=JSON.stringify([p.s.me,p.s.hand,p.s.mana,p.s.weapon,p.s.locations,p.s.discarded,p.s.drawnUnknown,p.s.faceDealt]);
+    ownKey.set(p,k);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(p);
+  }
   const sameBody=(a,b)=>JSON.stringify(combatKey(a).slice(1))===JSON.stringify(combatKey(b).slice(1));
-  return plans.filter(p=>!plans.some(q=>{
-    if(p===q||q.score<=p.score||!p.steps.every(m=>m.exact)||!q.steps.every(m=>m.exact)||own(p)!==own(q))return false;
+  return plans.filter(p=>!groups.get(ownKey.get(p)).some(q=>{
+    if(p===q||q.score<=p.score||!p.steps.every(m=>m.exact)||!q.steps.every(m=>m.exact))return false;
     const left=p.s.opp.filter(a=>!q.s.opp.some(b=>b.id===a.id));
     const right=q.s.opp.filter(b=>!p.s.opp.some(a=>a.id===b.id));
     if(left.length!==1||right.length!==1)return false;

@@ -1,0 +1,3125 @@
+{
+  "version": "local-class-prior-v1",
+  "source": "audited history-quadrants-2026-10-01T19-17-42-331Z; user/analyst public replay rulings",
+  "window": {
+    "start": "2026-09-24T17:31:28.715Z",
+    "end": "2026-10-01T17:31:28.715Z"
+  },
+  "trainedThrough": "2026-10-01T17:31:28.715Z",
+  "scope": "Local Warlock/Wild/Ranked encounters; not a region/rank-matched global meta estimate. Unknown labels included. Rebuild after reviewing newly completed games.",
+  "hashes": {
+    "games": "f4cd1552c49d1b441a36c2fc84766beb584946cd91a46df75cef08350111a5fa",
+    "rulings": "1f5c4e25e633bbf6df5bb0c40cb518ef406c7b9c6ee5507e50ff6a2244ef8936"
+  },
+  "rows": [
+    {
+      "id": "c0cd4286-00bd-4a4f-a6d6-34f574fdbcfe",
+      "endedAt": "2026-09-25T18:01:17.4765444+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "MEND_506",
+        "FIR_911",
+        "MEND_501"
+      ]
+    },
+    {
+      "id": "470d1073-80f4-4fed-8b50-d55a05fb8971",
+      "endedAt": "2026-09-25T18:18:00.9134328+08:00",
+      "heroClass": "Warlock",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_319",
+        "DMF_COIN2",
+        "YOP_033",
+        "LOOT_014"
+      ]
+    },
+    {
+      "id": "6ef10067-6dfe-480e-8884-64538b6e72bf",
+      "endedAt": "2026-09-25T18:33:52.3041212+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TLC_602",
+        "VAC_528",
+        "ULD_003",
+        "CS2_013",
+        "TOY_605",
+        "TSC_908",
+        "SCH_259",
+        "CORE_EX1_606",
+        "TIME_873",
+        "YOG_502",
+        "DEEP_020",
+        "BAR_721",
+        "TIME_715",
+        "BG31_BOB"
+      ]
+    },
+    {
+      "id": "6c037ffc-5a25-4e12-bfdb-26daa69057e1",
+      "endedAt": "2026-09-25T18:56:48.4455238+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "CORE_ICC_407",
+        "TSC_956",
+        "WW_442",
+        "SW_003",
+        "TSC_924",
+        "WW_001t18",
+        "CORE_EX1_309",
+        "TTN_COIN1",
+        "TSC_962",
+        "EX1_049",
+        "TTN_742",
+        "TSC_955"
+      ]
+    },
+    {
+      "id": "d941ac0c-a378-4ffb-baff-685659af4245",
+      "endedAt": "2026-09-26T15:39:47.6591442+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CAP_104",
+        "CAP_102",
+        "JAIL_421",
+        "CATA_585",
+        "CORE_DRG_024",
+        "CORE_REV_990"
+      ]
+    },
+    {
+      "id": "b1abbde7-df50-41c8-b160-735d9104f072",
+      "endedAt": "2026-09-26T15:48:04.1529991+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_UNG_809",
+        "UNG_809t1",
+        "EDR_852",
+        "FIR_929",
+        "TLC_249",
+        "CORE_CS2_029",
+        "EDR_800"
+      ]
+    },
+    {
+      "id": "e9a0232f-7ff7-4e8f-a793-4b3623de657e",
+      "endedAt": "2026-09-29T02:26:06.1517874+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TSC_210",
+        "TIME_026",
+        "EDR_856",
+        "RLK_534",
+        "TSC_908",
+        "WON_103"
+      ]
+    },
+    {
+      "id": "db5c3b36-65fe-41ff-aa04-995311781a8e",
+      "endedAt": "2026-09-29T02:31:16.2271682+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "ULD_003",
+        "CS1_112",
+        "DEEP_026",
+        "CORE_CS1_112",
+        "TTN_COIN1",
+        "END_025"
+      ]
+    },
+    {
+      "id": "abd61b1c-95e0-466b-863f-6c361cf0161d",
+      "endedAt": "2026-09-29T02:36:37.023854+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "RLK_503",
+        "CORE_NEW1_020",
+        "RLK_708",
+        "CORE_RLK_062",
+        "RLK_060",
+        "CORE_RLK_712",
+        "CORE_SCH_713"
+      ]
+    },
+    {
+      "id": "ec6c0d17-8ca5-47b7-9a4c-08f30ab76368",
+      "endedAt": "2026-09-29T02:41:38.6388212+08:00",
+      "heroClass": "Priest",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_193",
+        "GAME_005",
+        "CORE_CS1_130",
+        "CORE_GVG_085",
+        "CORE_EX1_096",
+        "CORE_CS2_004",
+        "CORE_SW_066",
+        "CORE_EX1_189"
+      ]
+    },
+    {
+      "id": "7ea38aec-0a48-4fe2-a545-9d1efe44fee8",
+      "endedAt": "2026-09-29T02:50:46.1493441+08:00",
+      "heroClass": "Druid",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "JAIL_718",
+        "TSC_654",
+        "SCH_427",
+        "BT_724",
+        "VAC_428",
+        "EX1_169",
+        "SC_755",
+        "BOT_054",
+        "SC_753",
+        "TID_001",
+        "CS2_008"
+      ]
+    },
+    {
+      "id": "8893d102-218a-4537-bb0f-e259f2679d83",
+      "endedAt": "2026-09-29T03:02:08.40362+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "RLK_503",
+        "CORE_ULD_723",
+        "CORE_RLK_121",
+        "CORE_EDR_003",
+        "RLK_707",
+        "RLK_060",
+        "RLK_720",
+        "RLK_061",
+        "RLK_708",
+        "CORE_RLK_116",
+        "RLK_958"
+      ]
+    },
+    {
+      "id": "d38709da-fbd7-42f8-a973-4cbdae5c39db",
+      "endedAt": "2026-09-29T03:07:23.6032128+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_RLK_712",
+        "CORE_NEW1_020",
+        "CORE_RLK_121",
+        "CORE_RLK_062",
+        "RLK_708",
+        "CORE_SCH_713",
+        "RLK_709"
+      ]
+    },
+    {
+      "id": "2dc8984b-84d9-4670-913c-069faa20198b",
+      "endedAt": "2026-09-29T03:13:24.0721005+08:00",
+      "heroClass": "Warrior",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CORE_GVG_085",
+        "CORE_EX1_604",
+        "CORE_AT_064",
+        "CORE_LOOT_413",
+        "CORE_CS2_179",
+        "CORE_OG_218",
+        "CORE_EX1_606",
+        "CORE_EX1_391",
+        "CORE_OG_149"
+      ]
+    },
+    {
+      "id": "b4f87310-f425-405c-8b99-32b05a15e227",
+      "endedAt": "2026-09-29T03:19:33.087761+08:00",
+      "heroClass": "Paladin",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TLC_426",
+        "GAME_005",
+        "EDR_999",
+        "CORE_DMF_067",
+        "WORK_040"
+      ]
+    },
+    {
+      "id": "39b0d65d-1e54-4422-afe9-c66030605278",
+      "endedAt": "2026-09-29T03:24:27.9647959+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_SCH_713",
+        "CORE_EX1_134",
+        "CORE_NEW1_018",
+        "CORE_EX1_129"
+      ]
+    },
+    {
+      "id": "1a9de399-8fbc-4dec-81c4-23f6ea3bc00e",
+      "endedAt": "2026-09-29T05:14:49.4946514+08:00",
+      "heroClass": "Shaman",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "EDR_COIN2",
+        "REV_917"
+      ]
+    },
+    {
+      "id": "9c8bebe2-9a26-4e29-87ad-902b118552ae",
+      "endedAt": "2026-09-29T05:21:16.5129173+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CFM_637",
+        "GVG_075",
+        "CAP_107",
+        "BT_124",
+        "CAP_107t",
+        "CAP_103"
+      ]
+    },
+    {
+      "id": "2e6e8157-bc5d-43f2-a302-abb572c6fed8",
+      "endedAt": "2026-09-29T05:27:54.6202089+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TSC_963",
+        "TOY_518",
+        "CS2_146",
+        "DRG_035",
+        "DRG_035t",
+        "LOOT_033",
+        "TSC_086"
+      ]
+    },
+    {
+      "id": "0b7d19cb-5f09-4fa3-9a37-0f4443417a5e",
+      "endedAt": "2026-09-29T05:34:57.4623477+08:00",
+      "heroClass": "Mage",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "BAR_546",
+        "TIME_855",
+        "TOY_377",
+        "GIL_667",
+        "RLK_222",
+        "END_025",
+        "ULD_208",
+        "GAME_005",
+        "DINO_414"
+      ]
+    },
+    {
+      "id": "adbc7f4e-2a21-4084-9075-bb369d9ad345",
+      "endedAt": "2026-09-29T22:35:44.8022017+08:00",
+      "heroClass": "Paladin",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TLC_438",
+        "TIME_019",
+        "TIME_045",
+        "CORE_CS2_093",
+        "END_013",
+        "END_011",
+        "OG_221",
+        "EDR_253",
+        "END_010",
+        "CORE_ICC_038",
+        "EDR_255",
+        "CORE_BT_292",
+        "TIME_700",
+        "TIME_009t2",
+        "TIME_009t1"
+      ]
+    },
+    {
+      "id": "87c23c98-6abc-418a-bc4a-594fcc633512",
+      "endedAt": "2026-09-29T22:40:47.4569592+08:00",
+      "heroClass": "Warlock",
+      "type": "combo",
+      "forty": true,
+      "cards": [
+        "BAR_074",
+        "CAP_405",
+        "CAP_405tb2",
+        "ETC_085",
+        "RLK_532",
+        "ETC_085t8",
+        "RLK_534"
+      ]
+    },
+    {
+      "id": "f3d2e233-695b-42df-9469-7d8b086dde97",
+      "endedAt": "2026-09-29T22:49:20.9581521+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_145",
+        "CORE_EX1_129",
+        "CORE_EX1_010",
+        "GAME_005",
+        "CORE_EX1_134",
+        "CORE_NEW1_027",
+        "CORE_NEW1_018",
+        "CORE_EX1_131",
+        "CORE_CS2_076",
+        "CS3_022"
+      ]
+    },
+    {
+      "id": "df122434-0053-4b4f-b740-327ab48cd9cc",
+      "endedAt": "2026-09-29T22:57:49.0829376+08:00",
+      "heroClass": "Mage",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "BAR_546",
+        "BAR_074",
+        "BAR_544",
+        "SW_319",
+        "SCH_350",
+        "SCH_312",
+        "CS3_024",
+        "CORE_ULD_191",
+        "BAR_547"
+      ]
+    },
+    {
+      "id": "a11a841d-f94b-41d2-92e3-68490340bd5e",
+      "endedAt": "2026-09-29T23:01:42.7848202+08:00",
+      "heroClass": "Shaman",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "ULD_291",
+        "BOT_533",
+        "GDB_901",
+        "SW_032"
+      ]
+    },
+    {
+      "id": "e0beab00-6209-4bf9-a283-feac82ab384d",
+      "endedAt": "2026-09-29T23:05:50.0505485+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TIME_701",
+        "GVG_076",
+        "WON_014",
+        "TTN_930",
+        "TSC_926"
+      ]
+    },
+    {
+      "id": "d98026f3-dab6-459c-ab8b-eec9e1aaa2a7",
+      "endedAt": "2026-09-29T23:13:50.5831536+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GDB_728",
+        "BAR_COIN1",
+        "BOT_909",
+        "GDB_726",
+        "BT_025",
+        "UNG_961"
+      ]
+    },
+    {
+      "id": "8f468473-2d47-4d6c-be09-4e7705161b8e",
+      "endedAt": "2026-09-29T23:22:21.2687187+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": true,
+      "cards": [
+        "TLC_433",
+        "RLK_225",
+        "RLK_060",
+        "YOG_512"
+      ]
+    },
+    {
+      "id": "10d75fd7-8445-438d-a24b-28a45804a42a",
+      "endedAt": "2026-09-29T23:27:19.8817626+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TLC_602",
+        "GAME_005",
+        "EDR_456",
+        "CATA_582",
+        "TOY_386",
+        "BRM_026",
+        "WORK_023",
+        "DINO_400",
+        "CORE_EX1_606"
+      ]
+    },
+    {
+      "id": "a26aa3d8-4c84-4496-97ae-29911ceb118f",
+      "endedAt": "2026-09-29T23:33:55.2854692+08:00",
+      "heroClass": "Mage",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "CATA_485",
+        "JAIL_COIN2",
+        "CATA_458",
+        "TIME_855",
+        "TIME_006",
+        "CORE_DRG_107",
+        "TLC_364",
+        "EX1_277"
+      ]
+    },
+    {
+      "id": "4c6e62e5-1bc1-4cc3-ba8c-9e5a558822a5",
+      "endedAt": "2026-09-29T23:54:03.477791+08:00",
+      "heroClass": "Druid",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_010",
+        "CORE_CS2_009",
+        "Core_LOE_115",
+        "CORE_SW_439",
+        "DAL_350"
+      ]
+    },
+    {
+      "id": "66c0dabe-089b-4a9b-941f-e1d1822f8d88",
+      "endedAt": "2026-09-30T00:01:26.1596284+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "GAME_005",
+        "TSC_654",
+        "TTN_924",
+        "CS2_013",
+        "ULD_003",
+        "EX1_066",
+        "WW_826",
+        "ETC_080",
+        "REV_238"
+      ]
+    },
+    {
+      "id": "0df4ad77-ccdb-4a1b-b36f-2662936cea30",
+      "endedAt": "2026-09-30T00:12:33.533781+08:00",
+      "heroClass": "Deathknight",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_RLK_066",
+        "EDR_814",
+        "CORE_NEW1_020",
+        "CORE_EDR_002",
+        "EDR_810",
+        "RLK_720",
+        "RLK_506"
+      ]
+    },
+    {
+      "id": "b30ce411-5b32-42c4-8d94-8caec1443d6c",
+      "endedAt": "2026-09-30T00:19:01.0187651+08:00",
+      "heroClass": "Druid",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GDB_852",
+        "TTN_955",
+        "TTN_950t3",
+        "DRG_314",
+        "MUDAN_COIN1",
+        "TSC_654",
+        "DED_002",
+        "CORE_EX1_169",
+        "MIS_301",
+        "DMF_060",
+        "TIME_701",
+        "SW_422",
+        "DMF_058",
+        "TTN_954"
+      ]
+    },
+    {
+      "id": "9111a737-e74f-4f13-b6a5-6cace513d016",
+      "endedAt": "2026-09-30T00:56:48.9245448+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_SCH_713",
+        "RLK_061",
+        "CORE_ULD_723",
+        "CORE_RLK_118",
+        "CORE_RLK_121",
+        "RLK_060",
+        "RLK_720",
+        "CORE_RLK_116",
+        "RLK_018"
+      ]
+    },
+    {
+      "id": "926fdf7a-1a07-45ac-91d3-655a5ed164f7",
+      "endedAt": "2026-09-30T01:02:47.5805643+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "RLK_061",
+        "RLK_708",
+        "RLK_503",
+        "EX1_019",
+        "RLK_060",
+        "CORE_RLK_116"
+      ]
+    },
+    {
+      "id": "72a3e997-e3bf-4fdc-ba8f-ca7adf295c69",
+      "endedAt": "2026-09-30T01:07:34.6425346+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "TLC_460",
+        "WON_014",
+        "TOY_700t",
+        "WORK_025"
+      ]
+    },
+    {
+      "id": "77da1ed0-89d5-4b56-b7ac-e834eebe059c",
+      "endedAt": "2026-09-30T01:23:28.9726508+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CFM_637",
+        "TSC_963",
+        "TSC_086",
+        "GVG_075",
+        "CS2_073",
+        "TTN_922",
+        "CORE_NEW1_027",
+        "AT_029",
+        "DMF_519"
+      ]
+    },
+    {
+      "id": "06ded367-b329-4f9d-bbbe-1ca4db0a4281",
+      "endedAt": "2026-09-30T01:29:13.3318912+08:00",
+      "heroClass": "Warrior",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CAP_105",
+        "CORE_OG_149",
+        "TSC_942",
+        "TTN_753t",
+        "RLK_222",
+        "RLK_960",
+        "BAR_081",
+        "DEEP_037"
+      ]
+    },
+    {
+      "id": "0c593989-6a56-442f-858b-94b17e3312f1",
+      "endedAt": "2026-09-30T01:35:53.1171256+08:00",
+      "heroClass": "Warlock",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TLC_451",
+        "TLC_249",
+        "CORE_SCH_713",
+        "CORE_CS2_062",
+        "TOY_916",
+        "ULD_163",
+        "RLK_534"
+      ]
+    },
+    {
+      "id": "9e9c1ac3-9058-4e1a-90aa-3f206159d23a",
+      "endedAt": "2026-09-30T01:39:28.5504613+08:00",
+      "heroClass": "Shaman",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "ULD_291",
+        "TSC_960",
+        "DED_509"
+      ]
+    },
+    {
+      "id": "0e3467e5-ae8b-442a-95f6-51a37f5e8588",
+      "endedAt": "2026-09-30T01:45:25.0814553+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_ULD_723",
+        "GAME_005",
+        "CORE_RLK_121",
+        "CORE_RLK_116",
+        "RLK_503",
+        "RLK_061",
+        "RLK_060",
+        "RLK_708",
+        "WW_373"
+      ]
+    },
+    {
+      "id": "794564e6-cb40-4ccd-b301-6127e50f6bb7",
+      "endedAt": "2026-09-30T01:56:21.7380913+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CAP_105",
+        "CORE_REV_990",
+        "VAC_438",
+        "EDR_492",
+        "CATA_582",
+        "CATA_585",
+        "CAP_104",
+        "EDR_457",
+        "CAP_102",
+        "JAM_009",
+        "END_033",
+        "CATA_556",
+        "CAP_106",
+        "DAL_146"
+      ]
+    },
+    {
+      "id": "9524f3bd-9ef5-4d13-8f4e-6a7cec9617e4",
+      "endedAt": "2026-09-30T01:59:58.488051+08:00",
+      "heroClass": "Druid",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TSC_654"
+      ]
+    },
+    {
+      "id": "28971aff-3023-4641-817c-ae84eda4cd5d",
+      "endedAt": "2026-09-30T02:08:44.5684067+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SW_433",
+        "CATA_308",
+        "CORE_CS1_112",
+        "LOE_077",
+        "WW_384",
+        "EDR_449",
+        "TTN_484",
+        "AV_331",
+        "VAC_523",
+        "CATA_303",
+        "BRM_017",
+        "TIME_EVENT_999",
+        "VAC_523t",
+        "VAC_323",
+        "VAC_323t",
+        "EDR_000",
+        "END_025",
+        "VAC_323t2"
+      ]
+    },
+    {
+      "id": "3956904c-9323-49b1-8d4c-89183a7f984a",
+      "endedAt": "2026-09-30T02:12:48.4438628+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "FP1_017",
+        "ETC_318",
+        "LEG_TTN_908",
+        "YOP_031",
+        "WW_391",
+        "DMF_236"
+      ]
+    },
+    {
+      "id": "2958ec29-5ac6-4527-8946-5cec6e8c6b2f",
+      "endedAt": "2026-09-30T02:24:17.8159698+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SW_433",
+        "ULD_003",
+        "NEW1_031",
+        "REV_018",
+        "JAIL_913",
+        "DEEP_025",
+        "WW_0700",
+        "CORE_EX1_012",
+        "DINO_428"
+      ]
+    },
+    {
+      "id": "a3ff0fd6-753d-45ed-9483-1fa7497b2551",
+      "endedAt": "2026-09-30T02:33:36.5225343+08:00",
+      "heroClass": "Hunter",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "EX1_544",
+        "BT_213",
+        "BT_201",
+        "REV_362",
+        "CATA_COIN2",
+        "JAM_004",
+        "LEG_CS3_015",
+        "VAC_408",
+        "WW_811",
+        "WC_007",
+        "AV_333",
+        "EDR_856"
+      ]
+    },
+    {
+      "id": "b8c9c8b7-c666-471b-8b3f-f3add3510346",
+      "endedAt": "2026-09-30T02:39:23.9270187+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "RLK_958",
+        "RLK_061",
+        "CORE_RLK_116",
+        "WW_354",
+        "CORE_SCH_713",
+        "CORE_EDR_003"
+      ]
+    },
+    {
+      "id": "30f018f9-de28-4f07-8276-3d9335efcb3e",
+      "endedAt": "2026-09-30T02:47:35.4565353+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TSC_654",
+        "WON_014",
+        "EX1_161",
+        "MAW_024",
+        "BG31_BOB",
+        "VAC_907",
+        "ICC_054",
+        "TIME_701",
+        "DMF_058",
+        "LOOT_054",
+        "TTN_903"
+      ]
+    },
+    {
+      "id": "b0e8df51-b4f2-4c01-9c96-c9a3f6312474",
+      "endedAt": "2026-09-30T02:53:56.3499245+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "RLK_503",
+        "CORE_ULD_723",
+        "RLK_061",
+        "CORE_RLK_062",
+        "CORE_SCH_713",
+        "RLK_958"
+      ]
+    },
+    {
+      "id": "4ac8751b-d202-4538-af6e-238c15f532da",
+      "endedAt": "2026-09-30T02:58:21.0494436+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "REV_332",
+        "TOY_518",
+        "CAP_107",
+        "CS3_008",
+        "CAP_107t",
+        "CFM_637"
+      ]
+    },
+    {
+      "id": "e722ca87-7d29-4027-b307-692e0c6cd873",
+      "endedAt": "2026-09-30T03:04:24.4252778+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "DMF_236",
+        "BAR_875",
+        "WW_051",
+        "WW_336",
+        "LEG_TTN_908",
+        "TOY_882",
+        "CORE_ICC_038",
+        "WW_391",
+        "FP1_017"
+      ]
+    },
+    {
+      "id": "dc1644f3-5322-4be7-b97b-df473619cc25",
+      "endedAt": "2026-09-30T03:11:45.7223921+08:00",
+      "heroClass": "Paladin",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "CORE_CFM_790",
+        "GAME_005",
+        "TIME_700",
+        "CORE_ICC_038",
+        "TTN_742",
+        "CORE_EX1_012",
+        "JAIL_407",
+        "GVG_058"
+      ]
+    },
+    {
+      "id": "b3c895f4-8fae-455c-8fb8-59c6e823a68f",
+      "endedAt": "2026-09-30T03:21:06.3625087+08:00",
+      "heroClass": "Rogue",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "ULD_186",
+        "VAC_336",
+        "CORE_CFM_790",
+        "ETC_080",
+        "CORE_RLK_745",
+        "AV_711",
+        "LOE_011",
+        "CORE_KAR_069",
+        "WW_0700"
+      ]
+    },
+    {
+      "id": "c9638220-2e77-4c11-a36e-4b459329877b",
+      "endedAt": "2026-09-30T03:27:00.6624772+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "END_017",
+        "TLC_451",
+        "WW_092",
+        "DINO_411",
+        "DINO_410",
+        "REV_COIN2",
+        "ICC_041",
+        "TTN_932",
+        "ULD_717",
+        "MAW_002",
+        "TSC_926"
+      ]
+    },
+    {
+      "id": "ffb0fa65-3480-4c60-844a-7ae0f26e1d83",
+      "endedAt": "2026-09-30T03:34:06.7391838+08:00",
+      "heroClass": "Priest",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TLC_EVENT_400",
+        "CS2_234",
+        "CORE_EDR_004_2026",
+        "JAIL_850",
+        "EDR_849",
+        "JAIL_460",
+        "CAP_801"
+      ]
+    },
+    {
+      "id": "11e3aaa6-2bb3-4311-81ef-f7ea65abc87a",
+      "endedAt": "2026-09-30T03:41:34.0354973+08:00",
+      "heroClass": "Druid",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_AT_037",
+        "CORE_CS2_009",
+        "Core_LOE_115",
+        "GVG_044",
+        "CORE_OG_047",
+        "CORE_EX1_169",
+        "CORE_EX1_160",
+        "CORE_CATA_006"
+      ]
+    },
+    {
+      "id": "357e14e4-59e5-43b5-aaf6-75cc4f0c29a7",
+      "endedAt": "2026-09-30T16:58:31.0464756+08:00",
+      "heroClass": "Rogue",
+      "type": "control",
+      "forty": true,
+      "cards": []
+    },
+    {
+      "id": "4bd0a501-2342-450c-9cc7-7d1ee2772092",
+      "endedAt": "2026-09-30T17:26:06.6942209+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_EX1_129",
+        "CORE_KAR_069",
+        "CORE_EX1_134",
+        "WW_041",
+        "CORE_DMF_511",
+        "CORE_EX1_028",
+        "CORE_CS2_074",
+        "CORE_EX1_010",
+        "CORE_NEW1_022",
+        "CS3_022"
+      ]
+    },
+    {
+      "id": "be032316-379d-4390-bf89-fb598b0072b5",
+      "endedAt": "2026-09-30T17:49:29.050752+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "RLK_503",
+        "RLK_061",
+        "CORE_SCH_713",
+        "RLK_708",
+        "CORE_RLK_745",
+        "CORE_ULD_723",
+        "RLK_707"
+      ]
+    },
+    {
+      "id": "e097a128-6ac6-479f-848c-4fc4bd18298c",
+      "endedAt": "2026-10-01T02:42:06.8148258+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "RLK_503",
+        "RLK_958",
+        "RLK_061",
+        "CORE_GIL_622"
+      ]
+    },
+    {
+      "id": "48010b80-d4b0-4817-8450-4d3567d17df7",
+      "endedAt": "2026-10-01T02:46:53.0200987+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_010",
+        "GAME_005",
+        "CORE_NEW1_027",
+        "CORE_NEW1_018",
+        "CORE_NEW1_022"
+      ]
+    },
+    {
+      "id": "9dec331f-cad4-49e7-a6db-ba2d3331ac01",
+      "endedAt": "2026-10-01T02:52:38.5937037+08:00",
+      "heroClass": "DemonHunter",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_EX1_506",
+        "CORE_BT_801",
+        "CORE_BT_035",
+        "CORE_BT_416",
+        "CORE_BT_921"
+      ]
+    },
+    {
+      "id": "aaa71e38-7169-472c-a540-df8a12ee56ba",
+      "endedAt": "2026-10-01T02:59:52.6572859+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CS3_007",
+        "CORE_EX1_238",
+        "CORE_EX1_011",
+        "CORE_EX1_162",
+        "CORE_GIL_622"
+      ]
+    },
+    {
+      "id": "40c9cc0a-98fa-47f8-82a5-f7222c821387",
+      "endedAt": "2026-10-01T03:12:50.6208345+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_193",
+        "ULD_714",
+        "EX1_339",
+        "VAC_940",
+        "END_025",
+        "CS2_003",
+        "EX1_308",
+        "DAL_039",
+        "DEEP_026",
+        "TTN_429",
+        "DEEP_023",
+        "WON_041"
+      ]
+    },
+    {
+      "id": "012f8ab2-68ca-4d02-9ec5-d5f60ba1d9b7",
+      "endedAt": "2026-10-01T03:20:43.2845256+08:00",
+      "heroClass": "DemonHunter",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CORE_BT_480",
+        "CORE_BT_035",
+        "CORE_BT_921",
+        "CORE_BT_801",
+        "CORE_EX1_028",
+        "Core_CS2_200"
+      ]
+    },
+    {
+      "id": "67158d88-a9b8-4317-a8fe-835139286f93",
+      "endedAt": "2026-10-01T03:26:46.7043092+08:00",
+      "heroClass": "Warrior",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_LOOT_413",
+        "CORE_AT_064",
+        "CS2_106",
+        "CORE_CS2_108",
+        "CORE_EX1_604",
+        "CORE_EX1_606",
+        "CORE_UNG_928"
+      ]
+    },
+    {
+      "id": "db577b20-880b-4162-ae69-61de19fb0c20",
+      "endedAt": "2026-10-01T03:34:59.7834903+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "RLK_503",
+        "CORE_ULD_723",
+        "CORE_RLK_121",
+        "CORE_RLK_118",
+        "CORE_SCH_713",
+        "RLK_048"
+      ]
+    },
+    {
+      "id": "8c4a1295-b997-4e02-8150-b0ba2fcca3c6",
+      "endedAt": "2026-10-01T03:43:55.0649545+08:00",
+      "heroClass": "Hunter",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CORE_DS1_184",
+        "WW_391",
+        "TOY_352",
+        "EDR_852",
+        "CORE_EX1_610",
+        "EDR_860",
+        "WW_811",
+        "WW_807",
+        "EDR_227",
+        "CORE_UNG_205"
+      ]
+    },
+    {
+      "id": "f81008b4-5a1f-4d0a-ac9d-c5188f18bb1d",
+      "endedAt": "2026-10-01T03:49:47.877712+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "SW_028",
+        "TIME_COIN1",
+        "CORE_DRG_024",
+        "CAP_105",
+        "VAC_438",
+        "DMF_521",
+        "DED_519"
+      ]
+    },
+    {
+      "id": "c31ea987-2a0b-4882-8231-04cc1a440beb",
+      "endedAt": "2026-10-01T03:53:24.0661942+08:00",
+      "heroClass": "Deathknight",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "CORE_RLK_712"
+      ]
+    },
+    {
+      "id": "10264066-916d-4fa8-b361-f3f5b3f3bef6",
+      "endedAt": "2026-10-01T04:00:23.5184048+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CORE_ICC_038",
+        "AV_137",
+        "ETC_318",
+        "WW_331",
+        "YOP_031",
+        "WW_331t",
+        "FP1_017",
+        "LEG_TTN_908",
+        "LOOT_093"
+      ]
+    },
+    {
+      "id": "c1d6aab9-c0e8-4504-bb06-fee50ae6ebe3",
+      "endedAt": "2026-10-01T04:08:01.0498817+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CS3_008",
+        "SW_029",
+        "REV_332",
+        "TOY_518",
+        "CAP_107",
+        "CAP_107t",
+        "CAP_103",
+        "VAC_938",
+        "CORE_NEW1_027",
+        "YOD_022",
+        "JAIL_421"
+      ]
+    },
+    {
+      "id": "7280bb26-27b5-4957-ab22-ed6382af4cad",
+      "endedAt": "2026-10-01T04:14:31.5959781+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "CORE_EX1_302",
+        "GAME_005",
+        "CORE_UNG_928",
+        "CORE_CS2_062",
+        "CORE_EX1_310",
+        "CORE_EX1_309"
+      ]
+    },
+    {
+      "id": "11bbe7e4-0efb-4dc9-b5c5-d6d1ca928dd3",
+      "endedAt": "2026-10-01T04:23:12.8306124+08:00",
+      "heroClass": "Mage",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "ULD_433",
+        "FP1_004",
+        "EX1_612",
+        "MAW_006",
+        "REV_841",
+        "BOT_600",
+        "ULD_726",
+        "CORE_EX1_287",
+        "REV_018"
+      ]
+    },
+    {
+      "id": "9ed1d89c-f65c-498d-887b-1ff5be118b1f",
+      "endedAt": "2026-10-01T04:31:53.7685157+08:00",
+      "heroClass": "Paladin",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "TLC_426",
+        "VAC_958",
+        "BT_009",
+        "BT_018",
+        "UNG_937",
+        "UNG_011",
+        "BAR_062",
+        "DED_522",
+        "TLC_240",
+        "CORE_DMF_067",
+        "OG_156",
+        "CS2_173",
+        "AV_206"
+      ]
+    },
+    {
+      "id": "e84a893d-12a8-46da-bb9f-67989b182907",
+      "endedAt": "2026-10-01T04:40:57.9251756+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "TLC_817",
+        "TSC_210",
+        "ETC_335",
+        "CATA_308",
+        "BT_252",
+        "RLK_829",
+        "LEG_CS3_028",
+        "TLC_816",
+        "UNG_029",
+        "DMF_187",
+        "TLC_817t5",
+        "RLK_823",
+        "TSC_828",
+        "ETC_338",
+        "AV_330",
+        "CAP_805"
+      ]
+    },
+    {
+      "id": "6648c49f-d34a-4479-a72e-4411f32d4a17",
+      "endedAt": "2026-10-01T04:50:16.0023212+08:00",
+      "heroClass": "Druid",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "TIME_701",
+        "DED_002",
+        "TOY_851",
+        "TTN_955",
+        "BOT_054",
+        "CORE_EX1_169",
+        "CORE_AT_037",
+        "TTN_950",
+        "TOY_703",
+        "SCH_427",
+        "TSC_654",
+        "GDB_852",
+        "MEND_043",
+        "GDB_855",
+        "LOOT_051t1"
+      ]
+    },
+    {
+      "id": "0a5612f7-4189-4de4-8475-43e053c8c8b5",
+      "endedAt": "2026-10-01T04:57:57.4239303+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "JAM_001",
+        "ULD_239",
+        "ULD_240",
+        "MAW_101",
+        "KAR_092",
+        "WON_031",
+        "ULD_726",
+        "REV_513"
+      ]
+    },
+    {
+      "id": "432376dd-9127-4e9e-8e32-b3d40d7ca2ae",
+      "endedAt": "2026-10-01T05:05:43.287769+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SCH_259",
+        "TOY_COIN2",
+        "VAC_949",
+        "TOY_605",
+        "CORE_EX1_606",
+        "EDR_856",
+        "JAIL_307",
+        "REV_018",
+        "TTN_469",
+        "TSC_940",
+        "DEEP_020",
+        "TSC_908",
+        "ETC_080"
+      ]
+    },
+    {
+      "id": "d43e954a-1c34-4136-8885-f88a9bacbdfb",
+      "endedAt": "2026-10-01T05:13:29.4590093+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "NX2_006",
+        "TOY_510",
+        "CS2_146",
+        "LOOT_033",
+        "TOY_COIN3",
+        "TSC_086",
+        "TOY_505",
+        "DRG_035",
+        "DRG_035t",
+        "TOY_518",
+        "CORE_NEW1_027",
+        "GVG_075",
+        "TSC_963",
+        "CORE_KAR_069"
+      ]
+    },
+    {
+      "id": "e87b7ba3-66e1-43fb-8667-fd9807a0b910",
+      "endedAt": "2026-10-01T05:24:06.2067464+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "CORE_BT_156",
+        "CS3_038",
+        "CORE_WON_141",
+        "CORE_WON_351",
+        "CORE_ULD_723",
+        "CORE_UNG_205",
+        "JAIL_850",
+        "CORE_KAR_061",
+        "CORE_GIL_531",
+        "CORE_DMF_067",
+        "RLK_553",
+        "CORE_UNG_809",
+        "FP1_025",
+        "CORE_ULD_191",
+        "CORE_EX1_162",
+        "UNG_809t1"
+      ]
+    },
+    {
+      "id": "40a03d47-75d5-415d-b81c-97d7c5c4adf9",
+      "endedAt": "2026-10-01T05:30:30.5026087+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "TIME_701",
+        "WON_014",
+        "BOT_054",
+        "TTN_930t",
+        "DEEP_026",
+        "WC_006",
+        "EX1_161",
+        "EDR_843t1",
+        "CORE_EX1_154"
+      ]
+    },
+    {
+      "id": "a67a3d08-3aa4-4d9a-b219-3ca0fd5cd803",
+      "endedAt": "2026-10-01T05:36:58.2680257+08:00",
+      "heroClass": "Priest",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TLC_817",
+        "EDR_449",
+        "GVG_011",
+        "CATA_216",
+        "WW_394",
+        "JAIL_432"
+      ]
+    },
+    {
+      "id": "94038b44-7704-405f-906b-6753d12a591f",
+      "endedAt": "2026-10-01T05:48:01.6737383+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SCH_259",
+        "LOOT_367",
+        "JAIL_307",
+        "TSC_940",
+        "TIME_873",
+        "YOG_502t",
+        "DEEP_020",
+        "WW_0700",
+        "CORE_CFM_790",
+        "REV_238",
+        "BG31_BOB",
+        "SCH_526",
+        "TTN_469",
+        "WW_372"
+      ]
+    },
+    {
+      "id": "60c6ef3f-d2e8-460c-a82b-6f20c6c7d8ff",
+      "endedAt": "2026-10-01T05:55:03.6417363+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_518",
+        "SCH_514",
+        "VAC_512",
+        "TOY_381",
+        "DED_513",
+        "CFM_637"
+      ]
+    },
+    {
+      "id": "01fec106-0b56-4c12-8047-cd9f83eaaf1b",
+      "endedAt": "2026-10-01T06:00:37.3769814+08:00",
+      "heroClass": "Rogue",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "TSC_963",
+        "DED_005",
+        "TSC_085"
+      ]
+    },
+    {
+      "id": "60cc37d9-3ea0-454d-bee8-a0c27fc6d433",
+      "endedAt": "2026-10-01T06:09:10.9723848+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TLC_451",
+        "GAME_005",
+        "TLC_603",
+        "TIME_026",
+        "JAIL_EVENT_100",
+        "REV_246",
+        "WON_103",
+        "DMF_119",
+        "REV_253",
+        "CATA_493",
+        "END_025",
+        "BAR_735",
+        "VAC_940",
+        "JAIL_430",
+        "CATA_490"
+      ]
+    },
+    {
+      "id": "93b39a92-d0f3-4ee0-854e-141803a80ec4",
+      "endedAt": "2026-10-01T06:14:18.886292+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "NX2_006",
+        "LOOT_033",
+        "TSC_086",
+        "CS2_146"
+      ]
+    },
+    {
+      "id": "14a06465-744f-42c3-8d1a-6d2614aba193",
+      "endedAt": "2026-10-01T06:21:59.8488851+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN3",
+        "ULD_726",
+        "ULD_239",
+        "FP1_004",
+        "WON_031",
+        "CORE_LOOT_101",
+        "ULD_240",
+        "CFM_760"
+      ]
+    },
+    {
+      "id": "ccca56b4-cfc0-4a42-8d50-e321d9c2bc9d",
+      "endedAt": "2026-10-01T06:28:19.3162555+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TLC_249",
+        "EDR_852",
+        "CORE_SW_108",
+        "SW_108t",
+        "CORE_UNG_809",
+        "UNG_809t1",
+        "CORE_CS2_024",
+        "TIME_856",
+        "FIR_921",
+        "EDR_871",
+        "EDR_851t"
+      ]
+    },
+    {
+      "id": "5bb8bf4c-d18a-4476-b509-f3bbbf7a9ef7",
+      "endedAt": "2026-10-01T06:36:42.6104417+08:00",
+      "heroClass": "Rogue",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "GIL_827",
+        "ULD_003",
+        "EX1_126",
+        "EX1_144",
+        "TSC_926",
+        "CORE_CFM_790",
+        "CS1_112",
+        "VAC_336",
+        "CFM_637",
+        "WW_COIN1",
+        "WW_0700",
+        "CORE_KAR_069",
+        "GIL_672",
+        "TSC_963"
+      ]
+    },
+    {
+      "id": "67a76a7c-3e11-46ca-a920-9961e83018c5",
+      "endedAt": "2026-10-01T06:42:09.5175822+08:00",
+      "heroClass": "Rogue",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "ETC_418",
+        "LOOT_542",
+        "BAR_321",
+        "BAR_318",
+        "ETC_075",
+        "CORE_EX1_145",
+        "CS2_074",
+        "ETC_717",
+        "REV_018",
+        "SCH_623",
+        "CS2_233"
+      ]
+    },
+    {
+      "id": "4a035ea3-ddc7-4d85-97a1-8ddd5aa3cdc6",
+      "endedAt": "2026-10-01T06:48:45.7249171+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN3",
+        "FP1_004",
+        "WON_031",
+        "JAM_001",
+        "REV_841",
+        "MAW_101",
+        "KAR_092"
+      ]
+    },
+    {
+      "id": "d09cf492-7747-4e6f-926a-bfda3dcf0d7f",
+      "endedAt": "2026-10-01T06:58:51.1266902+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN3",
+        "CORE_UNG_809",
+        "DMF_100",
+        "BAR_854",
+        "TTN_095",
+        "DMF_100t",
+        "UNG_809t1",
+        "GDB_305",
+        "YOG_519",
+        "VAC_442",
+        "TTN_475"
+      ]
+    },
+    {
+      "id": "22fe126b-d765-422e-9cd9-22502ce2a2a9",
+      "endedAt": "2026-10-01T07:04:38.5019752+08:00",
+      "heroClass": "DemonHunter",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "GVG_075",
+        "JAIL_COIN3",
+        "VAC_933",
+        "CORE_BT_491",
+        "ETC_080",
+        "TSC_926"
+      ]
+    },
+    {
+      "id": "22a9e280-f506-493c-b03c-c6b433e3a114",
+      "endedAt": "2026-10-01T07:09:08.0011433+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_505",
+        "CFM_637",
+        "DMF_519",
+        "TSC_963",
+        "SCH_305"
+      ]
+    },
+    {
+      "id": "503b975f-91e1-4d13-9784-3131c9f89ad1",
+      "endedAt": "2026-10-01T07:15:45.2847289+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CS2_146",
+        "TOY_COIN3",
+        "NX2_006",
+        "DRG_035",
+        "DRG_035t",
+        "TOY_505",
+        "TSC_963",
+        "TOY_510",
+        "GVG_075",
+        "DRG_056"
+      ]
+    },
+    {
+      "id": "b5d33740-871d-46ec-bd41-4a5e14f344ee",
+      "endedAt": "2026-10-01T07:21:46.0214421+08:00",
+      "heroClass": "Rogue",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "LOOT_542",
+        "ETC_717",
+        "GAME_005",
+        "LOOT_033",
+        "TSC_908",
+        "CS2_074",
+        "BAR_318",
+        "GIFT_09",
+        "WORK_005",
+        "ICC_233"
+      ]
+    },
+    {
+      "id": "fcea18f1-e163-4f6d-bb35-920a8ee26681",
+      "endedAt": "2026-10-01T07:26:12.8635473+08:00",
+      "heroClass": "DemonHunter",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TLC_631",
+        "REV_834",
+        "JAM_019",
+        "TSC_610",
+        "END_007"
+      ]
+    },
+    {
+      "id": "9bf1a83a-ceca-4714-84e8-67b45fb3e0d9",
+      "endedAt": "2026-10-01T07:33:41.0510148+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "BAR_854",
+        "TTN_479",
+        "TRL_310",
+        "TLC_226",
+        "GDB_305",
+        "TTN_095",
+        "TLC_220",
+        "DEEP_034",
+        "CORE_UNG_809",
+        "UNG_809t1",
+        "WW_424"
+      ]
+    },
+    {
+      "id": "524b7d6d-9a3b-4e76-b2d1-a6bb6ba2ed95",
+      "endedAt": "2026-10-01T07:38:42.6926542+08:00",
+      "heroClass": "Shaman",
+      "type": "unknown",
+      "forty": false,
+      "cards": [
+        "TSC_637",
+        "DAL_052"
+      ]
+    },
+    {
+      "id": "efc42eae-ee14-485e-9cbf-9c390a6a918b",
+      "endedAt": "2026-10-01T07:43:26.0218236+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_518",
+        "TOY_COIN3",
+        "TSC_086",
+        "CS2_146",
+        "TOY_510",
+        "GVG_075",
+        "DRG_035",
+        "DRG_035t"
+      ]
+    },
+    {
+      "id": "41cc70e0-b997-465e-9a80-b97a3904a8f7",
+      "endedAt": "2026-10-01T07:49:49.8128744+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WW_331",
+        "BAR_875",
+        "WW_331t",
+        "ETC_318",
+        "LOOT_093",
+        "LEG_TTN_908",
+        "AV_137"
+      ]
+    },
+    {
+      "id": "9f7a8fce-f8ca-427a-92e4-0aca0b456a76",
+      "endedAt": "2026-10-01T07:56:43.5507728+08:00",
+      "heroClass": "Mage",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "JAM_001",
+        "KAR_092",
+        "REV_841",
+        "CFM_760",
+        "REV_513"
+      ]
+    },
+    {
+      "id": "5bc5b6d9-910a-4fc7-9527-9c3f9d0ebd1b",
+      "endedAt": "2026-10-01T08:04:57.6887379+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN3",
+        "TTN_095",
+        "CORE_UNG_809",
+        "BAR_854",
+        "UNG_809t1",
+        "TLC_226",
+        "WW_424",
+        "GDB_305",
+        "DMF_100",
+        "DMF_100t",
+        "VAC_442"
+      ]
+    },
+    {
+      "id": "c7d0357b-8c46-4e8f-ad14-c2e1135b74fc",
+      "endedAt": "2026-10-01T08:11:57.1740694+08:00",
+      "heroClass": "DemonHunter",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "NX2_050",
+        "GVG_075",
+        "VAC_927",
+        "VAC_929",
+        "GDB_333"
+      ]
+    },
+    {
+      "id": "7b9bad43-44ce-4d35-bab9-900259bb132a",
+      "endedAt": "2026-10-01T08:16:58.8678551+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "GVG_075",
+        "NX2_006",
+        "TSC_963",
+        "TSC_086",
+        "ETC_717t"
+      ]
+    },
+    {
+      "id": "dae42a1e-196d-4ac2-aea3-59acbfff4970",
+      "endedAt": "2026-10-01T08:22:37.1122877+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TSC_963",
+        "TOY_COIN3",
+        "CORE_KAR_069",
+        "TOY_505",
+        "CS2_146"
+      ]
+    },
+    {
+      "id": "98c63b4d-4fee-491d-b380-502017ce7a58",
+      "endedAt": "2026-10-01T08:26:57.3626819+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "TLC_817",
+        "GAME_005",
+        "BT_252",
+        "CATA_308",
+        "SW_441",
+        "TLC_816",
+        "CAP_805"
+      ]
+    },
+    {
+      "id": "d0dd52cb-10de-4bb1-bcec-a48b8d55b6bc",
+      "endedAt": "2026-10-01T16:15:54.3912139+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WW_027",
+        "REV_917",
+        "TTN_710",
+        "JAM_013",
+        "CS2_039",
+        "ULD_413",
+        "GVG_038",
+        "TSC_069"
+      ]
+    },
+    {
+      "id": "fe1f3e24-172e-43e6-b4ef-1d5f75ffe5e0",
+      "endedAt": "2026-10-01T16:23:54.6279967+08:00",
+      "heroClass": "DemonHunter",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "SW_039",
+        "TOY_COIN3",
+        "YOG_401",
+        "REV_507",
+        "BT_753",
+        "SW_041",
+        "CATA_526",
+        "JAIL_206",
+        "VAC_933",
+        "SW_037",
+        "CORE_YOP_001",
+        "SCH_702",
+        "TIME_020t2",
+        "MAW_014",
+        "VAC_928"
+      ]
+    },
+    {
+      "id": "1dbdc8de-64c9-4f21-81e4-b15ef8fea6bb",
+      "endedAt": "2026-10-01T16:30:58.8917854+08:00",
+      "heroClass": "Warlock",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TLC_249",
+        "TIME_027",
+        "REV_960",
+        "EX1_308",
+        "GDB_333",
+        "END_016",
+        "ULD_163"
+      ]
+    },
+    {
+      "id": "560760f2-9fe5-42ea-b034-d1d337506740",
+      "endedAt": "2026-10-01T16:37:46.6447561+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "SW_028",
+        "GVG_075",
+        "JAIL_COIN3",
+        "CAP_107",
+        "CAP_107t",
+        "CORE_DRG_024",
+        "DRG_025",
+        "CAP_106"
+      ]
+    },
+    {
+      "id": "ec4a9eb2-967b-46fb-9d9e-9e69a18ed713",
+      "endedAt": "2026-10-01T16:47:06.8133491+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "REV_246",
+        "BT_300",
+        "REV_011",
+        "CATA_499",
+        "DMF_119",
+        "RLK_532",
+        "SCH_147",
+        "JAIL_912",
+        "VAC_940",
+        "JAIL_448",
+        "ETC_071",
+        "TIME_432",
+        "WON_103",
+        "TIME_024",
+        "KAR_205"
+      ]
+    },
+    {
+      "id": "cdbbbdea-8a39-42c5-af6f-72ef7fc56edd",
+      "endedAt": "2026-10-01T16:49:37.9225233+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TLC_451"
+      ]
+    },
+    {
+      "id": "5e1d8994-7697-4b2c-a082-750ec8331879",
+      "endedAt": "2026-10-01T16:56:56.2836428+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "BOT_435",
+        "VAC_408",
+        "TIME_432",
+        "TTN_430",
+        "REV_246",
+        "GAME_005",
+        "BOT_568",
+        "TSC_210",
+        "CATA_490",
+        "TLC_603",
+        "DMF_119",
+        "END_016",
+        "RLK_534"
+      ]
+    },
+    {
+      "id": "78397778-34e2-4895-a5c4-08e0b3c7388e",
+      "endedAt": "2026-10-01T17:03:39.2699698+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "SW_028",
+        "GVG_075",
+        "JAIL_COIN3",
+        "CORE_DRG_024",
+        "VAC_938",
+        "SW_029",
+        "REV_332",
+        "CORE_NEW1_027",
+        "CAP_104",
+        "VAC_436",
+        "DRG_025"
+      ]
+    },
+    {
+      "id": "3ed3afee-72e1-4336-afd1-1f12f74924fa",
+      "endedAt": "2026-10-01T17:14:02.1915223+08:00",
+      "heroClass": "Rogue",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TIME_EVENT_999",
+        "GAME_005",
+        "MEND_100",
+        "JAIL_706",
+        "TLC_440",
+        "JAIL_720",
+        "MEND_100t",
+        "CORE_EX1_145",
+        "BAR_881",
+        "SW_070",
+        "DEEP_023",
+        "CORE_CFM_781",
+        "CATA_EVENT_402",
+        "ULD_328",
+        "CORE_CS1_112",
+        "CATA_200",
+        "DAL_416",
+        "LOOT_017",
+        "JAIL_851",
+        "EX1_581",
+        "YOG_082"
+      ]
+    },
+    {
+      "id": "c4694ef0-57a0-4bc4-82c0-bcaaf41d703d",
+      "endedAt": "2026-10-01T17:22:22.6717363+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "YOD_022",
+        "CAP_107",
+        "CFM_637",
+        "CAP_107t",
+        "ETC_372",
+        "CAP_105",
+        "TSC_COIN1",
+        "CAP_103",
+        "OG_315",
+        "CAP_104",
+        "CAP_106"
+      ]
+    },
+    {
+      "id": "ac8a1756-5348-49ba-a8ca-61f71e64b4e1",
+      "endedAt": "2026-10-01T17:32:21.7385752+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN3",
+        "DMF_100",
+        "DMF_100t",
+        "CORE_UNG_809",
+        "TTN_479",
+        "UNG_809t1",
+        "WW_424",
+        "TTN_095",
+        "TLC_226",
+        "DEEP_034",
+        "GDB_305"
+      ]
+    },
+    {
+      "id": "dd3abcf9-ae81-4ec3-b6bd-86fb71b1f2e3",
+      "endedAt": "2026-10-01T17:37:49.9108654+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "UNG_029",
+        "TIME_432",
+        "TSC_210",
+        "GAME_005",
+        "TLC_451",
+        "CATA_499",
+        "BOT_435",
+        "TTN_430"
+      ]
+    },
+    {
+      "id": "f9c0e124-12b1-4f16-a2a8-6f85caee6b48",
+      "endedAt": "2026-10-01T17:40:59.7228344+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "BAR_875",
+        "WW_051"
+      ]
+    },
+    {
+      "id": "01f62e20-c8e2-432a-a814-6d406b01469e",
+      "endedAt": "2026-10-01T17:45:12.7510363+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "JAM_001",
+        "REV_513"
+      ]
+    },
+    {
+      "id": "56fc0943-0283-4ce1-b14a-013c76a7bd0f",
+      "endedAt": "2026-10-01T17:50:45.8924735+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "TLC_817",
+        "CATA_COIN4",
+        "DMF_187",
+        "VAC_404",
+        "BT_252",
+        "VAC_404t1",
+        "TTN_430",
+        "JAIL_941",
+        "TSC_828",
+        "VAC_404t2",
+        "TRL_408",
+        "TLC_817t5",
+        "JAIL_941t"
+      ]
+    },
+    {
+      "id": "af572c8c-7877-49b0-ae15-1a7e16b73959",
+      "endedAt": "2026-10-01T17:56:36.6756599+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SCH_259",
+        "TSC_210",
+        "REV_246",
+        "TIME_026",
+        "REV_253",
+        "END_016",
+        "BT_300",
+        "TTN_430",
+        "SCH_147",
+        "CATA_493",
+        "RLK_532",
+        "TIME_432",
+        "RLK_534"
+      ]
+    },
+    {
+      "id": "c4b71073-3871-4516-871d-c870655b1adb",
+      "endedAt": "2026-10-01T18:01:42.9688787+08:00",
+      "heroClass": "Warlock",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "EX1_308",
+        "VAC_940",
+        "CATA_490",
+        "CATA_493",
+        "TIME_026",
+        "END_016"
+      ]
+    },
+    {
+      "id": "c9ec3d73-e5a8-4022-9dd8-34facee5f143",
+      "endedAt": "2026-10-01T18:10:51.2667158+08:00",
+      "heroClass": "Warlock",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TLC_451",
+        "EX1_308",
+        "RLK_532",
+        "BOT_568",
+        "TLC_603",
+        "CATA_490",
+        "AV_137",
+        "VAC_940",
+        "WON_103",
+        "TIME_026"
+      ]
+    },
+    {
+      "id": "677905dc-c0cd-4732-a16d-5d7fefd3005a",
+      "endedAt": "2026-10-01T18:19:48.2365804+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TIME_701",
+        "CORE_EX1_154",
+        "TSC_654",
+        "END_011",
+        "AV_205",
+        "MEND_043",
+        "DEEP_026",
+        "ICC_054",
+        "JAIL_COIN2",
+        "DMF_058",
+        "EX1_164",
+        "BOT_054",
+        "EX1_161",
+        "CORE_EX1_169",
+        "AT_045",
+        "TIME_064",
+        "DAL_752",
+        "CFM_308",
+        "ETC_080",
+        "EX1_561",
+        "LEG_CS3_031"
+      ]
+    },
+    {
+      "id": "b59ec627-d316-4e69-955b-852f1e584bba",
+      "endedAt": "2026-10-01T18:24:00.5625979+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "VAC_512",
+        "TOY_381",
+        "WON_065",
+        "CORE_SCH_713",
+        "SW_446",
+        "DS1_233"
+      ]
+    },
+    {
+      "id": "44363946-f7a4-4199-a924-47ccb84258d6",
+      "endedAt": "2026-10-01T18:34:03.4729793+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TLC_602",
+        "CORE_EX1_606",
+        "DEEP_008",
+        "WW_367",
+        "ULD_256",
+        "WON_339",
+        "NX2_027",
+        "WORK_023",
+        "REV_018",
+        "CORE_WW_329",
+        "JAIL_311",
+        "EX1_407",
+        "TLC_468"
+      ]
+    },
+    {
+      "id": "7932ee1f-f719-4f6e-b04b-518846b681e3",
+      "endedAt": "2026-10-01T18:39:27.0595717+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WON_065",
+        "TOY_381",
+        "CORE_SCH_713",
+        "RLK_COIN1",
+        "SW_444",
+        "SW_446",
+        "GDB_310"
+      ]
+    },
+    {
+      "id": "cafcc146-6d66-45f1-94ad-c8ab5c14dd14",
+      "endedAt": "2026-10-01T18:45:31.4638195+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WON_065",
+        "TOY_381",
+        "YOD_032",
+        "DED_513",
+        "SW_448"
+      ]
+    },
+    {
+      "id": "546d781e-94c6-481f-b484-30e446a405dd",
+      "endedAt": "2026-10-01T18:50:26.4970271+08:00",
+      "heroClass": "Rogue",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TSC_963",
+        "LOOT_033",
+        "TSC_086",
+        "CORE_NEW1_022",
+        "SCH_305",
+        "DRG_035",
+        "DRG_035t"
+      ]
+    },
+    {
+      "id": "3a6e72f0-da1d-48ea-8ec6-a66ec824ddb9",
+      "endedAt": "2026-10-01T18:54:02.4060511+08:00",
+      "heroClass": "Warlock",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "SW_091",
+        "TLC_451",
+        "WW_COIN2",
+        "YOP_033"
+      ]
+    },
+    {
+      "id": "57137fbe-c5f5-4f07-abf3-20b879cf6fed",
+      "endedAt": "2026-10-01T19:00:58.8544167+08:00",
+      "heroClass": "Warlock",
+      "type": "combo",
+      "forty": true,
+      "cards": [
+        "TLC_COIN2",
+        "LOOT_014",
+        "BAR_910",
+        "SW_091",
+        "BOT_447",
+        "SCH_514",
+        "TTN_462",
+        "DEEP_032",
+        "DEEP_030",
+        "CORE_BOT_222",
+        "EDR_482",
+        "SW_091t4",
+        "MIS_707"
+      ]
+    },
+    {
+      "id": "4d8ca605-1b8c-419c-b5f7-28812f9b46a8",
+      "endedAt": "2026-10-01T19:10:14.7630411+08:00",
+      "heroClass": "Warlock",
+      "type": "combo",
+      "forty": true,
+      "cards": [
+        "SW_091",
+        "LOOT_014",
+        "TLC_451",
+        "BOT_447",
+        "TTN_462",
+        "SCH_311",
+        "GDB_125",
+        "TIME_027",
+        "MIS_707",
+        "SCH_514",
+        "SCH_140",
+        "LOOT_017",
+        "BOT_568",
+        "ICC_041",
+        "EDR_482",
+        "DEEP_030",
+        "SW_091t4",
+        "EX1_620",
+        "TSC_926"
+      ]
+    },
+    {
+      "id": "85b882b8-8e34-4d48-85e0-4c8e031c5468",
+      "endedAt": "2026-10-01T20:50:19.5805179+08:00",
+      "heroClass": "Mage",
+      "type": "combo",
+      "forty": true,
+      "cards": [
+        "SW_450",
+        "JAIL_312",
+        "EX1_277",
+        "GAME_005",
+        "CATA_485",
+        "TTN_477t1",
+        "JAIL_125",
+        "REV_505",
+        "VAC_414"
+      ]
+    },
+    {
+      "id": "7669c1c1-6120-49e3-8f4f-b89183abd94f",
+      "endedAt": "2026-10-01T20:55:48.9096021+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "GAME_005",
+        "CAP_404",
+        "CORE_ICC_407",
+        "END_017",
+        "CORE_EX1_309",
+        "ETC_085"
+      ]
+    },
+    {
+      "id": "de551298-9fa8-45e3-9be6-495b971d1ae9",
+      "endedAt": "2026-10-01T21:03:14.3568742+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TSC_210",
+        "REV_246",
+        "TTN_430t",
+        "CATA_490",
+        "KAR_205",
+        "ETC_080",
+        "END_016",
+        "TIME_432",
+        "CATA_499",
+        "RLK_816",
+        "TIME_026",
+        "RLK_816t3",
+        "BAR_311",
+        "CATA_308",
+        "EX1_308"
+      ]
+    },
+    {
+      "id": "296cd560-389c-4f89-b99d-77ac7ddc3437",
+      "endedAt": "2026-10-01T21:08:31.4177145+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WW_331",
+        "TOY_381",
+        "WON_065",
+        "CORE_SCH_713",
+        "VAC_419",
+        "YOD_032",
+        "DS1_233",
+        "REV_290"
+      ]
+    },
+    {
+      "id": "b088d0b4-f78b-45f3-b45e-3b0ef26e7ad9",
+      "endedAt": "2026-10-01T21:17:06.6530538+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "VAC_951",
+        "VAC_952",
+        "GAME_005",
+        "BG31_BOB",
+        "VAC_951t",
+        "VAC_951t2"
+      ]
+    },
+    {
+      "id": "09d182ab-d7b2-46a6-8860-171531000b78",
+      "endedAt": "2026-10-01T21:30:40.1976891+08:00",
+      "heroClass": "Shaman",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "ULD_291",
+        "WORK_013",
+        "WW_360",
+        "WW_010",
+        "LOE_011",
+        "LOOT_358",
+        "WW_0700",
+        "TSC_032",
+        "TIME_024",
+        "BE_036",
+        "AV_250",
+        "REV_017t",
+        "ETC_409",
+        "FP1_030"
+      ]
+    },
+    {
+      "id": "a500bd96-ad13-474f-9082-dc80a5de7c13",
+      "endedAt": "2026-10-01T21:41:13.88689+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "VAC_940",
+        "REV_246",
+        "TLC_603",
+        "TSC_210",
+        "CATA_490",
+        "SCH_259",
+        "TLC_451",
+        "CATA_308",
+        "REV_253",
+        "BOT_568",
+        "TIME_432",
+        "TIME_026",
+        "RLK_534",
+        "DMF_119",
+        "JAIL_430",
+        "WON_103",
+        "REV_011",
+        "VAC_408",
+        "KAR_205",
+        "CATA_493"
+      ]
+    },
+    {
+      "id": "1e79c440-4abb-4353-969c-f06e76ea757a",
+      "endedAt": "2026-10-01T21:50:22.5279508+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "REV_841",
+        "MAW_006",
+        "ULD_726",
+        "ULD_240",
+        "MAW_101",
+        "KAR_092",
+        "REV_513",
+        "JAM_001"
+      ]
+    },
+    {
+      "id": "4fc3c2bf-b9df-4b27-ba58-2008f9c7bab5",
+      "endedAt": "2026-10-01T21:59:41.791585+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TIME_715",
+        "DEEP_010",
+        "TID_714",
+        "CORE_CFM_790",
+        "VAC_949",
+        "LOOT_367",
+        "GIFT_07",
+        "EX1_407",
+        "TOY_330t11",
+        "WW_0700",
+        "BG31_BOB"
+      ]
+    },
+    {
+      "id": "1fbe2a1b-cbc3-4799-b7e0-fe214b05d068",
+      "endedAt": "2026-10-01T22:09:48.9353318+08:00",
+      "heroClass": "Mage",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "SCH_235",
+        "CORE_CS2_023",
+        "JAIL_COIN3",
+        "JAM_002",
+        "CS2_026",
+        "CORE_CS2_028",
+        "BG31_BOB",
+        "BAR_748",
+        "SCH_352",
+        "LOE_011",
+        "ETC_080",
+        "CORE_CS2_032",
+        "DEEP_032"
+      ]
+    },
+    {
+      "id": "d19b9d0d-4c3e-45c3-95e0-5fff9879e7df",
+      "endedAt": "2026-10-01T22:16:44.79435+08:00",
+      "heroClass": "Mage",
+      "type": "unknown",
+      "forty": true,
+      "cards": [
+        "FP1_004",
+        "MAW_101",
+        "ULD_239",
+        "CFM_760"
+      ]
+    },
+    {
+      "id": "254f379d-2030-4c6b-92d6-a55f257b4e6e",
+      "endedAt": "2026-10-01T22:25:39.8564876+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TTN_COIN1",
+        "CATA_490",
+        "REV_253",
+        "TLC_451",
+        "VAC_940",
+        "UNG_029",
+        "CATA_308",
+        "TTN_430t",
+        "REV_246",
+        "WON_103",
+        "CATA_493"
+      ]
+    },
+    {
+      "id": "175a5713-2363-416b-a9c8-79f1ee1148e4",
+      "endedAt": "2026-10-01T22:31:56.3863878+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TTN_710",
+        "EX1_244",
+        "ULD_171",
+        "EX1_565",
+        "REV_921",
+        "CS2_039"
+      ]
+    },
+    {
+      "id": "a23e5209-e11f-4526-9d3b-a420faa67216",
+      "endedAt": "2026-10-01T22:33:08.9825453+08:00",
+      "heroClass": "Priest",
+      "type": "unknown",
+      "forty": false,
+      "cards": []
+    },
+    {
+      "id": "61d3038d-dd6e-4d11-86ff-5700cb81844b",
+      "endedAt": "2026-10-01T22:43:02.9019051+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "YOD_022",
+        "CAP_107",
+        "EDR_570",
+        "CAP_107t",
+        "DMF_528",
+        "ETC_372",
+        "VAC_958",
+        "JAM_013",
+        "EX1_400",
+        "TTN_710"
+      ]
+    },
+    {
+      "id": "0bfd3e5f-4158-4873-a7d9-7395d841efe1",
+      "endedAt": "2026-10-01T22:47:19.0260754+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_518",
+        "DED_513",
+        "YOD_032",
+        "SCH_514",
+        "DS1_233"
+      ]
+    },
+    {
+      "id": "9a1db169-9878-431d-af65-a3bc00b9be00",
+      "endedAt": "2026-10-01T22:49:23.6669619+08:00",
+      "heroClass": "Druid",
+      "type": "unknown",
+      "forty": true,
+      "cards": []
+    },
+    {
+      "id": "f6548b2a-8659-4767-bde8-40f16284b8d7",
+      "endedAt": "2026-10-01T22:54:46.7917552+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_COIN2",
+        "VAC_512",
+        "DED_513",
+        "TOY_381",
+        "CFM_637",
+        "GVG_009",
+        "VAC_419"
+      ]
+    },
+    {
+      "id": "f0001b27-48f3-475a-b904-e2fb496f38d0",
+      "endedAt": "2026-10-01T22:59:42.1424572+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "WON_081",
+        "EX1_565",
+        "ULD_171",
+        "DEEP_008",
+        "JAM_013"
+      ]
+    },
+    {
+      "id": "e25b3373-ef66-4fb5-8b7a-9fe4abd8d668",
+      "endedAt": "2026-10-01T23:11:29.3571625+08:00",
+      "heroClass": "Shaman",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "CORE_CFM_790",
+        "TSC_908",
+        "BAR_074",
+        "AT_051",
+        "SCH_259",
+        "WC_005",
+        "CFM_696",
+        "DEEP_010",
+        "VAC_409",
+        "ULD_003",
+        "EX1_066",
+        "LOE_011",
+        "DEEP_008",
+        "CORE_KAR_061",
+        "JAM_014",
+        "MIS_307",
+        "MIS_307t1"
+      ]
+    },
+    {
+      "id": "a3347b71-f157-43b0-8c92-8c3243047053",
+      "endedAt": "2026-10-01T23:22:29.1507895+08:00",
+      "heroClass": "Warrior",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "TIME_COIN2",
+        "VAC_949",
+        "LOOT_367",
+        "TSC_908",
+        "GIFT_07",
+        "EX1_407",
+        "VAC_702",
+        "VAC_702t3",
+        "BG31_BOB",
+        "CORE_EX1_606",
+        "TOY_605",
+        "SCH_526",
+        "TIME_873",
+        "VAC_406",
+        "TOY_330t11",
+        "SCH_259"
+      ]
+    },
+    {
+      "id": "d21c9a60-e438-4573-83bb-2fa81112b430",
+      "endedAt": "2026-10-01T23:27:50.5113383+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WW_331",
+        "CORE_ICC_038",
+        "WW_391",
+        "YOP_031",
+        "AV_137",
+        "LEG_TTN_908"
+      ]
+    },
+    {
+      "id": "49f2d267-1033-4b23-8862-a960758881c0",
+      "endedAt": "2026-10-01T23:45:43.4178637+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "WON_062",
+        "TOY_381",
+        "VAC_512",
+        "CORE_ICC_210",
+        "DS1_233",
+        "TOY_518"
+      ]
+    },
+    {
+      "id": "d5eb7818-9f91-4fc5-a62b-e8e09b8f9519",
+      "endedAt": "2026-10-01T23:49:32.5276796+08:00",
+      "heroClass": "Mage",
+      "type": "control",
+      "forty": false,
+      "cards": [
+        "REV_504",
+        "JAIL_COIN3",
+        "TOY_371"
+      ]
+    },
+    {
+      "id": "aaf2eabb-5812-49aa-b204-945ab5d8ead8",
+      "endedAt": "2026-10-01T23:55:58.151671+08:00",
+      "heroClass": "Priest",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "DMF_119",
+        "REV_253",
+        "END_016",
+        "EDR_449",
+        "RLK_532",
+        "REV_246",
+        "TIME_026",
+        "UNG_029"
+      ]
+    },
+    {
+      "id": "02cd1fb4-26f6-4f5f-ae96-0770c53ad003",
+      "endedAt": "2026-10-02T00:01:32.7922892+08:00",
+      "heroClass": "Shaman",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TSC_922",
+        "AV_259",
+        "EX1_565",
+        "TSC_069",
+        "EX1_244"
+      ]
+    },
+    {
+      "id": "7350154d-49bd-457d-b25a-98f4e9a7abe0",
+      "endedAt": "2026-10-02T00:10:59.6845132+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CAP_107",
+        "CAP_104",
+        "CORE_DRG_024",
+        "CAP_107t",
+        "CS3_008",
+        "CORE_NEW1_027",
+        "ETC_372",
+        "CAP_103",
+        "GVG_075",
+        "VAC_333",
+        "JAIL_421",
+        "CAP_102"
+      ]
+    },
+    {
+      "id": "f1604644-c5c3-4be9-a518-801e62488569",
+      "endedAt": "2026-10-02T00:15:58.4792907+08:00",
+      "heroClass": "Druid",
+      "type": "combo",
+      "forty": false,
+      "cards": [
+        "GAME_005",
+        "TTN_955",
+        "AV_295",
+        "TIME_701",
+        "BOT_054",
+        "JAIL_718",
+        "VAC_428",
+        "SC_755",
+        "TSC_654",
+        "CORE_EX1_169",
+        "SCH_427",
+        "BT_724",
+        "CS2_008",
+        "JAM_025",
+        "SC_753",
+        "TID_001",
+        "CORE_AT_037"
+      ]
+    },
+    {
+      "id": "58a708cf-da16-418b-b0bd-44c8b484f24e",
+      "endedAt": "2026-10-02T00:21:12.9963438+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "EDR_889",
+        "END_020",
+        "CORE_REV_990",
+        "CATA_580"
+      ]
+    },
+    {
+      "id": "acb90366-a630-4b50-a321-b2ca37a7d1a5",
+      "endedAt": "2026-10-02T00:25:15.7286801+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TOY_518",
+        "WON_062",
+        "SCH_514",
+        "CFM_637"
+      ]
+    },
+    {
+      "id": "a1207192-2f54-436d-9a3f-43dd0b4cb126",
+      "endedAt": "2026-10-02T00:33:06.0438622+08:00",
+      "heroClass": "Warlock",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "END_017",
+        "SC_000",
+        "DAL_602"
+      ]
+    },
+    {
+      "id": "988b6cc6-30b4-4338-8765-516c84ad730b",
+      "endedAt": "2026-10-02T00:36:36.4782513+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "BT_020",
+        "GDB_728",
+        "GDB_726"
+      ]
+    },
+    {
+      "id": "e7c7aa71-16a6-431f-b824-7fd0cd1ee068",
+      "endedAt": "2026-10-02T00:44:20.1220526+08:00",
+      "heroClass": "Mage",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TTN_COIN2",
+        "TTN_095",
+        "DMF_100",
+        "CORE_UNG_205",
+        "CORE_UNG_809",
+        "UNG_809t1",
+        "VAC_442",
+        "TTN_479",
+        "DMF_100t"
+      ]
+    },
+    {
+      "id": "2226f065-8659-41ae-9ede-454c461744ba",
+      "endedAt": "2026-10-02T00:54:43.1501862+08:00",
+      "heroClass": "Warrior",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "FIR_939",
+        "CATA_585",
+        "ULD_206",
+        "CATA_584",
+        "CATA_582",
+        "EDR_456",
+        "TOY_386",
+        "CORE_REV_990",
+        "TLC_600",
+        "TIME_034",
+        "CAP_107",
+        "CAP_107t"
+      ]
+    },
+    {
+      "id": "b33abc49-8518-43b4-80d6-8f68c76ae758",
+      "endedAt": "2026-10-02T00:59:16.2768011+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "CFM_637",
+        "TOY_381",
+        "SW_444",
+        "SCH_514",
+        "SW_446",
+        "NX2_019"
+      ]
+    },
+    {
+      "id": "0fd528d1-6357-4fbc-8716-9711238267fc",
+      "endedAt": "2026-10-02T01:05:01.8732367+08:00",
+      "heroClass": "Deathknight",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "RLK_958",
+        "GAME_005",
+        "RLK_708",
+        "RLK_503",
+        "CORE_ULD_723",
+        "CORE_EDR_002",
+        "RLK_060",
+        "CORE_GIL_622"
+      ]
+    },
+    {
+      "id": "5f57e441-debb-4aa1-b4c6-6595f838fc99",
+      "endedAt": "2026-10-02T01:10:52.9010076+08:00",
+      "heroClass": "Paladin",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "TTN_860",
+        "TSC_928",
+        "TTN_719t2",
+        "BOT_906",
+        "TOY_716",
+        "TSC_079",
+        "BOT_907",
+        "ETC_106",
+        "DRG_225",
+        "BOT_020",
+        "TSC_632",
+        "TTN_719t4",
+        "SC_401"
+      ]
+    },
+    {
+      "id": "c7cee227-f6b4-4b67-a597-469d07aced42",
+      "endedAt": "2026-10-02T01:15:45.1702469+08:00",
+      "heroClass": "Priest",
+      "type": "tempo",
+      "forty": false,
+      "cards": [
+        "GVG_009",
+        "TOY_381",
+        "VAC_512",
+        "SW_446",
+        "DED_513",
+        "YOD_032"
+      ]
+    },
+    {
+      "id": "2098d2fd-8963-4115-acc6-e91bf5d0453f",
+      "endedAt": "2026-10-02T01:31:28.7157128+08:00",
+      "heroClass": "Druid",
+      "type": "control",
+      "forty": true,
+      "cards": [
+        "WON_014",
+        "GAME_005",
+        "AV_205",
+        "BT_130",
+        "FIR_907",
+        "LOE_011",
+        "VAC_907",
+        "TOY_330t8",
+        "TSC_908",
+        "WW_0700",
+        "BOT_054",
+        "BOT_404",
+        "CS2_013",
+        "AT_045",
+        "TTN_903",
+        "LOOT_541",
+        "ETC_541",
+        "DMF_058",
+        "TTN_930",
+        "ETC_080",
+        "DED_002",
+        "TSC_654",
+        "DEEP_025",
+        "GIFT_10",
+        "YOP_029",
+        "WW_824",
+        "ULD_003",
+        "CS1_113",
+        "TIME_701"
+      ]
+    }
+  ]
+}

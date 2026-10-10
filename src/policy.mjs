@@ -857,6 +857,26 @@ function noIdleTurn(state,actions){
  return actions.some(spends)?actions.filter(a=>a.type!=='END_TURN'):actions;
 }
 
+// User ruling (2026-10-10 batch, game 17, turn 10): 4 mana, three ready attackers, Party Fiend,
+// Soulfire and Soul Barrage in hand, and the turn passed. 「先送掉一個2-2，然後再下派對，然後再解場」:
+// trade to open space, play Party Fiend, then Soulfire -- with Soul Barrage the only card left, the
+// random discard is certain, and Barrage clears the wide board for free (Duke grows too). While the
+// mana covers the outlet and every other card, the turn does not end, Barrage is not hard-cast,
+// Soulfire waits for the rest of the hand, and Life Tap waits (a drawn card would spoil the discard).
+const WHEN_PLAY_OR_DISCARD=/when you play or discard this/i;
+export function guaranteedDiscard(state,actions){
+ const hand=state.me?.hand??[],mana=Number(state.me?.mana??0);
+ const playable=c=>actions.some(a=>a.entityId===c.entityId);
+ const outlet=hand.find(c=>c.CARDTYPE==='SPELL'&&DISCARDS_RANDOM.test(flat(c.text))&&costOf(c)<=mana&&playable(c));
+ if(!outlet)return null;
+ const rest=hand.filter(c=>c!==outlet&&!isCoin(c));
+ const payoffs=rest.filter(c=>WHEN_PLAY_OR_DISCARD.test(flat(c.text)));
+ const others=rest.filter(c=>!payoffs.includes(c));
+ if(!payoffs.length||!others.every(playable))return null;
+ if(costOf(outlet)+others.reduce((n,c)=>n+costOf(c),0)>mana)return null;
+ return {outlet,payoffs,others};
+}
+
 // Same ruling: when a chosen discard is between a weapon and Duke of Below, the weapon goes if the
 // discard grows Duke to at least 6/6 (「公爵66 大於武器，如果小於66會保留武器」); otherwise Duke goes.
 const GROWS_ON_DISCARD=/\+2\/\+2 for each card you've discarded/i;
@@ -1105,6 +1125,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  }
  const veto=vetoes(state),vetoed=[];
  let out=actions.filter(a=>{const r=veto(a);if(r)vetoed.push({rule:r,actionId:a.id});return !r;});
+ const legal=out;
  const wasted=wastedFodder(state);
  const releases=[],hold={fodderHold:[...wasted]},fired=[];
  // Step 4 (impact check): which rule took which actions off the menu, before any release.
@@ -1145,6 +1166,13 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  prefer('swarmOccultist',swarmOccultist(state,out));
  prefer('counterFirst',counterFirst(state,out));
  {const ow=overflowWaits(state,out);prefer('overflowWaits',out.filter(a=>!ow(a)));}
+ {const g=guaranteedDiscard(state,legal);if(g){
+  const kept=out.filter(a=>a.type!=='END_TURN');
+  if(kept.length)took('guaranteedDiscardEnd',kept);
+  const hp=heroPowerOf(state),pay=new Set(g.payoffs.map(c=>c.entityId));
+  prefer('guaranteedDiscardWaits',out.filter(a=>!pay.has(a.entityId)&&a.entityId!==hp?.entityId
+   &&!(g.others.length&&a.entityId===g.outlet.entityId)));
+ }}
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);
  prefer('deadWhispers',out.filter(a=>!deadWhispers(state,held(a.entityId))));
  {const menu=out;prefer('whispersWaits',out.filter(a=>!whispersWaits(state,held(a.entityId),menu)));}

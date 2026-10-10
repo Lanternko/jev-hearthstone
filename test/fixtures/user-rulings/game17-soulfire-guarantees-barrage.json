@@ -1,0 +1,534 @@
+{
+ "note": "2026-10-10 batch game 17 turn 10 ruling: 「先送掉一個2-2，然後再下派對，然後再解場」 -- with 4 mana, three ready attackers, Party Fiend, Soulfire and Soul Barrage in hand, the turn passed. Trade to open space, play Party Fiend, then Soulfire discards Soul Barrage for certain.",
+ "state": {
+  "gameNumber": 17,
+  "turn": 10,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 4,
+   "maxMana": 5,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 56,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 4,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 57,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 93,
+     "cardId": "OG_070",
+     "name": "Bladed Cultist",
+     "text": "<b>Combo:</b> Gain +1/+1.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 3,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 107,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "DAMAGE": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 38,
+     "cardId": "CATA_493",
+     "name": "Duke of Below",
+     "text": "[x]<b>Rush</b>\nHas +2/+2 for each\ncard you've discarded\nthis game.",
+     "baseCost": 4,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 128,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 32,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 127,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 24,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 44,
+     "cardId": "EX1_308",
+     "name": "Soulfire",
+     "text": "[x]Deal $4 damage.\nDiscard a random card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 34,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "PRIEST",
+   "mana": 0,
+   "maxMana": 5,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 29,
+   "board": [
+    {
+     "entityId": 54,
+     "cardId": "HERO_09a",
+     "name": "Tyrande Whisperwind",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 40,
+     "DAMAGE": 26,
+     "CARDTYPE": "HERO",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 1
+    },
+    {
+     "entityId": 55,
+     "cardId": "CS1h_001_H1",
+     "name": "Lesser Heal",
+     "text": "<b>Hero Power</b>\nRestore #2 Health.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 58,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "DAMAGE": 2,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "DIVINE_SHIELD": 0,
+     "STEALTH": 0,
+     "FROZEN": 0,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 66,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 6,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "DIVINE_SHIELD": 0,
+     "STEALTH": 0,
+     "FROZEN": 0,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 113,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 75,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "DIVINE_SHIELD": 0,
+     "STEALTH": 0,
+     "FROZEN": 0,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 112,
+     "cardId": "VAC_940t",
+     "name": "Felbeast",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 118,
+     "cardId": "SCH_147t",
+     "name": "Boneweb Spider",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 119,
+     "cardId": "SCH_147t",
+     "name": "Boneweb Spider",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 5,
+     "entityId": 23,
+     "cardId": "TTN_430t",
+     "name": "Creation Protocol",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "<b>Forged</b>\n<b>Discover</b> a copy of a minion in your deck.\nGet another copy of it."
+    },
+    {
+     "public": true,
+     "engineTurn": 7,
+     "entityId": 58,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "CARDTYPE": "WEAPON",
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "text": "After your hero attacks, discard your highest Cost card."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 75,
+     "cardId": "VAC_940",
+     "name": "Party Fiend",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "<b>Battlecry:</b> Summon two 1/1 Felbeasts. Deal 3 damage to your hero."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 66,
+     "cardId": "RLK_532",
+     "name": "Walking Dead",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 5,
+     "text": "<b>Taunt</b>\nIf you discard this minion, summon it."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 73,
+     "cardId": "DMF_119",
+     "name": "Wicked Whispers",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Discard your lowest Cost card. Give your minions +1/+1."
+    }
+   ]
+  },
+  "optionsId": 32,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    35,
+    26,
+    51
+   ],
+   "complete": true
+  },
+  "fingerprint": "00035ee63986a0708bad",
+  "decisionFingerprint": "9e412c7001fe2d075323"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 24,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 54
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t1",
+   "targetId": 56
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t2",
+   "targetId": 93
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t3",
+   "targetId": 107
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t4",
+   "targetId": 38
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t5",
+   "targetId": 75
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t6",
+   "targetId": 112
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t7",
+   "targetId": 113
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t8",
+   "targetId": 66
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t9",
+   "targetId": 118
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t10",
+   "targetId": 119
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t11",
+   "targetId": 32
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t12",
+   "targetId": 127
+  },
+  {
+   "option": 2,
+   "entityId": 44,
+   "type": "POWER",
+   "id": "o2t13",
+   "targetId": 128
+  },
+  {
+   "option": 3,
+   "entityId": 34,
+   "type": "POWER",
+   "id": "o3"
+  },
+  {
+   "option": 4,
+   "entityId": 57,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 93,
+   "type": "POWER",
+   "id": "o5t0",
+   "targetId": 66
+  },
+  {
+   "option": 6,
+   "entityId": 107,
+   "type": "POWER",
+   "id": "o6t0",
+   "targetId": 66
+  },
+  {
+   "option": 7,
+   "entityId": 38,
+   "type": "POWER",
+   "id": "o7t0",
+   "targetId": 66
+  }
+ ]
+}

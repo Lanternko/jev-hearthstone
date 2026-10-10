@@ -36,7 +36,7 @@ const PAIRS=[
  ['buffBeforeTap','o4',E.all(E.dropMine('Felbeast'),E.dropMine('Felbeast'),E.mana(3)),'two bodies, not three: the buff is no longer worth reserving for'],
  ['castBeforeSwing','o3t0',E.dropHand('Chamber of Viscidus'),'nothing to cast before the swing'],
  ['counterFirst','o5t5',E.mana(-2),'Duke of Below no longer castable this turn'],
- ['deadWhispers','o3',E.addMine(1,2),'one minion on board: the buff has a target'],
+ ['deadWhispers','o3',E.all(E.addMine(1,2),E.addMine(1,2)),'two minions on board: the buff has targets (one is not worth a card, 2026-10-10)'],
  ['deferHardCast','o1',E.notTemporary('Walking Dead'),'the Walking Dead is not a temporary copy'],
  ['developBeforeBuff','o2',E.foeHp(5),'their hero at 5: the buff is lethal now'],
  ['discardPick','c3e88',E.addFoe(1,1,3),'three 1/1s on their side: the split damage clears a swarm'],

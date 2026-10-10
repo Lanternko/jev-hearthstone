@@ -236,9 +236,12 @@ test('whispers is off the table with no board and a real card as the cheapest',(
   // itself is then hard-cast for nothing, which the outlet rule above already takes away.
   const payoff=[WHISPERS,EGG];
   assert.deepEqual(ids(hand(payoff),payoff),['o8']);
-  // One body on board and the buff half works, whatever it eats.
+  // One body is not worth a real card (2026-10-10 ruling 「只有场上只有一张牌，不值得用 buff」); two and the
+  // buff half works, whatever it eats.
   const one1=hand(loss,[body(1)]);one1.me.mana=1;
-  assert.deepEqual(ids(one1,loss),['o8','o101']);
+  assert.ok(!ids(one1,loss).includes('o8'));
+  const two1=hand(loss,[body(1),{...body(1),entityId:77}]);two1.me.mana=1;
+  assert.deepEqual(ids(two1,loss),['o8','o101']);
   // A tie it might survive is Jev's call, not ours.
   const tied=[WHISPERS,FILLER(1),{...EGG,COST:1}];
   const t1=hand(tied);t1.me.mana=1;

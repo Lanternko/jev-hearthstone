@@ -695,6 +695,15 @@ export const whispersWaits=(state,card,actions)=>{
   return c&&c.entityId!==card.entityId&&makesBodies(c)&&costOf(c)<=room;
  });
 };
+// User ruling (2026-10-10, game 13, turn 6): 3 mana, Platysaur alone on the board, Jev cast Whispers and
+// it ate The Soularium. 「只有场上只有一张牌，不值得用 buff，而且我们弃掉的牌并不是一个素材」 -- +1/+1 on one
+// minion does not pay for a real card. With at most one minion out and nothing it would eat paying on
+// discard, Whispers waits; play the 3-drop (Walking Dead or Chamber of Viscidus) instead.
+export const whispersThinBoard=(state,card)=>{
+ if(!isWhispers(card)||myMinions(state)>1)return false;
+ const eats=wouldDiscard(state,card);
+ return eats.length>0&&!eats.some(isFodder);
+};
 // User ruling (2026-09-26, game 12, turn 4): with 1 mana, Whispers and Entropic Continuity in hand,
 // Jev cast Whispers and it ate Continuity. 「應該打連鎖。因為打完連鎖，最低費變成魔像」 -- the card
 // Whispers would throw away was castable itself, and casting it leaves Silverware Golem as the
@@ -1213,6 +1222,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  const held=id=>(state.me?.hand??[]).find(c=>c.entityId===id);
  prefer('deadWhispers',out.filter(a=>!deadWhispers(state,held(a.entityId))));
  {const menu=out;prefer('whispersWaits',out.filter(a=>!whispersWaits(state,held(a.entityId),menu)));}
+ prefer('whispersThinBoard',out.filter(a=>!whispersThinBoard(state,held(a.entityId))));
  {const menu=out;prefer('whispersEatsPlayable',out.filter(a=>!whispersEatsPlayable(state,held(a.entityId),menu)));}
  // Only while the buff is still on the table to be played: if the option went for some other
  // reason there is nothing to stay for. An END_TURN removal, so it stays hard (see the doc).

@@ -1,3 +1,10 @@
+# 2026-10-10 使用者裁定：場上只有一隻手下時不打 Wicked Whispers
+
+- 第 13 局第 6 回合：3 費，場上只有 Platysaur，打 Whispers 只 buff 一隻還棄掉 The Soularium。「只有场上只有一张牌，不值得用 buff，而且我们弃掉的牌并不是一个素材」。新規則 `whispersThinBoard`（prefer）：我方手下 ≤1 且 Whispers 會棄掉的卡不是棄牌素材時，Whispers 先不打；應下 3 費卡（Walking Dead 或 Chamber of Viscidus，地標有 3/4 機會棄到 Walking Dead，保底棄 Soul Barrage）。
+- 舊測試「一隻手下就讓 Jev 決定」被此裁定取代，改為兩隻手下才放行。
+- 註：Walking Dead 硬下目前仍被 `wastedFodder` 保護（有棄牌出口時不硬下素材），本次未改。
+- 新增 `test/game13-whispers-thin-board.test.mjs`；全套 569/569 通過。
+
 # 2026-10-10 使用者裁定：克洛諾之爪別浪費靈魂彈幕、派對動物只需一格空位
 
 - 第 18 局第 4 回合：裝克洛諾之爪攻擊棄掉靈魂彈幕，9 點傷害打在 0/2 零攻水蛭上。新規則 `weaponWastesBurn`（prefer）：敵方場面全是零攻、無聖盾/潛行，且我方可攻擊手下的總攻擊足以清場時，若武器會棄掉造成傷害的最高費卡，先不裝武器；改走一費手下 → buff → Wicked Whispers 棄最低費卡。

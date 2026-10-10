@@ -87,8 +87,14 @@ test('an empty board removes the pure buff, and Whispers with nothing worth eati
   assert.deepEqual(left,['o0']);
 });
 
-test('one friendly minion is enough to leave the decision to Jev', () => {
-  assert.deepEqual(constrainActions(withMinion([EC,WW]),acts).map(a=>a.id),['o0','o1','o2']);
+// Superseded by the 2026-10-10 ruling 「只有场上只有一张牌，不值得用 buff」: one minion and a real card to eat,
+// Whispers waits. A second minion leaves the decision to Jev again.
+test('one friendly minion and a real card to eat: Whispers waits', () => {
+  assert.deepEqual(constrainActions(withMinion([EC,WW]),acts).map(a=>a.id),['o0','o1']);
+});
+test('two friendly minions leave the decision to Jev', () => {
+  const s=withMinion([EC,WW]);s.me.board.push({entityId:6,CARDTYPE:'MINION',ATK:1,HEALTH:1});
+  assert.deepEqual(constrainActions(s,acts).map(a=>a.id),['o0','o1','o2']);
 });
 
 test('the option text states the card text and the friendly minion count', () => {

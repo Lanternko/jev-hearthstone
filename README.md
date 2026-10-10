@@ -1,38 +1,75 @@
 # Jev Hearthstone
 
-本機 Jev 決策接入與爐石公開狀態讀取器。尚未完成全自動對局驗證。
+讓 Jev 模型在本機打爐石戰記的機器人：讀 `Power.log` 得到盤面，用規則與搜尋把合法行動剪成少數候選，交給 Jev（`typesafe-ai/jev`，經 Vercel AI Gateway）選一步，再用滑鼠點出來並核對盤面真的變了。不讀螢幕畫面、不注入遊戲程序。
+
+目前主力是狂野棄牌術（`decks/warlock-discard`），另有 Void 惡魔獵人（`decks/dh-void`）。可以無人值守連打天梯批次；第 104–153 場的 50 場紀錄為 38 勝 12 敗，分析見 [runtime/winrate-game104-153.md](runtime/winrate-game104-153.md)。逐日的修正與裁定都記在 [STATUS.md](STATUS.md)。
+
+## 組成
+
+| 部分 | 做什麼 | 主要檔案 |
+|---|---|---|
+| 卡面與盤面判讀 | 增量解析 `Power.log`，只取本方手牌與公開資訊，對照完整卡面快照寫成候選描述 | `src/power.mjs`、`src/bridge.mjs`、`src/describe.mjs`、`src/mechanics.mjs`、`data/cards.enUS.json` |
+| 滑鼠點擊 | 實體換算成視窗像素，經常駐 PowerShell worker 以 SendInput 點擊、拖曳，再核對盤面 | `src/layout.mjs`、`src/execute.mjs`、`src/win.mjs`、`src/input-worker.ps1`、`src/verify.mjs`、`src/play.mjs` |
+| 打法 | 每副牌一個資料夾：給 Jev 讀的原則與起手留牌表；使用者對實戰的裁定寫成規則 | `decks/*/strategy.md`、`decks/*/mulligan.json`、`src/policy.mjs`、`runtime/strategy-long-2026-09-21.md` |
+| Jev | 呼叫模型選一步；存取失敗時的備援與復原 | `src/jev.mjs`、`src/choose.mjs`、`src/decide.mjs`、`src/jev-recovery.mjs` |
+| 剪枝與搜尋 | 整回合 beam search 與確定性模擬、斬殺偵測；規則分成硬刪（veto）與偏好（prefer）兩層 | `src/plan.mjs`、`src/sim.mjs`、`src/lethal.mjs`、`src/rule-release.mjs`、`src/planner-version.mjs` |
+| 對局迴圈 | 等對局開始、逐步決策、起手換牌、被吞掉的動作處理 | `src/await-game.mjs`、`src/loop.mjs`、`src/mulligan-*.mjs`、`src/dead-skip.mjs` |
+| 腳本 | 無人值守天梯批次、接近傳說時錄影、讀階級、賽後健康檢查 | `runtime/*.mjs`、`runtime/*.ps1`、`runtime/*.sh` |
+| 評估 | 離線重播、配對比較、人工標註盤面 | `src/eval-*.mjs`、`eval/` |
+
+搜尋的做法參考了 Silverfish，取捨見 [docs/silverfish-research.md](docs/silverfish-research.md)；每次改動規則層的依據與新舊比較在 `docs/` 其他檔案。決策引擎以版本凍結：預設 `silverfish-v1-veto-audit-v1`，用 `JEV_SEARCH_VERSION` 可切回 `src/planner-version.mjs` 列出的舊版，對應快照在 `eval/runs/`，不可刪。
+
+## 安裝
+
+Node.js 22，Windows。
+
+```bash
+npm ci
+```
+
+把 `.env.example` 複製成 `.env.local` 並填入：
+
+- `AI_GATEWAY_API_KEY`：Vercel AI Gateway 金鑰。
+- `JEV_ACCOUNT`：自己的 BattleTag，寫法與 `Power.log` 相同。賽後判定勝負要用，只留在本機。
+
+`.env.local` 不進版本庫，也不要貼進對話。
+
+第一次使用前跑 `npm run calibrate` 校正 `src/layout.mjs`：它只移動游標、不點擊。座標是 16:9 內容區的比例，執行時乘上實際 client rect，所以 1920x1080 視窗與 2560x1440 全螢幕共用同一組數字。
 
 ## 使用
 
-### 開一場休閒對戰
+### 打一場
 
-1. 先執行 `npm run smoke` 驗證 Jev 存取。若回覆模型無權限、額度或價格確認錯誤，先報告；API 並未可用，不能把規則備援稱為 Jev 正常思考。
-2. 爐石已開啟時直接選其現有視窗；斷線則先重連。主選單進入「爐石戰記」。
-3. 套牌頁右上角模式徽章選太陽圖示，確認頁首寫「休閒模式」。選 `Void Demon Hunter`，確認藍色選取框與右側套牌名稱。模式只點一次；英雄說明浮層可點空白處關閉。
-4. 在此專案執行一次 `npm run game`，再點遊戲中的「開始」。這個命令只等待並接管對局，**不會替你開啟遊戲、切模式或按開始**。不要啟動第二份。
-5. 「尋找對手」只代表排隊；確認進入對戰／起手換牌後才回報已開始。之後放手，對局後一次讀取 `runtime/last-game.log`、決策紀錄與 `npm run gestures`。
+1. `npm run smoke` 確認 Jev 可以呼叫。回覆無權限或額度錯誤時先處理；規則備援不是 Jev 在思考。
+2. 在爐石選好模式與套牌。
+3. `npm run game`，再按遊戲裡的「開始」。這個命令只等待並接管對局，不會替你排隊。不要同時開第二份。
+4. 放手讓它打完，賽後再看 `runtime/last-game.log` 與 `npm run gestures`。
 
-存取被拒時，執行中的備援會立即接手，且本次程序不再重試同一存取錯誤；修好 Gateway 設定後須重新啟動程序。備援不是 Jev 模型。
+### 連打天梯
 
-Node.js 22，執行 `npm ci`。將 Gateway key 放入本目錄 `.env.local`，格式見 `.env.example`；不要貼進對話或 vault。
+```bash
+node runtime/ranked-continuous.mjs --games=50
+```
 
-- `npm run smoke`：真正呼叫 `typesafe-ai/jev`，驗證選擇 API；缺金鑰會明確失敗。
-- `npm run decide -- --inspect`：讀取最新 Power.log，只顯示本方手牌及公開盤面。
-- `npm run decide`：在活躍回合以遊戲回報的合法選項呼叫 Jev，將單步決策存於 `runtime/decision.json`。
-- `npm run calibrate`：只移動游標、不點擊，逐一停在每個可點目標上，用來校正 `src/layout.mjs`。加 `--live` 改用當前對局的真實手牌與場面。
-- `npm run play`：執行 `runtime/decision.json` 的決策；`--dry` 只移動游標。
-- `npm test`：解析器、資訊遮罩、合法候選、結束狀態、座標與手勢測試。
+每場重新排隊、打完後讀勝負與階級；六連敗、模型故障、配對連續失敗或出現 `runtime/stop` 檔就停。加 `--no-record` 不啟動錄影；預設會帶起 `runtime/record-legend.mjs`，從鑽石 2 開始錄到確認傳說後一分鐘（需要 ffmpeg）。階級讀自 Hearthstone Deck Tracker 的 `DeckStats.xml`。排隊用的點擊座標以 2560x1440 為基準。
 
-執行由 `src/play.mjs` 以 SendInput 直接點擊完成，不需要視覺模型。座標來自 `src/layout.mjs`：常數是 16:9 內容區的比例，執行時乘上實際 client rect，因此 1920x1080 視窗與 2560x1440 全螢幕共用同一組數字；非 16:9 的 client 會自動算出信箱邊框。視窗以 process 名稱定位（標題是《爐石戰記》，不是 Hearthstone）。
+### 其他命令
 
-**`src/layout.mjs` 的常數是估計值，首次使用前必須跑一次 `npm run calibrate` 校正。** 每次執行後重新解析 Power.log 核對盤面是否真的改變；沒變就是座標沒對準。模型錯誤、舊日誌、已結束對局與狀態變更都停止；不以其他模型代替 Jev。
+- `npm run decide -- --inspect`：只顯示目前盤面；不加 `--inspect` 則呼叫 Jev 存下一步決策。
+- `npm run play`：執行已存的決策，`--dry` 只移動游標。
+- `npm run override`：人工指定一個合法行動。
+- `npm test`：解析、資訊遮罩、候選、規則、座標與手勢測試，全部離線。
+- `npm run eval-silverfish`、`npm run eval-combo-admission`、`npm run eval-strength -- results.json`：離線比較新舊引擎與分析 A/B 對局，不呼叫模型也不碰遊戲。
+- `npm run label`、`npm run eval`：標註盤面並對標註評分。
 
-`data/cards.enUS.json` 是 2026-09-20 下載的完整卡面快照，SHA256 `079C41A102D386A289BCF2676815799967A8AA0AAEB6B0A5958C76BDD4A20AC3`。來源：https://api.hearthstonejson.com/v1/latest/enUS/cards.json。
+## 資料與隱私
+
+- 傳給模型的只有過濾後的盤面、策略與候選；不含 BattleTag、GameAccountId、原始日誌、對手手牌或牌堆順序。
+- `runtime/` 底下的日誌、截圖、錄影與決策紀錄都留在本機，版本庫只收腳本與筆記。
+- `data/cards.enUS.json` 是 2026-09-20 的完整卡面快照，SHA256 `079C41A102D386A289BCF2676815799967A8AA0AAEB6B0A5958C76BDD4A20AC3`，來源 <https://api.hearthstonejson.com/v1/latest/enUS/cards.json>。
 
 ## 限制
 
-Silverfish 研究與可複驗的新舊比較見 [docs/silverfish-research.md](docs/silverfish-research.md)。`npm run eval-silverfish` 離線比较保存基準與目前的搜尋／候選，不呼叫模型或啟動遊戲。`npm run eval-strength -- results.json` 分析預登記 A/B 對局結果。預設使用 `silverfish-v1-combo-admission-v2`；`JEV_SEARCH_VERSION=silverfish-v1-combo-admission-v1` 使用整併前固定快照，`baseline-20261001` 使用更早基準。基準目錄必須保留。共用組合證據與決策優先順序見 [整併報告](docs/combo-consolidation-20261003.md)。單步 `decide` 與自動對局 `bridge` 使用同一決策引擎；單步命令只保存第一個動作，自動接續由 bridge 觀察及驗證。
-
-尚待現場驗證：Mulligan/Discover 選牌、subOption 類行動、召喚擺位、特殊地點、暫時牌及新增機制。遇到不支援的 subOption 不產生候選。不能把解析成功視為已完成遊戲控制。
-
-API 僅傳送過濾盤面、策略與候選，不含 BattleTag、GameAccountId、原始日誌、對手手牌或牌堆順序。Vercel 官方 Jev 免費優惠標示至 2026-09-25；效期後應重查計價。
+- 只支援上面兩副牌；規則與棄牌模型是照這些卡面寫的，換牌要重寫 `decks/` 與對應規則。
+- 模擬只算確定的部分。隨機棄牌並列、抽牌、發現與未建模的效果會停下來重新觀察，不猜結果，也不模擬對手回合。
+- 自動化違反暴雪的使用條款，帳號風險自負。

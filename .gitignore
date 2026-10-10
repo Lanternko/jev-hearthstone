@@ -1,4 +1,9 @@
 node_modules/
 .env*
 !.env.example
-runtime/
+# runtime/ holds logs, screenshots, videos and third-party clones; only the scripts and notes are tracked.
+runtime/*
+!runtime/*.mjs
+!runtime/*.ps1
+!runtime/*.sh
+!runtime/*.md

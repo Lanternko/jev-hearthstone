@@ -1,0 +1,345 @@
+{
+ "note": "2026-10-10 batch game 18 our turn 4: Chronoclaws would discard Soul Barrage onto a lone 0/2 Bloated Leech; play the 1-drop, the buff and Wicked Whispers instead.",
+ "state": {
+  "gameNumber": 18,
+  "turn": 7,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 4,
+   "maxMana": 4,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 83,
+     "cardId": "HERO_07",
+     "name": "Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 84,
+     "cardId": "HERO_07bp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 114,
+     "cardId": "CORE_KAR_069",
+     "name": "Swashburglar",
+     "text": "<b>Battlecry:</b> Add a random card from another class to your hand.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 115,
+     "cardId": "TID_078",
+     "name": "Shattershambler",
+     "text": "[x]<b>Battlecry:</b> Your next\n<b>Deathrattle</b> minion costs (1) \n less, but immediately\ndies when played.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 52,
+     "cardId": "TIME_026",
+     "name": "Entropic Continuity",
+     "text": "[x]Give your minions +1/+1.\nShuffle 2 Shreds of Time\ninto your deck.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 64,
+     "cardId": "DMF_119",
+     "name": "Wicked Whispers",
+     "text": "Discard your lowest Cost card. Give your minions +1/+1.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 70,
+     "cardId": "RLK_534",
+     "name": "Soul Barrage",
+     "text": "When you play\nor discard this, deal $5 damage randomly split among all enemies.",
+     "baseCost": 4,
+     "COST": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 112,
+     "cardId": "MEND_300",
+     "name": "Tame Pet",
+     "text": "[x]Replace your future\nAnimal Companions with\nrandom Beasts that cost\n(1) more. Draw a card.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 109,
+     "cardId": "VAC_958",
+     "name": "Adaptive Amalgam",
+     "text": "[x]<i>This has all minion types.</i>\n<b>Deathrattle:</b> Shuffle this\ninto your deck. It keeps\nany enchantments.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 54,
+     "cardId": "END_016",
+     "name": "Chronoclaws",
+     "text": "After your hero attacks, discard your highest Cost card.",
+     "baseCost": 4,
+     "baseAttack": 4,
+     "baseHealth": 3,
+     "COST": 4,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "WEAPON"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 3,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 5,
+   "deckCount": 31,
+   "board": [
+    {
+     "entityId": 26,
+     "cardId": "TTN_736",
+     "name": "Staff of the Primus",
+     "text": "After your hero attacks, shuffle a random\nPlague into your opponent's deck.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 3,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 0,
+     "CARDTYPE": "WEAPON",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 81,
+     "cardId": "HERO_11bi",
+     "name": "Judge Jailer",
+     "baseHealth": 30,
+     "ATK": 0,
+     "HEALTH": 42,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 82,
+     "cardId": "HERO_11gbp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 107,
+     "cardId": "EDR_810t",
+     "name": "Bloated Leech",
+     "text": "[x]At the end of your turn, your\nhero steals 1 Health from\nthe lowest Health enemy.",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 85,
+     "cardId": "CATA_COIN5",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 17,
+     "cardId": "CORE_DMF_067",
+     "name": "Prize Vendor",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "text": "<b>Battlecry and Deathrattle:</b> Each player draws a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 41,
+     "cardId": "EDR_814",
+     "name": "Infested Breath",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $2 damage. Summon a 0/2 Leech."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 12,
+     "cardId": "TTN_454",
+     "name": "Down with the Ship",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $3 damage. Shuffle two random Plagues into your opponent's deck."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 26,
+     "cardId": "TTN_736",
+     "name": "Staff of the Primus",
+     "CARDTYPE": "WEAPON",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "text": "After your hero attacks, shuffle a random\nPlague into your opponent's deck."
+    }
+   ]
+  },
+  "optionsId": 17,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    59
+   ],
+   "complete": true
+  },
+  "fingerprint": "c0882cab9a7a0d1fb9b8",
+  "decisionFingerprint": "d0754f698e335658331e"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 52,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 64,
+   "type": "POWER",
+   "id": "o2"
+  },
+  {
+   "option": 3,
+   "entityId": 70,
+   "type": "POWER",
+   "id": "o3"
+  },
+  {
+   "option": 4,
+   "entityId": 112,
+   "type": "POWER",
+   "id": "o4"
+  },
+  {
+   "option": 5,
+   "entityId": 109,
+   "type": "POWER",
+   "id": "o5"
+  },
+  {
+   "option": 6,
+   "entityId": 54,
+   "type": "POWER",
+   "id": "o6"
+  },
+  {
+   "option": 7,
+   "entityId": 84,
+   "type": "POWER",
+   "id": "o7"
+  },
+  {
+   "option": 8,
+   "entityId": 114,
+   "type": "POWER",
+   "id": "o8t0",
+   "targetId": 81
+  },
+  {
+   "option": 8,
+   "entityId": 114,
+   "type": "POWER",
+   "id": "o8t1",
+   "targetId": 107
+  },
+  {
+   "option": 9,
+   "entityId": 115,
+   "type": "POWER",
+   "id": "o9t0",
+   "targetId": 81
+  },
+  {
+   "option": 9,
+   "entityId": 115,
+   "type": "POWER",
+   "id": "o9t1",
+   "targetId": 107
+  }
+ ]
+}

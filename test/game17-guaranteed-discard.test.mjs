@@ -16,10 +16,23 @@ const swung=f=>{
  return f;
 };
 
-test('with ready attackers, the turn does not pass and only the trades are open',()=>{
+// User correction (2026-10-10): 「派對動物不需要有三個空場才能下」 and 「如果有優勢交換都可以自殺」 -- with one slot
+// free, only the swing that frees a second one (the 2/2 into the Taunt) is open; the 2/4 and 4/4 bounce off.
+test('with one slot, only the room-freeing trade is open and the turn does not pass',()=>{
  const f=load();
  assert.ok(guaranteedDiscard(f.state,f.options));
- assert.deepEqual(kept(f),attacks);
+ const ids=kept(f);
+ assert.ok(ids.includes('o5t0'),ids.join(' '));
+ for(const id of ['o6t0','o7t0','o3','o0','o1'])assert.ok(!ids.includes(id),ids.join(' '));
+});
+
+test('once the 2/2 is gone and a summon fits, Party Fiend goes down without waiting for more room',()=>{
+ const f=load();
+ f.state.me.board=f.state.me.board.filter(c=>c.entityId!==93);
+ f.options=f.options.filter(a=>a.id!=='o5t0');
+ const ids=kept(f);
+ assert.ok(ids.includes('o3'),ids.join(' '));
+ assert.ok(!ids.includes('o0'),ids.join(' '));
 });
 
 test('after the trades, Party Fiend goes down before Soulfire',()=>{

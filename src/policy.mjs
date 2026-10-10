@@ -195,7 +195,7 @@ function wastedBurn(state,actions){
   // Same game: with the face ruled out, the menu left was Soulfire into our own 1/1s. Burn on our
   // own minion is wasted too, unless its Deathrattle is the point (Boneweb Egg).
   const own=(state.me?.board??[]).find(c=>c.entityId===a.targetId&&c.CARDTYPE==='MINION');
-  if(own)return !(Number(own.DEATHRATTLE)>0||/deathrattle/i.test(flat(own.text)));
+  if(own)return !(Number(own.DEATHRATTLE)>0||/\bdeathrattle\b/i.test(flat(own.text)));
   // User ruling (2026-10-05, ranked game 1, turn 2): Soulfire to the face of a 30-hp hero with no
   // enemy minions, a third of the hand fodder. 「砸臉完全沒用，而且手上的素材機率是 1/3 很低」. An empty
   // enemy board no longer excuses face burn outside burn range.
@@ -240,6 +240,14 @@ function overflowWaits(state,actions){
   const n=landing(state,a);
   return n>1&&n>room;
  };
+}
+// Our minion swings that free a slot: the attacker dies to the target's counterattack.
+function roomFreeing(state,actions){
+ const board=state.me?.board??[],foe=state.opponent?.board??[];
+ return actions.filter(a=>{
+  const me=board.find(c=>c.entityId===a.entityId),t=foe.find(c=>c.entityId===a.targetId);
+  return me?.CARDTYPE==='MINION'&&t&&!on(me,'DIVINE_SHIELD')&&(hpNow(me)<=Number(t.ATK??0)||on(t,'POISONOUS'));
+ });
 }
 const boardRoom=state=>7-(state.me?.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
 // User ruling (2026-09-30, game 58 turn 5): 「第五回合沒有空間了。應該自殺一些怪清出空間，才能下新的」.
@@ -934,6 +942,26 @@ function weaponFirst(state,out){
  const pops=a=>on(foe.get(a.targetId),'DIVINE_SHIELD')&&Number(board.find(c=>c.entityId===a.entityId)?.ATK??0)<heroAtk;
  return out.filter(a=>!isAttackAction(state,a)||a.entityId===hero.entityId||pops(a));
 }
+// User ruling (2026-10-10 batch game 18, our turn 4): Chronoclaws went on and its swing discarded
+// Soul Barrage -- 4 + 5 damage spent on a 0/2 Bloated Leech that our minions could trade into for
+// free. 「九點打在兩點的手下上面，就浪費了七點伤害」; the line was the 1-drop, the buff, then Wicked
+// Whispers eating Tame Pet. While every enemy minion has no Attack and our ready minions together
+// clear them, a weapon whose swing discards a damage payoff stays in hand.
+const DAMAGE_ON_DISCARD=/discard this[^.]*\bdeal \$?\d+ damage/i;
+export function weaponWastesBurn(state,actions){
+ const hand=state.me?.hand??[],board=state.me?.board??[];
+ const foes=(state.opponent?.board??[]).filter(c=>c.CARDTYPE==='MINION');
+ if(!foes.length||foes.some(t=>Number(t.ATK??0)>0||on(t,'DIVINE_SHIELD')||on(t,'STEALTH')))return actions;
+ const ready=board.filter(c=>c.CARDTYPE==='MINION'&&actions.some(a=>a.entityId===c.entityId&&isAttackAction(state,a)));
+ if(ready.reduce((n,c)=>n+Number(c.ATK??0),0)<foes.reduce((n,t)=>n+hpNow(t),0))return actions;
+ const burns=w=>{
+  if(w?.CARDTYPE!=='WEAPON'||!DISCARDS_HIGHEST.test(flat(w.text)))return false;
+  const rest=hand.filter(c=>c!==w);if(!rest.length)return false;
+  const top=Math.max(...rest.map(costOf));
+  return rest.some(c=>costOf(c)===top&&DAMAGE_ON_DISCARD.test(flat(c.text)));
+ };
+ return actions.filter(a=>!burns(hand.find(c=>c.entityId===a.entityId)));
+}
 const hpNow=c=>Number(c?.HEALTH??0)-Number(c?.DAMAGE??0);
 // User ruling (2026-10-05, game 1 of the fourth small batch, turn 5): 「對方都是低攻擊手下，我們應該全解
 // 然後用公爵打臉」, and 「面對對方這種鋪場腳本，我們確實應該用最貪婪的方式優勢交換，因為對面沒有法術直傷」.
@@ -1148,6 +1176,7 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  prefer('guldanWaits',guldanWaits(state,out));
  prefer('noIdleTurn',noIdleTurn(state,out));
  prefer('dukeOverWeapon',dukeOverWeapon(state,out));
+ prefer('weaponWastesBurn',weaponWastesBurn(state,out));
  if(!isDH(state))prefer('weaponFirst',weaponFirst(state,out));
  let released=null;
  if(wasted.size){
@@ -1165,8 +1194,16 @@ export function constrainActions(state,actions,{trace,admission=combinationAdmis
  prefer('occultistPick',occultistPick(state,out));
  prefer('swarmOccultist',swarmOccultist(state,out));
  prefer('counterFirst',counterFirst(state,out));
- {const ow=overflowWaits(state,out);prefer('overflowWaits',out.filter(a=>!ow(a)));}
- {const g=guaranteedDiscard(state,legal);if(g){
+ const g=guaranteedDiscard(state,legal);
+ {const ow=overflowWaits(state,out),room=boardRoom(state),gone=g&&room<2?roomFreeing(state,out):[],waiting=out.some(ow);
+  // User correction (2026-10-10): 「派對動物不需要有三個空場才能下，有空場只是加分項」, and 「如果有優勢交換都
+  // 可以自殺」. Inside the guaranteed line a summoner waits only for one slot beyond its own body: with a
+  // single slot the swings that free one, and free trades, stay; once a summon fits, or nothing frees a
+  // slot, it goes. More space is a bonus, not a reason to hold the summoner back.
+  const free=a=>g&&g.others.some(c=>c.entityId===a.entityId)&&(room>=2||!gone.length);
+  prefer('overflowWaits',out.filter(a=>!ow(a)||free(a)));
+  if(gone.length&&waiting)prefer('guaranteedDiscardRoom',out.filter(a=>!isAttackAction(state,a)||gone.includes(a)||freeTrades(state,out).includes(a)));}
+ {if(g){
   const kept=out.filter(a=>a.type!=='END_TURN');
   if(kept.length)took('guaranteedDiscardEnd',kept);
   const hp=heroPowerOf(state),pay=new Set(g.payoffs.map(c=>c.entityId));

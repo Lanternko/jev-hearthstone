@@ -2,7 +2,10 @@
 
 讓 Jev 模型在本機打爐石戰記的機器人：讀 `Power.log` 得到盤面，用規則與搜尋把合法行動剪成少數候選，交給 Jev（`typesafe-ai/jev`，經 Vercel AI Gateway）選一步，再用滑鼠點出來並核對盤面真的變了。不讀螢幕畫面、不注入遊戲程序。
 
-目前主力是狂野棄牌術（`decks/warlock-discard`），另有 Void 惡魔獵人（`decks/dh-void`）。可以無人值守連打天梯批次；第 104–153 場的 50 場紀錄為 38 勝 12 敗，分析見 [runtime/winrate-game104-153.md](runtime/winrate-game104-153.md)。逐日的修正與裁定都記在 [STATUS.md](STATUS.md)。
+目前主力是開放棄牌術（`decks/warlock-discard`）。可以無人值守連打天梯批次，分析見 [runtime/winrate-game104-153.md](runtime/winrate-game104-153.md)。逐日的修正與裁定都記在 [STATUS.md](STATUS.md)。
+
+<img width="519" height="869" alt="image" src="https://github.com/user-attachments/assets/f99826de-9cde-4e67-af92-8404411400b5" />
+
 
 ## 組成
 

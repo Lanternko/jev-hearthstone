@@ -1,3 +1,110 @@
+# 2026-10-12 使用者裁定：自戰路線（只是規劃，未改任何程式）
+
+- 裁定：
+  - 自戰在 `src/sim.mjs` 裡跑，不開遊戲客戶端，所以不需要合任何牌。
+  - 自戰兩邊的出牌由深度學習策略決定，用 https://github.com/LYiHub/pub-street-fighter-ai 那套做法，**不是 Jev**。Jev 只留在實戰。
+  - 第二副牌選快攻海盜戰，不選牧師（牧師太貴，使用者組不起來，也就沒有自己的實戰經驗可參考）。牌表以下方量測最接近的第三副 zwTGrKfk 為準。
+- 順序（Claude 的建議，使用者未反對）：
+  1. 補完模擬器：回合交替與回合開始／結束觸發、抽牌與牌庫、inexact 步驟改成抽樣。
+  2. 先用棄牌術打棄牌術驗證能跑完整局，不需要新的牌模型。
+  3. 再補海盜戰約 18 張牌的模型。Patches、Ship's Cannon、Hook n' Heave 這類隨機或從牌庫拉牌的較麻煩。
+- 改用 DL 之後多出來的工作（Claude 的判讀，都還沒做）：
+  - 訓練要大量對局，模擬器得能脫離 Power.log、自己從牌表開局並快速跑完。
+  - 要定義觀測編碼、動作編碼和獎勵。每一步合法動作數不固定，需要動作遮罩。
+  - 該 repo 的做法（已打開 README 與 `main/train.py` 確認）：
+    - Stable-Baselines3 的 `PPO` + `CnnPolicy`（NatureCNN），環境是 Stable-Retro 的模擬器，Python 3.10。
+    - 觀測是 84×84×3 的遊戲畫面，動作是 27 個離散動作；獎勵用記憶體裡的雙方血量算（打掉對手血量 ×3 減自己掉的血、勝負加減分、每步小額時間懲罰）。
+    - 768 個平行環境（`SubprocVecEnv`），預設 7 億步。`n_steps` 128、`batch_size` 8192、`n_epochs` 3、學習率 2e-4、`gamma` 0.99。
+    - **它沒有自我對弈**：對手是遊戲內建的 12 關 CPU，一個模型同時練全部關卡。
+  - 所以能直接借的只有「PPO + 大量平行環境 + 以血量差為主的獎勵」。畫面輸入和 CNN 不適用（我們要用盤面特徵向量），固定 27 個動作也不適用（需要動作遮罩，SB3 本體沒有，要用 sb3-contrib 的 MaskablePPO 或自己處理）。自我對弈的對手池得自己寫，該 repo 沒有可參考的部分。
+  - 它是 Python，`sim.mjs` 是 Node，兩邊怎麼接還沒決定。
+- 限制：
+  - 自戰結果只跟模擬器一樣準。目前整步吻合率 66.4%，對手效果是已知的錯誤來源，所以自戰勝率只能當相對比較。
+  - 快攻海盜戰只佔我們對手約 3%（262 局中 8 局），它提供的是快攻型壓力，不是天梯分布。
+- 下一批：模擬器的回合交替加抽牌，開新 session 做。
+
+# 2026-10-12 實戰一局（對惡魔獵人，敗）：流程正常，`followed()` 的新路徑沒被觸發
+
+- `npm run game` 一局，12:04–12:11，30 個動作，第 13 回合（對手回合）陣亡。`last-game.log` 沒有重複動作或卡住，結束偵測正常。
+- `followed()`：三段計畫（#9–11、#13–16、#27–28）都照常接續，沒有退化。但這局沒有「計畫中途棄牌召喚出新 entity」的情況（Walking Dead 是 Catacombs 選出來的，Chamber 棄的是 Hand of Gul'dan，Whispers 是單步決策），id 對照那條路徑仍未實戰驗證。
+- 死因：第 12 回合結束時 24 血，對手一回合打 30（英雄攻擊那一段 12，接著三張手牌 3、7、8）。場上是 Duke of Below 12/12、Platysaur、被沉默的蛋，沒有嘲諷；Ocular Occultist 留在手上（Duke 4 + Occultist 3 超過 6 費）。
+- 第 6、8 回合各少 2 費：對手的 1 費法術 Mana Burn（我方下回合少 2 顆水晶，使用者確認）。Power.log 上是回合開始時 `RESOURCES_USED` 歸零後立刻變 2，bridge 讀到的 `mana` 是對的，不是讀到舊值。第 8 回合因此只能下蛋，否則 4 費可以 Occultist 棄 Hand of Gul'dan。規劃上沒有預判「下回合會少 2 費」，這局沒有評估是否值得做。
+- `npm run gestures` 是累計報表（19396 個手勢、死 5%），沒有按這一局拆開。
+- 沒有改程式，未 commit。
+
+# 2026-10-12 補上六張未建模的牌（只在 `full` 模式，實戰規劃不變）
+
+- 做法：`fromState(state,actions,{full:true})` 才啟用，目前只有 `eval-sim-fidelity.mjs` 傳。`bridge`／`plan`／`choose` 等實戰路徑不傳，`moves`／`apply` 對它們的結果與之前相同（`--plain` 重跑量測，數字與上一則完全一致）。因此這批不需要實戰驗證，也沒有跑對局。
+- 新模型（`sim.mjs` 的 `fullModel`）：
+  - Cursed Catacombs：牌庫有牌時 inexact（多一張未知手牌），牌庫空時 exact。
+  - Platysaur：身材 + 抽牌，沿用 `drawMinionModel`，inexact。
+  - Boneweb Egg：文字只有亡語的手下當白板，打出 exact；死亡照舊由亡語檢查標 inexact。
+  - Chamber of Viscidus：從手牌打出 exact（佔一格、當回合不能用）；啟動是新招式 `{kind:'use',id}`，一律 inexact（棄哪張不定、抽 2），耐久 −1，用完離場。只在遊戲有給該地標 option 時才列出。
+  - Soulfire：目標取自遊戲的 options；4 點傷害，手上沒有其他牌或只剩一張時 exact（那張就是被棄的，Golem／Walking Dead 會照樣召喚），兩張以上 inexact。
+  - Soul Barrage：對手場上沒有手下時 exact（5 點打臉）；否則 inexact，只扣「手下吸不完的」保底傷害。
+  - 我方有法術傷害手下時，Soulfire／Soul Barrage 一律 inexact（沒讀加成數值）。
+- 回放量測（262 局、我方 6228 個動作，`--plain` → 預設）：
+  - 覆蓋率 84.0% → 98.7%（5232 → 6147）；剩 81 個不在招式內，最多的是 Hand of Gul'dan 13、Void Soul 7，其餘都是對手牌庫偷來的零星牌。
+  - 宣稱 exact 4071 → 4222，盤面正確率維持 97.9%；整步吻合率 64.0% → 66.4%。
+  - 新增的 exact：打出 Chamber 81/81、Boneweb Egg 61/62（錯的一步是對手光環把蛋變 1/1）、Soulfire 4/4。
+  - inexact 1102 → 1863：Catacombs 290、Platysaur 248、Chamber 啟動 127、Soulfire 72、Soul Barrage 24 都是「能走但結果要抽樣」。猜對率 15.2% → 9.2%，因為這些步驟本來就沒有猜手牌。
+- 判讀：我方回合的招式幾乎齊了；要當自我對弈環境，下一個缺口是把 inexact 步驟變成抽樣（牌庫內容、隨機棄牌、Discover 選項），再來是回合交替與對手。
+- `npm run eval-sim-fidelity -- --plain` 可量實戰用的那個模擬器。
+- 測試：新增 `test/sim-full-models.test.mjs`（8 項）；全套 581/581 通過，未 commit。
+- 仍未做：上一則的 `followed()` 修正還沒跑過 `npm run game`。
+
+# 2026-10-12 量測：死騎、戰士、聖騎對手的實際構築（未改任何對局行為）
+
+- 起因：使用者貼了四份 HSReplay 牌表（聖典聖騎、兩套穢邪死騎、海盜戰），問哪些是我們常遇到的。
+- 方法：掃 `runtime/ranked-2*/game-NNNN-Power.log` 共 284 局，以 cardId 對 `data/cards.enUS.json`（存檔裡的卡名是繁中，不能用英文卡名比）。只算得到對手打出或揭示的牌，短局會低估。構築是依揭示的牌逐局人工歸類，不是程式分類。統計腳本是一次性的，沒有留在 repo。
+- 死騎（39 局）：主流是經典穢邪（Skeletal Sidekick 22 局、Chillfallen Baron 19、Anti-Magic Shell 14、Gnome Muncher 14、Army of the Dead 12；命中該牌表 ≥5 張的有 21 局）。蛋／Tower of Ghouls 版少見（Tower of Ghouls、Corpse Cannon 0 局，Twilight Egg 3，Monstrous Mosquito 2）。死騎這兩個數字沒有按對手職業過濾，也沒有逐局歸類。
+- 戰士（33 局，含開頭被截掉的那批存檔，所以比下一則的 31 局多）：
+  - 控制戰（40 張）13：Prince Renathal、Ysera, Emerald Aspect、Chainbreaker Hogger、Shield Block、Brawl、Hamm, the Hungry、Igneous Lavagorger；其中 4 局是 Reno 或 Enter the Lost City 任務變體。Ysera 開局讓雙方水晶上限 +5，是最早的辨識訊號。
+  - 快攻海盜戰 8：全部有 Chainbreaker Hogger，Cannonmaster、Patches the Pirate 各 7 局，另有 Warptooth、Ship's Cannon、Hand Cannon。和使用者貼的牌表大致吻合；對手多帶 Sky Raider、Roaring Applause、N'Zoth's First Mate，少見 Land Ho!、Captain Crowley。
+    - 使用者後來貼了四副快攻海盜戰牌表（HSReplay i9hKmUzN、yoRLY9bS、zwTGrKfk、XIwoRi5g），這 8 局逐局對照：
+      - 最接近第三副 zwTGrKfk（Mistake、N'Zoth's First Mate、Roaring Applause、Sky Raider ×1）：明確吻合 3 局（10-01 第 5 局、10-04 第 10 局、10-10 第 8 局），另 2 局只能縮到第二或第三副（10-01 第 15 局、10-04 第 4 局）。Mistake 只有這副有，是最乾淨的辨識牌。
+      - 第一副 i9hKmUzN 或第四副 XIwoRi5g：1 局（10-09 第 29 局，Anima Extractor）；10-03 第 3 局偏第一副但多了 N'Zoth's First Mate。這兩副只差 Ship's Cannon 和第二張 Corsair Cache，從揭示的牌分不出來。
+      - 第二副 yoRLY9bS 獨有的 Harbor Scamp、Ancharrr 在這 8 局都沒出現，只在任務海盜戰看到。
+      - 10-05 第 11 局有多張牌表外的牌，無法判斷。
+      - 10-01 第 5 局同時有 Bloodsail Deckhand、Southsea Captain，當成 Sky Raider 隨機給的海盜才歸到第三副；這是推測，沒有從 log 驗證。
+  - 任務海盜戰（40 張）3：Raid the Docks、Prince Renathal、Ancharrr、Defias Cannoneer。
+  - 龍／節奏戰 5：Stadium Announcer、Windpeak Wyrm、Darkrider、Mother Duck、Hook n' Heave。
+  - 其他 4（激怒戰、Keleseth 等各 1 局）。
+- 聖騎（24 局）：沒有任何一套超過 4 局。
+  - 奇數聖騎 4：Baku the Mooneater、Brash Battlemaster、Tour Guide、Lost in the Jungle。
+  - 機械聖騎 4：Drone Deconstructor、Galvanizer、Radar Detector、Glow-Tron、Annoy-o-Tron、Mechwarper。
+  - 聖典聖騎 4：Aldor Attendant、Libram of Wisdom、Interstellar Starslicer、Sunsapper Lynessa；只有 1 局揭示得夠多（13 張）。
+  - 魚人任務聖騎（40 張）2、光環聖騎 2、秘密快攻聖騎 2、手牌增益聖騎 2、無法判斷 4。
+  - Commander Beatrix 出現在 8 局，橫跨奇數、機械、光環，不能用來分辨構築。
+- 判讀：Chainbreaker Hogger 同時出現在控制戰、海盜戰、龍戰（21/33 局），Patches the Pirate 等中立海盜牌也出現在其他職業，單看這幾張不能判定是海盜戰。
+- 未做：其他職業（牧師 56 局最多）沒有拆構築；這些分布沒有接進 `data/opponent-prior.json`。
+
+# 2026-10-12 修正：棄牌召喚的手下換了 entity id，計畫不再因此中斷
+
+- 現象（來自下一則的量測）：Ocular Occultist／Wicked Whispers／武器攻擊棄掉 Walking Dead 之類的牌時，sim 沿用手牌 id，遊戲卻給新 entity；盤面全對但 `signature` 對不上，bridge 丟掉剩下的計畫（262 局 105 次）。
+- 修正：`sim.mjs` 新增 `followed(before,state)`。對手盤面、手牌、水晶、武器仍須完全一致；我方盤面先按 id 比，剩下「預測有、實際沒有」的非負 id 手下，必須能和「實際有、預測沒有」的手下逐項數值相同地一對一配對，否則視為意外。回傳預測 id → 實際 id 的對照。
+- `bridge.mjs` 改用 `followed`，並把佇列步驟的 `id`／`targetId` 透過對照換成實際 id 再找 action。之後的 `respectsDHTactics`、`allowsPlanContinuation` 檢查不變。
+- sim 自己的 token（負 id）照舊中斷計畫，這次沒動。
+- 回放量測：宣稱 exact 的 4071 步中，bridge 會繼續的比例 87.8% → 90.4%（+105 步）。離盤面正確率 97.9% 還差約 300 步，原因尚未拆解（推測多為負 id token，未驗證）。
+- 尚未實戰驗證：改動後還沒跑過 `npm run game`。
+- 測試：新增 `test/followed-new-entity.test.mjs`（4 項）；全套 573/573 通過，未 commit。
+
+# 2026-10-12 量測：sim.mjs 單步吻合率（RL 路線第一步，未改任何對局行為）
+
+- 起因：評估用強化學習訓練（參考 pub-street-fighter-ai）。結論是先量現有模擬器有多準，再決定要不要拿它當訓練環境。
+- 新增 `src/eval-sim-fidelity.mjs`（`npm run eval-sim-fidelity [批次名片段] [標籤片段]`）：重播 `runtime/ranked-*/game-NNNN-Power.log`，在我方每個根層 PLAY/ATTACK 之前取盤面跑 `fromState/moves/apply`，與下一個 options 封包時的真實盤面比對。只讀存檔，不開遊戲。第二個參數會印出該類步驟的 before/pred/real。
+- 樣本：262 局（另有 22 局 `ranked-2026-10-01T12-42` 的存檔缺 GameState CREATE_GAME，開頭被截掉，已跳過）、我方動作 6228 個、對手動作 4773 個。
+- 結果（以我方 6228 個動作為分母）：
+  - 64.0% sim 宣稱 exact 且盤面正確（3985）；1.4% 宣稱 exact 但錯（86）；17.7% sim 自己標 inexact（1102，其中 15% 猜對）；16.0% 不在 sim 的招式內（996）；0.9% 動作後對局結束無從比對。
+  - 宣稱 exact 的 4071 步中 97.9% 盤面正確。但 bridge 用的嚴格 signature 只有 87.8%：有 105 步盤面內容全對，只是棄牌召喚的手下（Ocular Occultist 76、Wicked Whispers 14、武器攻擊 16）在遊戲裡是新 entity，sim 沿用手牌 id，簽名對不上、計畫因此中斷。
+  - exact 卻錯的 86 步幾乎都是對手的效果：對手英雄少扣血 33、該死的對手手下沒死 21、對手光環消失後攻擊/血量變動 24。
+  - 不在招式內：Cursed Catacombs 290、Platysaur 248、Chamber of Viscidus 210、Soulfire 76、Boneweb Egg 62、Soul Barrage 25（合計 911/996）。
+  - inexact 主因：Life Tap 抽牌 312、棄牌觸發未建模 171、Disposable Acolytes 隨機召喚 144、亡語/復生 111、The Soularium 抽牌 81、隨機棄牌 118。
+  - 完全沒有的部分：END_TURN、回合開始/結束觸發、對手整個回合。
+- 對手分布（262 局，含勝負）：牧師 56（21.4%，33-23）、死亡騎士 39（14.9%，22-16）、戰士 31（11.8%，15-16）、術士 25（9.5%，17-8）、聖騎士 24（9.2%，11-13）、法師 23（8.8%，13-10）、薩滿 20（9-11）、盜賊 17（8-8）、德魯伊 13（7-6）、惡魔獵人 8（1-7）、獵人 6（4-2）。前四名合計 57.6%，加聖騎士、法師為 75.6%。
+- 判讀：我方回合內的確定性步驟已夠準；離可自我對弈的模擬器還差抽牌/牌庫、隨機效果取樣、六張未建模的牌、回合交替與對手套牌。
+- 輸出在 `eval/runs/sim-fidelity-<時間>/summary.json`（git 忽略）。全套 569/569 通過，未 commit。
+
 # 2026-10-10 使用者裁定：場上只有一隻手下時不打 Wicked Whispers
 
 - 第 13 局第 6 回合：3 費，場上只有 Platysaur，打 Whispers 只 buff 一隻還棄掉 The Soularium。「只有场上只有一张牌，不值得用 buff，而且我们弃掉的牌并不是一个素材」。新規則 `whispersThinBoard`（prefer）：我方手下 ≤1 且 Whispers 會棄掉的卡不是棄牌素材時，Whispers 先不打；應下 3 費卡（Walking Dead 或 Chamber of Viscidus，地標有 3/4 機會棄到 Walking Dead，保底棄 Soul Barrage）。

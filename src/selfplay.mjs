@@ -81,6 +81,27 @@ export function randomPolicy(seed=1){
   };
 }
 
+// A scripted player for the learned policy to be measured against once the random one is no test:
+// spend the mana on the dearest card, use a location, hit the face with everything, tap last, and
+// never aim anything at its own side while there is another step.
+export function rushPolicy(seed=1){
+  const dice={seed:seed|0},RANK={choose:0,play:1,use:2,attack:3,power:4};
+  return (s,legal)=>{
+    const own=new Set(s.me.map(b=>b.id)),face=hero(s,'opp').id;
+    const acts=legal.filter(m=>m.kind!=='end'&&!own.has(m.targetId));
+    if(!acts.length)return legal.find(m=>m.kind==='end')??legal[roll(dice,legal.length)];
+    const cost=m=>m.kind==='play'?s.hand.find(c=>c.id===m.id)?.cost??0:0;
+    const key=m=>[RANK[m.kind]??5,-cost(m),m.targetId===face?0:1];
+    let best=[];
+    for(const m of acts){
+      const k=key(m),d=best.length?k.findIndex((x,i)=>x!==best[0].k[i]):-1;
+      if(!best.length||(d>=0&&k[d]<best[0].k[d]))best=[{m,k}];
+      else if(d<0)best.push({m,k});
+    }
+    return best[roll(dice,best.length)].m;
+  };
+}
+
 if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
   const [games=200,seed=1,nameA='warlock-discard',nameB=nameA]=process.argv.slice(2);
   const lists=[loadList(nameA),loadList(nameB)],tally={0:0,1:0,draw:0,unfinished:0};

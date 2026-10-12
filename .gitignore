@@ -9,3 +9,5 @@ runtime/*
 !runtime/*.md
 # Evaluation outputs are large and local; frozen engine snapshots already tracked stay tracked.
 eval/runs/
+# Python bytecode of train/
+__pycache__/

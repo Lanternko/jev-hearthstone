@@ -14,6 +14,7 @@
     "override": "node --env-file-if-exists=.env.local src/override.mjs",
     "gestures": "node src/gesture-report.mjs",
     "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
+    "selfplay": "node src/selfplay.mjs",
     "eval-pick": "node src/eval-pick.mjs",
     "eval-silverfish": "node src/eval-silverfish.mjs",
     "eval-strength": "node src/eval-strength.mjs",

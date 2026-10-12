@@ -1,3 +1,26 @@
+# 2026-10-12 模擬器對局模式：換手、真實抽牌、亡語，棄牌術內戰能跑完整局
+
+- 範圍：自戰路線的第 1、2 步。只在 state 帶 `s.game` 時啟用，實戰規劃（`bridge`／`plan`／`choose`）不帶，行為不變。
+- 驗證：
+  - `npm test` 599/599（原 581，新增 `test/selfplay.test.mjs` 18 則）。
+  - `npm run eval-sim-fidelity` 與基線相同：262 局、6228 個動作、覆蓋 98.7%、exact 4222 個 97.9% 吻合、整步吻合率 66.4%。
+  - `node src/selfplay.mjs 1000 1`：先手 539、後手 461、平手 0、未結束 0；平均 16.3 回合、66 步；1.3 ms 一局，約 5 萬步／秒。兩邊都是隨機合法動作，這個勝率只說明能跑完，不代表牌組強弱。
+  - 沒有跑實戰對局（這批沒動實戰路徑）。
+- 新增：
+  - `src/sim.mjs`「Whole games」區塊：`end` 步驟換手（`flip`／`passTurn`／`beginTurn`）、從真實牌庫抽牌（疲勞、滿手爆牌、Shred of Time 抽到即施放）、Temporary 牌回合結束棄掉並觸發棄牌效果、雙方亡語（Boneweb Egg、Platysaur）、`choose` 步驟（Cursed Catacombs 三選一、Chamber of Viscidus 選棄牌）、地標冷卻、隨機效果用 `s.seed` 的 mulberry32 抽樣（同 seed 同一局）。
+  - `src/selfplay.mjs`：`newGame`（先手 3 張、後手 4 張加 The Coin）、`playout`、`winner`、`randomPolicy`；`npm run selfplay [局數] [seed] [牌組A] [牌組B]`。
+  - `decks/warlock-discard/list.json`：30 張，從 232 局存檔推出來的，不是從遊戲匯出的牌表代碼，請使用者對一次。
+- 已知缺口（都還沒做）：
+  - 沒有起手換牌。
+  - Disposable Acolytes 的隨機 1 費手下取自全部可收藏牌，不是只取標準；隨機手下的亡語與觸發沒建模。
+  - 戰鬥觸發沒建模，凍結被忽略。
+  - 地標冷卻（用過後隔一個自己的回合）是憑 Claude 對規則的記憶寫的，Power.log 裡沒找到對應 tag 可核對。
+  - 英雄技能只處理抽牌與加攻擊力，Armor Up 要等海盜戰那批。
+  - `turn` 從 1 起算，雙方各算一回合。
+  - 對局模式沒有對照 Power.log 量過吻合率；現有的 66.4% 量的是規劃模式。
+- 下面幾則裡 `followed()` 與六張牌模型的「未 commit」已過時，那些在 `03c24fa`。
+- 下一批：海盜戰（zwTGrKfk）約 18 張牌的模型，開新 session 做。
+
 # 2026-10-12 使用者裁定：自戰路線（只是規劃，未改任何程式）
 
 - 裁定：

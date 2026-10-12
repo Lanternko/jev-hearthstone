@@ -45,7 +45,7 @@ const enemyDrawOnly=b=>{const t=ownText(b?.text);return b?.side==='opp'&&!!t.mat
 // Chronoclaws: the swing is plain arithmetic; only the hand changes, and predictably so.
 const DISCARD_HIGH=/^after your hero attacks, discard your highest cost card\.?$/i;
 
-function body(c,side){
+export function body(c,side){
   const hp=num(c.HEALTH??c.baseHealth)-num(c.DAMAGE);
   return {id:c.entityId,cardId:c.cardId,effectAssessment:assessEffect(c,{zone:'PLAY'}),side,type:c.CARDTYPE,name:c.name,text:silenced(c)?'':flat(c.text),
     atk:num(c.ATK??c.baseAttack),hp,maxHp:num(c.HEALTH??c.baseHealth),armor:num(c.ARMOR),
@@ -106,8 +106,7 @@ export function fromState(state,actions=[],{full=false}={}){
   }
   const hp=(state.me.board??[]).find(c=>(heroAttackGain(c)>0||immediateDraws(c,state)>0)
     &&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
-  return {objective:matchupObjective(state),mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
-      atk:num(c.ATK??c.baseAttack),hp:num(c.HEALTH??c.baseHealth),raw:c,playable:plays.has(c.entityId)})),
+  return {objective:matchupObjective(state),mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>handCard(c,plays.has(c.entityId))),
     me:mine,opp:theirs,weapon:weapon?weaponBody(weapon):null,
     power:hp?{id:hp.entityId,name:hp.name,cost:cost(hp),gain:heroAttackGain(hp),draw:immediateDraws(hp,state),
       selfHit:Number(/take \$?(\d+)\s*damage/i.exec(flat(hp.text))?.[1]??0),used:on(hp,'EXHAUSTED')}:null,
@@ -115,6 +114,8 @@ export function fromState(state,actions=[],{full=false}={}){
     locations,tauntAtStart:tauntUp,faceDealt:0,nextToken:0,...(full?{full,aims,sites}:{})};
 }
 
+export const handCard=(c,playable)=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
+  atk:num(c.ATK??c.baseAttack),hp:num(c.HEALTH??c.baseHealth),raw:c,playable});
 const weaponBody=c=>({id:c.entityId,name:c.name,text:flat(c.text),atk:num(c.ATK??c.baseAttack),
   durability:c.HEALTH!=null||c.baseHealth!=null?num(c.HEALTH??c.baseHealth)-num(c.DAMAGE)
     :c.DURABILITY!=null?num(c.DURABILITY):null});
@@ -225,9 +226,12 @@ export function fullModel(c){
   }
   return death?{kind:'minion'}:null;
 }
-const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null)??(s.full?fullModel(c):null);
+// s.game only: Hand of Gul'dan cast from hand draws like its discard does.
+const castDraw=c=>{const d=c.type==='SPELL'?discardModel(c):null;return d?.kind==='draw'?{kind:'draw',n:d.n}:null};
+const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null)??(s.full?fullModel(c):null)??(s.game?castDraw(c):null);
 // Spell Damage on our side changes the number; the model does not read how much.
 const boosted=s=>s.me.some(b=>b.type==='MINION'&&/\bspell damage\b/i.test(b.text));
+const spider=s=>({id:-(++s.nextToken),name:'Spider',atk:2,hp:1,raw:{CARDTYPE:'MINION',name:'Spider',ATK:2,HEALTH:1}});
 function summonDiscard(s,c){
   if(room(s)<=0)return;
   const b=body({...c.raw,entityId:c.id,ATK:c.atk,HEALTH:c.hp,DAMAGE:0},'me');
@@ -245,14 +249,16 @@ function discard(s,mode,pickId){
   const picked=mode==='pick'?s.hand.find(c=>c.id===pickId):null;
   if(mode==='pick'&&!picked)return {exact:true,note:''};
   const extreme=(mode==='low'?Math.min:Math.max)(...s.hand.map(c=>c.cost));
-  const tied=picked?[picked]:s.hand.filter(c=>c.cost===extreme);
+  let tied=picked?[picked]:s.hand.filter(c=>c.cost===extreme);
+  if(s.game&&tied.length>1)tied=[tied[roll(s,tied.length)]];
   if(tied.length>1){
     s.uncertainDiscard=tied.map(c=>({id:c.id,name:c.name,cost:c.cost}));
     return {exact:false,note:`random ${mode==='low'?'lowest':'highest'}-cost discard among ${tied.map(c=>c.name).join(', ')}; no particular outcome assumed`};
   }
   const lost=tied[0],model=discardModel(lost);
   s.hand=s.hand.filter(c=>c.id!==lost.id);
-  s.discarded=[...(s.discarded??[]),lost];
+  if(s.game)s.discardCount=(s.discardCount??0)+1;
+  else s.discarded=[...(s.discarded??[]),lost];
   // Tags already include historical growth. Add only this newly simulated discard.
   for(const c of s.hand){
     const gain=discardGrowth(c);
@@ -262,9 +268,15 @@ function discard(s,mode,pickId){
   if(model.kind==='body'){s.fixedDiscard=true;summonDiscard(s,lost);return {exact:true,note:`discard summons ${lost.name} if space permits`}}
   if(model.kind==='spiders'){
     s.fixedDiscard=true;
-    for(let i=0;i<model.n&&room(s)>0;i++)summonDiscard(s,{id:-(++s.nextToken),name:'Spider',atk:2,hp:1,
-      raw:{CARDTYPE:'MINION',name:'Spider',ATK:2,HEALTH:1}});
+    for(let i=0;i<model.n&&room(s)>0;i++)summonDiscard(s,spider(s));
     return {exact:true,note:'discard summons up to two 2/1 Spiders before the buff'};
+  }
+  if(s.game){
+    const hit=BARRAGE.exec(lost.text);
+    if(hit)volley(s,Number(hit[1]));
+    if(model.kind==='draw')pull(s,model.n);
+    if(model.kind==='randomBodies')conjure(s,model.n,model.cost);
+    return {exact:true,note:''};
   }
   if(model.kind==='draw'){
     const r=drawFrom(s,model.n);
@@ -281,6 +293,8 @@ function discard(s,mode,pickId){
 
 // Every exact-or-terminal step available in s. Each is {kind,id,targetId?}.
 export function moves(s){
+  if(s.game&&(hero(s,'me').hp<=0||hero(s,'opp').hp<=0))return [];
+  if(s.choice)return s.choice.options.map(id=>({kind:'choose',id}));
   const out=[];
   const oppAlive=s.opp.filter(b=>b.hp>0);
   const wall=oppAlive.some(guards);
@@ -293,10 +307,10 @@ export function moves(s){
       if(t.type==='HERO'&&a.rushOnly)continue;
       // A hero swinging into a minion takes its Attack back. A game was lost on exactly that:
       // 5 Health into a 7-Attack Void Terror, planned as an ordinary trade.
-      if(a.type==='HERO'&&t.type==='MINION'&&!a.immune&&!a.ds&&t.atk>=hpOf(a))continue;
+      if(!s.game&&a.type==='HERO'&&t.type==='MINION'&&!a.immune&&!a.ds&&t.atk>=hpOf(a))continue;
       // The game's own targets rule while the Taunt picture is unchanged; once the last Taunt
       // is gone, the bodies behind it open up.
-      const known=a.targets.has(t.id)||(s.tauntAtStart&&(!wall||bypass));
+      const known=s.game||a.targets.has(t.id)||(s.tauntAtStart&&(!wall||bypass));
       if(!known)continue;
       out.push({kind:'attack',id:a.id,targetId:t.id});
     }
@@ -311,7 +325,7 @@ export function moves(s){
     const m=modelOf(s,c);
     if(!m||((m.kind==='minion'||m.kind==='location')&&free<=0))continue;
     if(m.kind==='bolt'){
-      for(const id of s.aims?.get(c.id)??[])if([...s.me,...s.opp].some(b=>b.id===id&&(b.hp>0||b.type==='HERO')))out.push({kind:'play',id:c.id,targetId:id});
+      for(const id of s.game?aimable(s):s.aims?.get(c.id)??[])if([...s.me,...s.opp].some(b=>b.id===id&&(b.hp>0||b.type==='HERO')))out.push({kind:'play',id:c.id,targetId:id});
       continue;
     }
     if(m.chooseDiscard){
@@ -321,6 +335,7 @@ export function moves(s){
     out.push({kind:'play',id:c.id});
   }
   for(const x of s.sites??[])if(x.ready&&SITE_DISCARD_DRAW.test(x.text))out.push({kind:'use',id:x.id});
+  if(s.game)out.push({kind:'end'});
   return out;
 }
 
@@ -338,9 +353,19 @@ function strike(dealer,victim,n){
 // must stop after this step.
 function applyStep(s0,m){
   const s=clone(s0);
+  if(m.kind==='end')return {s:passTurn(s),exact:true,note:''};
+  if(m.kind==='choose'){
+    const {kind}=s.choice;
+    s.choice=null;settle(s,kind,m.id);
+    return {s,exact:true,note:''};
+  }
   if(m.kind==='power'){
     const h=hero(s,'me');
     s.mana-=s.power.cost;s.power.used=true;h.atk+=s.power.gain;
+    if(s.power.draw&&s.game){
+      pull(s,s.power.draw);strike({},h,s.power.selfHit);
+      return {s,exact:true,note:''};
+    }
     if(s.power.draw){
       const r=drawFrom(s,s.power.draw);
       strike({},h,s.power.selfHit+r.damageMin);
@@ -367,7 +392,7 @@ function applyStep(s0,m){
       if(s.weapon.durability<=0){a.atk=Math.max(0,a.atk-s.weapon.atk);s.weapon=null;}
     }
     for(const b of [a,t])if(b.hp<=0&&b.type==='MINION'&&ON_DEATH.test(ownText(b.text))&&!enemyDrawOnly(b)){exact=false;notes.push(`${b.name} dies with a Deathrattle/Reborn`)}
-    s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
+    bury(s);
     if(afterWeapon){
       if(DISCARD_HIGH.test(afterWeapon)&&a.hp>0){const r=discard(s,'high');exact&&=r.exact;if(r.note)notes.push(r.note)}
       else if(!DISCARD_HIGH.test(afterWeapon)){exact=false;notes.push('weapon triggers an unmodelled effect')}
@@ -379,6 +404,12 @@ function applyStep(s0,m){
     const x=s.sites.find(x=>x.id===m.id);
     x.ready=false;
     if(x.durability!=null&&--x.durability<=0){s.sites=s.sites.filter(y=>y!==x);s.locations--}
+    if(s.game){
+      // Closed for the owner's next turn, open again on the one after.
+      x.cooldown=2;
+      offer(s,'site',sample(s,s.hand.map(c=>c.id),3));
+      return {s,exact:true,note:''};
+    }
     // The game shows three of the hand and the player picks: which three is not ours to know.
     if(s.hand.length)s.uncertainDiscard=s.hand.map(c=>({id:c.id,name:c.name,cost:c.cost}));
     const r=drawFrom(s,2);
@@ -391,7 +422,13 @@ function applyStep(s0,m){
     s.hand.splice(i,1);s.mana-=c.cost;
     if(model.kind==='location'){
       s.locations++;
-      if(s.sites)s.sites=[...s.sites,{...weaponBody(c.raw),ready:false}];
+      if(s.sites)s.sites=[...s.sites,{...weaponBody(c.raw),ready:!!s.game}];
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='discover'&&s.game){
+      // Three different cards of the deck, never another copy of the spell itself.
+      const names=[...new Set(s.deck.filter(d=>d.name!==c.name).map(d=>d.name))];
+      offer(s,'discover',sample(s,names,3).map(n=>s.deck.find(d=>d.name===n).entityId));
       return {s,exact:true,note:''};
     }
     if(model.kind==='discover'){
@@ -406,12 +443,17 @@ function applyStep(s0,m){
       strike({},t,model.damage);
       if(t.side==='opp'&&t.type==='HERO')s.faceDealt+=before-hpOf(t);
       if(t.hp<=0&&t.type==='MINION'&&ON_DEATH.test(ownText(t.text))&&!enemyDrawOnly(t)){exact=false;notes.push(`${t.name} dies with a Deathrattle/Reborn`)}
-      s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
+      bury(s);
+      if(s.game){
+        if(s.hand.length)discard(s,'pick',s.hand[roll(s,s.hand.length)].id);
+        return {s,exact:true,note:''};
+      }
       // One card left is the one discarded; among several the game picks at random.
       if(s.hand.length<=1||s.drawnUnknown>0){const r=discard(s,'high');exact&&=r.exact;if(r.note)notes.push(r.note)}
       else{s.uncertainDiscard=s.hand.map(c=>({id:c.id,name:c.name,cost:c.cost}));exact=false;notes.push(`random discard among ${s.hand.map(c=>c.name).join(', ')}; no particular outcome assumed`)}
       return {s,exact,note:notes.join('; ')};
     }
+    if(model.kind==='barrage'&&s.game){volley(s,model.damage);return {s,exact:true,note:''}}
     if(model.kind==='barrage'){
       const h=hero(s,'opp'),others=s.opp.filter(b=>b.type==='MINION'&&b.hp>0&&!b.dormant&&!b.immune),before=hpOf(h);
       // Every point a minion cannot absorb lands on the hero: a floor, exact when the board is empty.
@@ -428,10 +470,12 @@ function applyStep(s0,m){
       for(const held of s.hand)if(held.cost>s0.mana&&held.cost<=s.mana&&modelOf(s,held))held.playable=true;
       return {s,exact:true,note:''};
     }
+    if(model.kind==='randomSummon'&&s.game){conjure(s,model.n,model.cost);return {s,exact:true,note:''}}
     if(model.kind==='randomSummon'){
       s.pendingSummons={sourceId:c.id,n:model.n,cost:model.cost,via:'play'};
       return {s,exact:false,note:`summon up to ${model.n} random ${model.cost}-Cost minions; identities, stats and buff eligibility unknown; observe and replan`};
     }
+    if(model.kind==='draw'&&s.game){pull(s,model.n,/\btemporary\b/i.test(c.text));return {s,exact:true,note:''}}
     if(model.kind==='draw'){
       const r=drawFrom(s,model.n);
       const h=hero(s,'me');if(h)strike({},h,r.damageMin);
@@ -462,12 +506,14 @@ function applyStep(s0,m){
         // Tokens have no entity id until the game makes them; the plan's next step is then
         // re-checked against the real board anyway (bridge compares signatures).
         for(let k=0;k<count;k++)s.me.push({id:-(++s.nextToken),side:'me',type:'MINION',name:'token',text:'',
-          atk:model.summon.atk,hp:model.summon.hp,armor:0,taunt:/taunt/.test(t),ds:/divine shield/.test(t),
+          atk:model.summon.atk,hp:model.summon.hp,maxHp:model.summon.hp,armor:0,taunt:/taunt/.test(t),ds:/divine shield/.test(t),
           stealth:/stealth/.test(t),poison:/poisonous/.test(t),lifesteal:/lifesteal/.test(t),windfury:/windfury/.test(t),
           dormant:false,immune:false,frozen:false,attacks:0,canAttack:/rush/.test(t),rushOnly:true,
           targets:new Set(/rush/.test(t)?s.opp.filter(o=>o.type==='MINION').map(o=>o.id):[]),maxAttacks:/windfury/.test(t)?2:1});
       }
       if(model.selfHit){const h=hero(s,'me');if(h)strike({},h,model.selfHit)}
+      // The body remembers what it drew: Platysaur's Deathrattle discards exactly that card.
+      if(model.draw&&s.game){b.drew=pull(s,model.draw);return {s,exact:true,note:''}}
       if(model.draw){
         const r=drawFrom(s,model.draw);
         const h=hero(s,'me');if(h)strike({},h,r.damageMin);
@@ -479,6 +525,11 @@ function applyStep(s0,m){
     let exact=true;const notes=[];
     if(model.discard){
       const r=discard(s,'low');exact&&=r.exact;if(r.note)notes.push(r.note);
+    }
+    if(c.name==='Entropic Continuity'&&s.game){
+      const shred=s.game.extra['Shred of Time'];
+      s.deck=[...s.deck];
+      for(let k=0;k<2;k++)s.deck.splice(roll(s,s.deck.length+1),0,{...shred,entityId:-(++s.nextToken)});
     }
     if(c.name==='Entropic Continuity'&&s.drawState.me.deckCount!=null){
       s.drawState={me:{...s.drawState.me,deckCount:Number(s.drawState.me.deckCount)+2,drawHazards:[...(s.drawState.me.drawHazards??[]),3,3]}};
@@ -496,6 +547,7 @@ function applyStep(s0,m){
 
 export function apply(s0,m){
   const r=applyStep(s0,m);
+  if(s0.game){reap(r.s);return r}
   const summoned=r.s.me.some(b=>!s0.me.some(x=>x.id===b.id))||!!r.s.pendingSummons;
   const discarded=(r.s.discarded?.length??0)>(s0.discarded?.length??0)||!!r.s.uncertainDiscard;
   // Do not call a fixed summon/buff exact in the presence of an unmodelled
@@ -558,3 +610,136 @@ export const searchSignature=s=>JSON.stringify([
     .sort((a,b)=>a[0]-b[0])),
   s.hand.map(c=>[c.id,c.cost,c.atk,c.hp,c.playable]),s.mana,s.weapon,s.power,s.locations,s.sites,
   s.drawState,s.discarded?.map(c=>[c.id,c.cost]),s.fixedDiscard,s.uncertainDiscard,s.pendingSummons,s.drawnUnknown,s.faceDealt,s.nextToken]);
+
+// ---- Whole games (s.game, built by selfplay.mjs) -------------------------------------------------
+// The planner above stops where it cannot know. A game played inside the simulator has no board to
+// re-read, so with s.game set the same steps finish: a draw takes the real top card of s.deck, a
+// random outcome is rolled from s.seed, a player's pick becomes a 'choose' step, and 'end' hands the
+// turn over. Everything the acting side owns sits on s; the other side's hidden half sits in s.them.
+const SEAT=['hand','deck','weapon','power','locations','sites','mana','crystals','fatigue','discardCount','seat'];
+
+// mulberry32, with the counter kept in the state: equal states roll equal outcomes.
+export function roll(s,n){
+  let t=s.seed=(s.seed+0x6D2B79F5)|0;
+  t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);
+  return Math.floor(((t^t>>>14)>>>0)/4294967296*n);
+}
+function sample(s,list,k){
+  const a=[...list];
+  for(let i=0;i<Math.min(k,a.length);i++){const j=i+roll(s,a.length-i);[a[i],a[j]]=[a[j],a[i]]}
+  return a.slice(0,k);
+}
+
+// The same game seen from the other chair.
+export function flip(s){
+  const t=s.them,turned=(bs,side)=>bs.map(b=>({...b,side}));
+  return {...s,...t,hand:t.hand.map(c=>({...c})),weapon:t.weapon&&{...t.weapon},power:t.power&&{...t.power},
+    me:turned(s.opp,'me'),opp:turned(s.me,'opp'),them:Object.fromEntries(SEAT.map(k=>[k,s[k]]))};
+}
+
+function gain(s,raw,temp){
+  if(s.hand.length>=10)return null;                              // a full hand burns the card
+  const c=handCard(raw,true),g=discardGrowth(c)*(s.discardCount??0);
+  if(g){c.atk+=g;c.hp+=g;c.raw={...c.raw,ATK:c.atk,HEALTH:c.hp}}
+  if(temp)c.temp=true;
+  s.hand.push(c);
+  return c.id;
+}
+// Draw n real cards for the acting side; returns the ids that reached the hand.
+function pull(s,n,temp=false){
+  const got=[],h=hero(s,'me');
+  for(let k=0;k<n;k++){
+    if(!s.deck.length){s.fatigue=(s.fatigue??0)+1;strike({},h,s.fatigue);continue}
+    const [raw,...rest]=s.deck;s.deck=rest;
+    // Shred of Time: it casts, and the draw it interrupted still happens.
+    if(/\bcasts when drawn\b/i.test(flat(raw.text))){
+      strike({},h,Number(/deal (\d+) damage to your hero/i.exec(flat(raw.text))?.[1]??0));
+      n++;continue;
+    }
+    const id=gain(s,raw,temp);
+    if(id!=null)got.push(id);
+  }
+  return got;
+}
+export const drawCards=pull;
+
+// Soul Barrage: one point at a time, each on a living enemy.
+function volley(s,n){
+  for(let k=0;k<n;k++){
+    const live=s.opp.filter(b=>b.type==='HERO'||b.hp>0&&!b.dormant&&!b.immune);
+    if(!live.length)return;
+    strike({},live[roll(s,live.length)],1);
+  }
+}
+function conjure(s,n,cost){
+  const pool=s.game.minions[cost]??[];
+  for(let k=0;k<n&&pool.length&&room(s)>0;k++){
+    const raw=pool[roll(s,pool.length)];
+    summonDiscard(s,{id:-(++s.nextToken),name:raw.name,atk:num(raw.ATK??raw.baseAttack),hp:num(raw.HEALTH??raw.baseHealth),raw});
+  }
+}
+const aimable=s=>[...s.opp.filter(b=>!b.stealth),...s.me].filter(b=>!b.immune&&!b.dormant).map(b=>b.id);
+
+// A pick the player makes mid-step. One option needs no asking; none skips the pick.
+function offer(s,kind,options){
+  if(options.length>1)s.choice={kind,options};
+  else settle(s,kind,options[0]);
+}
+function settle(s,kind,id){
+  if(kind==='site'){
+    if(id!=null)discard(s,'pick',id);
+    pull(s,2);
+  }else if(id!=null){
+    const raw=s.deck.find(d=>d.entityId===id);
+    s.deck=s.deck.filter(d=>d!==raw);
+    gain(s,raw,true);
+  }
+}
+
+const gone=b=>b.type==='MINION'&&b.hp<=0;
+function bury(s){
+  if(s.game)return reap(s);
+  s.me=s.me.filter(b=>!gone(b));s.opp=s.opp.filter(b=>!gone(b));
+}
+// Deaths, and the Deathrattles this deck has: Boneweb Egg's Spiders and Platysaur's discard. One on
+// the other side runs with the chairs swapped, so its payoffs land on its owner's board and hand.
+function rattle(s,b){
+  if(discardModel(b).kind==='spiders')for(let i=0;i<2&&room(s)>0;i++)summonDiscard(s,spider(s));
+  for(const id of b.drew??[])discard(s,'pick',id);
+}
+function reap(s){
+  for(let pass=0;pass<40;pass++){
+    const dead=[...s.me,...s.opp].filter(gone);
+    if(!dead.length)return;
+    s.me=s.me.filter(b=>!gone(b));s.opp=s.opp.filter(b=>!gone(b));
+    for(const b of dead){
+      if(b.side==='me')rattle(s,b);
+      else{const f=flip(s);rattle(f,b);Object.assign(s,flip(f))}
+    }
+  }
+}
+
+// Start of the acting side's turn: a crystal, fresh attacks, the location cooldown, a card.
+export function beginTurn(s){
+  s.crystals=Math.min(10,s.crystals+1);s.mana=s.crystals;
+  if(s.power)s.power.used=false;
+  s.sites=s.sites.map(x=>{const cooldown=Math.max(0,(x.cooldown??0)-1);return {...x,cooldown,ready:!cooldown}});
+  for(const b of s.me){
+    b.attacks=0;b.exhausted=false;b.rushOnly=false;
+    if(b.type==='HERO'){b.atk=s.weapon?.atk??0;b.canAttack=b.atk>0}
+    else b.canAttack=!b.dormant;
+  }
+  pull(s,1);
+  reap(s);
+}
+// End of turn: Temporary cards are discarded (their payoffs fire), the hero's Attack is its own
+// turn's only, then the other side begins.
+function passTurn(s){
+  for(const c of s.hand.filter(c=>c.temp))discard(s,'pick',c.id);
+  reap(s);
+  const h=hero(s,'me');h.atk=0;h.canAttack=false;
+  const f=flip(s);
+  f.turn=(f.turn??0)+1;
+  beginTurn(f);
+  return f;
+}

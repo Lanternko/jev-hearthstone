@@ -3,7 +3,7 @@ import {fileURLToPath} from 'node:url';
 import {snapshot} from './power.mjs';
 import {actionFor} from './plan.mjs';
 import {loadDecisionEngine} from './planner-version.mjs';
-import {fromState,signature} from './sim.mjs';
+import {fromState,followed} from './sim.mjs';
 import {deckFor} from './deck.mjs';
 import {createJevRecovery} from './jev-recovery.mjs';
 import {respectsDHTactics} from './dh-tactics.mjs';
@@ -59,7 +59,9 @@ export async function next({shot,skip}={}){
   // Pure resource drawing remains optional; proved lethal retains priority.
   const live=full;
   // A skipped step is simply not in `live`: the plan is dropped and the turn asked afresh.
-  const action=signature(fromState(s.state,full))===step.before&&actionFor(live,step);
+  // A body the game re-created under a new entity id acts and is targeted under that id.
+  const ids=followed(step.before,fromState(s.state,full));
+  const action=ids&&actionFor(live,{...step,id:ids.get(step.id)??step.id,targetId:ids.get(step.targetId)??step.targetId});
   const continuation=allowsPlanContinuation??allowsWeaponContinuation;
   if(action&&(queueLethal||(respectsDHTactics(s.state,acts,action)&&(!continuation||continuation(s.state,full,action,{admission:trace.admission}))))){queue.shift();return {ready:true,action,state:s.state,source:queueLethal?'planned_lethal':'plan',latencyMs:0,cost:'0'}}
  }

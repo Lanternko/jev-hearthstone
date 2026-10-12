@@ -61,7 +61,10 @@ function body(c,side){
 
 // The planning view of a public state. `canAttack` and `targets` come from the game's own options
 // at the start, because only the game knows about summoning sickness, Rush and odd restrictions.
-export function fromState(state,actions=[]){
+// `full` (eval-sim-fidelity.mjs only) also models the cards the live search leaves out on purpose:
+// Discovers, targeted burn with a random discard, locations and their activation. Most of these
+// steps are inexact; they exist so a replay or a rollout can take them, not so a plan can run past them.
+export function fromState(state,actions=[],{full=false}={}){
   // A minion at 0 Health is already dead; the log just has not moved it to the graveyard yet.
   const live=b=>b.type==='HERO'||b.hp>0;
   const mine=(state.me.board??[]).filter(c=>['MINION','HERO'].includes(c.CARDTYPE)).map(c=>body(c,'me')).filter(live);
@@ -92,6 +95,15 @@ export function fromState(state,actions=[]){
   // A minion the mana covers is playable once a death frees a slot (moves() checks the room).
   if(mine.filter(b=>b.type==='MINION').length+locations>=7)
     for(const c of state.me.hand??[])if(c.CARDTYPE==='MINION'&&cost(c)<=num(state.me.mana))plays.add(c.entityId);
+  const aims=new Map(),sites=[];
+  if(full){
+    for(const a of actions)if(inHand(a.entityId)){
+      plays.add(a.entityId);
+      if(a.targetId!=null&&!inHand(a.targetId))aims.set(a.entityId,[...(aims.get(a.entityId)??[]),a.targetId]);
+    }
+    for(const c of state.me.board??[])if(c.CARDTYPE==='LOCATION')
+      sites.push({...weaponBody(c),ready:actions.some(a=>a.entityId===c.entityId)});
+  }
   const hp=(state.me.board??[]).find(c=>(heroAttackGain(c)>0||immediateDraws(c,state)>0)
     &&actions.some(a=>a.entityId===c.entityId&&a.targetId==null));
   return {objective:matchupObjective(state),mana:num(state.me.mana),hand:(state.me.hand??[]).map(c=>({id:c.entityId,name:c.name,type:c.CARDTYPE,cost:cost(c),text:flat(c.text),
@@ -100,7 +112,7 @@ export function fromState(state,actions=[]){
     power:hp?{id:hp.entityId,name:hp.name,cost:cost(hp),gain:heroAttackGain(hp),draw:immediateDraws(hp,state),
       selfHit:Number(/take \$?(\d+)\s*damage/i.exec(flat(hp.text))?.[1]??0),used:on(hp,'EXHAUSTED')}:null,
     drawState:{me:{deckCount:state.me.deckCount,fatigue:state.me.fatigue,drawHazards:state.me.drawHazards}},
-    locations,tauntAtStart:tauntUp,faceDealt:0,nextToken:0};
+    locations,tauntAtStart:tauntUp,faceDealt:0,nextToken:0,...(full?{full,aims,sites}:{})};
 }
 
 const weaponBody=c=>({id:c.entityId,name:c.name,text:flat(c.text),atk:num(c.ATK??c.baseAttack),
@@ -189,7 +201,33 @@ const drawFrom=(s,n)=>{
   const k=s.drawnUnknown??0,d=s.drawState.me.deckCount;
   return drawImpact({me:{...s.drawState.me,deckCount:k&&d!=null?Math.max(0,Number(d)-k):d,hand:[...s.hand,...Array(k).fill({})]}},n);
 };
-const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null);
+// s.full only. Cursed Catacombs, Soulfire, Soul Barrage, any location, and a body whose only text
+// is its Deathrattle (Boneweb Egg; Platysaur through drawMinionModel).
+const DISCOVER_DECK=/^discover another card from your deck\. make it temporary\.?$/i;
+const BOLT=/^deal (\d+) damage\. discard a random card\.?$/i;
+const BARRAGE=/^when you play or discard this, deal (\d+) damage randomly split among all enemies\.?$/i;
+const SITE_DISCARD_DRAW=/^look at 3 cards in your hand and choose one to discard\. draw two cards\.?$/i;
+export function fullModel(c){
+  if(c?.type==='LOCATION')return {kind:'location'};
+  if(c?.type==='SPELL'){
+    if(DISCOVER_DECK.test(c.text))return {kind:'discover'};
+    const b=BOLT.exec(c.text);if(b)return {kind:'bolt',damage:Number(b[1])};
+    const r=BARRAGE.exec(c.text);if(r)return {kind:'barrage',damage:Number(r[1])};
+    return null;
+  }
+  if(c?.type!=='MINION')return null;
+  const draws=drawMinionModel(c);
+  if(draws)return draws;
+  let death=false;
+  for(const p of c.text.split(/(?<=\.)\s+/).filter(Boolean)){
+    if(/^deathrattle:/i.test(p)||/^if you discard this, trigger its deathrattle\.?$/i.test(p)){death=true;continue}
+    if(p.replace(KEYWORDS,'').replace(/[\s.,]/g,''))return null;
+  }
+  return death?{kind:'minion'}:null;
+}
+const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null)??(s.full?fullModel(c):null);
+// Spell Damage on our side changes the number; the model does not read how much.
+const boosted=s=>s.me.some(b=>b.type==='MINION'&&/\bspell damage\b/i.test(b.text));
 function summonDiscard(s,c){
   if(room(s)<=0)return;
   const b=body({...c.raw,entityId:c.id,ATK:c.atk,HEALTH:c.hp,DAMAGE:0},'me');
@@ -271,13 +309,18 @@ export function moves(s){
   for(const c of s.hand){
     if(!c.playable||c.cost>s.mana)continue;
     const m=modelOf(s,c);
-    if(!m||(m.kind==='minion'&&free<=0))continue;
+    if(!m||((m.kind==='minion'||m.kind==='location')&&free<=0))continue;
+    if(m.kind==='bolt'){
+      for(const id of s.aims?.get(c.id)??[])if([...s.me,...s.opp].some(b=>b.id===id&&(b.hp>0||b.type==='HERO')))out.push({kind:'play',id:c.id,targetId:id});
+      continue;
+    }
     if(m.chooseDiscard){
       const picks=s.hand.filter(x=>x.id!==c.id);
       if(picks.length){for(const x of picks)out.push({kind:'play',id:c.id,targetId:x.id});continue}
     }
     out.push({kind:'play',id:c.id});
   }
+  for(const x of s.sites??[])if(x.ready&&SITE_DISCARD_DRAW.test(x.text))out.push({kind:'use',id:x.id});
   return out;
 }
 
@@ -331,9 +374,53 @@ function applyStep(s0,m){
     }
     return {s,exact,note:notes.join('; ')};
   }
+  if(m.kind==='use'){
+    s.sites=s.sites.map(x=>({...x}));
+    const x=s.sites.find(x=>x.id===m.id);
+    x.ready=false;
+    if(x.durability!=null&&--x.durability<=0){s.sites=s.sites.filter(y=>y!==x);s.locations--}
+    // The game shows three of the hand and the player picks: which three is not ours to know.
+    if(s.hand.length)s.uncertainDiscard=s.hand.map(c=>({id:c.id,name:c.name,cost:c.cost}));
+    const r=drawFrom(s,2);
+    const h=hero(s,'me');if(h)strike({},h,r.damageMin);
+    s.drawnUnknown=(s.drawnUnknown??0)+Math.max(0,r.cardsMax-r.burnMax);
+    return {s,exact:false,note:`${x.name}: a chosen discard, then draw 2; at least ${r.damageMin} draw damage; observe the hand and replan`};
+  }
   if(m.kind==='play'){
     const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=modelOf(s,c);
     s.hand.splice(i,1);s.mana-=c.cost;
+    if(model.kind==='location'){
+      s.locations++;
+      if(s.sites)s.sites=[...s.sites,{...weaponBody(c.raw),ready:false}];
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='discover'){
+      const left=s.drawState.me.deckCount==null?null:Number(s.drawState.me.deckCount)-(s.drawnUnknown??0);
+      if(left!=null&&left<=0)return {s,exact:true,note:''};
+      s.drawnUnknown=(s.drawnUnknown??0)+1;
+      return {s,exact:false,note:'discover a card from the deck; observe the hand and replan'};
+    }
+    if(model.kind==='bolt'){
+      const t=[...s.me,...s.opp].find(b=>b.id===m.targetId),before=hpOf(t);
+      let exact=!boosted(s);const notes=exact?[]:['Spell Damage changes the hit'];
+      strike({},t,model.damage);
+      if(t.side==='opp'&&t.type==='HERO')s.faceDealt+=before-hpOf(t);
+      if(t.hp<=0&&t.type==='MINION'&&ON_DEATH.test(ownText(t.text))&&!enemyDrawOnly(t)){exact=false;notes.push(`${t.name} dies with a Deathrattle/Reborn`)}
+      s.me=s.me.filter(b=>b.hp>0||b.type==='HERO');s.opp=s.opp.filter(b=>b.hp>0||b.type==='HERO');
+      // One card left is the one discarded; among several the game picks at random.
+      if(s.hand.length<=1||s.drawnUnknown>0){const r=discard(s,'high');exact&&=r.exact;if(r.note)notes.push(r.note)}
+      else{s.uncertainDiscard=s.hand.map(c=>({id:c.id,name:c.name,cost:c.cost}));exact=false;notes.push(`random discard among ${s.hand.map(c=>c.name).join(', ')}; no particular outcome assumed`)}
+      return {s,exact,note:notes.join('; ')};
+    }
+    if(model.kind==='barrage'){
+      const h=hero(s,'opp'),others=s.opp.filter(b=>b.type==='MINION'&&b.hp>0&&!b.dormant&&!b.immune),before=hpOf(h);
+      // Every point a minion cannot absorb lands on the hero: a floor, exact when the board is empty.
+      const least=Math.max(0,model.damage-others.reduce((n,b)=>n+b.hp+(b.ds?1:0),0));
+      if(h)for(let k=0;k<(others.length?least:model.damage);k++)strike({},h,1);
+      s.faceDealt+=before-hpOf(h);
+      if(!others.length&&!boosted(s))return {s,exact:true,note:''};
+      return {s,exact:false,note:`${model.damage} damage split at random among all enemies; at least ${least} to the hero; observe and replan`};
+    }
     if(model.kind==='mana'){
       s.mana+=model.gain;
       // A newly affordable supported card is a future step, not an invented
@@ -436,6 +523,32 @@ export const signature=s=>JSON.stringify([
   s.opp.map(b=>[b.id,b.atk,b.hp,b.armor,b.ds,b.taunt,b.dormant,b.frozen]).sort((x,y)=>x[0]-y[0]),
   s.hand.map(c=>c.id),s.mana,s.weapon&&[s.weapon.id,s.weapon.atk,s.weapon.durability]]);
 
+// Did the real board `s` follow the predicted signature `before`? Returns null when it did not,
+// else a map from predicted to real entity id for our bodies that are there under another id:
+// a minion summoned by its own discard is a new entity in the game, while the sim keeps the hand
+// card's id. Such a board is the predicted one, yet the strict comparison dropped the rest of the
+// plan 105 times in 262 games (2026-10-12, mostly Ocular Occultist discarding Walking Dead).
+// The sim's own tokens (negative ids) still end the plan, as before.
+export function followed(before,s){
+  const now=signature(s);
+  if(now===before)return new Map();
+  const [mine,...rest]=JSON.parse(before),[real,...realRest]=JSON.parse(now);
+  if(JSON.stringify(rest)!==JSON.stringify(realRest))return null;
+  const stats=b=>JSON.stringify(b.slice(1)),left=new Map(real.map(b=>[b[0],b])),loose=[],ids=new Map();
+  for(const b of mine){
+    const r=left.get(b[0]);
+    if(!r){loose.push(b);continue}
+    if(stats(r)!==stats(b))return null;
+    left.delete(b[0]);
+  }
+  for(const b of loose){
+    const r=b[0]>=0&&[...left.values()].find(r=>stats(r)===stats(b));
+    if(!r)return null;
+    left.delete(r[0]);ids.set(b[0],r[0]);
+  }
+  return left.size?null:ids;
+}
+
 // Search equivalence is stricter than the live observation signature. Readiness,
 // remaining attacks, card costs/stats and resource history affect future moves.
 export const searchSignature=s=>JSON.stringify([
@@ -443,5 +556,5 @@ export const searchSignature=s=>JSON.stringify([
     b.stealth,b.poison,b.lifesteal,b.windfury,b.rush,b.ignoreTaunt,b.dormant,b.immune,b.frozen,
     b.attacks,b.maxAttacks,b.canAttack,b.rushOnly,b.zeroReady,[...b.targets??[]].sort((a,b)=>a-b)])
     .sort((a,b)=>a[0]-b[0])),
-  s.hand.map(c=>[c.id,c.cost,c.atk,c.hp,c.playable]),s.mana,s.weapon,s.power,s.locations,
+  s.hand.map(c=>[c.id,c.cost,c.atk,c.hp,c.playable]),s.mana,s.weapon,s.power,s.locations,s.sites,
   s.drawState,s.discarded?.map(c=>[c.id,c.cost]),s.fixedDiscard,s.uncertainDiscard,s.pendingSummons,s.drawnUnknown,s.faceDealt,s.nextToken]);

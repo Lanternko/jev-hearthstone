@@ -18,6 +18,7 @@
     "eval-silverfish": "node src/eval-silverfish.mjs",
     "eval-strength": "node src/eval-strength.mjs",
     "eval-model-pair": "node --env-file-if-exists=.env.local src/eval-model-pair.mjs",
+    "eval-sim-fidelity": "node src/eval-sim-fidelity.mjs",
     "eval-mulligan-cohorts": "node src/eval-mulligan-cohorts.mjs",
     "eval-rulings": "node src/eval-rulings.mjs",
     "label": "node src/eval-label.mjs",

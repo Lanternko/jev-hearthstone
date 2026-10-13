@@ -88,18 +88,15 @@ export async function next({shot,skip}={}){
    return {ready:true,action:n.action,state:s.state,source:'selfplay_net',latencyMs:0,cost:'0'};
   }
  }
- if(NET_ADVICE&&!p.lethal&&full.length>1){
-  // The network learned on whole menus. Ordering preferences (weaponFirst) once left it only
-  // END_TURN and a hero swing while two Dukes could attack; it sees everything but vetoes.
-  const barred=new Set((trace.vetoes??[]).map(v=>v.actionId));
-  const menu=s.state.choice?full:rawActions.filter(a=>!barred.has(a.id)&&!(skip&&skip(a,s.state)));
+ // Advice mode measures the network, so no rule shapes the turn (user ruling 2026-10-14): the network
+ // and Jev both get every legal action. Only the mulligan rules and a proved lethal stay.
+ const menu=s.state.choice?.type==='MULLIGAN'?full:rawActions.filter(a=>!(skip&&skip(a,s.state)));
+ if(NET_ADVICE&&!p.lethal&&menu.length>1){
   const n=await netPick({parsed:s.parsed,state:s.state,actions:menu});
-  // An END_TURN the rules dropped still reaches Jev as the network's proposal: with six minions out,
-  // passing kept the slot a temporary Walking Dead needed when it was discarded (2026-10-14).
   if(n){
-   const options=[n.action,...(p.forced?[p.forced.action]:p.acts??[])].filter((a,i,all)=>a&&all.findIndex(b=>b.id===a.id)===i);
+   const options=[n.action,...menu].filter((a,i,all)=>a&&all.findIndex(b=>b.id===a.id)===i);
    const advice={choice:n.action.id,valueEstimate:n.value,top:n.top,knownCards:KNOWN,unknownCards:n.unknown};
-   const rulesChoice=p.forced?{id:p.forced.action.id,source:p.forced.source}:null;
+   const rulesChoice=null;
    let result={model:null,source:'net_unopposed',latencyMs:0,answers:{move:{choice:n.action.id}}};
    if(options.length>1){
     const request=opts=>ask({board:s.state,strategy:deckFor(s.state).strategy,networkAdvice:advice,rulesChoice,effectAssessments:{version:EFFECT_VERSION,cards:boardEffectAssessments(s.state)}},{move:{type:'choice',instructions:ADVICE_INSTRUCTIONS,criteria:criteria(s.state,options)}},opts);

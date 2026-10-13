@@ -94,10 +94,9 @@ export async function next({shot,skip}={}){
   const barred=new Set((trace.vetoes??[]).map(v=>v.actionId));
   const menu=s.state.choice?full:rawActions.filter(a=>!barred.has(a.id)&&!(skip&&skip(a,s.state)));
   const n=await netPick({parsed:s.parsed,state:s.state,actions:menu});
-  // The network may not end a turn the rules still have work in: it passed with two 14/14 Dukes
-  // facing one taunt (2026-10-14). Such a turn goes to the ordinary pipeline below.
-  const rulesActs=p.forced?[p.forced.action]:p.acts??full;
-  if(n&&!(n.action.type==='END_TURN'&&!rulesActs.some(a=>a.type==='END_TURN'))){
+  // An END_TURN the rules dropped still reaches Jev as the network's proposal: with six minions out,
+  // passing kept the slot a temporary Walking Dead needed when it was discarded (2026-10-14).
+  if(n){
    const options=[n.action,...(p.forced?[p.forced.action]:p.acts??[])].filter((a,i,all)=>a&&all.findIndex(b=>b.id===a.id)===i);
    const advice={choice:n.action.id,valueEstimate:n.value,top:n.top,knownCards:KNOWN,unknownCards:n.unknown};
    const rulesChoice=p.forced?{id:p.forced.action.id,source:p.forced.source}:null;

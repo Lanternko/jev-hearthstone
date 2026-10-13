@@ -26,7 +26,8 @@
     "label": "node src/eval-label.mjs",
     "eval": "node --env-file-if-exists=.env.local src/eval-score.mjs",
     "eval-combo-admission": "node src/eval-combo-admission.mjs",
-    "shadow": "node src/eval-shadow.mjs"
+    "shadow": "node src/eval-shadow.mjs",
+    "shadow-scale": "node src/eval-shadow-scale.mjs"
   },
   "dependencies": {
     "ai": "7.0.107"

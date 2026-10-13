@@ -27,8 +27,9 @@ function firstPlayerSeat(parsed,state){
   return e?.tags?.FIRST_PLAYER==='1'?0:1;
 }
 
-function knownDiscardCount(){
-  return {value:0,note:'discardCount unknown'};
+// The parser counts them (power.mjs); a parse that carries no count leaves the network with 0.
+function knownDiscardCount(parsed,playerId){
+  return parsed?.discards?{value:num(parsed.discards.get(playerId))}:{value:0,note:'discardCount unknown'};
 }
 
 function hiddenDeck(parsed,state,{cards,list},notes){
@@ -84,7 +85,7 @@ export function shadowView(parsed,state,actions,{cards=cardDb(),list=loadList('w
   if(!state||state.status!=='RUNNING'||!actions?.length||actions.some(a=>a.type==='MULLIGAN'))return null;
   const notes=[];
   const s=fromState(state,actions,{full:true});
-  const mine=knownDiscardCount(),theirs=knownDiscardCount();
+  const mine=knownDiscardCount(parsed,ownPlayer(state)),theirs=knownDiscardCount(parsed,oppPlayer(state));
   const opp=playerEntity(parsed,oppPlayer(state));
   Object.assign(s,{
     crystals:num(state.me.maxMana),
@@ -105,7 +106,7 @@ export function shadowView(parsed,state,actions,{cards=cardDb(),list=loadList('w
   });
   // The simulator the network learned in calls the Boneweb Egg token 'Spider'; the game says 'Boneweb Spider'.
   for(const b of [...s.me,...s.opp])if(b.name==='Boneweb Spider')b.name='Spider';
-  notes.push(mine.note,theirs.note);
+  if(mine.note)notes.push(mine.note);
   s.choice=choiceView(state,s,notes);
   delete s.game;
   const legal=actions.map(a=>legalMove(parsed,state,a));

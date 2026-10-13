@@ -15,7 +15,10 @@ export async function latestLog(root=LOG_ROOT){
 export function createParser(){
   let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,revision=0,gameNumber=0,optionsOpen=false;
   let choices=new Map(),shownTurn=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
-  let publicPlays=[],initialHeroHealth=new Map();
+  let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null;
+  // A card that leaves the hand for the graveyard without being the card played was discarded. The
+  // game keeps no count of its own in the log, and the self-play network was trained with one.
+  const leaves=(e,id,zone)=>{if(zone==='GRAVEYARD'&&e.tags.ZONE==='HAND'&&id!==playing){const c=Number(e.tags.CONTROLLER);discards.set(c,(discards.get(c)??0)+1)}};
   const ensure=id=>{if(!entities.has(id))entities.set(id,{id,cardId:'',tags:{}});return entities.get(id)};
   function resolve(s){
     const id=s.match(/\bid=(\d+)/)?.[1]??(/^\d+$/.test(s)?s:null);
@@ -38,11 +41,12 @@ export function createParser(){
     if(m){shownTurn=Number(m[1]);continue}
     m=line.match(/GameState\.DebugPrintPower\(\) -\s*(.*)/);
     if(m){const s=m[1];
-      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();gameNumber++;continue}
+      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;gameNumber++;continue}
       if(s.startsWith('BLOCK_START')){
         effectStack.push(s.match(/\bcardId=(\S*)/)?.[1]??'');
         const play=s.match(/^BLOCK_START BlockType=PLAY Entity=\[(.*?)\](?:\s+EffectCardId=|\s*$)/);
         if(play){const id=resolve(play[1]),e=entities.get(id),playerId=Number(play[1].match(/\bplayer=(\d+)/)?.[1]??e?.tags.CONTROLLER);
+          playing=id;
           if(e?.tags.ZONE==='HAND'&&[1,2].includes(playerId))publicPlays.push({entityId:id,playerId,
             engineTurn:Number(entities.get(game)?.tags.TURN??0),cardId:play[1].match(/\bcardId=(\S*)/)?.[1]??'',originZone:'HAND'});
         }
@@ -59,12 +63,12 @@ export function createParser(){
       // A new turn voids the last menu. The server prints this turn's options ~120ms after the
       // TURN change; a read in that gap used to find last turn's leftover END-only menu, take it
       // as forced, and end our turn with Whispers and two minions castable (2026-09-25).
-      a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];if(id===game&&a[2]==='TURN')options=null;
+      a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){if(a[2]==='ZONE')leaves(ensure(id),id,a[3]);ensure(id).tags[a[2]]=a[3];if(id===game&&a[2]==='TURN')options=null;
         if(id===game&&a[2]==='STEP'&&a[3]==='MAIN_READY'&&Number(entities.get(game)?.tags.TURN)===1&&initialHeroHealth.size===0)
           for(const e of entities.values())if(e.tags.CARDTYPE==='HERO'&&e.tags.ZONE==='PLAY'&&e.tags.HEALTH)
             initialHeroHealth.set(Number(e.tags.CONTROLLER),Number(e.tags.HEALTH));
       }block=null;continue}
-      a=s.match(/^tag=(\S+) value=(\S+)/);if(a&&block){block.tags[a[1]]=a[2];continue}
+      a=s.match(/^tag=(\S+) value=(\S+)/);if(a&&block){if(a[1]==='ZONE')leaves(block,block.id,a[2]);block.tags[a[1]]=a[2];continue}
       a=s.match(/HIDE_ENTITY - Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){ensure(id).tags[a[2]]=a[3];ensure(id).cardId='';}block=null;continue}
       block=null;continue;
     }
@@ -100,7 +104,7 @@ export function createParser(){
   return api;
   }
   function ownHand(){const n=new Map();for(const e of entities.values())if(e.tags?.ZONE==='HAND'&&e.cardId){const c=Number(e.tags.CONTROLLER);n.set(c,(n.get(c)||0)+1)}const r=[...n].sort((a,b)=>b[1]-a[1]);return r.length&&(r.length===1||r[0][1]>r[1][1])?r[0][0]:null}
-  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,localPlayer:ownHand()??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
+  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,discards,localPlayer:ownHand()??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
   return api;
 }
 export const parsePower=text=>createParser().feed(text).result();

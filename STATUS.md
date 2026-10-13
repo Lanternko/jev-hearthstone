@@ -1,3 +1,18 @@
+# 2026-10-13 自戰模型的實戰量尺；棄牌數接上了
+
+- 範圍：新增 `src/eval-shadow-scale.mjs`（`npm run shadow-scale`，可加 `rulings` 或 `value`）。`src/power.mjs` 的 parser 開始數棄牌（手牌進墓地、且不是剛打出的那張；`result().discards`，`publicState` 沒變）；`src/selfplay-shadow.mjs` 改讀這個數字，不再固定填 0。`test/selfplay-shadow.test.mjs` 加 2 則。未 commit。沒動編碼、網路、模型。
+- 驗證：`npm test` 638/638。
+  - 裁決題（`eval/labels.json` 使用者自己的答案）：15 題，網路 12/15（80%）。錯的 3 題正解都排第 2：g1t15r534、g4t11r1187、g1t20r1242。這些題是 Jev 當時答錯才被收進來的，Jev 0/15 不能拿來比。
+  - 勝負判讀（257 局、1579 個我方回合，AUC：贏的局面估值高於輸的局面的機率）：全部 0.740，只數血量與身材 0.707。鏡像 0.820 對 0.827（只有 135 回合）；非鏡像 0.735 對 0.697，其中 1–6 回合 0.646、7–12 回合 0.804、13 回合後 0.917。
+  - 棄牌：1114/1579 個回合前面已有棄牌（我方最多 14、對方最多 7）。補上後第一選擇改了 81 個回合（7%），估值平均動 0.074，AUC 沒變（0.742 → 0.740）。
+- 已知限制：
+  - 估值只比「數血量與身材」好一點，鏡像裡沒有更好。前期（1–6 回合）最弱。
+  - 裁決題只有 15 題；沒有網路對 Jev 的實際對局勝率。
+  - 實戰旁聽第一局（17:33–17:37，對海盜戰，第 9 回合後輸）：`runtime/shadow.jsonl` 16 行全部對得到，沒有丟錯。網路第一名與實際動作相同 10/16（其中 6 步是只有一個選項的結束回合），前三名 15/16。扣掉那 6 步，真的有得選的 10 步裡第一名相同 4 步、前三名 9 步。只有一局，不能當勝率看。
+  - 16 行裡有 8 行的 `jev.source` 是空的，看不出那一步是計畫、強制步還是問 Jev 來的。
+  - 這一局看到、還沒修的：(1) 牌庫每步都要補佔位牌，而且越補越多（24→26 到 13→19），扣牌庫時多扣了；(2) 估值第 3 回合就 -0.77，之後到 -1.11，超出 ±1；(3) 第 3、5 回合網路要 Life Tap（0.88、0.98）而不是下 Boneweb Egg／Entropic Continuity；(4) 第 9 回合估值 -1.0 時網路仍要武器打臉（0.95），Jev 打 Cannoneer；(5) 對手 8 張牌全不在詞彙裡。使用者的決定（2026-10-13）：這一點先不處理，網路只看身材就夠，卡牌效果以後再學。
+  - 詞彙只有 19 張牌名，非鏡像的對手牌大多不認識（Felbeast、Murmy 最常見）。
+
 # 2026-10-13 自戰模型實戰旁聽 shadow mode
 
 - 範圍：新增 `src/selfplay-shadow.mjs`、`src/eval-shadow.mjs`、`test/selfplay-shadow.test.mjs`，`bridge.mjs` 在續走、強制、斬殺與 Jev 回覆後寫 `runtime/shadow.jsonl`；`package.json` 新增 `npm run shadow`。沒有啟動遊戲、沒有呼叫 Gateway、沒有 commit/push，也沒有修改 `src/selfplay-encode.mjs`、`src/selfplay-net.mjs` 或 `models/`。

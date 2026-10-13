@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {cardDb,loadList,rawCard} from '../src/selfplay.mjs';
 import {loadNet} from '../src/selfplay-net.mjs';
+import {parsePower} from '../src/power.mjs';
 import {assertEncoded,recordShadowDecision,shadowRow,shadowView} from '../src/selfplay-shadow.mjs';
 
 const cards=cardDb(),list=loadList('warlock-discard'),net=loadNet();
@@ -89,4 +90,25 @@ test('safe recorder swallows network errors',async()=>{
   const text=await readFile(out,'utf8');
   assert.equal(text.trim().split('\n').length,1);
   await rm(dir,{recursive:true,force:true});
+});
+
+test('the parser counts cards discarded from hand, not cards played',()=>{
+  const L=s=>'D 00:00:00.0000000 GameState.DebugPrintPower() - '+s;
+  const E=id=>`[entityName=x id=${id} zone=HAND zonePos=1 cardId=X player=1]`;
+  const card=(id,controller)=>[L(`FULL_ENTITY - Creating ID=${id} CardID=X`),L(`    tag=CONTROLLER value=${controller}`),L('    tag=ZONE value=HAND')];
+  const p=parsePower([L('CREATE_GAME'),...card(5,1),...card(6,1),...card(7,2),
+    L(`BLOCK_START BlockType=PLAY Entity=${E(6)} EffectCardId=x EffectIndex=0 Target=0 SubOption=-1`),
+    L(`TAG_CHANGE Entity=${E(6)} tag=ZONE value=GRAVEYARD`),          // the spell itself: played
+    L(`TAG_CHANGE Entity=${E(5)} tag=ZONE value=GRAVEYARD`),          // thrown away by it
+    L(`SHOW_ENTITY - Updating Entity=${E(7)} CardID=Y`),L('    tag=ZONE value=GRAVEYARD'),   // a hidden card shown as it goes
+    L('BLOCK_END')].join('\n'));
+  assert.equal(p.discards.get(1),1);
+  assert.equal(p.discards.get(2),1);
+});
+
+test('counted discards reach the network state; a parse without them is noted',()=>{
+  const f=fixture(),with_=shadowView({...f.parsed,discards:new Map([[1,3],[2,2]])},f.state,f.actions,{cards,list});
+  assert.equal(with_.s.discardCount,3);assert.equal(with_.s.them.discardCount,2);
+  assert.ok(!with_.notes.includes('discardCount unknown'));
+  assert.ok(shadowView(f.parsed,f.state,f.actions,{cards,list}).notes.includes('discardCount unknown'));
 });

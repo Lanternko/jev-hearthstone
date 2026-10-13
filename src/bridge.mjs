@@ -89,7 +89,11 @@ export async function next({shot,skip}={}){
   }
  }
  if(NET_ADVICE&&!p.lethal&&full.length>1){
-  const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
+  // The network learned on whole menus. Ordering preferences (weaponFirst) once left it only
+  // END_TURN and a hero swing while two Dukes could attack; it sees everything but vetoes.
+  const barred=new Set((trace.vetoes??[]).map(v=>v.actionId));
+  const menu=s.state.choice?full:rawActions.filter(a=>!barred.has(a.id)&&!(skip&&skip(a,s.state)));
+  const n=await netPick({parsed:s.parsed,state:s.state,actions:menu});
   // The network may not end a turn the rules still have work in: it passed with two 14/14 Dukes
   // facing one taunt (2026-10-14). Such a turn goes to the ordinary pipeline below.
   const rulesActs=p.forced?[p.forced.action]:p.acts??full;

@@ -125,3 +125,21 @@ TAG_CHANGE Entity=22 tag=TAG_SCRIPT_DATA_NUM_1 value=21`);
  // Once Platysaur has died, the discard has happened (or can no longer happen).
  assert.deepEqual(hand(publicState(parsePower(log+'\n'+power('TAG_CHANGE Entity=20 tag=ZONE value=GRAVEYARD')),1,cards)),[[4,false],[21,false]]);
 });
+test('an emptied hand keeps the side the last hand named, even as the second listed player',()=>{
+  const names=['D 00:00:00 GameState.DebugPrintGame() - PlayerID=1, PlayerName=A#1','D 00:00:00 GameState.DebugPrintGame() - PlayerID=2, PlayerName=B#2'].join('\n');
+  const log=power(`CREATE_GAME
+GameEntity EntityID=1
+tag=STEP value=BEGIN_MULLIGAN
+Player EntityID=2 PlayerID=1
+tag=CONTROLLER value=1
+Player EntityID=3 PlayerID=2
+tag=CONTROLLER value=2
+FULL_ENTITY - Creating ID=4 CardID=MY_CARD
+tag=CONTROLLER value=2
+tag=ZONE value=HAND
+FULL_ENTITY - Creating ID=5 CardID=
+tag=CONTROLLER value=1
+tag=ZONE value=HAND`)+'\n'+names+'\n'+power(`TAG_CHANGE Entity=1 tag=STEP value=MAIN_ACTION
+TAG_CHANGE Entity=4 tag=ZONE value=PLAY`);
+  assert.equal(parsePower(log).localPlayer,2);
+});

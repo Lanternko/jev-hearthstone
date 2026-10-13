@@ -13,7 +13,7 @@ export async function latestLog(root=LOG_ROOT){
 // action, and one file carries every game of a session, so each read got slower as the night
 // went on. feed() takes complete lines only; snapshot() holds back a trailing partial line.
 export function createParser(){
-  let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,revision=0,gameNumber=0,optionsOpen=false;
+  let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,handOwner=null,revision=0,gameNumber=0,optionsOpen=false;
   let choices=new Map(),shownTurn=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
   let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null;
   // A card that leaves the hand for the graveyard without being the card played was discarded. The
@@ -41,7 +41,7 @@ export function createParser(){
     if(m){shownTurn=Number(m[1]);continue}
     m=line.match(/GameState\.DebugPrintPower\(\) -\s*(.*)/);
     if(m){const s=m[1];
-      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;gameNumber++;continue}
+      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;handOwner=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;gameNumber++;continue}
       if(s.startsWith('BLOCK_START')){
         effectStack.push(s.match(/\bcardId=(\S*)/)?.[1]??'');
         const play=s.match(/^BLOCK_START BlockType=PLAY Entity=\[(.*?)\](?:\s+EffectCardId=|\s*$)/);
@@ -68,6 +68,9 @@ export function createParser(){
       // TURN change; a read in that gap used to find last turn's leftover END-only menu, take it
       // as forced, and end our turn with Whispers and two minions castable (2026-09-25).
       a=s.match(/TAG_CHANGE Entity=(.+) tag=(\S+) value=(\S+)/);if(a){const id=resolve(a[1]);if(id!=null){if(a[2]==='ZONE')leaves(ensure(id),id,a[3]);ensure(id).tags[a[2]]=a[3];if(id===game&&a[2]==='TURN')options=null;
+        // An empty hand names no owner; keep the side the last non-empty hand named, or the first
+        // listed player becomes "me" and our own turns read as the opponent's (2026-10-14).
+        if(id===game&&a[2]==='STEP')handOwner=ownHand()??handOwner;
         if(id===game&&a[2]==='STEP'&&a[3]==='MAIN_READY'&&Number(entities.get(game)?.tags.TURN)===1&&initialHeroHealth.size===0)
           for(const e of entities.values())if(e.tags.CARDTYPE==='HERO'&&e.tags.ZONE==='PLAY'&&e.tags.HEALTH)
             initialHeroHealth.set(Number(e.tags.CONTROLLER),Number(e.tags.HEALTH));
@@ -108,7 +111,7 @@ export function createParser(){
   return api;
   }
   function ownHand(){const n=new Map();for(const e of entities.values())if(e.tags?.ZONE==='HAND'&&e.cardId){const c=Number(e.tags.CONTROLLER);n.set(c,(n.get(c)||0)+1)}const r=[...n].sort((a,b)=>b[1]-a[1]);return r.length&&(r.length===1||r[0][1]>r[1][1])?r[0][0]:null}
-  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,discards,localPlayer:ownHand()??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
+  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,discards,localPlayer:ownHand()??handOwner??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
   return api;
 }
 export const parsePower=text=>createParser().feed(text).result();

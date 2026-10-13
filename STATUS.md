@@ -1,3 +1,21 @@
+# 2026-10-13 旁聽三項修正：牌庫扣錯、`jev.source` 空值、單選項步驟分開算
+
+- 範圍：
+  - `src/power.mjs`：在效果區塊裡建立的實體標 `created`（開局牌庫的牌都在任何區塊之前建立）。
+  - `src/selfplay-shadow.mjs` 的 `hiddenDeck`：只扣不是 `created` 的我方實體；仍在牌庫、由 Entropic Continuity 生成的實體算成 Shred of Time（`TIME_025t`，模擬器也是這樣放）。
+  - `src/bridge.mjs`：Jev 正常回覆時旁聽的來源寫 `jev`（原本是 undefined；備援模型與規則備援照舊）。
+  - `src/eval-shadow.mjs`：只有一個選項的步驟（`legal===1`）另外計數，不進 matched／top1／top3；`add`、`emptyStats` 改成 export 供測試用。
+  - `test/selfplay-shadow.test.mjs` 加 3 則。未 commit。沒有開遊戲、沒有呼叫 Gateway。
+- 驗證：`npm test` 641/641。
+  - 牌庫：原因是 Cursed Catacombs 的發現選項與選中的複製品（放在 SETASIDE／GRAVEYARD／REMOVEDFROMGAME）、重新生成的 Boneweb Egg 被當成離開牌庫的牌；另外 Entropic Continuity 洗進牌庫的 2 張 Shred of Time 沒算進去。重放 10/13 那一局的 Power.log（只看出牌與攻擊的盤面），每個盤面牌庫張數都剛好，沒有再補或修剪。
+  - `npm run shadow -- live`（同一份 16 行）：有得選的 10 步，top1 40.0%、top3 90.0%；單選項 6 步另列。與上一批手算的 4/10、9/10 相同。
+  - `npm run shadow`（262 局、6212 盤面）改動前後：鏡像 top1 56.7% → 55.9%、top3 82.8% → 83.1%；非鏡像 top1 48.1% → 47.8%、top3 78.8% → 78.5%。牌庫變準之後 top1 沒有變好，略降。
+- 已知限制：
+  - `jev.source` 的修正只影響之後的對局；現有 `runtime/shadow.jsonl` 那 8 行空值沒有回填。這一項沒有實戰驗證，只改了一個預設值。
+  - `npm run shadow` 的重放只取出牌與攻擊，沒有結束回合，所以單選項步驟在重放永遠是 0；分開算只對 live 有意義。
+  - 沒有統計 262 局裡還有多少盤面要補佔位牌；只逐步核對了一局。對手洗進我方牌庫的牌、`created` 之後又回牌庫的牌都沒處理。
+  - 上一批列的 (2)–(4)（估值超出 ±1、前期偏好 Life Tap、落後時仍打臉）沒動。
+
 # 2026-10-13 自戰模型的實戰量尺；棄牌數接上了
 
 - 範圍：新增 `src/eval-shadow-scale.mjs`（`npm run shadow-scale`，可加 `rulings` 或 `value`）。`src/power.mjs` 的 parser 開始數棄牌（手牌進墓地、且不是剛打出的那張；`result().discards`，`publicState` 沒變）；`src/selfplay-shadow.mjs` 改讀這個數字，不再固定填 0。`test/selfplay-shadow.test.mjs` 加 2 則。未 commit。沒動編碼、網路、模型。

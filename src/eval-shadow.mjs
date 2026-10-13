@@ -16,8 +16,10 @@ function bucket(stats,mirror){
   return stats[mirror?'mirror':'nonMirror'];
 }
 
-function add(stats,row,matched=true){
+// A menu of one (the forced end of turn) agrees by construction and says nothing about the network.
+export function add(stats,row,matched=true){
   const b=bucket(stats,row.mirror);
+  if(row.legal===1){b.forced++;return}
   b.positions++;
   if(matched)b.matched++;
   if(row.agree)b.top1++;
@@ -25,15 +27,16 @@ function add(stats,row,matched=true){
   for(const n of row.unknown)bump(stats.unknown,n);
 }
 
-function emptyStats(){
-  return {games:0,positions:0,matched:0,top1:0,top3:0,mirror:{positions:0,matched:0,top1:0,top3:0},nonMirror:{positions:0,matched:0,top1:0,top3:0},unknown:{}};
+export function emptyStats(){
+  const b=()=>({positions:0,forced:0,matched:0,top1:0,top3:0});
+  return {games:0,positions:0,matched:0,top1:0,top3:0,mirror:b(),nonMirror:b(),unknown:{}};
 }
 
 function printStats(stats){
-  console.log(`games ${stats.games}; positions ${stats.positions}`);
+  console.log(`games ${stats.games}; positions with a choice ${stats.positions}; single-option steps ${stats.mirror.forced+stats.nonMirror.forced} (left out below)`);
   for(const k of ['mirror','nonMirror']){
     const b=stats[k];
-    console.log(`${k}: positions ${b.positions}; matched ${b.matched}/${b.positions} ${pct(b.matched,b.positions)}; top1 ${pct(b.top1,b.matched)}; top3 ${pct(b.top3,b.matched)}`);
+    console.log(`${k}: positions ${b.positions}; single-option ${b.forced}; matched ${b.matched}/${b.positions} ${pct(b.matched,b.positions)}; top1 ${pct(b.top1,b.matched)}; top3 ${pct(b.top3,b.matched)}`);
   }
   const unknown=Object.entries(stats.unknown).sort((a,b)=>b[1]-a[1]).slice(0,15);
   console.log(`unknown: ${unknown.length?unknown.map(([n,c])=>`${n} ${c}`).join(', '):'-'}`);

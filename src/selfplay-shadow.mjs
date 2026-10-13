@@ -35,12 +35,19 @@ function knownDiscardCount(parsed,playerId){
 function hiddenDeck(parsed,state,{cards,list},notes){
   const counts=new Map(Object.entries(list.cards));
   const player=ownPlayer(state);
+  let shreds=0;
   for(const e of parsed?.entities?.values()??[]){
-    if(Number(e.tags?.CONTROLLER)!==player||e.tags?.ZONE==='DECK'||!counts.has(e.cardId))continue;
+    if(Number(e.tags?.CONTROLLER)!==player)continue;
+    // Entropic Continuity's two Shreds of Time sit in the deck face down; the simulator holds them there too.
+    if(e.tags?.ZONE==='DECK'){if(e.generatedByContinuity)shreds++;continue}
+    // 2026-10-13 live game 1: Catacombs' discover copies and a re-made Egg were counted as cards
+    // gone from the deck, and the deck was padded with more blanks every turn (24->26 up to 13->19).
+    if(e.created||!counts.has(e.cardId))continue;
     counts.set(e.cardId,Math.max(0,counts.get(e.cardId)-1));
   }
   let next=900000,deck=[];
   for(const [id,n] of counts)for(let i=0;i<n;i++)deck.push(rawCard(cards[id],next++));
+  for(let i=0;i<shreds&&cards.TIME_025t;i++)deck.push(rawCard(cards.TIME_025t,next++));
   const want=num(state.me.deckCount);
   if(deck.length>want){notes.push(`deck trimmed ${deck.length}->${want}`);deck=deck.slice(0,want)}
   if(deck.length<want)notes.push(`deck padded ${deck.length}->${want}`);

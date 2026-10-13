@@ -55,7 +55,11 @@ export function createParser(){
       if(s==='BLOCK_END'){effectStack.pop();block=null;continue}
       let a=s.match(/GameEntity EntityID=(\d+)/);if(a){game=Number(a[1]);block=ensure(game);continue}
       a=s.match(/Player EntityID=(\d+) PlayerID=(\d+)/);if(a){block=ensure(Number(a[1]));block.playerId=Number(a[2]);continue}
-      a=s.match(/FULL_ENTITY - Creating ID=(\d+) CardID=(\S*)/);if(a){block=ensure(Number(a[1]));block.cardId=a[2];if(effectStack.includes('TIME_026'))block.generatedByContinuity=true;continue}
+      a=s.match(/FULL_ENTITY - Creating ID=(\d+) CardID=(\S*)/);if(a){block=ensure(Number(a[1]));block.cardId=a[2];
+        // The starting decks are created before any block opens; anything made inside one is a copy
+        // or a token, and never left the deck the list describes.
+        if(effectStack.length)block.created=true;
+        if(effectStack.includes('TIME_026'))block.generatedByContinuity=true;continue}
       a=s.match(/(?:SHOW_ENTITY|CHANGE_ENTITY) - Updating Entity=(.+) CardID=(\S*)/);if(a){const id=resolve(a[1]);block=id==null?null:ensure(id);if(block)block.cardId=a[2];
         // Only a reveal of a card with a preceding public PLAY fills its record.
         // Hidden hand/deck cards never create public-play evidence.

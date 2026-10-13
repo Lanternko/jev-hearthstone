@@ -112,3 +112,34 @@ test('counted discards reach the network state; a parse without them is noted',(
   assert.ok(!with_.notes.includes('discardCount unknown'));
   assert.ok(shadowView(f.parsed,f.state,f.actions,{cards,list}).notes.includes('discardCount unknown'));
 });
+
+test('copies made by an effect do not come off the deck; Shreds shuffled in are in it',()=>{
+  const f=fixture(),e=f.parsed.entities;
+  f.state.me.deckCount=28;   // the 26 the list still holds and the two Shreds
+  const before=shadowView(f.parsed,f.state,f.actions,{cards,list}).s.deck;
+  // Cursed Catacombs' discover: a copy of a deck card set aside, the deck itself untouched.
+  e.set(96,{id:96,cardId:'VAC_940',created:true,tags:{CONTROLLER:'1',ZONE:'SETASIDE'}});
+  e.set(97,{id:97,cardId:'',generatedByContinuity:true,created:true,tags:{CONTROLLER:'1',ZONE:'DECK'}});
+  e.set(98,{id:98,cardId:'',generatedByContinuity:true,created:true,tags:{CONTROLLER:'1',ZONE:'DECK'}});
+  const deck=shadowView(f.parsed,f.state,f.actions,{cards,list}).s.deck;
+  const count=(d,id)=>d.filter(c=>c.cardId===id).length;
+  assert.equal(count(deck,'VAC_940'),count(before,'VAC_940'));
+  assert.equal(count(deck,'TIME_025t'),2);
+  assert.equal(count(deck,'UNKNOWN_SHADOW'),0);
+});
+
+test('the parser marks entities created inside an effect, not the starting cards',()=>{
+  const L=s=>'D 00:00:00.0000000 GameState.DebugPrintPower() - '+s;
+  const p=parsePower([L('CREATE_GAME'),L('FULL_ENTITY - Creating ID=5 CardID=X'),L('    tag=ZONE value=DECK'),
+    L('BLOCK_START BlockType=POWER Entity=[entityName=x id=5 zone=PLAY zonePos=1 cardId=X player=1] EffectCardId=x EffectIndex=0 Target=0 SubOption=-1'),
+    L('FULL_ENTITY - Creating ID=6 CardID=X'),L('    tag=ZONE value=SETASIDE'),L('BLOCK_END')].join('\n'));
+  assert.ok(!p.entities.get(5).created);
+  assert.equal(p.entities.get(6).created,true);
+});
+
+test('the live summary leaves single-option steps out of the agreement rates',async()=>{
+  const {add,emptyStats}=await import('../src/eval-shadow.mjs');
+  const stats=emptyStats(),row=(legal,agree,rank)=>({mirror:true,legal,agree,jev:{rank},unknown:[]});
+  add(stats,row(1,true,0));add(stats,row(4,true,0));add(stats,row(5,false,2));add(stats,row(6,false,4));
+  assert.deepEqual(stats.mirror,{positions:3,forced:1,matched:3,top1:1,top3:2});
+});

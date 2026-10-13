@@ -10,6 +10,8 @@ import {respectsDHTactics} from './dh-tactics.mjs';
 import {boardEffectAssessments,EFFECT_VERSION} from './effect-state.mjs';
 import {matchupObjective} from './matchup-objective.mjs';
 import {recordShadowDecision,netPick} from './selfplay-shadow.mjs';
+import {criteria} from './describe.mjs';
+import {ask} from './jev.mjs';
 process.loadEnvFile(fileURLToPath(new URL('../.env.local',import.meta.url)));
 const {version:plannerVersion,prepare,askJev,resolve,rulePick,constrainActions,spendFirst,allowsWeaponContinuation,allowsPlanContinuation}=await loadDecisionEngine();
 console.log(`Decision engine: ${plannerVersion}`);
@@ -46,6 +48,12 @@ const PENDING=SHOTS+'pending.jpg';
 // JEV_FOLLOW_NET=1: the self-play network plays instead of only listening. Mulligan and proved lethal stay as they are;
 // when the network has no answer the usual path (rules, then Jev) decides.
 const FOLLOW_NET=process.env.JEV_FOLLOW_NET==='1';
+// JEV_NET_ADVICE=1 (user, 2026-10-14): the network's choice is the default and Jev is shown it. Jev may overrule it
+// when the network could not have weighed an opposing effect or a card it does not know; otherwise the network is followed.
+// The alternatives Jev may overrule with are the ones the rules would have offered.
+const NET_ADVICE=process.env.JEV_NET_ADVICE==='1';
+const ADVICE_INSTRUCTIONS='Choose ONE next action. networkAdvice.choice is the default: a self-play network trained only on this deck against itself chose it. Choose it unless it is wrong for a reason the network cannot see. The network knows the text of the cards in networkAdvice.knownCards only; every other card, including each one in networkAdvice.unknownCards and all opponent cards, it sees as cost, attack and health with no text. It does not know opponent hero powers, secrets, armor gain, board clears, deathrattles, taunt-granting, lifesteal or any other opposing effect. Overrule it only when a visible card text, a known opponent effect or an unknown card makes another option clearly better, for example it attacks into a punishing effect, ignores an engine that must die, overextends into a board clear, or misuses a card it cannot read. When unsure, choose networkAdvice.choice. Respect lethal and survival.';
+const KNOWN=['Chamber of Viscidus','Soulfire','The Soularium','Silverware Golem','Cursed Catacombs','Entropic Continuity','Party Fiend','Platysaur','Wicked Whispers','Boneweb Egg','Disposable Acolytes','Ocular Occultist','Walking Dead','Chronoclaws','Duke of Below','Soul Barrage',"Hand of Gul'dan",'The Coin','Boneweb Spider'];
 const shadow=(s,actions,action,source)=>recordShadowDecision({parsed:s.parsed,state:s.state,actions,action,source});
 // shot(path), when given, saves a picture of the game window: taken before Jev is asked, so it
 // shows the position Jev saw, and filed under the decision's row once the decision is recorded.
@@ -58,7 +66,7 @@ export async function next({shot,skip}={}){
  if(!s.actions.length){queue=[];return {ready:false,state:s.state}}
  const full=s.actions;
  const acts=spendFirst(s.state,full,{admission:trace.admission,trace});
- if(queue.length&&!s.state.choice&&(!FOLLOW_NET||queueLethal)){
+ if(queue.length&&!s.state.choice&&(!(FOLLOW_NET||NET_ADVICE)||queueLethal)){
   const step=queue[0];
   // A legal queued attack still has to obey the current buff/setup ordering.
   // Pure resource drawing remains optional; proved lethal retains priority.
@@ -78,6 +86,29 @@ export async function next({shot,skip}={}){
    await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,rawOptions:rawActions,action:n.action,source:'selfplay_net',net:{value:n.value,top:n.top},latencyMs:0,cost:'0'});
    await shadow(s,full,n.action,'selfplay_net');
    return {ready:true,action:n.action,state:s.state,source:'selfplay_net',latencyMs:0,cost:'0'};
+  }
+ }
+ if(NET_ADVICE&&!p.lethal&&full.length>1){
+  const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
+  if(n){
+   const options=[n.action,...(p.forced?[p.forced.action]:p.acts??[])].filter((a,i,all)=>a&&all.findIndex(b=>b.id===a.id)===i);
+   const advice={choice:n.action.id,valueEstimate:n.value,top:n.top,knownCards:KNOWN,unknownCards:n.unknown};
+   const rulesChoice=p.forced?{id:p.forced.action.id,source:p.forced.source}:null;
+   let result={model:null,source:'net_unopposed',latencyMs:0,answers:{move:{choice:n.action.id}}};
+   if(options.length>1){
+    const request=opts=>ask({board:s.state,strategy:deckFor(s.state).strategy,networkAdvice:advice,rulesChoice,effectAssessments:{version:EFFECT_VERSION,cards:boardEffectAssessments(s.state)}},{move:{type:'choice',instructions:ADVICE_INSTRUCTIONS,criteria:criteria(s.state,options)}},opts);
+    result=await recoverJev(()=>request(),
+     async e=>{
+      try{return {...await request({model:BACKUP,timeoutMs:12000}),source:'backup_model',error:e.message}}
+      catch(e2){return {model:null,source:'net_fallback',latencyMs:0,answers:{move:{choice:n.action.id}},error:`${e.message} | ${BACKUP}: ${e2.message}`}}
+     });
+    const fresh=await inspect();if(fresh.state.decisionFingerprint!==s.state.decisionFingerprint)return {ready:false,reason:'state_changed'};
+   }
+   const action=options.find(a=>a.id===result.answers.move.choice)??n.action;
+   const source=result.source??(action.id===n.action.id?'net_confirmed':'jev_override');
+   await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options,rawOptions:rawActions,net:advice,rulesChoice,action,...result,source});
+   await shadow(s,full,action,source);
+   return {ready:true,action,state:s.state,source,latencyMs:result.latencyMs,cost:result.metadata?.gateway?.cost};
   }
  }
  if(p.forced){

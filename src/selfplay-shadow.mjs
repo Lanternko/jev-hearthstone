@@ -189,7 +189,7 @@ export async function netPick({parsed,state,actions}){
     const ranked=rt.net.rank(view.s,view.legal);
     const i=view.legal.indexOf(ranked.steps[0]?.move);
     if(i<0)return null;
-    return {action:actions[i],value:ranked.value,top:ranked.steps.slice(0,3).map(x=>withNames(view.s,x))};
+    return {action:actions[i],value:ranked.value,unknown:unknownCards(rt.net,view.s),top:ranked.steps.slice(0,3).map(x=>withNames(view.s,x))};
   }catch(e){
     console.warn(`network pick failed: ${e.message}`);
     return null;

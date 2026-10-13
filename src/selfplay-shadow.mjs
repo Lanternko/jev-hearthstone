@@ -113,6 +113,9 @@ export function shadowView(parsed,state,actions,{cards=cardDb(),list=loadList('w
   });
   // The simulator the network learned in calls the Boneweb Egg token 'Spider'; the game says 'Boneweb Spider'.
   for(const b of [...s.me,...s.opp])if(b.name==='Boneweb Spider')b.name='Spider';
+  // The live state marks a temporary card `temporary` (power.mjs); the simulator the network learned in
+  // says `temp`. Unmapped, the network was told "no temporary cards in hand" in every live game.
+  for(const c of s.hand)if(c.raw?.temporary)c.temp=true;
   if(mine.note)notes.push(mine.note);
   s.choice=choiceView(state,s,notes);
   delete s.game;

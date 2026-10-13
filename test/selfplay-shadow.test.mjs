@@ -34,6 +34,13 @@ function fixture(){
   return {parsed:p,state,actions};
 }
 
+test('a temporary card in the live hand reaches the network as a temporary card',()=>{
+  const f=fixture();
+  assert.equal(assertEncoded(shadowView(f.parsed,f.state,f.actions,{cards,list}),net).obs[28],0);
+  f.state.me.hand[0].temporary={expires:'end_of_own_turn'};
+  assert.equal(assertEncoded(shadowView(f.parsed,f.state,f.actions,{cards,list}),net).obs[28],.1);
+});
+
 test('shadow view encodes to the network sizes with finite numbers',()=>{
   const f=fixture(),view=shadowView(f.parsed,f.state,f.actions,{cards,list});
   const e=assertEncoded(view,net);

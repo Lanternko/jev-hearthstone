@@ -90,7 +90,10 @@ export async function next({shot,skip}={}){
  }
  if(NET_ADVICE&&!p.lethal&&full.length>1){
   const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
-  if(n){
+  // The network may not end a turn the rules still have work in: it passed with two 14/14 Dukes
+  // facing one taunt (2026-10-14). Such a turn goes to the ordinary pipeline below.
+  const rulesActs=p.forced?[p.forced.action]:p.acts??full;
+  if(n&&!(n.action.type==='END_TURN'&&!rulesActs.some(a=>a.type==='END_TURN'))){
    const options=[n.action,...(p.forced?[p.forced.action]:p.acts??[])].filter((a,i,all)=>a&&all.findIndex(b=>b.id===a.id)===i);
    const advice={choice:n.action.id,valueEstimate:n.value,top:n.top,knownCards:KNOWN,unknownCards:n.unknown};
    const rulesChoice=p.forced?{id:p.forced.action.id,source:p.forced.source}:null;

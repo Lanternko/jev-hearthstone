@@ -9,6 +9,7 @@ import {createJevRecovery} from './jev-recovery.mjs';
 import {respectsDHTactics} from './dh-tactics.mjs';
 import {boardEffectAssessments,EFFECT_VERSION} from './effect-state.mjs';
 import {matchupObjective} from './matchup-objective.mjs';
+import {recordShadowDecision} from './selfplay-shadow.mjs';
 process.loadEnvFile(fileURLToPath(new URL('../.env.local',import.meta.url)));
 const {version:plannerVersion,prepare,askJev,resolve,rulePick,constrainActions,spendFirst,allowsWeaponContinuation,allowsPlanContinuation}=await loadDecisionEngine();
 console.log(`Decision engine: ${plannerVersion}`);
@@ -42,6 +43,7 @@ const record=async decision=>{
 };
 export const SHOTS=fileURLToPath(new URL('../runtime/shots/',import.meta.url));
 const PENDING=SHOTS+'pending.jpg';
+const shadow=(s,actions,action,source)=>recordShadowDecision({parsed:s.parsed,state:s.state,actions,action,source});
 // shot(path), when given, saves a picture of the game window: taken before Jev is asked, so it
 // shows the position Jev saw, and filed under the decision's row once the decision is recorded.
 // skip(action), when given, takes actions off the menu (loop.mjs: ones the game kept swallowing).
@@ -63,16 +65,17 @@ export async function next({shot,skip}={}){
   const ids=followed(step.before,fromState(s.state,full));
   const action=ids&&actionFor(live,{...step,id:ids.get(step.id)??step.id,targetId:ids.get(step.targetId)??step.targetId});
   const continuation=allowsPlanContinuation??allowsWeaponContinuation;
-  if(action&&(queueLethal||(respectsDHTactics(s.state,acts,action)&&(!continuation||continuation(s.state,full,action,{admission:trace.admission}))))){queue.shift();return {ready:true,action,state:s.state,source:queueLethal?'planned_lethal':'plan',latencyMs:0,cost:'0'}}
+  if(action&&(queueLethal||(respectsDHTactics(s.state,acts,action)&&(!continuation||continuation(s.state,full,action,{admission:trace.admission}))))){queue.shift();const source=queueLethal?'planned_lethal':'plan';await shadow(s,full,action,source);return {ready:true,action,state:s.state,source,latencyMs:0,cost:'0'}}
  }
  queue=[];queueLethal=false;
  const p=prepare(s.state,full,{planner:PLANNER,admission:trace.admission});
  if(p.forced){
   if(s.state.choice?.type==='MULLIGAN'||p.weaponBuff||p.weaponPreservation?.length||p.weaponReplacement||p.turnOrder?.heldAttackIds.length||p.handRetention?.risks.length||p.turnAlternatives?.length||p.temporaryDiscard?.length||p.divineShield?.length||p.chamberIntents?.length||p.combinationEvidence?.lines.length)await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,matchupObjective:matchupObjective(s.state),weaponBuff:p.weaponBuff,weaponPreservation:p.weaponPreservation,weaponReplacement:p.weaponReplacement,turnOrder:p.turnOrder,turnAlternatives:p.turnAlternatives,handRetention:p.handRetention,temporaryDiscard:p.temporaryDiscard,divineShield:p.divineShield,chamberIntents:p.chamberIntents,rawOptions:rawActions,combinationEvidence:p.combinationEvidence,decisionPolicy:p.decisionPolicy,candidateTrace:trace.evidence,...p.forced,latencyMs:0,cost:'0'});
+  await shadow(s,full,p.forced.action,p.forced.source??'forced');
   return {ready:true,...p.forced,state:s.state,latencyMs:0,cost:'0'};
  }
  if(Date.now()-s.mtime>600000)return {ready:false,reason:'stale_log',state:s.state};
- if(p.lethal){queue=p.rest;queueLethal=true;return {ready:true,...p.lethal,state:s.state,latencyMs:0,cost:'0'}}
+ if(p.lethal){queue=p.rest;queueLethal=true;await shadow(s,full,p.lethal.action,p.lethal.source??'lethal');return {ready:true,...p.lethal,state:s.state,latencyMs:0,cost:'0'}}
  s.actions=p.acts;
  const shotTaken=shot&&await shot(PENDING).then(()=>true,()=>false);
  const result=await recoverJev(
@@ -89,5 +92,6 @@ export async function next({shot,skip}={}){
  if(plan)queue=plan.slice(1);
  const row=await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:s.actions,rawOptions:rawActions,combinationEvidence:p.combinationEvidence,decisionPolicy:p.decisionPolicy,candidateTrace:trace.evidence,fodderRelease:trace.fodderRelease,ruleReleases:trace.ruleReleases,matchupObjective:p.objective,weaponBuff:p.weaponBuff,weaponPreservation:p.weaponPreservation,weaponReplacement:p.weaponReplacement,turnOrder:p.turnOrder,turnAlternatives:p.turnAlternatives,handRetention:p.handRetention,temporaryDiscard:p.temporaryDiscard,divineShield:p.divineShield,chamberIntents:p.chamberIntents,resourceTools:p.resourceTools,searchStats:p.searchStats,...(plan?{plan:{id:pick,steps:plan,text:p.crit[pick].description,developmentEvidence:p.crit[pick].developmentEvidence,combination:p.crit[pick].combination}}:{}),action,...result});
  if(shotTaken)await rename(PENDING,`${SHOTS}g${s.state.gameNumber}t${s.state.turn}r${row}.jpg`).catch(()=>{});
+ await shadow(s,full,action,result.source);
  return {ready:true,action,state:s.state,plan:plan&&pick,source:result.source,latencyMs:result.latencyMs,cost:result.metadata?.gateway?.cost};
 }

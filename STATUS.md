@@ -1,3 +1,9 @@
+# 2026-10-13 自戰模型實戰旁聽 shadow mode
+
+- 範圍：新增 `src/selfplay-shadow.mjs`、`src/eval-shadow.mjs`、`test/selfplay-shadow.test.mjs`，`bridge.mjs` 在續走、強制、斬殺與 Jev 回覆後寫 `runtime/shadow.jsonl`；`package.json` 新增 `npm run shadow`。沒有啟動遊戲、沒有呼叫 Gateway、沒有 commit/push，也沒有修改 `src/selfplay-encode.mjs`、`src/selfplay-net.mjs` 或 `models/`。
+- 驗證：`npm test` 636/636。`npm run shadow` 重放 262 局、6212 個盤面，真實動作對得到 6211/6212；鏡像 522 盤面 top1 58.6%、top3 83.5%，非鏡像 5690 盤面 top1 48.6%、top3 79.4%；最常見 unknown 是 Felbeast（2293 次）、Murmy。Codex 實作後由 Claude 複查並改三處：對不到的盤面原本被丟掉不計、場上的 Boneweb Spider 改名成模擬器用的 Spider（原本被當成不認識的牌 1008 次）、牌庫補佔位牌時記 note。`npm run shadow -- live` 讀 `runtime/shadow.jsonl` 做同樣統計。
+- 已知限制：`discardCount` 還找不到穩定 Power.log 來源，暫填 0 並在 notes 標記；牌庫用牌表扣除已離開牌庫的我方可見/已知實體，長度不合時修剪或補 unknown 佔位牌；旁聽只記錄、不影響 Jev 出牌。
+
 # 2026-10-13 模型上傳：v5 匯出成 Node 可讀的 JSON，附實戰旁聽交接文件
 
 - 範圍：新增 `models/selfplay/warlock-discard-v5.{json,pt}`（`runtime/selfplay/2026-10-13-gen2` 第 800 輪）、`src/selfplay-net.mjs`（Node 讀取與算分）、`train/export.py`、`test/selfplay-net.test.mjs`（2 則）與 `test/fixtures/selfplay-net-v5.json`、`docs/selfplay-shadow-handoff.md`。沒動訓練、搜尋、模擬器、實戰路徑。這一批連同先前未 commit 的自戰檔案一起 commit 並 push。

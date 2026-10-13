@@ -1655,3 +1655,13 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 - 已排除：HS 客戶端凍結（PowerTaskList 對 GameState 落後≤14s）；Jev 呼叫（停頓後第一筆延遲0.9–1.2s正常、HTTP 有5s abort）；Power.log 解析器 CPU（50場重放合計約0.8s、單塊最壞≤45ms）；系統睡眠/時鐘跳變（僅12:21一次2.6s NTP 校時，不在任何停頓窗口）；停頓窗口內的 Windows 事件（g29/g49 零事件，g2/g33/g50 只有無關背景事件）。Wi-Fi 驅動 mtkwlex 事件（170筆，成群出現）與 g2/g29/g49/g50 不重疊，但這只是沒有證據，不是排除。
 - 未知：bot 端事件迴圈被擋或程序被凍結（例如 HS Logs 目錄 readdir/stat/open/read 被防毒或 IO 拖慢、libuv 執行緒池被佔滿），對比某個 await 永不返回（win.shot / worker 回覆遺失 / Jev 後的 inspect）。已證實的根因：loop.mjs、bridge.mjs、win.mjs、jev-recovery.mjs 沒有任何逾時或看門狗（只有 Jev 的 HTTP 有 abort），停頓若發生在我方回合，活的對局就是凍結到自己恢復或被 runner 殺掉。
 - 下一步（未做，等使用者同意）：先插樁——階段標記＋看門狗輸出「STALL: in <phase> for N s」＋事件迴圈延遲計時器，用來分辨「事件迴圈被擋」與「await 懸住」；再補 win.mjs 的逐呼叫逾時（逾時就重啟 worker）、bridge.mjs/jev-recovery.mjs 的 shot 與 Jev await 逾時、loop 層的無進展看門狗；順手處理換牌階段重複呼叫 Jev（約412次，每250ms 重問一次）與 runner 的引擎預設值。未commit。
+
+
+## 2026-10-14：網路上天梯 8 場的檢討
+- 10-13 由自我對弈網路（warlock-discard-v5，JEV_FOLLOW_NET=1）打開放天梯 8 場，2 勝 6 敗。
+- 問題：選錯是網路爛，還是不認得的牌被跳過。結論：主要是網路本身弱。程式沒有跳過牌，不認得的牌都編進同一個「其他」欄位。
+- 不認得的手牌 28 次可打只選 2 次（認得的 393 次選 111 次），但 8 場只出現 7 張。64 次結束回合有 18 次還有事可做，其中 10 次留著認得的牌，2 次只剩不認得的牌。
+- 第 5、7 場慢開局都是認得的牌：2 點法力選 Life Tap 不下 Boneweb Egg。
+- 對手的牌面效果、職業、英雄技能不在網路輸入裡；317 個決策有 252 個場上有不認得的名字。
+- 沒有對照組，「選錯」是人看牌面判斷的。沒改程式。詳見 docs/net-ranked-review-20261013.md。
+- JEV_FOLLOW_NET 的程式（src/bridge.mjs、src/selfplay-shadow.mjs）仍未 commit。

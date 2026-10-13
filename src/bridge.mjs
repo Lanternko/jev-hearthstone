@@ -9,7 +9,7 @@ import {createJevRecovery} from './jev-recovery.mjs';
 import {respectsDHTactics} from './dh-tactics.mjs';
 import {boardEffectAssessments,EFFECT_VERSION} from './effect-state.mjs';
 import {matchupObjective} from './matchup-objective.mjs';
-import {recordShadowDecision} from './selfplay-shadow.mjs';
+import {recordShadowDecision,netPick} from './selfplay-shadow.mjs';
 process.loadEnvFile(fileURLToPath(new URL('../.env.local',import.meta.url)));
 const {version:plannerVersion,prepare,askJev,resolve,rulePick,constrainActions,spendFirst,allowsWeaponContinuation,allowsPlanContinuation}=await loadDecisionEngine();
 console.log(`Decision engine: ${plannerVersion}`);
@@ -43,6 +43,9 @@ const record=async decision=>{
 };
 export const SHOTS=fileURLToPath(new URL('../runtime/shots/',import.meta.url));
 const PENDING=SHOTS+'pending.jpg';
+// JEV_FOLLOW_NET=1: the self-play network plays instead of only listening. Mulligan and proved lethal stay as they are;
+// when the network has no answer the usual path (rules, then Jev) decides.
+const FOLLOW_NET=process.env.JEV_FOLLOW_NET==='1';
 const shadow=(s,actions,action,source)=>recordShadowDecision({parsed:s.parsed,state:s.state,actions,action,source});
 // shot(path), when given, saves a picture of the game window: taken before Jev is asked, so it
 // shows the position Jev saw, and filed under the decision's row once the decision is recorded.
@@ -55,7 +58,7 @@ export async function next({shot,skip}={}){
  if(!s.actions.length){queue=[];return {ready:false,state:s.state}}
  const full=s.actions;
  const acts=spendFirst(s.state,full,{admission:trace.admission,trace});
- if(queue.length&&!s.state.choice){
+ if(queue.length&&!s.state.choice&&(!FOLLOW_NET||queueLethal)){
   const step=queue[0];
   // A legal queued attack still has to obey the current buff/setup ordering.
   // Pure resource drawing remains optional; proved lethal retains priority.
@@ -69,6 +72,14 @@ export async function next({shot,skip}={}){
  }
  queue=[];queueLethal=false;
  const p=prepare(s.state,full,{planner:PLANNER,admission:trace.admission});
+ if(FOLLOW_NET&&!p.lethal){
+  const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
+  if(n){
+   await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,rawOptions:rawActions,action:n.action,source:'selfplay_net',net:{value:n.value,top:n.top},latencyMs:0,cost:'0'});
+   await shadow(s,full,n.action,'selfplay_net');
+   return {ready:true,action:n.action,state:s.state,source:'selfplay_net',latencyMs:0,cost:'0'};
+  }
+ }
  if(p.forced){
   if(s.state.choice?.type==='MULLIGAN'||p.weaponBuff||p.weaponPreservation?.length||p.weaponReplacement||p.turnOrder?.heldAttackIds.length||p.handRetention?.risks.length||p.turnAlternatives?.length||p.temporaryDiscard?.length||p.divineShield?.length||p.chamberIntents?.length||p.combinationEvidence?.lines.length)await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,matchupObjective:matchupObjective(s.state),weaponBuff:p.weaponBuff,weaponPreservation:p.weaponPreservation,weaponReplacement:p.weaponReplacement,turnOrder:p.turnOrder,turnAlternatives:p.turnAlternatives,handRetention:p.handRetention,temporaryDiscard:p.temporaryDiscard,divineShield:p.divineShield,chamberIntents:p.chamberIntents,rawOptions:rawActions,combinationEvidence:p.combinationEvidence,decisionPolicy:p.decisionPolicy,candidateTrace:trace.evidence,...p.forced,latencyMs:0,cost:'0'});
   await shadow(s,full,p.forced.action,p.forced.source??'forced');

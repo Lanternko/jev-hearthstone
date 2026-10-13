@@ -1664,4 +1664,4 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 - 第 5、7 場慢開局都是認得的牌：2 點法力選 Life Tap 不下 Boneweb Egg。
 - 對手的牌面效果、職業、英雄技能不在網路輸入裡；317 個決策有 252 個場上有不認得的名字。
 - 沒有對照組，「選錯」是人看牌面判斷的。沒改程式。詳見 docs/net-ranked-review-20261013.md。
-- JEV_FOLLOW_NET 的程式（src/bridge.mjs、src/selfplay-shadow.mjs）仍未 commit。
+- JEV_FOLLOW_NET 的程式（src/bridge.mjs、src/selfplay-shadow.mjs）已在同日 commit；預設關閉，641/641 測試通過。

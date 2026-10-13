@@ -179,6 +179,23 @@ export async function recordShadowDecision({parsed,state,actions,action,source,o
   }
 }
 
+// JEV_FOLLOW_NET=1 (bridge.mjs): the network's first choice among the same options the shadow log ranks.
+// null when it has no view of the position (mulligan, not running) or anything goes wrong.
+export async function netPick({parsed,state,actions}){
+  try{
+    const rt=await runtime();
+    const view=shadowView(parsed,state,actions,rt);
+    if(!view)return null;
+    const ranked=rt.net.rank(view.s,view.legal);
+    const i=view.legal.indexOf(ranked.steps[0]?.move);
+    if(i<0)return null;
+    return {action:actions[i],value:ranked.value,top:ranked.steps.slice(0,3).map(x=>withNames(view.s,x))};
+  }catch(e){
+    console.warn(`network pick failed: ${e.message}`);
+    return null;
+  }
+}
+
 export function assertEncoded(view,net){
   const e=encode(view.s,view.legal,net.vocab);
   if(e.obs.length!==208)throw Error(`obs length ${e.obs.length}`);

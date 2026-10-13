@@ -12,7 +12,7 @@
 
 - 對局紀錄：`runtime/ranked-2026-10-13T15-54-11-825Z/`（不在版本庫內），8 場，2 勝 6 敗。
 - 模型：`models/selfplay/warlock-discard-v5.json`，只跟棄牌術自己對練過。
-- 由網路出牌：`JEV_FOLLOW_NET=1`。這個開關在 `src/bridge.mjs` 和 `src/selfplay-shadow.mjs`，寫這份文件時還沒 commit。換牌和已證明的斬殺仍走舊路徑。
+- 由網路出牌：`JEV_FOLLOW_NET=1`。這個開關在 `src/bridge.mjs` 和 `src/selfplay-shadow.mjs`，預設關閉。換牌和已證明的斬殺仍走舊路徑。
 - 樣本：8 場共 317 個由網路決定的動作，搭配 `runtime/shadow.jsonl` 的局面評分與前三名機率。
 
 | 場 | 對手 | 結果 |

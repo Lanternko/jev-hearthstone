@@ -7,6 +7,7 @@ import * as win from '../src/win.mjs';
 const limitArg=process.argv.find(a=>a.startsWith('--games='));
 const gameLimit=limitArg?Number(limitArg.slice('--games='.length)):null;
 if(gameLimit!==null&&(!Number.isInteger(gameLimit)||gameLimit<1))throw Error('Invalid --games limit');
+const winArg=process.argv.find(a=>a.startsWith('--wins='));const winLimit=winArg?Number(winArg.slice('--wins='.length)):null;
 // 2026-10-09 batch: a hard-coded default here lagged two versions behind and ran all 50 games on fodder-hold-v1.
 const {defaultVersion}=await import('../src/planner-version.mjs');
 process.env.JEV_SEARCH_VERSION??=defaultVersion;
@@ -48,6 +49,7 @@ try {
  if(initialStatus==='RUNNING')throw Error('An existing game is running; refusing to queue over it');
  while(true){
   if(gameLimit!==null&&state.games>=gameLimit){state.stopReason='game_limit_reached';break}
+  if(winLimit!==null&&state.wins>=winLimit){state.stopReason='win_limit_reached';break}
   if(await stopRequested()){state.stopReason='user_stop';break}
   const ordinal=state.games+1;state.currentGame=ordinal;state.phase='queueing';await save();
   let started=false;

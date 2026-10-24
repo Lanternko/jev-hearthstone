@@ -16,6 +16,7 @@
     "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
     "selfplay": "node src/selfplay.mjs",
     "selfplay-train": "python train/ppo.py",
+    "bc-export": "node src/bc-export.mjs",
     "eval-pick": "node src/eval-pick.mjs",
     "eval-silverfish": "node src/eval-silverfish.mjs",
     "eval-strength": "node src/eval-strength.mjs",

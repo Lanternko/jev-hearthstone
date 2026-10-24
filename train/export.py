@@ -17,6 +17,7 @@ from ppo import Arena, load, padded, tensors
 def main(path, out, check=None):
     net, ck = load(path)
     doc = {k: ck[k] for k in ('obs', 'act', 'width', 'names', 'decks', 'iters')}
+    doc['timers'] = bool(ck.get('timers', False))
     doc['tensors'] = {k: {'shape': list(v.shape), 'data': base64.b64encode(v.float().numpy().astype('<f4').tobytes()).decode()}
                       for k, v in net.state_dict().items()}
     with open(out, 'w') as f:
@@ -32,7 +33,7 @@ def main(path, out, check=None):
         if len(rows) < 12:
             e = arena.envs[len(rows) % 8]
             i = len(rows) % 8
-            rows.append({'obs': e['obs'], 'acts': e['acts'], 'logits': logits[i, :len(e['acts'])].tolist(), 'value': value[i].item()})
+            rows.append({'obs': e['obs'].tolist(), 'acts': e['acts'].tolist(), 'logits': logits[i, :len(e['acts'])].tolist(), 'value': value[i].item()})
         arena.step(logits.argmax(-1).tolist())
     arena.close()
     with open(check, 'w') as f:

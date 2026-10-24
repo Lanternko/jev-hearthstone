@@ -1,3 +1,269 @@
+# 2026-10-24 encoder 看得到計時器了；新的 zoo-v2（`--timers`）贏 zoo-v1
+
+- 起因：上一條的量測發現價值網路看不到 Ritual／審判的計時器和 Kazakus 已選的效果，搜尋因此幫不了動物園。
+- 程式（預設關閉，舊模型照舊編碼）：
+  - `src/selfplay-encode.mjs`：`vocabulary(..., {timers})`。開啟後，obs 尾端多 33 格：3 塊 × 11 種延遲效果（`summon`、`cthun`、`CAP_405t1..t9`）。
+    - 第 0 塊是自己的計時器，第 1 塊是對手的，每格加 1/剩餘回合。
+    - 第 2 塊是手上審判卡的效果，每格加 1/(回合數+1)；Kazakus 已選的效果，每格加 1。
+  - `src/selfplay-env.mjs`（`Arena({timers})`、`dims.timers`）、`src/selfplay-net.mjs`（讀 JSON 的 `timers`）、`train/export.py`（寫 `timers`）。
+  - `train/ppo.py --timers`：`--resume` 一個沒有計時器的模型時，第一層補零欄位。checkpoint 存 `timers`。`--eval --vs` 遇到兩個網路 obs 不同時改叫人用 `selfplay-match.mjs`。
+  - `test/selfplay-env.test.mjs` 新增 2 則：計時器格的數值和舊前綴不變；Arena 開 timers 時 dims、狀態長度正確。`npm test` 全綠。
+- 訓練（5090，從加寬的 zoo-v1 接著，兩副牌、`--swap --timers --seed 1`）：
+  - `zoo-t-distill`：`--distill --tau 0.01 --lr 3e-4 --mono 1 --iters 150 --workers 6`（設定同舊 zoo-v2 再加 `--timers`）。輸出 `runtime/selfplay/2026-10-24-zoo-t-distill`。
+  - `zoo-t-ppo`：PPO 300 輪，`--snapshot-every 10 --pool 20 --workers 5`。輸出 `runtime/selfplay/2026-10-24-zoo-t-ppo`。
+- 直接驗證價值網路：同一盤面（動物園對棄牌，種子 7），加一個「下回合觸發的 Ritual of Summoning」計時器：
+  - zoo-v1：−0.1751 → −0.1751，完全看不到。
+  - 新 zoo-v2：−0.1373 → 0.5295。
+- 搜尋對動物園席的增益（同一模型自己動物園對棄牌，`--look a`，先後手各 300 局）：
+
+  | 模型 | 不搜尋 | 搜尋 | 差 |
+  |---|---|---|---|
+  | zoo-v1 | 45.0% | 41.3% | −3.7 |
+  | zoo-t-ppo | 42.2% | 50.7% | +8.5 |
+  | zoo-t-distill | 35.7% | 44.5% | +8.8 |
+
+  zoo-v1 在 2000 局的量測是 +0.4，所以兩個新模型的動物園席都開始從搜尋受惠。
+- 對打（`selfplay-match.mjs`，先後手各 1000 局，貪婪，Wilson 95%）：
+
+  | 對戰 | zoo-t-distill | zoo-t-ppo | 舊 zoo-v2 | 門檻 |
+  |---|---|---|---|---|
+  | 動物園鏡像，對 zoo-v1 | **57.6%**（55.4–59.7） | 56.9% | 43.3% | > 50% |
+  | 新版動物園 對 zoo-v1 棄牌 | **47.9%**（45.7–50.1） | 46.0% | — | zoo-v1 自己 42.6% |
+  | 新版棄牌 對 zoo-v1 動物園 | **67.5%**（65.5–69.6） | 60.9% | — | zoo-v1 自己 57.4% |
+  | 兩副混合，對 zoo-v1 | **57.7%** | 53.5% | 50.1% | > 50% |
+  | 新版動物園 對 v5 棄牌 | **36.0%**（33.9–38.1） | 34.2% | 26.4% | zoo-v1 31.8%（29.8–33.9） |
+
+- 結論：zoo-t-distill 每一項都贏 zoo-v1，區間都不重疊。訓練中的評估：對隨機 99.4%、對 rush 87.7%。
+- 匯出：`models/selfplay/warlock-zoo-v2.pt`／`.json` = zoo-t-distill 第 650 輪。舊的 zoo-v2 改名為 `warlock-zoo-v2-blind`。都沒有 commit。
+- 對打輸出在 5090 的 `~/side_projects/jev-hearthstone/runtime/zoo-t-eval/`。
+- 下一步：
+  - Twilight Egg、Cursed Catacombs 這類「現在付、之後收」的牌還沒單獨驗證。
+  - 可以從新 zoo-v2 再做一代蒸餾。
+  - 現在動物園席也能用搜尋當老師了。
+
+# 2026-10-24 搜尋對兩副牌各值多少：棄牌 +13 分、動物園 +0；根因候選是 encoder 看不到 Ritual／審判的計時器
+
+- 起因：zoo-v2 的蒸餾讓棄牌駕駛變強、動物園駕駛變弱。要分開量 look ahead（蒸餾老師：2 次發牌、束寬 8、順序規則、prior 0.001）對兩副牌各值多少，並找出動物園沒受惠的原因。
+- 程式：
+  - `src/selfplay-match.mjs` 新增 `--look a|b|both`、`--samples`、`--beam`、`--prior`、`--json`。新增 `lookStep()`：用 JS 的價值網路驅動 `src/selfplay-search.mjs` 的 search；選步方式和發牌種子都和 `ppo.py` 的 `think`、`selfplay-env` 的 `plan` 相同。`match()` 多了 `look:[席0,席1]` 和 `onLook`。
+  - `src/selfplay-net.mjs` 的 `loadNet` 多回傳 `value(obs)`。
+  - `test/selfplay-match.test.mjs` 新增 2 則：只有開搜尋的那一席會被搜尋，而且選的是最高分；`value()` 等於 forward 的 value。
+- 量測：
+  - 5090，`~/tmp/searchgain/`。每組先後手各 1000 局，種子 1–1000，每組都用同一批種子。
+  - 括號是 Wilson 95% 區間；勝率是 A 那一席的，A 是第一個模型。
+
+  | 組別（A 對 B） | A 先手 | A 後手 | 合計 |
+  |---|---|---|---|
+  | zoo-v1 動物園 對 zoo-v1 棄牌（都不搜尋） | 47.7% | 37.5% | 42.6%（40.4–44.8） |
+  | zoo-v1 動物園加搜尋 對 zoo-v1 棄牌 | 46.8% | 39.3% | **43.0%（40.9–45.2）**，+0.4 |
+  | zoo-v1 棄牌加搜尋 對 zoo-v1 動物園 | 76.1% | 65.1% | **70.6%（68.6–72.6）**，不加是 57.4%，+13.2 |
+  | v5 棄牌 對 zoo-v1 動物園（都不搜尋） | 72.8% | 63.4% | 68.1%（66.0–70.1） |
+  | v5 棄牌加搜尋 對 zoo-v1 動物園 | 67.1% | 60.3% | 63.7%（61.6–65.8），−4.4 |
+  | v5 棄牌加搜尋 對 v5 棄牌 | 58.3% | 51.1% | 54.7%（52.5–56.9） |
+  | zoo-v1 棄牌加搜尋 對 zoo-v1 棄牌 | 38.8% | 39.6% | 39.2%（37.1–41.4） |
+  | zoo-v1 動物園加搜尋 對 zoo-v1 動物園 | 51.0% | 33.7% | 42.4%（40.2–44.5） |
+
+  - zoo-v1 在自己的訓練對局（動物園對棄牌）裡，兩副混合的增益是 (43.0+70.6)/2 = 56.8%。和 zoo-v2 session 用 Python 量的 55.0%（1000 局）一致，所以 JS 版搜尋和 `ppo.py` 的一樣。
+  - 搜尋只在價值網路熟悉的對局有用。zoo-v1 沒練過的鏡像、v5 沒看過的動物園牌，搜尋反而變差：價值網路在陌生的盤面上不可靠，搜尋照著它選，還不如策略網路本身。
+  - v5 加搜尋對自己只有 54.7%，低於當初 v1 的 62–66%。v5 本身就是蒸餾出來的，老師能教的已經吸收掉大半。這和「棄牌的增益」不衝突：同一套搜尋在 zoo-v1 的棄牌席上加了 13 分。
+- 搜尋改掉網路選擇的比例（zoo-v1 對 zoo-v1，搜尋那一席，各 400 局）：
+  - 動物園 39.5%，棄牌 39.0%，兩副差不多。
+  - 從被改掉的盤面隨機抽樣，兩種選擇各實打 100 局（重新發暗牌，之後雙方都用 zoo-v1 貪婪出牌）。勝率差＝搜尋選的減網路選的：
+    - 動物園 +0.1 ± 0.9 分，292 個盤面，改好和改壞各 42 個；
+    - 棄牌 +1.9 ± 1.0 分，374 個盤面，改好 75 個、改壞 38 個。
+  - 動物園被搜尋改掉的選擇裡，好壞剛好抵銷。
+- 根因候選（有證據）：`src/selfplay-encode.mjs` 的 `observe()` 沒有讀 `s.timers`、`s.them.timers`，也沒有讀審判卡帶的 `c.trial.effects` 和 `s.kaz`。
+  - 直接驗證：同一個盤面加上計時器（Ritual 剩 1 回合、審判剩 2 回合），編出來的 obs 逐位相同，價值都是 −0.3007。
+  - 模擬器本身是對的：計時器會觸發，搜尋那一席有 28 次用 C'thrax Brute 攻擊，也出現 166 次 C'Thun 能力選擇。斷掉的地方在搜尋只推到本回合結束，剩下交給價值網路，而價值網路看不到兩回合後才生效的東西。
+  - 結果是 Ritual 被壓低：
+
+    | 卡 | 在手上的局 | 網路首選打它的決策 | 搜尋同意 | 搜尋實際打出（每局） |
+    |---|---|---|---|---|
+    | Ritual of Summoning | 64% | 398 | 45% | 0.48 |
+    | Ritual of C'Thun | 57% | 275 | 57% | 0.52 |
+    | Godfather Kazakus | 36% | 114 | 64% | 0.30 |
+    | Tachyon Barrage | 60% | 438 | 41% | 0.62 |
+    | Cursed Catacombs | 56% | 396 | 50% | 0.64 |
+
+  - 實打驗證：在網路要打 Ritual、搜尋改打別的盤面，各實打 100 局。
+    - Ritual of Summoning：288 個盤面，搜尋的選擇少贏 4.0 ± 1.3 分；改壞 100 個，改好 22 個。
+    - Ritual of C'Thun：122 個盤面，少贏 2.5 ± 1.3 分；改壞 31 個，改好 9 個。
+  - 例子：
+    - 第 9026 局第 7 回合，3 費。手牌 Cult Neophyte、Darkest Depths、Ruinous Velocidrake、Ritual of Summoning；場上 Platysaur 1/2；對手空場，血量 29 對 23。網路打 Ritual of Summoning（搜尋分數 0.346），搜尋改打 Darkest Depths（0.610）。實打結果：Ritual 64%，Depths 34%。
+    - 第 9005 局第 6 回合，2 費。場上 Timehopper 6/2、Egg 2/1、Platysaur 1/2，對手空場。網路打 Ritual of Summoning（−0.052），搜尋改打 Tachyon Barrage（0.055）。實打結果：65% 對 38%。
+    - 第 9108 局第 11 回合，剩 1 費。場上兩隻 Velocidrake 5/2，對手空場。網路打 Ritual of C'Thun（0.495），搜尋選直接結束回合（0.559）。實打結果：82% 對 57%。
+  - Kazakus：
+    - 選第一、第二個效果時，三個選項走到的盤面在網路看來完全一樣（`s.kaz` 不在 obs 裡），搜尋把它們併成同一個節點。121/121 次三個選項分數相同，最後只能照網路原本的選擇。
+    - 選審判長度時，搜尋只看得到牌名，看不到效果。它把網路的 Grueling（1 回合）改成 Unending（4 回合）53 次，把 Rushed 改成 Unending 26 次。
+  - 這些只解釋了一部分。隨機抽樣裡的 Ritual 類只佔動物園改動的一成多，其他像 Twilight Egg 改成結束回合（112 次）、Cursed Catacombs 改成結束回合（86 次）也是「現在付出、之後才回收」。這類在估值上同樣吃虧，但還沒有單獨驗證。
+- 下一步建議：
+  - 修 encoder：obs 加上雙方的計時器（剩餘回合、效果種類：summon／cthun／trial 加上兩個效果）、手上審判卡的效果、選第二個效果時的 `s.kaz.first`。Kazakus 選效果時的 key 也就會分開。
+  - 改了 obs 維度後，要從 zoo-v1 接著做一段 PPO，讓價值網路學會這些格子，再重量動物園席加搜尋的增益。這次的 `--look` 可以直接量：增益要明顯大於 +0.4 才值得再蒸餾。
+  - 修好之前，蒸餾只用棄牌席的目標比較安全，動物園席照 PPO。
+  - 搜尋只在價值網路熟悉的對局有用，所以蒸餾不要放進沒練過的牌組組合。
+- 驗證：`npm test` 683/683（這次加 2 則；主 session 同時在改 encoder，另外的測試是它加的）。
+- 未 commit，沒有開遊戲，沒有呼叫 Gateway，`runtime/ranked-continuous.mjs`、`src/bc-export.mjs` 沒碰。對局和診斷輸出在 5090 的 `~/tmp/searchgain/`（`out/`、`diag/`、`roll/`）。
+
+# 2026-10-24 zoo-v2：動物園術搜尋蒸餾 150 輪（5090），結果退步；訓練加了 `--swap` 讓兩副牌輪流先手
+
+- 先後手：
+  - zoo-v1 的 PPO 訓練中，動物園永遠先手。`Arena` 照 `lists` 的順序排座位，0 號位先手；網路兩副牌都駕駛，但只練過一種先後手。
+  - 修正：
+    - `train/ppo.py` 新增 `--swap`，只用在訓練用的 arena；`Arena`、`Pool`、`make` 多帶一個 `swap` 參數。
+    - `src/selfplay-env.mjs` 的 reset 新增 `swap:true`：種子是奇數的局，第二副牌坐先手；詞彙不變。
+    - 不帶 `--swap` 時行為不變。訓練中的評估不帶 swap，讀數可以和以前比。
+  - 測試：`test/selfplay-env.test.mjs` 新增 1 則，共檢查三件事：
+    - 奇數種子時換成第二副牌先手；
+    - 詞彙和維度不變；
+    - 6 桌拆成 2+4 的 hold arena，600 步內和單一 arena 逐一相同。
+  - 一致性：本機 distill 2 輪，`--workers 1` 和 `--workers 3` 的權重、log 逐位相同。CUDA 上沒有重驗：swap 只改 node 端的發牌。
+- 訓練：
+  - 指令：`python train/ppo.py --decks warlock-zoo warlock-discard --distill --tau 0.01 --lr 3e-4 --mono 1 --resume models/selfplay/warlock-zoo-v1.pt --iters 150 --swap --workers 20 --device cuda --eval-every 10 --eval-games 512 --keep-every 10 --lag 50 --seed 1`。
+  - 設定沿用 v4，另加 `--mono 1`（v4m／v5 線，不影響強度）。
+  - 5090 上 18:37 開始，共 1843 秒（約 31 分鐘）。一般輪約 10 秒，含評估的輪 18–30 秒。
+  - 輸出：5090 的 `runtime/selfplay/2026-10-24-zoo-v2`，也存了診斷用的 `diag-*.txt`。
+- 匯出：`models/selfplay/warlock-zoo-v2.pt`（第 650 輪的 `policy.pt`）和 `.json`。zoo-v1、v5 沒動。之後改名為 `warlock-zoo-v2-blind`，`warlock-zoo-v2` 換成看得到計時器的新版（見最上面的條目）。
+- 結果（貪婪；網路駕駛動物園；每種先後手 1000 局，括號是 Wilson 95% 區間）：
+
+  | 對手 | zoo-v1 | zoo-v2 |
+  |---|---|---|
+  | v5 駕駛棄牌 | 31.8%（29.8–33.9） | 26.4%（24.5–28.3） |
+  | 快攻腳本棄牌 | 82.9%（81.2–84.5） | 79.6%（77.8–81.3） |
+  | 隨機棄牌 | 99.1%（98.6–99.4） | 98.5%（97.9–99.0） |
+
+  - zoo-v2 對 zoo-v1：
+    - 動物園鏡像 43.3%（41.1–45.5）；
+    - 棄牌鏡像 53.3%（51.1–55.4）；
+    - 兩副混合 50.1%（2000 局）。
+  - zoo-v1 加搜尋對自己只有 55.0%（1000 局）。棄牌術當時是 62–66%。
+  - zoo-v1 欄的快攻、隨機數字是用同一套跑法重新量的。之前記的 86.2% 是只算先手，這次先手是 86.8%。
+- 判讀：
+  - 蒸餾讓棄牌駕駛變強、動物園駕駛變弱，總強度沒變。
+  - 原因大概是搜尋對動物園幫助很小，可能是延遲生效的 Ritual／Kazakus 審判和多段選擇。
+  - zoo 的基準仍是 zoo-v1。細節和下一步在 `docs/selfplay-versions.md` 的「zoo-v2」。
+- 下一步：先分開量搜尋對兩副牌各有多少幫助，再決定要修搜尋，還是蒸餾時只用棄牌那一席的目標。
+- 驗證：`npm test` 679/679（原本 678，加 1 則）。
+- 未 commit，沒有開遊戲，沒有呼叫 Gateway，`runtime/ranked-continuous.mjs` 沒碰。
+
+# 2026-10-24 自戰訓練的 node 環境分成多個 worker（`--workers`），搜尋的 ask 也改二進位
+
+- 起因：zoo-v2 要走搜尋蒸餾（`--distill`），每步都要在 node 裡做 look ahead，單一 node 子程序在 5090 上每輪約 38 秒。
+- 範圍：
+  - `train/ppo.py`：
+    - 新增 `--workers N`（預設 1）。`--envs` 張桌子依序平均分給 N 個 node 子程序（`Pool`）。`step`、`plan`、`values` 先送給所有 worker，再一起收回覆。
+    - 結束的局不在 worker 裡馬上重發，等所有 worker 都回覆後，由 Python 依「單一程序會用的順序」配種子再發（`deal`）。所以每桌的牌局、views 的順序、網路看到的每一個 batch 都和 `--workers 1` 相同。
+    - 訓練的收集（PPO 和 `--distill`）、`evaluate`、`duel`（含 `--eval`、`--vs`）都會用到 workers。`--audit`、`--probe`、`--compare` 還是單一程序。
+    - `--workers 1` 走原本的 `Arena`，行為不變。reset 多帶一個 `hold:false`，node 端不受影響。
+    - `Arena` 拆成 `send`／`recv`／`started`，`call` 還是原來的介面。
+  - `src/selfplay-env.mjs`：
+    - reset 新增 `"hold":true`：局結束時回傳終局的 view 加上 `ended`，桌子會等 `{"cmd":"deal","tables":[...],"seeds":[...]}` 才發新局。等待中的桌子如果收到 `step`，會先報錯，不會先動到其他桌。不帶 `hold` 時和以前一樣。
+    - `bin` 模式下，look ahead 的 `{"ask":[...]}` 改成 `{"askBin","asked"}`（float32 base64）。剖析顯示 distill 每輪 50 秒中，Python 解析 ask 的 JSON 加上 `torch.tensor(list)` 佔了約 33 秒。不帶 `bin`（`train/probes/quiz.py`）時不變。
+  - `test/selfplay-env.test.mjs` 新增 2 則：
+    - 6 桌拆成 2+4 的 hold arena，依序配種子，600 步內每個 view 都和單一 arena 相同（無對手與 rush 都測）。
+    - 打包後的 ask 等於原本 states 的 float32 值。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway，沒有產生新模型。`runtime/ranked-continuous.mjs` 沒碰。
+- 用法：`python train/ppo.py --decks warlock-zoo warlock-discard --distill --resume models/selfplay/warlock-zoo-v1.pt --workers 20 --device cuda ...`
+- 正確性：用固定種子比對 `--workers 1` 和 `--workers N`，PPO 與 distill 各收 2 批：每筆決策（obs、acts、target／動作、logp、adv、z）、局數、回合數，以及之後 40 局對 rush 的評估，全部逐位相同。
+  - 本機 CPU：N = 2、3、5、24 都相同。
+  - 5090 CUDA：N = 5、20 都相同。
+  - ask 改二進位前後，本機 distill workers 1 的結果一樣：1236 筆決策、局數 [15, 11]、評估 28-0-12。
+- 5090：Intel Core Ultra 7 265K，20 個實體核心，沒有超執行緒（`nproc` 20）。量測前負載約 0.1。
+- 速度（5090、`--envs 128 --batch 8192 --device cuda`，從 zoo-v1 接著跑，結果放 5090 的 `~/tmp/workers-bench/`）：
+  - 每輪秒數取第 2 輪。第 1 輪多了暖機，distill 的訓練視窗也還只有 1 批。
+  - 每秒步數＝每秒決策數。
+  - GPU 使用率是 `nvidia-smi` 每 0.5 秒取樣的平均，含最後一輪的評估，是約略值。
+
+  | 模式 | workers | ask 傳輸 | 每輪秒數 | 每秒步數 | GPU 平均（峰值） |
+  |---|---|---|---|---|---|
+  | distill | 1 | JSON | 37.8 | 219 | 1%（14%） |
+  | distill | 5 | JSON | 23.1 | 359 | 1%（38%） |
+  | distill | 10 | JSON | 21.2 | 391 | 2%（39%） |
+  | distill | 20 | JSON | 20.1 | 412 | 1%（15%） |
+  | distill | 1 | 二進位 | 27.9 | 297 | 1%（32%） |
+  | distill | 5 | 二進位 | 12.3 | 672 | 3%（23%） |
+  | distill | 10 | 二進位 | 10.4 | 799 | 4%（38%） |
+  | distill | 20 | 二進位 | 9.4 | 881 | 4%（39%） |
+  | distill（`--envs 256`） | 20 | 二進位 | 9.3 | 883 | 4%（20%） |
+  | PPO | 1 | — | 0.8–0.9 | 9,400–10,300 | 8%（22%） |
+  | PPO | 10 | — | 0.8–0.9 | 9,400–9,800 | 8%（33%） |
+  | PPO | 20 | — | 0.7–0.9 | 9,300–11,500 | 12%（34%） |
+
+  - distill 從 37.8 秒降到 9.4 秒，快約 4 倍。
+  - PPO 本來就只要約 0.8 秒，瓶頸在 Python，workers 沒有幫助。
+  - 剖析（20 workers、二進位）：約 25 秒中有 14 秒是 `readline`，也就是在等最慢的 worker。同時負載只有 6 左右：每輪 look ahead 各桌的工作量不同，大家要互相等。base64 解碼約 3 秒。
+- 建議：zoo-v2 只跑一個種子時用 `--workers 16–20`（10 和 20 只差 1 秒）。像 zoo-v1 那樣三個種子同時跑時，每個用 6 左右，總數不要超過 20 核。要再快，就要讓 worker 不必每一輪都同步。
+
+# 2026-10-24 BC 資料匯出（HDT 錄影＋runtime/ranked-*）
+
+- 起因：PPO 之前先做模仿學習，需要把實戰紀錄變成 (obs, acts, 實際選的 index, 勝負)。
+- 範圍：
+  - 新增 `src/bc-export.mjs`（`npm run bc-export [deck] [deck]`）：讀 HDT `.hdtreplay`（zip 內的 `output_log.txt`，手寫 central directory 解析＋`inflateRawSync`）與 `runtime/ranked-*` 的 Power.log；在 GameState `CREATE_GAME` 切局；以 `CREATE_GAME 時間|排序後玩家名` 去重；依我方非衍生牌的 cardId 指派牌組（至少 3 張命中、不能平手）。
+  - 決策點：我方頂層（無縮排）`BLOCK_START` PLAY／ATTACK、我方回合 `STEP=MAIN_END`（補上 END_TURN）、`SendChoices ChoiceType=GENERAL` 的發現選擇（在 header 前先快照，因為 parser 讀到 header 就刪掉 choice）。每點用 `shadowView`＋`encode` 產生 obs/acts，詞彙與 ppo 預設 `--decks` 相同。超時由伺服器代選的發現沒有 SendChoices，跳過。
+  - 輸出 `runtime/bc/<deck>.jsonl`（每列 `{game,src,turn,kind,pick,legal,result,opp,obs,acts,unknown}`，只寫對得上的盤面；單一選項的盤面保留，可用 `legal` 過濾）與 `runtime/bc/<deck>-summary.json`。
+  - 新增 `test/bc-export.test.mjs` 4 則：zip 來回、只在 GameState CREATE_GAME 切局、合成局面中頂層 PLAY／END_TURN／發現被記錄且巢狀 PLAY 被忽略、同一局兩份檔案同 key。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway。
+- 結果（warlock-discard，26 秒）：
+  - 檔案 890、局 867、重複 304、保留 517 局（勝 299／負 218）；跳過：牌組認不出 40（多為其他職業）、warlock-zoo 6、另有無本地玩家／亂鬥／未完局。
+  - 盤面 16,144，對得上 16,138（100.0%），其中單一選項 2,467。
+
+  | 種類 | 盤面 | 不在選單內 |
+  |---|---|---|
+  | play | 5,208 | 6（0.1%） |
+  | attack | 6,122 | 0 |
+  | end | 3,057 | 0 |
+  | choose | 842 | 0 |
+  | power | 633 | 0 |
+  | use | 282 | 0 |
+
+- 注意：
+  - 22 份 runtime ranked 檔從 PowerTaskList 的 `CREATE_GAME` 開始，缺 GameState 建局與實體建立行，無法解析（同局多半在 HDT 裡已有）；另 1 份是薩滿 HDT。
+  - 詞彙外的牌：Felbeast 5,608 次（shadow 已知問題）、Patches 473、Murmy 408、Body Bagger 279 等，編碼時成為未知牌。
+  - 老師是 Jev（勝率約 58%），不是高手；8 月可能混有約 7 局人手打的，沒過濾。
+  - zoo 只有 6 局，不夠做 BC。
+- 驗證：`npm test` 676/676。
+
+# 2026-10-24 自戰網路對戰：zoo-v1 對 v5
+
+- 起因：使用者想知道動物園術網路 zoo-v1 遇到上一代最強的棄牌術網路 v5 會怎樣。兩個模型的詞彙不同（19 對 53 個牌名，盤面 208 對 344），不能共用一個編碼。
+- 範圍：
+  - 新增 `src/selfplay-match.mjs`：`match(nets,lists,{games,seed,maxSteps})`，輪到哪一席就用那一席的網路 `rank()`（用模型檔自帶的詞彙編碼）取最高分的一步；`wilson()` 算 95% 區間。CLI：`node src/selfplay-match.mjs <A.json> <B.json> [games=200] [seed=1] [deckA] [deckB]`，A 先、B 先各跑 `games` 局，牌組預設是模型檔 `decks[0]`。
+  - 新增 `test/selfplay-match.test.mjs`，3 則：兩個大小不同的網路在同一盤面各自評分、兩種先後手對打到終局不報錯、Wilson 區間合理。
+  - 沒動 `src/selfplay-env.mjs` 和其他 session 的改動。未 commit，沒有開遊戲，沒有呼叫 Gateway。
+- 結果（貪婪，每種先後手 1000 局，種子 1–1000）：
+
+  | 先手 | 局數 | zoo-v1（動物園）勝 | v5（棄牌）勝 | 平手（超時） |
+  |---|---|---|---|---|
+  | zoo-v1 先 | 1000 | 36.6%（33.7–39.6） | 63.4%（60.4–66.3） | 0（0） |
+  | v5 先 | 1000 | 27.0%（24.3–29.8） | 72.8%（70.0–75.5） | 2（0） |
+  | 合計 | 2000 | 31.8%（29.8–33.9） | 68.1%（66.0–70.1） | 2（0） |
+
+- 對照：zoo-v1 自己駕駛兩邊時動物園 42.6%；棄牌術鏡像 v5 對 zoo-v1 63.7%。所以輸的原因是動物園這副在模擬器裡本來就弱一點，加上 v5 駕駛棄牌比 zoo-v1 強。細節在 `docs/selfplay-versions.md` 的「zoo-v1 對 v5」。
+- 驗證：`npm test` 672/672。
+
+# 2026-10-24 自戰環境改用二進位傳 obs/acts 給 Python
+
+- 起因：量測 PPO 路徑（64 桌、網路選步、對手 rush），每次 `step` 約 20 ms，模擬器（含對手與編碼）只佔約 4 ms；JSON 兩端解析、管線、list 轉 tensor 佔一半以上。
+- 範圍：
+  - `src/selfplay-env.mjs`：`reset` 帶 `"bin":true` 時，凡帶 `envs` 的回覆（step／fork／side／reset）把數字搬進兩塊 base64 float32：`obsBin`（逐桌狀態）、`actsBin`（逐桌逐步的動作列）；每個 view 只剩 `{seat,steps,ended?}`。新增 export `packed()`。不帶 `bin` 時回覆和以前逐字相同（`selfplay-quiz.mjs` 與 `train/probes/quiz.py` 不受影響）。
+  - `train/ppo.py`：`Arena` 的 reset 帶 `bin=True`；`call()` 收到 `obsBin` 就用 numpy 解回每桌的 `obs`／`acts`（numpy 陣列）；`tensors()` 改用 `torch.as_tensor`（numpy 不複製，list 照舊）。`plan` 回覆的 `ask` 仍是 JSON。
+  - `train/export.py`：檢查用位置的 `obs`／`acts` 加 `.tolist()` 才能寫 JSON。
+  - `test/selfplay-env.test.mjs` 新增 1 則：packed 的每個數字等於原 view 的 float32 值、步數正確、空 envs 不動。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway。
+- 對網路的影響：沒有。以前 `torch.tensor(list, float32)` 也是轉成 float32，輸入逐位相同。
+- 驗證：
+  - `npm test` 669/669。
+  - 二進位與 JSON 兩條路逐桌比對：16 桌 × 400 步加一次 fork，0 個不符。
+  - 未訓練網路用兩種傳輸各評 64 局（對 random、對 rush），結果相同：都是 0 勝 64 負，這是原本就有的狀況，不是這次造成的。
+  - `python train/ppo.py --decks warlock-zoo warlock-discard --iters 1 --envs 16 --batch 1024`（輸出放暫存）跑完；`train/export.py` 含檢查位置也跑完。
+- 速度（本機 i5-12400F，呼叫方每秒步數；對手的步在 node 內，不算）：
+
+  | 桌數 | 選步 | 改前 | 改後 |
+  |---|---|---|---|
+  | 16 | 隨機 | 5,620 | 7,850 |
+  | 16 | 網路 | 2,526 | 3,830–4,210 |
+  | 64 | 隨機 | 6,557 | 8,530 |
+  | 64 | 網路 | 3,139 | 4,920–5,050 |
+
 # 2026-10-24 自戰編碼器補 warlock-zoo 的選項與衍生牌
 
 - 範圍：
@@ -1759,3 +2025,22 @@ combo-admission-v3 納入安全確定的棄牌buff組合；discardModel完整文
 - 對手的牌面效果、職業、英雄技能不在網路輸入裡；317 個決策有 252 個場上有不認得的名字。
 - 沒有對照組，「選錯」是人看牌面判斷的。沒改程式。詳見 docs/net-ranked-review-20261013.md。
 - JEV_FOLLOW_NET 的程式（src/bridge.mjs、src/selfplay-shadow.mjs）已在同日 commit；預設關閉，641/641 測試通過。
+
+## 2026-10-24：zoo 自戰網路 v1（5090 GPU 訓練）
+
+- `train/ppo.py` 加了 `--device auto|cpu|cuda`（預設 auto）。權重存檔一律轉回 CPU 再存，載入用 `map_location='cpu'`，所以 .pt 兩邊都能讀。CPU 路徑行為不變：本機 3 輪的 log.csv 前 11 欄和改之前一樣，`npm test` 綠。
+- 5090 環境：`~/venvs/jev-hearthstone`（torch 2.11.0+cu128、numpy）。repo 在 `~/side_projects/jev-hearthstone`，跑之前要 `export PATH=$HOME/.nvm/versions/node/v22.13.1/bin:$PATH`。`.env.local` 沒有傳上去。
+- 速度（預設 `--envs 128 --batch 8192`）：
+  - CPU 每輪 6 秒，CUDA 每輪 1.7 秒，快約 3.5 倍。
+  - 三個種子同時跑，每個每輪約 3 秒；500 輪加評估共 66 分鐘。
+  - GPU 只用到 13%，瓶頸在 node 模擬器和評估。
+- 訓練：`--decks warlock-zoo warlock-discard --iters 500 --eval-every 10 --eval-games 512 --snapshot-every 10 --pool 20 --keep-every 10 --lag 50 --device cuda`，種子 1、2、3。資料留在 5090 的 `runtime/selfplay/2026-10-24-zoo-s{1,2,3}`。
+- 結果（s1 第 500 輪，按網路駕駛哪副牌分開，每格約 512 局）：
+  - 駕駛動物園：對隨機棄牌 99.6%，對快攻棄牌 86.2%。
+  - 駕駛棄牌：對隨機動物園 98.4%，對快攻動物園 82.8%。
+  - s2、s3 差不多。三個種子互打 47–51%，所以匯出 s1。
+  - 第 100 輪後對 50 輪前的自己一直在 47–55%，已經接近停住。
+- 匯出：`models/selfplay/warlock-zoo-v1.{pt,json}`（已拉回本機）。node 端對快攻 200 局 86.0%，和 torch 端一致。
+- 沒有和棄牌術 v5 網路對打：v5 的盤面是 208 個數字，讀不了這次的 344。詳細數字和 GPU/CPU 對照在 `docs/selfplay-versions.md` 的 zoo-v1 一節。
+- 沒有 commit。`runtime/ranked-continuous.mjs` 是使用者自己的改動，這次沒碰。
+

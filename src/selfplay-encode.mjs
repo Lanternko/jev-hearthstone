@@ -18,15 +18,20 @@ const MADE={
 
 // One slot per card of the lists, The Coin, the Spider token, the cards the lists make (MADE), and a
 // last one for everything else (the random minions of Disposable Acolytes).
-export function vocabulary(lists,cards=cardDb()){
+// With `timers` the state also holds what is set to happen later (DELAYED); the nets made before it
+// was added go without, and see the state they were trained on.
+export function vocabulary(lists,cards=cardDb(),{timers=false}={}){
   const ids=lists.flatMap(l=>Object.keys(l.cards));
   const names=[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name))])];
-  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1};
+  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers};
 }
+
+// What a Ritual or a Kazakus trial does when its clock runs out: the two rituals and the nine effects.
+const DELAYED=['summon','cthun',...Array.from({length:9},(_,i)=>`CAP_405t${i+1}`)];
 
 const KINDS=['play','attack','power','use','choose','end'];
 const SLOT=8,FOE=6,SCALARS=30,TARGET=7;
-export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size;
+export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0);
 export const actSize=v=>KINDS.length+v.size+3+TARGET+v.size;
 
 const t=n=>(n??0)/10;
@@ -53,6 +58,16 @@ function observe(s,v){
   k+=7*FOE;
   for(const [list,at] of [[s.hand,0],[minions(s.me),1],[minions(s.opp),2],[s.deck,3]])
     for(const c of list)o[k+at*v.size+slot(v,c.name)]+=.1;
+  if(v.timers){
+    // Three blocks: my clocks and the other chair's, each effect weighed by how soon it comes (1 when
+    // it comes at the start of the next turn), then the trials in my hand and a Kazakus pick under way.
+    k+=4*v.size;
+    const add=(block,e,w)=>{const i=DELAYED.indexOf(e);if(i>=0)o[k+block*DELAYED.length+i]+=w};
+    const clocks=(block,ts)=>{for(const x of ts??[])for(const e of x.effect==='trial'?x.effects:[x.effect])add(block,e,1/x.left)};
+    clocks(0,s.timers);clocks(1,th.timers);
+    for(const c of s.hand)if(c.trial)for(const e of c.trial.effects)add(2,e,1/(c.trial.turns+1));
+    for(const e of [s.kaz?.first,s.kaz?.second])if(e)add(2,e,1);
+  }
   return o;
 }
 

@@ -34,7 +34,7 @@ export function loadNet(path=MODEL){
   const layer=name=>({w:tensor(doc.tensors[`${name}.weight`]),b:tensor(doc.tensors[`${name}.bias`])});
   const L={body0:layer('body.0'),body2:layer('body.2'),step0:layer('step.0'),
     score0:layer('score.0'),score2:layer('score.2'),value0:layer('value.0'),value2:layer('value.2')};
-  const vocab={names:doc.names,index:new Map(doc.names.map((n,i)=>[n,i])),size:doc.names.length+1};
+  const vocab={names:doc.names,index:new Map(doc.names.map((n,i)=>[n,i])),size:doc.names.length+1,timers:!!doc.timers};
   if(obsSize(vocab)!==doc.obs||actSize(vocab)!==doc.act)
     throw Error(`${path}: made for states of ${doc.obs} and steps of ${doc.act}, the encoder now gives ${obsSize(vocab)} and ${actSize(vocab)}`);
   // -> {logits:[one per step], value}; the value is for the seat to act, between about -1 and 1.
@@ -47,13 +47,15 @@ export function loadNet(path=MODEL){
     });
     return {logits,value:linear(L.value2,linear(L.value0,e,true))[0]};
   }
+  // The value alone of an encoded state, as train/ppo.py's look_ahead asks it.
+  const value=obs=>linear(L.value2,linear(L.value0,linear(L.body2,linear(L.body0,obs,true),true),true))[0];
   // The network's reading of a simulator state: every legal step with its share of the choice.
   function rank(s,legal=moves(s)){
     const {obs,acts}=encode(s,legal,vocab),{logits,value}=forward(obs,acts);
     const top=Math.max(...logits),e=logits.map(x=>Math.exp(x-top)),sum=e.reduce((a,b)=>a+b,0);
     return {value,steps:legal.map((move,i)=>({move,logit:logits[i],p:e[i]/sum})).sort((a,b)=>b.logit-a.logit)};
   }
-  return {vocab,decks:doc.decks,iters:doc.iters,forward,rank};
+  return {vocab,decks:doc.decks,iters:doc.iters,forward,value,rank};
 }
 
 if(import.meta.url===pathToFileURL(process.argv[1]??'').href){

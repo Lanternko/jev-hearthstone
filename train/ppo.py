@@ -36,6 +36,7 @@ the scripted players are soon beaten, and after that only earlier selves say whe
 Needs torch and node; nothing else.
 """
 import argparse
+import base64
 import copy
 import json
 import random
@@ -43,6 +44,7 @@ import subprocess
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.distributions import Categorical
@@ -50,26 +52,43 @@ from torch.nn.utils.rnn import pad_sequence
 
 ROOT = Path(__file__).resolve().parent.parent
 RIVALS = ('random', 'rush')  # the players of src/selfplay.mjs the policy is measured against
+DEVICE = torch.device('cpu')  # where the networks and the updates live, set by --device; the games stay in node
 
 
 class Arena:
     """The node process that holds the games."""
 
-    def __init__(self, n, seed, decks, rival=None, audit=False):
+    def __init__(self, n, seed, decks, rival=None, audit=False, hold=False, wait=True, swap=False):
         self.p = subprocess.Popen(['node', str(ROOT / 'src' / 'selfplay-env.mjs')], cwd=ROOT,
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, encoding='utf-8')
-        r = self.call(cmd='reset', n=n, seed=seed, decks=list(decks), rival=rival, audit=audit)
+        self.send(cmd='reset', n=n, seed=seed, decks=list(decks), rival=rival, audit=audit, bin=True, hold=hold, swap=swap, timers=TIMERS)
+        if wait:
+            self.started()
+
+    def started(self):
+        """The reply to the reset."""
+        r = self.recv()
         self.obs, self.act, self.names, self.envs = r['obs'], r['act'], r['names'], r['envs']
 
     def call(self, **m):
+        self.send(**m)
+        return self.recv()
+
+    def send(self, **m):
         self.p.stdin.write(json.dumps(m) + '\n')
         self.p.stdin.flush()
+
+    def recv(self):
         line = self.p.stdout.readline()
         if not line:
             raise RuntimeError('the simulator process ended')
         r = json.loads(line)
         if 'error' in r:
             raise RuntimeError(r['error'])
+        if 'obsBin' in r:
+            unpack(r, *((r['obs'], r['act']) if 'act' in r else (self.obs, self.act)))
+        if 'askBin' in r:
+            r['ask'] = np.frombuffer(bytearray(base64.b64decode(r.pop('askBin'))), np.float32).reshape(r.pop('asked'), self.obs)
         return r
 
     def step(self, actions):
@@ -81,6 +100,103 @@ class Arena:
         self.p.wait()
 
 
+class Pool:
+    """The tables of one Arena split over several node processes (--workers), which play at the same time.
+
+    Each request goes to every process before any reply is read. A finished game is dealt again only
+    once all the processes have answered ("hold" in src/selfplay-env.mjs), with the seed one process
+    would have given it, so the games, the order of the views and every batch the networks see are
+    those of a single Arena.
+    """
+
+    def __init__(self, n, seed, decks, rival=None, workers=2, swap=False):
+        k = min(workers, n)
+        self.at = [n * w // k for w in range(k + 1)]  # worker w holds the tables at[w]..at[w + 1] - 1
+        self.parts = [Arena(self.at[w + 1] - self.at[w], seed + self.at[w], decks, rival, hold=True, wait=False, swap=swap) for w in range(k)]
+        for a in self.parts:
+            a.started()
+        self.obs, self.act, self.names = self.parts[0].obs, self.parts[0].act, self.parts[0].names
+        self.envs = [e for a in self.parts for e in a.envs]
+        self.next = seed + n  # the seed of the next game dealt
+        self.plans = None
+
+    def where(self, i):
+        """Table i -> (its worker, its index there)."""
+        w = next(w for w in range(len(self.parts)) if i < self.at[w + 1])
+        return w, i - self.at[w]
+
+    def each(self, msgs):
+        """{worker: message} -> {worker: reply}, every message sent before any reply is read."""
+        for w, m in msgs.items():
+            self.parts[w].send(**m)
+        return {w: self.parts[w].recv() for w in msgs}
+
+    def step(self, actions):
+        r = self.each({w: {'cmd': 'step', 'actions': actions[self.at[w]:self.at[w + 1]]} for w in range(len(self.parts))})
+        envs = [e for w in range(len(self.parts)) for e in r[w]['envs']]
+        ended = {}
+        for i, e in enumerate(envs):
+            if 'ended' in e:
+                w, k = self.where(i)
+                ended.setdefault(w, []).append((i, k, self.next))
+                self.next += 1
+        dealt = self.each({w: {'cmd': 'deal', 'tables': [k for _, k, _ in got], 'seeds': [s for _, _, s in got]} for w, got in ended.items()})
+        for w, got in ended.items():
+            for (i, _, _), e in zip(got, dealt[w]['envs']):
+                envs[i] = {**e, 'ended': envs[i]['ended']}
+        self.envs = envs
+        return envs
+
+    def call(self, cmd, **m):
+        """Only the look ahead: 'plan' at some tables, then 'values' for the states it asks about."""
+        if cmd == 'plan':
+            who = {}
+            for j, i in enumerate(m.pop('tables')):
+                w, k = self.where(i)
+                who.setdefault(w, []).append((j, k))
+            self.plans = {'who': who, 'scores': {}, 'n': sum(map(len, who.values()))}
+            return self.asked(self.each({w: {'cmd': 'plan', 'tables': [k for _, k in got], **m} for w, got in who.items()}))
+        if cmd == 'values':
+            v, at, msgs = m['v'], 0, {}
+            for w, n in self.plans['asking']:
+                msgs[w] = {'cmd': 'values', 'v': v[at:at + n]}
+                at += n
+            if at != len(v):
+                raise RuntimeError(f'{len(v)} values for {at} states')
+            return self.asked(self.each(msgs))
+        raise RuntimeError(f'{cmd} is not split over workers')
+
+    def asked(self, replies):
+        """The look ahead's replies of the workers as one: the states all of them ask about, or every score."""
+        plans, ask = self.plans, []
+        plans['asking'] = []
+        for w in sorted(replies):
+            r = replies[w]
+            if 'ask' in r:
+                plans['asking'].append((w, len(r['ask'])))
+                ask.append(r['ask'])
+            else:
+                for (j, _), sc in zip(plans['who'][w], r['scores']):
+                    plans['scores'][j] = sc
+        if ask:
+            return {'ask': np.concatenate(ask) if isinstance(ask[0], np.ndarray) else [x for a in ask for x in a]}
+        self.plans = None
+        return {'scores': [plans['scores'][j] for j in range(plans['n'])]}
+
+    def close(self):
+        for a in self.parts:
+            a.close()
+
+
+WORKERS = 1  # node processes the training games and the measuring games are split over, set by --workers
+TIMERS = False  # whether the state holds the clocks of rituals and trials (src/selfplay-encode.mjs): --timers, or the network's own
+
+
+def make(n, seed, decks, rival=None, swap=False):
+    """An Arena, or a Pool of --workers of them."""
+    return Arena(n, seed, decks, rival, swap=swap) if WORKERS <= 1 else Pool(n, seed, decks, rival, WORKERS, swap)
+
+
 class Net(nn.Module):
     def __init__(self, obs, act, width=256):
         super().__init__()
@@ -90,6 +206,7 @@ class Net(nn.Module):
         self.value = nn.Sequential(nn.Linear(width, width), nn.ReLU(), nn.Linear(width, 1))
 
     def forward(self, obs, acts, mask):
+        obs, acts, mask = obs.to(DEVICE), acts.to(DEVICE), mask.to(DEVICE)
         e = self.body(obs)
         a = self.step(acts)
         logits = self.score(torch.cat([e.unsqueeze(1).expand(-1, a.shape[1], -1), a], -1)).squeeze(-1)
@@ -130,7 +247,7 @@ def look_ahead(net, arena, idx, samples, width):
     """The look ahead of src/selfplay-search.mjs at the tables idx -> a score for each legal step of each."""
     r = arena.call(cmd='plan', tables=idx, samples=samples, width=width)
     while 'ask' in r:
-        r = arena.call(cmd='values', v=net.value(net.body(torch.tensor(r['ask'], dtype=torch.float32))).squeeze(-1).tolist())
+        r = arena.call(cmd='values', v=net.value(net.body(torch.as_tensor(r['ask'], dtype=torch.float32).to(DEVICE))).squeeze(-1).tolist())
     return r['scores']
 
 
@@ -143,9 +260,19 @@ def rollout(net, arena, table, steps, games, seed=1):
     return r['tally']
 
 
+def unpack(r, obs, act):
+    """The float32 blocks of a "bin" reply (src/selfplay-env.mjs) back into each view's obs and acts, as numpy arrays."""
+    o = np.frombuffer(bytearray(base64.b64decode(r.pop('obsBin'))), np.float32).reshape(len(r['envs']), obs)
+    a = np.frombuffer(bytearray(base64.b64decode(r.pop('actsBin'))), np.float32).reshape(-1, act)
+    at = 0
+    for e, x in zip(r['envs'], o):
+        e['obs'], e['acts'] = x, a[at:at + e['steps']]
+        at += e['steps']
+
+
 def tensors(envs):
     f = torch.float32
-    return [torch.tensor(e['obs'], dtype=f) for e in envs], [torch.tensor(e['acts'], dtype=f) for e in envs]
+    return [torch.as_tensor(e['obs'], dtype=f) for e in envs], [torch.as_tensor(e['acts'], dtype=f) for e in envs]
 
 
 def evaluate(net, decks, games, seed=900_000_000, n=64, rival='random', look=None):
@@ -154,7 +281,7 @@ def evaluate(net, decks, games, seed=900_000_000, n=64, rival='random', look=Non
     Every table plays the same number of games: taking the first to finish would count the short ones.
     """
     n = min(n, games)
-    arena = Arena(n, seed, decks, rival)
+    arena = make(n, seed, decks, rival)
     left = [games // n + (i < games % n) for i in range(n)]
     tally = {1: 0, 0: 0, -1: 0}
     while any(left):
@@ -168,10 +295,13 @@ def evaluate(net, decks, games, seed=900_000_000, n=64, rival='random', look=Non
 
 
 def load(path):
-    ck = torch.load(path, weights_only=True)
+    """A saved network; the games it is then measured in are encoded as it was trained, with or without the clocks."""
+    global TIMERS
+    ck = torch.load(path, weights_only=True, map_location='cpu')
+    TIMERS = bool(ck.get('timers', False))
     net = Net(ck['obs'], ck['act'], ck['width'])
     net.load_state_dict(ck['net'])
-    return net.eval(), ck
+    return net.to(DEVICE).eval(), ck
 
 
 def duel(a, b, decks, games, seed=800_000_000, n=64, look=None):
@@ -180,7 +310,7 @@ def duel(a, b, decks, games, seed=800_000_000, n=64, look=None):
     look=(samples, width, prior) lets a, and only a, look ahead.
     """
     n = min(n, games)
-    arena = Arena(n, seed, decks)
+    arena = make(n, seed, decks)
     left = [games // n + (i < games % n) for i in range(n)]
     played = [0] * n
     tally = {1: 0, 0: 0, -1: 0}
@@ -245,11 +375,11 @@ def probe(net, decks, states=20000, seed=600_000_000, n=64):
         seen += obs
         arena.step(think(net, arena, list(range(n)), obs, acts))
     arena.close()
-    obs = torch.stack(seen)
+    obs = torch.stack(seen).to(DEVICE)
     value = lambda x: net.value(net.body(x)).squeeze(-1)
     base, rows = value(obs), []
     for d in (1, 3, 6):
-        for what, (x, ok) in zip(('our hero healthier', 'their hero weaker'), shifted(obs, torch.full((len(obs),), d / 10))):
+        for what, (x, ok) in zip(('our hero healthier', 'their hero weaker'), shifted(obs, torch.full((len(obs),), d / 10, device=DEVICE))):
             dv = (value(x) - base)[ok]
             rows.append((what, d, (dv < 0).float().mean().item(), dv.mean().item()))
     return rows
@@ -303,7 +433,7 @@ def collect_search(net, arena, state, args):
                 logits, _ = net(torch.stack([obs[i] for i in idx]), *padded([acts[i] for i in idx]))
             prior = torch.log_softmax(logits, -1).clamp(min=-10)
             for j, (i, sc) in enumerate(zip(idx, look_ahead(net, arena, idx, args.search or 2, args.beam))):
-                target = torch.softmax(prior[j, :len(sc)] + torch.tensor(sc) / args.tau, 0)
+                target = torch.softmax(prior[j, :len(sc)] + torch.tensor(sc, device=DEVICE) / args.tau, 0)
                 actions[i] = int(torch.multinomial(target, 1))
                 live[i][envs[i]['seat']].append((obs[i], acts[i], target))
         for i, e in enumerate(envs):
@@ -324,8 +454,8 @@ def collect_search(net, arena, state, args):
 
 def distill(net, opt, data, args):
     """One pass over the decisions: the step scorer towards the look ahead, the value towards the result."""
-    obs = torch.stack([d[0] for d in data])
-    z = torch.tensor([d[3] for d in data])
+    obs = torch.stack([d[0] for d in data]).to(DEVICE)
+    z = torch.tensor([d[3] for d in data], device=DEVICE)
     stats, n = torch.zeros(3), 0
     order = torch.randperm(len(data))
     for at in range(0, len(data), args.minibatch):
@@ -342,7 +472,7 @@ def distill(net, opt, data, args):
         mono = torch.zeros(())
         if args.mono:
             base = net.value(net.body(obs[idx])).squeeze(-1)
-            for x, ok in shifted(obs[idx], torch.randint(1, 7, (len(rows),)) / 10):
+            for x, ok in shifted(obs[idx], torch.randint(1, 7, (len(rows),)).to(DEVICE) / 10):
                 mono = mono + (torch.relu(base - net.value(net.body(x)).squeeze(-1)) * ok).mean()
         opt.zero_grad()
         (policy + args.vf * critic + args.mono * mono).backward()
@@ -395,9 +525,9 @@ def collect(net, arena, pool, state, args):
 
 
 def update(net, opt, data, args):
-    obs = torch.stack([d[0] for d in data])
+    obs = torch.stack([d[0] for d in data]).to(DEVICE)
     acts = [d[1] for d in data]
-    a, logp0, adv, ret = (torch.tensor([d[k] for d in data]) for k in (2, 3, 4, 5))
+    a, logp0, adv, ret = (torch.tensor([d[k] for d in data], device=DEVICE) for k in (2, 3, 4, 5))
     adv = (adv - adv.mean()) / (adv.std() + 1e-8)
     stats = torch.zeros(3)
     n = 0
@@ -444,6 +574,7 @@ def main():
     p.add_argument('--seed', type=int, default=1)
     p.add_argument('--out', default=None, help='run directory, default runtime/selfplay/<time>')
     p.add_argument('--resume', default=None, help='a policy.pt to go on from')
+    p.add_argument('--timers', action='store_true', help='show the network the clocks of rituals and trials; with --resume from a network without them, its first layer is widened with zeros')
     p.add_argument('--eval', default=None, help='only evaluate this policy.pt against the scripted players')
     p.add_argument('--audit', nargs='+', default=None, help='only count the plain mistakes of these policy.pt files')
     p.add_argument('--vs', default=None, help='with --eval: play it against this policy.pt instead')
@@ -461,7 +592,14 @@ def main():
     p.add_argument('--prior', type=float, default=1e-3, help="weight of the policy's own log probability beside a look ahead's score")
     p.add_argument('--keep-every', type=int, default=10, help='iterations between the numbered copies under <run>/ckpt')
     p.add_argument('--lag', type=int, default=50, help='also measure against the copy this many iterations back')
+    p.add_argument('--workers', type=int, default=1, help='node processes to split the games over, in training and in --eval (not --audit, --probe or --compare)')
+    p.add_argument('--swap', action='store_true', help='in the training games, give the second deck the first seat in half of them (odd seeds)')
+    p.add_argument('--device', choices=('auto', 'cpu', 'cuda'), default='auto', help='where the networks run; auto takes CUDA when there is one')
     args = p.parse_args()
+    global DEVICE, WORKERS, TIMERS
+    WORKERS = args.workers
+    TIMERS = args.timers
+    DEVICE = torch.device('cuda' if args.device == 'cuda' or args.device == 'auto' and torch.cuda.is_available() else 'cpu')
     torch.manual_seed(args.seed)
     random.seed(args.seed)
     look = (args.search, args.beam, args.prior) if args.search else None
@@ -500,6 +638,8 @@ def main():
         net, ck = load(args.eval)
         if args.vs:
             old, ck2 = load(args.vs)
+            if ck2['obs'] != ck['obs'] or ck2.get('timers', False) != ck.get('timers', False):
+                raise SystemExit(f'{args.vs} sees other states than {args.eval}: measure them with src/selfplay-match.mjs')
             w, d, l = duel(net, old, ck['decks'], args.eval_games, look=look)
             print(f'{args.eval} (iter {ck["iters"]}{", looking ahead" if look else ""}) against {args.vs} (iter {ck2["iters"]}): {w}W {d}D {l}L, {w / (w + d + l):.1%}')
             return
@@ -510,11 +650,15 @@ def main():
 
     out = Path(args.out) if args.out else ROOT / 'runtime' / 'selfplay' / time.strftime('%Y-%m-%dT%H-%M-%S')
     out.mkdir(parents=True, exist_ok=True)
-    arena = Arena(args.envs, args.seed, args.decks)
-    net = Net(arena.obs, arena.act, args.width)
+    arena = make(args.envs, args.seed, args.decks, swap=args.swap)
+    net = Net(arena.obs, arena.act, args.width).to(DEVICE)
     done_iters = 0
     if args.resume:
-        ck = torch.load(args.resume, weights_only=True)
+        ck = torch.load(args.resume, weights_only=True, map_location='cpu')
+        w = ck['net']['body.0.weight']
+        if w.shape[1] < arena.obs and args.timers and not ck.get('timers'):
+            # The clocks come after everything else in the state, so the old weights keep their places.
+            ck['net']['body.0.weight'] = torch.cat([w, w.new_zeros(w.shape[0], arena.obs - w.shape[1])], 1)
         net.load_state_dict(ck['net'])
         done_iters = ck['iters']
     opt = torch.optim.Adam(net.parameters(), lr=args.lr)
@@ -545,7 +689,7 @@ def main():
     def shown(vs):
         return ', '.join(f'{x:.1%} against {r}' for r, x in zip(RIVALS, vs))
 
-    print(f'{args.decks[0]} vs {args.decks[1]}: state {arena.obs}, step {arena.act}, {sum(x.numel() for x in net.parameters())} weights -> {out}')
+    print(f'{args.decks[0]} vs {args.decks[1]}: state {arena.obs}, step {arena.act}, {sum(x.numel() for x in net.parameters())} weights on {DEVICE} -> {out}')
     print(f'iter {done_iters}: {shown(score())} over {args.eval_games} games each', flush=True)
     for it in range(done_iters + 1, done_iters + args.iters + 1):
         t0 = time.time()
@@ -563,8 +707,8 @@ def main():
         if it % args.snapshot_every == 0:
             pool.append(copy.deepcopy(net).eval())
             del pool[:-args.pool]
-        ck = {'net': net.state_dict(), 'obs': arena.obs, 'act': arena.act, 'width': args.width,
-              'names': arena.names, 'decks': args.decks, 'iters': it}
+        ck = {'net': {k: v.cpu() for k, v in net.state_dict().items()}, 'obs': arena.obs, 'act': arena.act, 'width': args.width,
+              'names': arena.names, 'decks': args.decks, 'iters': it, 'timers': args.timers}
         torch.save(ck, out / 'policy.pt')
         selves = ('', '') if vs is None else (against(first), against(kept / f'iter-{it - args.lag:04d}.pt'))
         if args.distill and vs is not None:

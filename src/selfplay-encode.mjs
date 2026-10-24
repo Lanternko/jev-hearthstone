@@ -5,10 +5,22 @@
 import {hero,hpOf} from './sim.mjs';
 import {cardDb} from './selfplay.mjs';
 
-// One slot per card of the lists, The Coin, the Spider token, and a last one for everything else
-// (the random minions of Disposable Acolytes).
+// Cards a list card makes during a game: the options of its picks (C'Thun abilities, Kazakus effects
+// and trials, offered as card ids) and the tokens it summons or shuffles. They enter the vocabulary
+// only when the list holds the maker, so the lists of the older nets keep the vocabulary they had.
+const MADE={
+  BE_726:['BE_013t1','BE_013t2','BE_013t3','BE_013t4','BE_013t5'],
+  BE_085:['BE_085t'],
+  CAP_405:[...Array.from({length:9},(_,i)=>`CAP_405t${i+1}`),'CAP_405tb1','CAP_405tb2','CAP_405tb3','LOOT_368'],
+  TIME_025:['TIME_025t'],TIME_027:['TIME_025t'],
+  CATA_210:['CATA_210t'],
+};
+
+// One slot per card of the lists, The Coin, the Spider token, the cards the lists make (MADE), and a
+// last one for everything else (the random minions of Disposable Acolytes).
 export function vocabulary(lists,cards=cardDb()){
-  const names=[...new Set([...lists.flatMap(l=>Object.keys(l.cards).map(id=>cards[id].name)),'The Coin','Spider'])];
+  const ids=lists.flatMap(l=>Object.keys(l.cards));
+  const names=[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name))])];
   return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1};
 }
 
@@ -44,7 +56,8 @@ function observe(s,v){
   return o;
 }
 
-// Whatever a step names: a body on the table, a card in hand, a location, or a card still in the deck.
+// Whatever a step names: a body on the table, a card in hand, a location, a card still in the deck,
+// or a card of the database named by its id.
 function thing(s,id){
   const b=[...s.me,...s.opp].find(x=>x.id===id);
   if(b)return {name:b.name,cost:0,atk:b.atk,hp:hpOf(b),hero:b.type==='HERO',mine:b.side==='me',taunt:b.taunt,card:false};
@@ -53,7 +66,10 @@ function thing(s,id){
   const x=s.sites.find(x=>x.id===id);
   if(x)return {name:x.name,cost:0,atk:0,hp:x.durability,card:false,mine:true};
   const d=s.deck.find(x=>x.entityId===id);
-  return d?{name:d.name,cost:d.COST??0,atk:d.ATK??0,hp:d.HEALTH??0,card:true,mine:true}:null;
+  if(d)return {name:d.name,cost:d.COST??0,atk:d.ATK??0,hp:d.HEALTH??0,card:true,mine:true};
+  // An option named by its card id (the C'Thun and Kazakus picks): the card of the database.
+  const c2=typeof id==='string'?cardDb()[id]:null;
+  return c2?{name:c2.name,cost:c2.cost??0,atk:c2.attack??0,hp:c2.health??0,card:true,mine:true}:null;
 }
 function act(s,m,v){
   const a=new Array(actSize(v)).fill(0),V=v.size;

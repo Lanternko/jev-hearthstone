@@ -1,3 +1,97 @@
+# 2026-10-24 自戰編碼器補 warlock-zoo 的選項與衍生牌
+
+- 範圍：
+  - `src/selfplay-encode.mjs`：
+    - 新增 `MADE`：牌表裡有某張來源牌時，才把它在對局中產生的牌加進詞彙。Ritual of C'Thun → 四種能力與 Faceless Fanatic；Ritual of Summoning → C'thrax Brute；Godfather Kazakus → 九種效果、三種審判、Voidlord；Twilight Timehopper／Tachyon Barrage → Shred of Time；Twilight Egg → Accelerated Whelp。
+    - `thing()`：選項是卡號字串時（`cthun`、`kaz1/2/3`），從卡面庫查牌名、費用、身材，choose 動作因此填到該牌的詞彙格。
+    - 觀察向量沒改（`SCALARS` 仍 30），沒有加「目前是哪種選擇」的旗標。
+  - 新增 `test/selfplay-encode-zoo.test.mjs`，6 則：詞彙收齊、discard 詞彙不變、`cthun`／`kaz1`／`kaz2`／`kaz3` 每個選項的動作編碼互不相同，且不落在「其他」格。
+  - `docs/warlock-zoo-sim-coverage.md`：編碼那一條改成已補。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway。
+- 對舊網路的影響：沒有。
+  - warlock-discard 的詞彙和改前逐字相同（20 格），維度不變。dh-void 沒有 `list.json`，不走自戰編碼。
+  - 模型檔自帶 `names`，`loadNet` 用檔裡的詞彙，不會重建。
+  - zoo 的詞彙從 18 格變 40 格；zoo 還沒有模型。
+- 驗證：
+  - `npm test` 668/668。
+  - `node src/selfplay.mjs 100 1 warlock-zoo warlock-discard`：先手 56、後手 44，0 局沒打完。
+  - `python train/ppo.py --decks warlock-zoo warlock-discard --iters 1 --envs 16 --batch 1024`（輸出放暫存，不在 repo）：狀態 344、動作 124，一輪 1102 個決策，沒有報錯。
+  - 300 局隨機對局逐步編碼：`cthun` 161 次、`kaz1/2/3` 各 74 次，每次選項編碼都不同，沒有一次落到「其他」格。
+
+# 2026-10-24 warlock-zoo 模擬器補第 3 類（自戰用）
+
+- 範圍：
+  - `src/sim.mjs`（只在 `s.game` 生效，放在 `gameModel` 系列）：
+    - 延遲計時器：座位上的 `timers`（加進 `SEAT`），只有座位主人的 `beginTurn` 會扣；出牌那回合不算，對手回合不算。兩張 Ritual 與 Kazakus 的審判共用。
+    - Ritual of Summoning：我方第 2 個回合開始召喚兩隻 C'thrax Brute（3/5 嘲諷），盤面滿就少召。
+    - Ritual of C'Thun：我方第 2 個回合開始 4 選 1（Wrath／Domain／Glare／Servants）；Glare 再選一個敵方隨從，沒有敵方隨從時選項裡沒有 Glare。
+    - Floating Lessons：目標隨從與手上隨機一張隨從 +X/+X，X＝`costOf`×2（Mawman 在場 +4/+4）。
+    - Godfather Kazakus：戰吼三段選擇（9 取 3、剩下 8 取 3、審判長度 7／4／0 費），結果是一張審判牌進手牌，打出後才計時／生效，依序施放兩個效果；9 種效果都做了。
+    - Voidlord 亡語（三隻 1/3 嘲諷 Demon）進 `rattle`。
+  - `src/selfplay.mjs`：`extra` 加 C'thrax Brute、Faceless Fanatic、Voidlord、三張審判牌；座位初始 `timers:[]`。
+  - `test/warlock-zoo-sim.test.mjs`：「第 3 類以外都能出」改成「30 張都能出」；新增 `test/warlock-zoo-cat3.test.mjs`，8 則。
+  - `docs/warlock-zoo-sim-coverage.md`：表格、可出張數（30/30）、自戰數字、第 3 類機制與簡化清單。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway，沒有訓練。
+- 驗證：
+  - `npm test` 662/662。
+  - `node src/selfplay.mjs 100 1 warlock-zoo warlock-zoo`：先手 53、後手 47，平均 15.9 回合，0 局沒打完。
+  - `node src/selfplay.mjs 100 1 warlock-zoo warlock-discard`：zoo（先手）56、discard 44，平均 16.2 回合，0 局沒打完。
+  - 探針（10 費、我方一隻敵方一隻 Yeti）：30/30 張都有出牌動作。
+- 已知限制（詳見覆蓋報告）：
+  - Kazakus 的強制攻擊是「每隻隨從和一隻隨機其他隨從互打一次」；奪取的隨從當回合不能攻擊；偷來的牌保持原費用。
+  - Domain 因為沒有來源隨從，從所有友方隨從隨機挑兩隻。
+  - 編碼器看不到 `cthun`、`kaz*` 選項的內容（選項是卡號字串），訓練 zoo 之前要決定要不要補編碼。
+  - Twilight Egg 手牌成長、Darkest Depths 的 Assemble 等第 1、2 類的簡化照舊。
+
+# 2026-10-24 warlock-zoo 模擬器補第 1、2 類（自戰用）
+
+- 範圍：
+  - `src/sim.mjs`：
+    - 第 1 類：Twilight Timehopper、Tachyon Barrage，加上共用的 Shred of Time 洗牌（`shuffleShreds`）。
+    - 第 2 類：Cult Neophyte、Vaultkeeper、Twilight Egg、Darkest Depths、Blasphemy、Mawman Cultist、Ruinous Velocidrake。
+    - 新增 `gameModel`，只在 `s.game` 生效；實戰、warlock-discard、dh-void 的模型鏈不變。
+    - 新增 `costOf`，在自戰中把法術費用加上座位的 `spellTax`（Neophyte）和雙方場上的 Mawman 光環。
+      - `spellTax` 放進 SEAT，`passTurn` 時歸零。
+    - 其他：`reap` 記錄死亡隨從的位置（`slot`），給 Vaultkeeper 亡語用；抽出 `tokens`、`grow` 兩個 helper。
+  - `src/selfplay.mjs`：`extra` 加入 Accelerated Whelp（CATA_210t），座位初始 `spellTax:0`。
+  - 新增 `test/warlock-zoo-sim.test.mjs`，11 則：每張新牌一則，加上「第 3 類以外的牌都能出」的總檢查。
+  - `docs/warlock-zoo-sim-coverage.md`：更新狀態欄、可出張數（23/30，16 種裡 12 種）、自戰數字。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway，沒有訓練。
+- 驗證：
+  - `npm test` 654/654（舊牌組的測試都過）。
+  - `node src/selfplay.mjs 100 1 warlock-zoo warlock-zoo`：先手 56、後手 44，平均 16.1 回合（補之前 52:48、21.7 回合）。
+  - `node src/selfplay.mjs 100 1 warlock-zoo warlock-discard`：zoo 44、discard 56，平均 16.5 回合（補之前 0:100、12.6 回合）。
+  - 兩組都是 0 局沒打完。
+- 已知限制：
+  - 第 3 類還是死牌：Ritual of C'Thun、Ritual of Summoning、Godfather Kazakus、Floating Lessons，共 7 張。
+  - Twilight Egg 的雛龍以印刷身材 2/1 召喚，在手上的成長沒做。
+  - Darkest Depths 不做 Assemble。
+  - Blasphemy 判斷「手上最貴」時，同費也算最貴。
+  - Vaultkeeper 的戰吼假設出牌放在最右邊，只加左鄰。
+  - Velocidrake 的複製是用卡面資料重新做一隻，不帶原體身上的增益。
+  - 這些模型只在自戰生效。實戰時 Mawman、Neophyte 的費用由遊戲標籤提供，模擬器不另外加。
+
+# 2026-10-24 新牌組 warlock-zoo：更新卡面庫、建牌表、模擬器覆蓋報告
+
+- 範圍：
+  - `data/cards.enUS.json`：換成 2026-10-24 的 HearthstoneJSON 快照，36390 張。README 的 SHA256 已更新為 `06E61CE4…DC04`。
+    - 與舊檔相比，只移除了 BE_259e2（一個附魔），另有 485 筆內容變動，大多是文字；warlock-discard 的牌都沒變。
+  - 新增 `decks/warlock-zoo/list.json`：30 張、16 種，英雄 HERO_07f，英雄技能 Life Tap。由使用者給的牌組代碼解出。
+  - `src/mechanics.mjs` 的 `textOf`：新快照的卡面多了排版用的 `&`（329 張），一律換成空白。這是因為它讓 Stardust Scythe 的模型失效，DH 的 2 則測試因此失敗。
+  - 新增 `docs/warlock-zoo-sim-coverage.md`：每張牌的模擬器覆蓋報告。
+  - README 的「限制」補上 zoo 的說明。
+  - 未 commit，沒有開遊戲，沒有呼叫 Gateway。
+- 驗證：
+  - `npm test` 643/643。
+  - 自戰（隨機合法動作，各 100 局）：
+    - zoo 鏡像：先手 52、後手 48，沒有打不完的局。
+    - zoo 對 discard：0 比 100。
+- 已知限制：
+  - 30 張裡只有 6 張在模擬器能打：Cursed Catacombs、Platysaur、Entropic Continuity，各 2 張。另外英雄技能也能用。其餘 13 種在 `modelOf` 都回 null，是卡在手裡的死牌。
+  - 補模擬器之前不要訓練 zoo 網路。報告裡的修正順序是：先做 Timehopper 和 Tachyon Barrage，再做 Egg／Depths／Blasphemy／費用光環／Velocidrake，最難的是延遲儀式、Kazakus、Floating Lessons。
+  - zoo 沒有任何實戰 Power.log，模擬準確度量不到。
+  - 換新卡面庫之後沒有重跑 `npm run shadow`；舊網路的重放數字可能會有小幅變動。
+
 # 2026-10-13 旁聽三項修正：牌庫扣錯、`jev.source` 空值、單選項步驟分開算
 
 - 範圍：

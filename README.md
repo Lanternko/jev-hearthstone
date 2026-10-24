@@ -69,10 +69,10 @@ node runtime/ranked-continuous.mjs --games=50
 
 - 傳給模型的只有過濾後的盤面、策略與候選；不含 BattleTag、GameAccountId、原始日誌、對手手牌或牌堆順序。
 - `runtime/` 底下的日誌、截圖、錄影與決策紀錄都留在本機，版本庫只收腳本與筆記。
-- `data/cards.enUS.json` 是 2026-09-20 的完整卡面快照，SHA256 `079C41A102D386A289BCF2676815799967A8AA0AAEB6B0A5958C76BDD4A20AC3`，來源 <https://api.hearthstonejson.com/v1/latest/enUS/cards.json>。
+- `data/cards.enUS.json` 是 2026-10-24 的完整卡面快照，SHA256 `06E61CE4AFD2BCE9C2FF53DE8C2C1CC0080DF27AA4743C8EEE3D63894D10DC04`，來源 <https://api.hearthstonejson.com/v1/latest/enUS/cards.json>。
 
 ## 限制
 
-- 只支援上面兩副牌；規則與棄牌模型是照這些卡面寫的，換牌要重寫 `decks/` 與對應規則。
+- 只支援 `decks/` 裡的牌組：`warlock-discard`、`dh-void` 有完整規則；`warlock-zoo`（2026-10-24 新增）只有牌表，模擬器覆蓋見 `docs/warlock-zoo-sim-coverage.md`。規則與棄牌模型是照這些卡面寫的，換牌要重寫 `decks/` 與對應規則。
 - 模擬只算確定的部分。隨機棄牌並列、抽牌、發現與未建模的效果會停下來重新觀察，不猜結果，也不模擬對手回合。
 - 自動化違反暴雪的使用條款，帳號風險自負。

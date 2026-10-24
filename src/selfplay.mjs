@@ -23,7 +23,9 @@ export const rawCard=(c,entityId)=>({entityId,cardId:c.id,CARDTYPE:c.type,name:c
 function context(cards){
   const minions={};
   for(const c of Object.values(cards))if(c.collectible&&c.type==='MINION')(minions[c.cost]??=[]).push(rawCard(c,0));
-  return {minions,extra:{'Shred of Time':rawCard(cards.TIME_025t,0)}};
+  return {minions,extra:Object.fromEntries([['Shred of Time','TIME_025t'],['Accelerated Whelp','CATA_210t'],["C'thrax Brute",'BE_085t'],
+    ['Faceless Fanatic','BE_013t5'],['Voidlord','LOOT_368'],['Rushed Trial','CAP_405tb1'],['Grueling Trial','CAP_405tb2'],
+    ['Unending Trial','CAP_405tb3']].map(([name,id])=>[name,rawCard(cards[id],0)]))};
 }
 const contexts=new WeakMap();
 
@@ -33,7 +35,7 @@ function seat(k,list,cards,s){
   const deck=ids.map((id,i)=>rawCard(cards[id],(k+1)*100+i));
   for(let i=deck.length-1;i>0;i--){const j=roll(s,i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}
   const p=rawCard(cards[list.power],(k+1)*100+99),t=textOf(p);
-  return {seat:k,hand:[],deck,weapon:null,locations:0,sites:[],mana:0,crystals:0,fatigue:0,discardCount:0,
+  return {seat:k,hand:[],deck,weapon:null,locations:0,sites:[],mana:0,crystals:0,fatigue:0,discardCount:0,spellTax:0,timers:[],
     power:{id:p.entityId,name:p.name,cost:p.COST,gain:heroAttackGain(p),draw:/\bdraw a card\b/i.test(t)?1:0,
       selfHit:Number(/take \$?(\d+)\s*damage/i.exec(t)?.[1]??0),used:false}};
 }

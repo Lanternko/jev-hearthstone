@@ -138,6 +138,10 @@ const COUNT={a:1,an:1,one:1,two:2,three:3};
 const SUMMON=/^battlecry: summon (a|an|one|two|three) (\d+)\/(\d+) [a-z' -]+?(?: with ((?:(?:taunt|rush|divine shield|poisonous|lifesteal|windfury|stealth)(?:,? and |, | )?)+))?\.?$/i;
 const CHOOSE_DISCARD=/battlecry: choose a card in your hand to discard\.?/i;
 const SELF_HIT=/^deal (\d+) damage to your hero\.?$/i;
+// Entropic Continuity, Twilight Timehopper, Tachyon Barrage: Shreds of Time go into the deck.
+const SHREDS=/^(?:battlecry: )?shuffle (\d+|a|an|one|two|three) shreds? of time into your deck\.?$/i;
+const SHRED_NOTE=/^when drawn, deal \d+ damage to your hero\.?$/i;  // the Shred's own text, reminded
+const shredCount=m=>COUNT[m[1].toLowerCase()]??Number(m[1]);
 export function cardModel(c){
   if(c.type==='SPELL'&&/^gain 1 mana crystal this turn only\.?$/i.test(c.text))return {kind:'mana',gain:1};
   if(c.type==='SPELL'){
@@ -151,7 +155,7 @@ export function cardModel(c){
   // missed ten damage of lethal. Its discard is simulated on the swing, like an equipped one.
   if(c.type==='WEAPON'&&(!c.text||/^after your hero attacks, get a void soul\.?$/i.test(c.text)||DISCARD_HIGH.test(c.text)))return {kind:'weapon'};
   if(c.type==='MINION'){
-    let summon=null,selfHit=0;
+    let summon=null,selfHit=0,shreds=0;
     // Duke of Below: the growth is already in the tags, so it is a statline, not an effect.
     let text=c.text.replace(/\b(?:has|gains) \+\d+\/\+\d+ for each card you'?ve discarded this game\.?/i,'');
     if(discardModel(c).kind==='body')text=text.replace(/If you discard this minion, summon it\.?/i,'');
@@ -163,23 +167,28 @@ export function cardModel(c){
       if(m&&!summon){summon={n:COUNT[m[1].toLowerCase()],atk:Number(m[2]),hp:Number(m[3]),with:(m[4]??'').toLowerCase()};continue}
       const h=SELF_HIT.exec(p);
       if(h){selfHit+=Number(h[1]);continue}
+      const sh=SHREDS.exec(p);
+      if(sh){shreds+=shredCount(sh);continue}
+      if(shreds&&SHRED_NOTE.test(p))continue;
       if(p.replace(KEYWORDS,'').replace(/[\s.,]/g,''))return null;
     }
-    return {kind:'minion',...(summon?{summon}:{}),...(selfHit?{selfHit}:{}),...(pick?{chooseDiscard:true}:{})};
+    return {kind:'minion',...(summon?{summon}:{}),...(selfHit?{selfHit}:{}),...(shreds?{shreds}:{}),...(pick?{chooseDiscard:true}:{})};
   }
   if(c.type!=='SPELL')return null;
   if(/^draw (?:a|an|one|two|three|\d+) cards?\.(?: they are temporary\.| at the end of turn, discard them\.)?$/i.test(c.text))
     return {kind:'draw',n:immediateDraws(c.raw)};
   const parts=c.text.split(/(?<=\.)\s+/).filter(Boolean);
-  let buff=null,discard=false;
+  let buff=null,discard=false,shreds=0;
   for(const p of parts){
     const m=BUFF.exec(p);
     if(m){buff={other:!!m[1],atk:Number(m[2]),hp:Number(m[3])};continue}
     if(DISCARD_LOW.test(p)){discard=true;continue}
+    const sh=SHREDS.exec(p);
+    if(sh){shreds+=shredCount(sh);continue}
     if(IGNORABLE.test(p))continue;
     return null;
   }
-  return buff?{kind:'buff',...buff,discard}:null;
+  return buff?{kind:'buff',...buff,discard,...(shreds?{shreds}:{})}:null;
 }
 // Rule-release searches only (rule-release.mjs, s.additive): a minion whose battlecry draws is a
 // body plus unknown cards, like Platysaur ("Battlecry: Draw a card. Deathrattle: Discard it.").
@@ -207,6 +216,7 @@ const drawFrom=(s,n)=>{
 const DISCOVER_DECK=/^discover another card from your deck\. make it temporary\.?$/i;
 const BOLT=/^deal (\d+) damage\. discard a random card\.?$/i;
 const BARRAGE=/^when you play or discard this, deal (\d+) damage randomly split among all enemies\.?$/i;
+const SPLIT=/^deal (\d+) damage (?:randomly )?split among all enemies\.?$/i;
 const SITE_DISCARD_DRAW=/^look at 3 cards in your hand and choose one to discard\. draw two cards\.?$/i;
 export function fullModel(c){
   if(c?.type==='LOCATION')return {kind:'location'};
@@ -214,6 +224,14 @@ export function fullModel(c){
     if(DISCOVER_DECK.test(c.text))return {kind:'discover'};
     const b=BOLT.exec(c.text);if(b)return {kind:'bolt',damage:Number(b[1])};
     const r=BARRAGE.exec(c.text);if(r)return {kind:'barrage',damage:Number(r[1])};
+    // Tachyon Barrage: the split damage, then the Shreds.
+    let split=0,shreds=0;
+    for(const p of c.text.split(/(?<=\.)\s+/).filter(Boolean)){
+      const d=SPLIT.exec(p);if(d&&!split){split=Number(d[1]);continue}
+      const sh=SHREDS.exec(p);if(sh){shreds+=shredCount(sh);continue}
+      split=0;break;
+    }
+    if(split)return {kind:'barrage',damage:split,...(shreds?{shreds}:{})};
     return null;
   }
   if(c?.type!=='MINION')return null;
@@ -226,9 +244,51 @@ export function fullModel(c){
   }
   return death?{kind:'minion'}:null;
 }
+// s.game only (self-play): warlock-zoo cards whose effect needs the whole game -- the other
+// side's next turn, board positions, the deck. Live play leaves them unmodelled as before.
+const NEOPHYTE=/^battlecry: your opponent's spells cost \((\d+)\) more next turn\.?$/i;
+const ADJACENT=/^battlecry and deathrattle: give adjacent minions \+(\d+)\/\+(\d+)\.?$/i;
+const WHELP_EGG=/^deathrattle: summon a \S+ whelp\. \(gains \+1\/\+1 at the start of your turns!\)$/i;
+const GUARDS=/^summon (a|an|one|two|three) (\d+)\/(\d+) [a-z' -]+? with taunt\. assemble a minion\.?$/i;
+const TWICE=/^deal (\d+) damage to all enemies\. if this is the highest cost card in your hand, do it again\.?$/i;
+const COPY_SHRED=/^rush battlecry: cast a shred of time from your deck to summon a copy of this\.?$/i;
+const SPELL_AURA=/^all spells cost \((\d+)\) more\.?$/i;
+const RITUAL_SUMMON=/^in 2 turns, summon two 3\/5 c'thraxxi with taunt\.?$/i;
+const RITUAL_CTHUN=/^in 2 turns, choose a c'thun ability to trigger\.?$/i;
+const LESSONS=/^give a minion and a random one in your hand stats equal to double this card's cost\.?$/i;
+const PLOT=/^battlecry: plot a custom sham trial! then choose the trial's length\.?$/i;
+const VOIDLORD=/^taunt deathrattle: summon three (\d+)\/(\d+) demons with taunt\.?$/i;
+export function gameModel(c){
+  if(c?.type==='SPELL'){
+    // The trial card Godfather Kazakus plotted: it carries its length and its two effects.
+    if(c.trial)return {kind:'trial',turns:c.trial.turns};
+    if(RITUAL_SUMMON.test(c.text))return {kind:'ritual',turns:2,effect:'summon'};
+    if(RITUAL_CTHUN.test(c.text))return {kind:'ritual',turns:2,effect:'cthun'};
+    if(LESSONS.test(c.text))return {kind:'lessons'};
+    const g=GUARDS.exec(c.text);
+    if(g)return {kind:'tokens',summon:{n:COUNT[g[1].toLowerCase()],atk:Number(g[2]),hp:Number(g[3]),with:'taunt',name:'Depthguard'}};
+    const t=TWICE.exec(c.text);if(t)return {kind:'blast',damage:Number(t[1]),again:true};
+    return null;
+  }
+  if(c?.type!=='MINION')return null;
+  if(PLOT.test(c.text))return {kind:'minion',plot:true};
+  const n=NEOPHYTE.exec(c.text);if(n)return {kind:'minion',tax:Number(n[1])};
+  const a=ADJACENT.exec(c.text);if(a)return {kind:'minion',adjacent:{atk:Number(a[1]),hp:Number(a[2])}};
+  if(COPY_SHRED.test(c.text))return {kind:'minion',copyShred:true};
+  if(WHELP_EGG.test(c.text)||SPELL_AURA.test(c.text))return {kind:'minion'};
+  return null;
+}
+// What a card costs to play now. Live tags already carry every aura; self-play adds Mawman
+// Cultist's on either board and Cult Neophyte's tax for this turn.
+export function costOf(s,c){
+  if(!s.game||c.type!=='SPELL')return c.cost;
+  let tax=s.spellTax??0;
+  for(const b of [...s.me,...s.opp])if(b.type==='MINION'&&b.hp>0&&!b.dormant){const m=SPELL_AURA.exec(b.text);if(m)tax+=Number(m[1])}
+  return c.cost+tax;
+}
 // s.game only: Hand of Gul'dan cast from hand draws like its discard does.
 const castDraw=c=>{const d=c.type==='SPELL'?discardModel(c):null;return d?.kind==='draw'?{kind:'draw',n:d.n}:null};
-const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null)??(s.full?fullModel(c):null)??(s.game?castDraw(c):null);
+const modelOf=(s,c)=>cardModel(c)??(s.additive?drawMinionModel(c):null)??(s.full?fullModel(c):null)??(s.game?castDraw(c)??gameModel(c):null);
 // Spell Damage on our side changes the number; the model does not read how much.
 const boosted=s=>s.me.some(b=>b.type==='MINION'&&/\bspell damage\b/i.test(b.text));
 const spider=s=>({id:-(++s.nextToken),name:'Spider',atk:2,hp:1,raw:{CARDTYPE:'MINION',name:'Spider',ATK:2,HEALTH:1}});
@@ -321,11 +381,15 @@ export function moves(s){
     out.push({kind:'power',id:s.power.id});
   const free=room(s);
   for(const c of s.hand){
-    if(!c.playable||c.cost>s.mana)continue;
+    if(!c.playable||costOf(s,c)>s.mana)continue;
     const m=modelOf(s,c);
     if(!m||((m.kind==='minion'||m.kind==='location')&&free<=0))continue;
     if(m.kind==='bolt'){
       for(const id of s.game?aimable(s):s.aims?.get(c.id)??[])if([...s.me,...s.opp].some(b=>b.id===id&&(b.hp>0||b.type==='HERO')))out.push({kind:'play',id:c.id,targetId:id});
+      continue;
+    }
+    if(m.kind==='lessons'){
+      for(const b of [...s.me,...s.opp])if(b.type==='MINION'&&b.hp>0&&!b.dormant&&!(b.side==='opp'&&b.stealth))out.push({kind:'play',id:c.id,targetId:b.id});
       continue;
     }
     if(m.chooseDiscard){
@@ -357,6 +421,8 @@ function applyStep(s0,m){
   if(m.kind==='choose'){
     const {kind}=s.choice;
     s.choice=null;settle(s,kind,m.id);
+    // A second Ritual of C'Thun that came due on the same turn waits for the first pick to finish.
+    if(!s.choice&&s.pendingCthun>0){s.pendingCthun--;cthun(s)}
     return {s,exact:true,note:''};
   }
   if(m.kind==='power'){
@@ -419,7 +485,7 @@ function applyStep(s0,m){
   }
   if(m.kind==='play'){
     const i=s.hand.findIndex(c=>c.id===m.id),c=s.hand[i],model=modelOf(s,c);
-    s.hand.splice(i,1);s.mana-=c.cost;
+    s.mana-=costOf(s,c);s.hand.splice(i,1);
     if(model.kind==='location'){
       s.locations++;
       if(s.sites)s.sites=[...s.sites,{...weaponBody(c.raw),ready:!!s.game}];
@@ -453,8 +519,9 @@ function applyStep(s0,m){
       else{s.uncertainDiscard=s.hand.map(c=>({id:c.id,name:c.name,cost:c.cost}));exact=false;notes.push(`random discard among ${s.hand.map(c=>c.name).join(', ')}; no particular outcome assumed`)}
       return {s,exact,note:notes.join('; ')};
     }
-    if(model.kind==='barrage'&&s.game){volley(s,model.damage);return {s,exact:true,note:''}}
+    if(model.kind==='barrage'&&s.game){volley(s,model.damage);if(model.shreds)shuffleShreds(s,model.shreds);return {s,exact:true,note:''}}
     if(model.kind==='barrage'){
+      if(model.shreds)shuffleShreds(s,model.shreds);
       const h=hero(s,'opp'),others=s.opp.filter(b=>b.type==='MINION'&&b.hp>0&&!b.dormant&&!b.immune),before=hpOf(h);
       // Every point a minion cannot absorb lands on the hero: a floor, exact when the board is empty.
       const least=Math.max(0,model.damage-others.reduce((n,b)=>n+b.hp+(b.ds?1:0),0));
@@ -467,7 +534,7 @@ function applyStep(s0,m){
       s.mana+=model.gain;
       // A newly affordable supported card is a future step, not an invented
       // current game option. The live queue still checks its actual legality.
-      for(const held of s.hand)if(held.cost>s0.mana&&held.cost<=s.mana&&modelOf(s,held))held.playable=true;
+      for(const held of s.hand)if(costOf(s,held)>s0.mana&&costOf(s,held)<=s.mana&&modelOf(s,held))held.playable=true;
       return {s,exact:true,note:''};
     }
     if(model.kind==='randomSummon'&&s.game){conjure(s,model.n,model.cost);return {s,exact:true,note:''}}
@@ -501,17 +568,28 @@ function applyStep(s0,m){
         const r=discard(s,'pick',m.targetId);
         if(!r.exact)return {s,exact:false,note:r.note};
       }
-      if(model.summon){
-        const t=model.summon.with,count=Math.min(model.summon.n,room(s));
-        // Tokens have no entity id until the game makes them; the plan's next step is then
-        // re-checked against the real board anyway (bridge compares signatures).
-        for(let k=0;k<count;k++)s.me.push({id:-(++s.nextToken),side:'me',type:'MINION',name:'token',text:'',
-          atk:model.summon.atk,hp:model.summon.hp,maxHp:model.summon.hp,armor:0,taunt:/taunt/.test(t),ds:/divine shield/.test(t),
-          stealth:/stealth/.test(t),poison:/poisonous/.test(t),lifesteal:/lifesteal/.test(t),windfury:/windfury/.test(t),
-          dormant:false,immune:false,frozen:false,attacks:0,canAttack:/rush/.test(t),rushOnly:true,
-          targets:new Set(/rush/.test(t)?s.opp.filter(o=>o.type==='MINION').map(o=>o.id):[]),maxAttacks:/windfury/.test(t)?2:1});
-      }
+      if(model.summon)tokens(s,model.summon);
       if(model.selfHit){const h=hero(s,'me');if(h)strike({},h,model.selfHit)}
+      if(model.shreds)shuffleShreds(s,model.shreds);
+      if(model.tax)s.them={...s.them,spellTax:(s.them.spellTax??0)+model.tax};
+      if(model.plot)offer(s,'kaz1',sample(s,KAZAKUS,3));
+      if(model.adjacent){
+        // A played minion goes to the right end here, so its only neighbour is the one before it.
+        const left=s.me.filter(x=>x.type==='MINION'&&x!==b).at(-1);
+        if(left)grow(left,model.adjacent);
+      }
+      if(model.copyShred){
+        const k=s.deck.findIndex(d=>d.name==='Shred of Time');
+        if(k>=0){
+          const shred=s.deck[k];s.deck=s.deck.filter((d,j)=>j!==k);
+          const h=hero(s,'me');if(h)strike({},h,Number(/deal (\d+) damage to your hero/i.exec(flat(shred.text))?.[1]??0));
+          if(room(s)>0){
+            const copy=body({...c.raw,entityId:-(++s.nextToken)},'me');
+            Object.assign(copy,{canAttack:!copy.dormant&&(charge||rush),zeroReady:false,rushOnly:rush&&!charge,targets:new Set(s.opp.map(t=>t.id)),maxAttacks:copy.windfury?2:1});
+            s.me.push(copy);
+          }
+        }
+      }
       // The body remembers what it drew: Platysaur's Deathrattle discards exactly that card.
       if(model.draw&&s.game){b.drew=pull(s,model.draw);return {s,exact:true,note:''}}
       if(model.draw){
@@ -522,18 +600,32 @@ function applyStep(s0,m){
       }
       return {s,exact:true,note:''};
     }
+    if(model.kind==='tokens'){tokens(s,model.summon);return {s,exact:true,note:''}}
+    if(model.kind==='ritual'){s.timers=[...(s.timers??[]),{left:model.turns,effect:model.effect}];return {s,exact:true,note:''}}
+    if(model.kind==='trial'){
+      if(model.turns>0)s.timers=[...(s.timers??[]),{left:model.turns,effect:'trial',effects:c.trial.effects}];
+      else castTrial(s,c.trial.effects);
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='lessons'){
+      // Double the Cost this card has now, after Mawman Cultist and any tax.
+      const x=2*costOf(s,c),target=[...s.me,...s.opp].find(b=>b.id===m.targetId);
+      if(target)grow(target,{atk:x,hp:x});
+      const held=s.hand.filter(h=>h.type==='MINION');
+      if(held.length)growCard(held[roll(s,held.length)],x,x);
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='blast'){
+      // "Highest Cost" is read from the hand left after this card is gone; ties count.
+      const twice=model.again&&s.hand.every(x=>x.cost<=c.cost);
+      for(let k=0;k<(twice?2:1);k++)for(const t of s.opp)if(t.type==='HERO'||!t.dormant)strike({},t,model.damage);
+      return {s,exact:true,note:''};
+    }
     let exact=true;const notes=[];
     if(model.discard){
       const r=discard(s,'low');exact&&=r.exact;if(r.note)notes.push(r.note);
     }
-    if(c.name==='Entropic Continuity'&&s.game){
-      const shred=s.game.extra['Shred of Time'];
-      s.deck=[...s.deck];
-      for(let k=0;k<2;k++)s.deck.splice(roll(s,s.deck.length+1),0,{...shred,entityId:-(++s.nextToken)});
-    }
-    if(c.name==='Entropic Continuity'&&s.drawState.me.deckCount!=null){
-      s.drawState={me:{...s.drawState.me,deckCount:Number(s.drawState.me.deckCount)+2,drawHazards:[...(s.drawState.me.drawHazards??[]),3,3]}};
-    }
+    if(model.shreds)shuffleShreds(s,model.shreds);
     for(const b of s.me)if(b.type==='MINION'&&!b.dormant){
       b.atk+=model.atk;b.hp+=model.hp;b.maxHp+=model.hp;
       // A ready 0-Attack egg had no printed targets before the buff. Explicit
@@ -616,7 +708,7 @@ export const searchSignature=s=>JSON.stringify([
 // re-read, so with s.game set the same steps finish: a draw takes the real top card of s.deck, a
 // random outcome is rolled from s.seed, a player's pick becomes a 'choose' step, and 'end' hands the
 // turn over. Everything the acting side owns sits on s; the other side's hidden half sits in s.them.
-const SEAT=['hand','deck','weapon','power','locations','sites','mana','crystals','fatigue','discardCount','seat'];
+const SEAT=['hand','deck','weapon','power','locations','sites','mana','crystals','fatigue','discardCount','seat','spellTax','timers'];
 
 // mulberry32, with the counter kept in the state: equal states roll equal outcomes.
 export function roll(s,n){
@@ -663,6 +755,28 @@ function pull(s,n,temp=false){
 }
 export const drawCards=pull;
 
+// Fixed tokens from a battlecry or a spell. Tokens have no entity id until the game makes them;
+// a live plan's next step is re-checked against the real board anyway (bridge compares signatures).
+function tokens(s,spec){
+  const t=spec.with,count=Math.min(spec.n,room(s));
+  for(let k=0;k<count;k++)s.me.push({id:-(++s.nextToken),side:'me',type:'MINION',name:spec.name??'token',text:'',
+    atk:spec.atk,hp:spec.hp,maxHp:spec.hp,armor:0,taunt:/taunt/.test(t),ds:/divine shield/.test(t),
+    stealth:/stealth/.test(t),poison:/poisonous/.test(t),lifesteal:/lifesteal/.test(t),windfury:/windfury/.test(t),
+    dormant:false,immune:false,frozen:false,attacks:0,canAttack:/rush/.test(t),rushOnly:true,
+    targets:new Set(/rush/.test(t)?s.opp.filter(o=>o.type==='MINION').map(o=>o.id):[]),maxAttacks:/windfury/.test(t)?2:1});
+}
+const grow=(b,{atk,hp})=>{b.atk+=atk;b.hp+=hp;b.maxHp+=hp};
+// Shreds of Time at random places in the deck. Outside self-play only the count and the
+// 3-damage draw hazards are known.
+function shuffleShreds(s,n){
+  if(s.game){
+    const shred=s.game.extra['Shred of Time'];
+    s.deck=[...s.deck];
+    for(let k=0;k<n;k++)s.deck.splice(roll(s,s.deck.length+1),0,{...shred,entityId:-(++s.nextToken)});
+  }else if(s.drawState?.me?.deckCount!=null){
+    s.drawState={me:{...s.drawState.me,deckCount:Number(s.drawState.me.deckCount)+n,drawHazards:[...(s.drawState.me.drawHazards??[]),...Array(n).fill(3)]}};
+  }
+}
 // Soul Barrage: one point at a time, each on a living enemy.
 function volley(s,n){
   for(let k=0;k<n;k++){
@@ -678,6 +792,78 @@ function conjure(s,n,cost){
     summonDiscard(s,{id:-(++s.nextToken),name:raw.name,atk:num(raw.ATK??raw.baseAttack),hp:num(raw.HEALTH??raw.baseHealth),raw});
   }
 }
+const growCard=(c,atk,hp)=>{c.atk+=atk;c.hp+=hp;c.raw={...c.raw,ATK:c.atk,HEALTH:c.hp}};
+// A token card of the database (s.game.extra), summoned at its printed stats and keywords.
+function spawn(s,name,n){
+  const raw=s.game.extra[name];
+  for(let k=0;k<n&&room(s)>0;k++)summonDiscard(s,{id:-(++s.nextToken),name:raw.name,atk:num(raw.ATK),hp:num(raw.HEALTH),raw});
+}
+const hurtGlare=(s,t)=>{if(strike({lifesteal:true},t,5)){const h=hero(s,'me');h.hp=Math.min(h.maxHp,h.hp+5)}};
+const glareable=s=>s.opp.filter(b=>b.type==='MINION'&&b.hp>0&&!b.dormant&&!b.stealth);
+
+// Delayed effects. A timer sits on the seat of the player who made it and counts only that
+// player's own turn starts: the first one after the cast takes it from 2 to 1, the second fires it.
+const CTHUN=['BE_013t1','BE_013t2','BE_013t3','BE_013t4'];
+function cthun(s){
+  if(s.choice){s.pendingCthun=(s.pendingCthun??0)+1;return}
+  offer(s,'cthun',CTHUN.filter(id=>id!=='BE_013t3'||glareable(s).length));
+}
+function pickAbility(s,id){
+  if(id==='BE_013t1')volley(s,7);
+  else if(id==='BE_013t2'){
+    const row=s.me.filter(b=>b.type==='MINION'&&b.hp>0);
+    for(const b of sample(s,row,2))grow(b,{atk:2,hp:3});
+  }
+  else if(id==='BE_013t3')offer(s,'glare',glareable(s).map(b=>b.id));
+  else if(id==='BE_013t4')spawn(s,'Faceless Fanatic',2);
+}
+// Godfather Kazakus: nine effects, two picks of three from them, then the length of the trial.
+const KAZAKUS=Array.from({length:9},(_,i)=>`CAP_405t${i+1}`);
+const TRIALS=[{id:'CAP_405tb1',name:'Rushed Trial',turns:0},{id:'CAP_405tb2',name:'Grueling Trial',turns:1},{id:'CAP_405tb3',name:'Unending Trial',turns:4}];
+function castEffect(s,id){
+  const h=hero(s,'me'),minion=b=>b.type==='MINION'&&b.hp>0&&!b.dormant;
+  if(id==='CAP_405t1'){
+    // Simplified: each minion, in board order, fights one random other living minion.
+    const all=[...s.me,...s.opp].filter(minion);
+    for(const a of all){
+      const foes=all.filter(b=>b!==a&&b.hp>0);
+      if(a.hp<=0||!foes.length)continue;
+      const t=foes[roll(s,foes.length)];
+      strike(a,t,a.atk);strike(t,a,t.atk);
+    }
+  }else if(id==='CAP_405t2'){
+    const pool=s.opp.filter(minion);
+    if(pool.length&&room(s)>0){
+      const b=pool[roll(s,pool.length)];
+      s.opp=s.opp.filter(x=>x!==b);
+      Object.assign(b,{side:'me',canAttack:false,attacks:0,rushOnly:false,targets:new Set()});
+      s.me.push(b);
+    }
+  }else if(id==='CAP_405t3'){
+    const take=sample(s,s.them.hand.map((_,i)=>i),2);
+    const stolen=take.map(i=>s.them.hand[i]);
+    s.them={...s.them,hand:s.them.hand.filter((_,i)=>!take.includes(i))};
+    for(const c of stolen)if(s.hand.length<10)s.hand.push({...c,playable:true,temp:false});
+  }else if(id==='CAP_405t4')pull(s,3);
+  else if(id==='CAP_405t5'){
+    for(const b of s.me)if(b.type==='MINION')grow(b,{atk:3,hp:3});
+    for(const c of s.hand)if(c.type==='MINION')growCard(c,3,3);
+  }else if(id==='CAP_405t6')conjure(s,3,3);
+  else if(id==='CAP_405t7'){
+    for(const c of s.hand)if(c.type==='MINION'){c.cost=Math.max(0,c.cost-2);c.raw={...c.raw,COST:c.cost}}
+  }else if(id==='CAP_405t8')h.hp=Math.min(h.maxHp,h.hp+12);
+  else if(id==='CAP_405t9')spawn(s,'Voidlord',1);
+}
+const castTrial=(s,effects)=>{for(const e of effects)castEffect(s,e)};
+function fireTimers(s){
+  const due=[];
+  s.timers=(s.timers??[]).map(t=>({...t,left:t.left-1})).filter(t=>t.left>0||!due.push(t));
+  for(const t of due){
+    if(t.effect==='summon')spawn(s,"C'thrax Brute",2);
+    else if(t.effect==='cthun')cthun(s);
+    else castTrial(s,t.effects);
+  }
+}
 const aimable=s=>[...s.opp.filter(b=>!b.stealth),...s.me].filter(b=>!b.immune&&!b.dormant).map(b=>b.id);
 
 // A pick the player makes mid-step. One option needs no asking; none skips the pick.
@@ -689,6 +875,21 @@ function settle(s,kind,id){
   if(kind==='site'){
     if(id!=null)discard(s,'pick',id);
     pull(s,2);
+  }else if(kind==='cthun')pickAbility(s,id);
+  else if(kind==='glare'){
+    const t=s.opp.find(b=>b.id===id);
+    if(t)hurtGlare(s,t);
+  }else if(kind==='kaz1'){
+    s.kaz={first:id};
+    offer(s,'kaz2',sample(s,KAZAKUS.filter(e=>e!==id),3));
+  }else if(kind==='kaz2'){
+    s.kaz={...s.kaz,second:id};
+    offer(s,'kaz3',TRIALS.map(t=>t.id));
+  }else if(kind==='kaz3'){
+    // The trial card is plotted now; its clock starts when it is played.
+    const t=TRIALS.find(t=>t.id===id),cid=gain(s,{...s.game.extra[t.name],entityId:-(++s.nextToken)});
+    if(cid!=null)s.hand.find(c=>c.id===cid).trial={turns:t.turns,effects:[s.kaz.first,s.kaz.second]};
+    s.kaz=null;
   }else if(id!=null){
     const raw=s.deck.find(d=>d.entityId===id);
     s.deck=s.deck.filter(d=>d!==raw);
@@ -705,12 +906,28 @@ function bury(s){
 // the other side runs with the chairs swapped, so its payoffs land on its owner's board and hand.
 function rattle(s,b){
   if(discardModel(b).kind==='spiders')for(let i=0;i<2&&room(s)>0;i++)summonDiscard(s,spider(s));
+  // Twilight Egg: the Whelp at its printed stats; its growth while the Egg waits is not kept.
+  if(WHELP_EGG.test(b.text)&&room(s)>0){
+    const raw=s.game?.extra?.['Accelerated Whelp']??{CARDTYPE:'MINION',name:'Accelerated Whelp',ATK:2,HEALTH:1,text:''};
+    summonDiscard(s,{id:-(++s.nextToken),name:raw.name,atk:Number(raw.ATK??2),hp:Number(raw.HEALTH??1),raw});
+  }
+  // Voidlord: three Demons with Taunt.
+  const v=VOIDLORD.exec(b.text);
+  if(v)tokens(s,{n:3,atk:Number(v[1]),hp:Number(v[2]),with:'taunt',name:'Demon'});
+  // Vaultkeeper: the minions that stood on either side of it when it died.
+  const a=ADJACENT.exec(b.text);
+  if(a&&b.slot!=null){
+    const row=s.me.filter(x=>x.type==='MINION');
+    for(const x of [row[b.slot-1],row[b.slot]])if(x)grow(x,{atk:Number(a[1]),hp:Number(a[2])});
+  }
   for(const id of b.drew??[])discard(s,'pick',id);
 }
 function reap(s){
   for(let pass=0;pass<40;pass++){
     const dead=[...s.me,...s.opp].filter(gone);
     if(!dead.length)return;
+    // Where each dead minion stood among the living ones, for an adjacency Deathrattle.
+    for(const side of [s.me,s.opp]){let i=0;for(const b of side)if(b.type==='MINION'){if(gone(b))b.slot=i;else i++}}
     s.me=s.me.filter(b=>!gone(b));s.opp=s.opp.filter(b=>!gone(b));
     for(const b of dead){
       if(b.side==='me')rattle(s,b);
@@ -729,6 +946,7 @@ export function beginTurn(s){
     if(b.type==='HERO'){b.atk=s.weapon?.atk??0;b.canAttack=b.atk>0}
     else b.canAttack=!b.dormant;
   }
+  if(s.game&&s.timers?.length)fireTimers(s);                      // after the refresh: new bodies stay sick
   pull(s,1);
   reap(s);
 }
@@ -737,6 +955,7 @@ export function beginTurn(s){
 function passTurn(s){
   for(const c of s.hand.filter(c=>c.temp))discard(s,'pick',c.id);
   reap(s);
+  s.spellTax=0;                                                   // Cult Neophyte's tax lasted one turn
   const h=hero(s,'me');h.atk=0;h.canAttack=false;
   const f=flip(s);
   f.turn=(f.turn??0)+1;

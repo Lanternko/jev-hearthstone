@@ -1,6 +1,6 @@
 // Shared, visible-card arithmetic. Unknown/conditional effects stay with Jev and a fresh
 // observation; these helpers never infer hidden cards or read the deck order.
-export const textOf=c=>(c?.text??'').replace(/\[x\]/g,' ').replace(/<[^>]+>/g,'')
+export const textOf=c=>(c?.text??'').replace(/\[x\]/g,' ').replace(/<[^>]+>/g,'').replace(/&/g,' ')
   .replace(/\$[a-z]?(\d+)/gi,'$1').replace(/\s+/g,' ').trim();
 export const tagOn=(c,t)=>c?.[t]===1||c?.[t]==='1';
 export const isOutcast=c=>/\bOutcast:/i.test(textOf(c));

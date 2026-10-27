@@ -2,6 +2,7 @@
 import * as X from './layout.mjs';
 import {mulliganCards} from './power.mjs';
 import {roles} from './describe.mjs';
+import {adjacentSlot} from './sim.mjs';
 
 const CARD=(state,id)=>[...(state.me.hand??[]),...(state.me.board??[]),...(state.opponent.board??[]),...(state.choice?.entities??[])].find(c=>c.entityId===id);
 
@@ -36,7 +37,11 @@ export function plan(box,state,action){
   if(src.where==='hand'){
     if(['MINION','LOCATION'].includes(card?.CARDTYPE)){
       const n=(state.me.board??[]).filter(c=>['MINION','LOCATION'].includes(c.CARDTYPE)).length;
-      push(X.dropSlot(box,n,n),`drop into slot ${n+1}`);   // rightmost; strategy.md never pins a position
+      // Rightmost, except a minion that buffs both neighbours (Vaultkeeper) goes in the middle of the minions.
+      const minions=(state.me.board??[]).filter(c=>c.CARDTYPE==='MINION').length;
+      const mid=card.CARDTYPE==='MINION'?adjacentSlot(card.text,minions):minions;
+      const slot=mid<minions?mid:n;
+      push(X.dropSlot(box,slot,n),`drop into slot ${slot+1}`);
     }else if(action.targetId==null){
       push(X.board(box,0,1,'me'),'play onto the board');
     }

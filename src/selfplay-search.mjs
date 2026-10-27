@@ -18,6 +18,11 @@
 //   - a finished line counts for its first step only if no later step of it, played first instead,
 //     leaves more on the board (reordered). The beam may never have held that better order; it is
 //     played out here, and its first step is credited with at least the value of the line it beats.
+//
+// With turns=2 the search looks one turn further for the first steps that score best: the other
+// side's next turn is played out from the position each of them hands over, by another network's
+// policy (`reply`, as loadNet in src/selfplay-net.mjs gives it) along its `replies` best first steps
+// and greedily after them, and the step scores the worst of what those leave us, by our network.
 import {moves,apply,roll,handCard,hpOf} from './sim.mjs';
 import {winner,cardDb,rawCard} from './selfplay.mjs';
 import {encode} from './selfplay-encode.mjs';
@@ -114,36 +119,95 @@ function reordered(root,n,legal,seat){
       if(w!=null){won=w===seat;ok=won;break}
     }
     if(!ok)continue;
-    if(won)out.push([at,1]);
-    else if(s.seat!==seat&&`${names(s.them.hand)}|${s.them.deck.length}`===n.left&&standing(s,true)>n.board)out.push([at,n.v]);
+    if(won)out.push([at,1,s]);
+    else if(s.seat!==seat&&`${names(s.them.hand)}|${s.them.deck.length}`===n.left&&standing(s,true)>n.board)out.push([at,n.v,s]);
   }
   return out;
 }
 
 // One sample's score for each first step: its best finished line that no other order beats.
+// b.at[r] is the position that line hands over.
 function settle(b,legal,seat){
-  const lines=legal.map(()=>[]),lift=legal.map(()=>-Infinity);
+  const lines=legal.map(()=>[]),lift=legal.map(()=>[-Infinity,null]);
   for(const n of b.lines)for(const r of n.roots)lines[r].push(n);
   lines.forEach((mine,r)=>{
     for(const n of mine.sort((x,y)=>y.v-x.v)){
       if(n.v<=b.best[r])break;
       const beaten=n.roots[0]===r?reordered(b.root,n,legal,seat):[];
-      for(const [at,v] of beaten)if(v>lift[at])lift[at]=v;
-      if(!beaten.length){b.best[r]=n.v;break}
+      for(const [at,v,s] of beaten)if(v>lift[at][0])lift[at]=[v,s];
+      if(!beaten.length){b.best[r]=n.v;b.at[r]=n.s;break}
     }
   });
-  lift.forEach((v,r)=>{if(v>b.best[r])b.best[r]=v});
+  lift.forEach(([v,s],r)=>{if(v>b.best[r]){b.best[r]=v;b.at[r]=s}});
+}
+
+// The other side's turn from t, which it is to play: its network's best step, or at the first step
+// each of its `k` best -> the positions where each line ends (our turn again, the game over, or cut
+// off after `cap` steps).
+export function replies(t,net,k,cap=40){
+  const pick=(s,legal)=>{
+    if(legal.length<2)return [0];
+    const {obs,acts}=encode(s,legal,net.vocab);
+    const {logits}=net.forward(obs,acts);
+    return logits.map((x,i)=>[x,i]).sort((x,y)=>y[0]-x[0]).map(([,i])=>i);
+  };
+  const seat=t.seat,first=moves(t),out=[];
+  for(const i of pick(t,first).slice(0,k)){
+    let s=apply(t,first[i]).s;
+    for(let n=1;n<cap&&s.seat===seat&&winner(s)==null;n++){
+      const legal=moves(s);
+      if(!legal.length)break;
+      s=apply(s,legal[pick(s,legal)[0]]).s;
+    }
+    out.push(s);
+  }
+  return out;
+}
+
+// turns=2: the `expand` first steps of each sample that score best, scored again by the worst of the
+// other side's replies to the position they hand over. A first step not looked at again moves by the
+// mean change of those that were (a guess, so within the bounds of a value), and never above the
+// worst of them: it was not seen to survive the reply, and the reply is what tends to bring a score
+// down.
+function* further(beams,legal,vocab,{expand,replies:k,reply}){
+  const seat=beams[0].root.seat,ends=[];
+  for(const b of beams){
+    b.top=legal.map((_,r)=>r).filter(r=>Number.isFinite(b.best[r])&&b.at[r]).sort((x,y)=>b.best[y]-b.best[x]).slice(0,expand);
+    b.again=new Map();
+    for(const r of b.top){
+      const t=b.at[r];
+      if(winner(t)!=null){b.again.set(r,[b.best[r]]);continue}
+      b.again.set(r,replies(t,reply,k).map(s=>{
+        const w=winner(s),n={v:null};
+        if(w!=null)n.v=w==='draw'?0:w===seat?1:-1;
+        else ends.push(Object.assign(n,{obs:encode(s,[],vocab).obs,sign:s.seat===seat?1:-1}));
+        return n;
+      }));
+    }
+  }
+  if(ends.length){
+    const values=yield ends.map(n=>n.obs);
+    ends.forEach((n,i)=>{n.v=n.sign*Math.max(-.98,Math.min(.98,values[i]))});
+  }
+  for(const b of beams){
+    if(!b.again.size)continue;
+    const now=new Map([...b.again].map(([r,ns])=>[r,Math.min(...ns.map(n=>n.v??n))]));
+    const shift=[...now].reduce((a,[r,v])=>a+v-b.best[r],0)/now.size,low=Math.min(...now.values());
+    b.best=b.best.map((v,r)=>now.has(r)?now.get(r):Number.isFinite(v)?Math.max(-.98,Math.min(v+shift,low)):v);
+  }
 }
 
 // A generator: it yields lists of encoded states and is sent back the network's value of each (seen
 // from the seat to act in that state), and returns one score per legal step, in the root seat's
-// favour. `legal` must be moves(s).
-export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false}={}){
+// favour. `legal` must be moves(s). `deal(s,seed)` gives each sample its position (redeal; a live view passes
+// opponentDealer of src/opponent-hand.mjs, which also deals the cards of the other side's hand).
+export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal}={}){
+  if(turns>1&&!reply)throw Error('turns=2 needs the network that plays the reply');
   const seat=s.seat,total=legal.map(()=>0);
   if(legal.length<2)return total;
   const beams=Array.from({length:samples},(_,d)=>{
-    const root=redeal(s,seed+d);
-    return {root,best:legal.map(()=>-Infinity),lines:[],open:[{s:root,roots:null,steps:[],path:[]}]};
+    const root=deal(s,seed+d);
+    return {root,best:legal.map(()=>-Infinity),at:legal.map(()=>null),lines:[],open:[{s:root,roots:null,steps:[],path:[]}]};
   });
   let rolls=0;
   for(let layer=0;layer<depth&&beams.some(b=>b.open.length);layer++){
@@ -178,7 +242,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
       const open=b.next.filter(n=>!n.done).sort((x,y)=>y.v-x.v);
       for(const n of b.next)if(n.done){
         if(orders&&n.obs)b.lines.push(n);
-        else for(const r of n.roots)if(n.v>b.best[r])b.best[r]=n.v;
+        else for(const r of n.roots)if(n.v>b.best[r]){b.best[r]=n.v;b.at[r]=n.s}
       }
       b.open=layer+1<depth?open.slice(0,width):[];
     }
@@ -189,6 +253,9 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
   for(const b of beams){
     if(orders&&dominance)b.lines=keepPlain(b.lines);
     if(orders)settle(b,legal,seat);
+  }
+  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply});
+  for(const b of beams){
     const floor=Math.min(...b.best.filter(Number.isFinite));
     b.best.forEach((v,r)=>{total[r]+=(Number.isFinite(v)?v:floor)/samples});
   }

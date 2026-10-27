@@ -494,8 +494,11 @@ export function buffDevelopmentActions(state,actions,buff){
  const mana=Number(state.me?.mana??0);
  return actions.filter(a=>{
   const c=hand.find(c=>c.entityId===a.entityId),t=flat(c?.text).trim();
+  // A body that taxes spells (Mawman Cultist) makes the buff dearer after it (2026-10-27 v9 game vs warlock, turn 16:
+  // 4 mana, Mawman 2 + Entropic Continuity 2 held the buff, though after Mawman it cost 3).
+  const tax=Number(t.match(/^all spells cost \((\d+)\) more/i)?.[1]??0);
   if(!c||c===buff||a.targetId!=null||lethalSelfDamage(state,a)
-   ||costOf(c)+buffManaReserve(state,buff)>mana)return false;
+   ||costOf(c)+buffManaReserve(state,buff)+tax>mana)return false;
   const spell=c.CARDTYPE==='SPELL'&&/^(?:when you play or discard this, )?summon\b/i.test(t)
    &&!/\bif\b|next turn|end of|dormant/i.test(t);
   // Ordinary bodies and simple summon/draw/self-hit Battlecries add buff targets.

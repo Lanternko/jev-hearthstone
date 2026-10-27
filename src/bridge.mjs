@@ -10,6 +10,7 @@ import {respectsDHTactics} from './dh-tactics.mjs';
 import {boardEffectAssessments,EFFECT_VERSION} from './effect-state.mjs';
 import {matchupObjective} from './matchup-objective.mjs';
 import {recordShadowDecision,netPick} from './selfplay-shadow.mjs';
+import {guardPick} from './net-guards.mjs';
 import {criteria} from './describe.mjs';
 import {ask} from './jev.mjs';
 process.loadEnvFile(fileURLToPath(new URL('../.env.local',import.meta.url)));
@@ -52,6 +53,9 @@ const FOLLOW_NET=process.env.JEV_FOLLOW_NET==='1';
 // when the network could not have weighed an opposing effect or a card it does not know; otherwise the network is followed.
 // The alternatives Jev may overrule with are the ones the rules would have offered.
 const NET_ADVICE=process.env.JEV_NET_ADVICE==='1';
+// JEV_OFFLINE=1 (user, 2026-10-25): Jev is never called. With JEV_FOLLOW_NET=1 the network plays the turns and the
+// rule pick answers what reaches Jev otherwise (the mulligan); it is logged as rules_offline, not a rule_fallback.
+const OFFLINE=process.env.JEV_OFFLINE==='1';
 const ADVICE_INSTRUCTIONS='Choose ONE next action. networkAdvice.choice is the default: a self-play network trained only on this deck against itself chose it. Choose it unless it is wrong for a reason the network cannot see. The network knows the text of the cards in networkAdvice.knownCards only; every other card, including each one in networkAdvice.unknownCards and all opponent cards, it sees as cost, attack and health with no text. It does not know opponent hero powers, secrets, armor gain, board clears, deathrattles, taunt-granting, lifesteal or any other opposing effect. Overrule it only when a visible card text, a known opponent effect or an unknown card makes another option clearly better, for example it attacks into a punishing effect, ignores an engine that must die, overextends into a board clear, or misuses a card it cannot read. When unsure, choose networkAdvice.choice. Respect lethal and survival.';
 const KNOWN=['Chamber of Viscidus','Soulfire','The Soularium','Silverware Golem','Cursed Catacombs','Entropic Continuity','Party Fiend','Platysaur','Wicked Whispers','Boneweb Egg','Disposable Acolytes','Ocular Occultist','Walking Dead','Chronoclaws','Duke of Below','Soul Barrage',"Hand of Gul'dan",'The Coin','Boneweb Spider'];
 const shadow=(s,actions,action,source)=>recordShadowDecision({parsed:s.parsed,state:s.state,actions,action,source});
@@ -83,9 +87,13 @@ export async function next({shot,skip}={}){
  if(FOLLOW_NET&&!p.lethal){
   const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
   if(n){
-   await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,rawOptions:rawActions,action:n.action,source:'selfplay_net',net:{value:n.value,top:n.top},latencyMs:0,cost:'0'});
-   await shadow(s,full,n.action,'selfplay_net');
-   return {ready:true,action:n.action,state:s.state,source:'selfplay_net',latencyMs:0,cost:'0'};
+   // net-guards.mjs: orderings the result-only reward cannot tell apart (buff before attacking, Life Tap before ending).
+   const g=guardPick(s.state,full,n.action,n.top)??n.guard??null;
+   const action=g?.action??n.action,source=g?'selfplay_net_guard':'selfplay_net';
+   if(g)console.log(`guard ${g.guard}: network chose ${n.action.id}, playing ${action.id} (${g.reason})`);
+   await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,rawOptions:rawActions,action,source,net:{value:n.value,top:n.top,pick:n.action.id,...(g?{guard:g.guard,reason:g.reason}:{})},latencyMs:0,cost:'0'});
+   await shadow(s,full,action,source);
+   return {ready:true,action,state:s.state,source,latencyMs:0,cost:'0'};
   }
  }
  // Advice mode measures the network, so no rule shapes the turn (user ruling 2026-10-14): the network
@@ -98,7 +106,7 @@ export async function next({shot,skip}={}){
    const advice={choice:n.action.id,valueEstimate:n.value,top:n.top,knownCards:KNOWN,unknownCards:n.unknown};
    const rulesChoice=null;
    let result={model:null,source:'net_unopposed',latencyMs:0,answers:{move:{choice:n.action.id}}};
-   if(options.length>1){
+   if(options.length>1&&!OFFLINE){
     const request=opts=>ask({board:s.state,strategy:deckFor(s.state).strategy,networkAdvice:advice,rulesChoice,effectAssessments:{version:EFFECT_VERSION,cards:boardEffectAssessments(s.state)}},{move:{type:'choice',instructions:ADVICE_INSTRUCTIONS,criteria:criteria(s.state,options)}},opts);
     result=await recoverJev(()=>request(),
      async e=>{
@@ -122,8 +130,8 @@ export async function next({shot,skip}={}){
  if(Date.now()-s.mtime>600000)return {ready:false,reason:'stale_log',state:s.state};
  if(p.lethal){queue=p.rest;queueLethal=true;await shadow(s,full,p.lethal.action,p.lethal.source??'lethal');return {ready:true,...p.lethal,state:s.state,latencyMs:0,cost:'0'}}
  s.actions=p.acts;
- const shotTaken=shot&&await shot(PENDING).then(()=>true,()=>false);
- const result=await recoverJev(
+ const shotTaken=!OFFLINE&&shot&&await shot(PENDING).then(()=>true,()=>false);
+ const result=OFFLINE?{model:null,source:'rules_offline',latencyMs:0,answers:{move:{choice:rulePick(p)}}}:await recoverJev(
   ()=>askJev(s.state,p,deckFor(s.state).strategy),
   async e=>{
    try{return {...await askJev(s.state,p,deckFor(s.state).strategy,{model:BACKUP,timeoutMs:12000}),source:'backup_model',error:e.message}}

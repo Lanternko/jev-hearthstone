@@ -2,7 +2,7 @@
 
 讓 Jev 模型在本機打爐石戰記的機器人：讀 `Power.log` 得到盤面，用規則與搜尋把合法行動剪成少數候選，交給 Jev（`typesafe-ai/jev`，經 Vercel AI Gateway）選一步，再用滑鼠點出來並核對盤面真的變了。不讀螢幕畫面、不注入遊戲程序。
 
-目前主力是開放棄牌術（`decks/warlock-discard`）。可以無人值守連打天梯批次，分析見 [runtime/winrate-game104-153.md](runtime/winrate-game104-153.md)。逐日的修正與裁定都記在 [STATUS.md](STATUS.md)。
+目前主力是開放棄牌術（`decks/warlock-discard`）。可以無人值守連打天梯批次，分析見 [runtime/winrate-game104-153.md](runtime/winrate-game104-153.md)。發現、實驗、裁定、教訓與目前交接都記在共用記憶 [memory/](memory/README.md)（舊的逐日紀錄在 [memory/archive/STATUS-2026-10-27.md](memory/archive/STATUS-2026-10-27.md)）。
 
 <img width="519" height="869" alt="image" src="https://github.com/user-attachments/assets/f99826de-9cde-4e67-af92-8404411400b5" />
 

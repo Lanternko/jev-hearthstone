@@ -1,6 +1,8 @@
 # 自戰模型版本筆記
 
-棄牌術鏡像自戰（`train/ppo.py`）每一個版本的設定、結果、以及為什麼做下一版。新的版本加在最下面，舊的不改寫；數字的出處是 `runtime/selfplay/<版本>/log.csv` 和 `STATUS.md` 當天的條目。
+棄牌術鏡像自戰（`train/ppo.py`）每一個版本的設定、結果、以及為什麼做下一版。新的版本加在最下面，舊的不改寫；數字的出處是 `runtime/selfplay/<版本>/log.csv` 和當天的紀錄（2026-10-27 前在 `memory/archive/STATUS-2026-10-27.md`，之後在 `memory/experiments.md`）。
+
+> 本檔保留為版本細節筆記。每次訓練／評估的實驗條目（假設、設定、結果、結論）登記在 [memory/experiments.md](../memory/experiments.md)，以 `E-…` ID 查詢；新版本請兩邊都寫：這裡寫細節，experiments 寫一筆條目並指回本檔小節。
 
 讀數的單位：
 
@@ -25,6 +27,14 @@
 | zoo-v1 `2026-10-24-zoo-s1` | 動物園術 對 棄牌術，PPO 自戰 500 輪（5090 GPU） | 99.0% | 84.5% | 對自己第 0 輪 72.5%、對 50 輪前 53.5%；對 v5（v5 駕駛棄牌）31.8% | 新牌組對戰的第一版；兩邊都由同一個網路出牌 |
 | zoo-v2 `2026-10-24-zoo-t-distill` | 從 zoo-v1 接著，encoder 加計時器（`--timers`），搜尋蒸餾 150 輪，`--swap` | 99.4% | 87.7% | 對 zoo-v1：動物園鏡像 57.6%、兩副混合 57.7%；駕駛動物園對 v5 36.0% | 動物園的基準；搜尋對動物園席 +8.8 |
 | zoo-v2-blind `2026-10-24-zoo-v2` | 從 zoo-v1 接著，搜尋蒸餾 150 輪，兩副牌輪流先手（`--swap`） | 99.2% | 85.4% | 對 zoo-v1 50.1%（兩副混合）；駕駛動物園對 zoo-v1 43.3%、對 v5 26.4% | 退步：棄牌那邊變強，動物園那邊變弱；zoo 的基準仍是 zoo-v1 |
+| zoo-t-gen2 `2026-10-24-zoo-t-gen2-w18`（未匯出） | 從 zoo-v2 接著，同樣設定再蒸餾 150 輪，`--seed 2` | 99.2% | 90.6% | 對 zoo-v2：動物園鏡像 52.6%、兩副混合 51.8%；駕駛動物園對 v5 37.3% | 第二代只多 2.6 分，沒過 53% 門檻；蒸餾到頭，下一步跨回合搜尋 |
+| zoo-v3 `2026-10-25-zoo-t-d2s12` | 從 zoo-v2 接著，跨回合搜尋（`--depth 2`，12 樣本）蒸餾 150 輪 | 99.8% | 92.2% | 對 zoo-v2：動物園鏡像 54.5%；駕駛動物園對 zoo-v2 棄牌 38.8%、駕駛棄牌對 zoo-v2 動物園 66.8% | 跨回合搜尋讓蒸餾再往上 |
+| zoo-v4 `2026-10-25-zoo-v3-gen2` | 從 zoo-v3 接著，同樣的跨回合搜尋再蒸餾 150 輪，`--seed 4`，回覆網路 zoo-v3 | 99.4% | 92.6% | 對 zoo-v3：動物園鏡像 53.3%；駕駛動物園對 zoo-v3 棄牌 38.8%、駕駛棄牌對 zoo-v3 動物園 65.8% | 剛好過門檻；動物園的新基準。增益 +4.5 → +3.3，在縮小 |
+| zoo-v6 `2026-10-26-zoo-cheap` | 從 zoo-v5 接著 150 輪（約 66 分鐘），便宜對手模式 `--opp`：discard=v5、dh=dh-long，`--opp-lr 1e-4` | 98.4% | 83.2% | 對 zoo-v5：動物園鏡像 53.5%（6000 局，三組不重疊發牌）；對 dh-long 49.0% 對 v5 的 41.6%（C'Thun 修正後） | 動物園目前最強，2026-10-26 起為實戰 zoo 網路。discard 座位沒訓練、退步（對 v4 zoo 50.6%），discard 仍用 v5 |
+| zoo-v7 `2026-10-27-eggpriest` | 從 zoo-v6 接著 150 輪（第 1400→1550，約 80 分鐘，三組平行），`--decks warlock-zoo warlock-discard dh-cthun priest-egg --mix 0.25 0.25 0.5 --mirror 0.15`，混合蒸餾 λ=0.3，`--opp` 的蛋牧席由自己的對手網路駕駛 | — | — | 對 zoo-v6：鏡像 50.0%、對 v5 discard 43.1%（v6 43.2%）；對蛋牧試打網路 P 85.9%（v6 61.3%，區間不重疊） | 學會不理蛋（蛋攻擊 1.34→0.32 次／局）；2026-10-27 匯出，`MODELS` 尚未更換 |
+| zoo-v8 `shaman-B` | 上一輪 shaman 候選 B（λ=0.1），v7 接 150 輪 | — | — | 對新蛋牧駕駛 79.0%、舊駕駛 86.8% | 2026-10-27 本輪搬進 models/，zoo-v9 的起點 |
+| zoo-v9 `2026-10-27-egg` | 從 zoo-v8 接 150 輪（第 1701→1850，約 69 分鐘），`--decks warlock-zoo priest-egg shaman-cthun warlock-zakajz dh-cthun --mix 0.45 0.2 0.2 0.15 --mirror 0.15`，混合蒸餾 λ=0.1，蛋牧席＝新駕駛 P2 | — | — | 對蛋牧 P2 81.6%（v8 79.0，區間下界 79.8 > 79.0）；對薩滿 83.5、zakajz 51.0、dh 49.6、鏡像對 v8 52.0% | 唯一過門檻的組；2026-10-27 匯出，`MODELS` 未動 |
+| zakajz-v1 `2026-10-26-zakajz` | 新構築 warlock-zakajz（-Fatebreaker、Tachyon/Vaultkeeper 各 -1、+2 Glacial Shard、+1 Zakajz）。從 zoo-v6 接著 150 輪（約 74 分鐘），同 zoo-cheap 的 `--opp` 設定（對手從 v6 存的對手權重續練） | — | — | 對 dh-long 53.5%（6000 局，v6 打同構築 50.6%、v6 打舊 zoo 49.0%）；對 v5 discard 38.8%（v6 打同構築 40.3%、v6 打舊 zoo 38.8%）；新構築+新網路 對 v6 舊 zoo 51.0%（4000 局） | 2026-10-26 起 `npm run game-zakajz` 用它；還沒實戰打過 |
 
 ## v1 `2026-10-12-lab`：PPO 自戰
 
@@ -419,3 +429,184 @@
   - 新版動物園對 zoo-v1 棄牌 47.9%（zoo-v1 自己 42.6%）；新版棄牌對 zoo-v1 動物園 67.5%（zoo-v1 自己 57.4%）。兩副混合 57.7%。
 - 駕駛動物園對 v5 棄牌：36.0%（33.9–38.1），zoo-v1 是 31.8%（29.8–33.9），舊 zoo-v2 是 26.4%。
 - 結論：動物園的基準改為 zoo-v2。蒸餾這次讓兩副牌都變強，不像 blind 版只強了棄牌。
+
+## zoo-t-gen2 `2026-10-24-zoo-t-gen2-w18`：動物園第二代蒸餾（未匯出）
+
+- 設定：和 zoo-v2 相同，只把起點換成 `models/selfplay/warlock-zoo-v2.pt`、種子換成 2；`--workers 18`。5090，第 651–800 輪，每輪 12–14 s。這時瓶頸是 Python 主迴圈，不是模擬器。
+- 訓練中對起點：每 10 輪 512 局，一直在 48–55%，沒有往上的趨勢。
+- 對 zoo-v2（先後手各 1000 局）：
+  - 動物園鏡像 52.6%（50.5–54.8）。
+  - 新版動物園對 zoo-v2 棄牌 38.9%；新版棄牌對 zoo-v2 動物園 64.6%。兩副混合 51.8%。
+- 駕駛動物園對 v5 棄牌：37.3%（35.2–39.4）。zoo-v2 是 36.0%，區間重疊。
+- 搜尋對動物園席的增益（先後手各 300 局）：+4.3（36.0% → 40.3%）。zoo-v2 是 +8.8。
+- 判讀：
+  - 第二代的增幅是 +2.6，第一代是 +7.6，和棄牌術 v3s→v5 的曲線一樣（+6～8 → +2）。
+  - 鏡像沒到 53% 的門檻，所以不匯出，動物園的基準仍是 zoo-v2。
+  - 搜尋能多教的也減半了。再蒸餾一代，預期只會再多 1–2 分。
+- 結論：蒸餾已經到頭，回合內搜尋這個老師已經被吸收得差不多。下一步做跨回合搜尋：推到對手回合結束再估值，Ritual、審判這類延遲效果才看得到兌現。
+
+## 2026-10-25 跨回合搜尋（`--depth 2`）：多看對手一回合再估值
+
+- 為什麼做：蒸餾一代比一代少（zoo-t-gen2 對 zoo-v2 只有 52.6%），搜尋本身的增益（動物園席 +8.8）也有限。回合內搜尋在回合結束時直接問價值網路；改成先讓對手用網路走完下一回合，再估值。
+- 做法（`src/selfplay-search.mjs`，`turns: 2`）：
+  - 回合內的 beam 搜尋不變。`settle` 之後，每個樣本（`redeal` 出來的對手手牌）取分數最高的 `expand` 個根步驟。
+  - 每個根步驟從它最好的那條線的終局狀態出發，用回覆網路（`reply`）走對手的回合：第一步取網路前 `replies` 名，之後貪婪走到回合結束（`replies()`，上限 40 步），再用價值網路估值。這個根的分數取各條回覆裡的最小值。
+  - 沒展開的根步驟用 `max(-0.98, min(v + shift, low))`：shift 是展開過的根平均掉的分數，low 是展開過的根裡最低的分數，所以沒展開的根不會因為少看一回合而佔便宜。已經贏了的盤面仍然算 1。
+  - 開關：`node src/selfplay-match.mjs ... --look a --depth 2 [--expand 4 --replies 1 --reply <net.json>]`（回覆網路預設用自己）；`python train/ppo.py --distill --search N --depth 2 [--expand --replies --reply]`（`--reply` 預設 `models/selfplay/warlock-zoo-v2.json`）。預設 `--depth 1`，行為和以前逐位一致。
+- 先修的兩個速度問題：
+  - ppo.py 和 node 之間的 IPC：觀測改成原始二進位區塊（JSON 標頭帶 `raw:{name:bytes}`，後面接 bytes），價值用 float32 `vBin` 回傳；`Pool.look` 改成非同步，每個 worker 一條讀取執行緒，誰先問就先答。18 個 worker 時 distill 每輪 12–13 s → 8 s。
+  - JS 前向（`src/selfplay-net.mjs`）：跳過為 0 的輸入、把 score0 對盤面那一半的部分和算一次給每個步驟共用、權重轉置後逐欄累加（同一列仍照同樣順序加，結果逐位相同；zoo-v2、v5 各 1000+ 個盤面驗過）。前向 1.87 → 0.51 ms，價值 0.36 → 0.13 ms。
+- 增益（zoo-v2 動物園對 zoo-v2 棄牌，動物園席勝率，先後手各 300 局，種子 1–300；不搜尋 35.7%）：
+
+  | 設定 | 動物園席 | 增益 |
+  |---|---|---|
+  | 回合內，2 樣本（現行） | 44.5% | +8.8 |
+  | depth 2，2 樣本，e4 r2 | 43.8% | +8.1 |
+  | depth 2，2 樣本，e4 r1 | 43.0% | +7.3 |
+  | depth 2，2 樣本，e8 r1 / e8 r2 / e16 r1 | 40.3% / 40.7% / 41.0% | +4.6～+5.3 |
+  | 回合內，6 樣本 | 45.2% | +9.5 |
+  | depth 2，6 樣本，e4 r1 | 48.0% | +12.3 |
+  | depth 2，6 樣本，e8 r1 | 47.2% | +11.5 |
+  | 回合內，12 樣本 | 47.2% | +11.5 |
+  | depth 2，12 樣本，e4 r1 | **50.5%** | **+14.8** |
+
+  - 讀法：600 局的誤差約 ±2 分。樣本只有 2 個時，對手的手牌在推演裡是固定的，depth 2 等於用 2 個樣本的蒙地卡羅取代價值網路對整副手牌的平均，雜訊大、反而變差；展開越多越差。樣本夠多時，depth 2 在同樣本數下比 depth 1 多約 3 分。抽查 36 個決策：d2−d1 的分數平均差 −0.014，24 個選同一步，沒有正負號錯誤。
+- 成本：
+  - 本機每個決策（轉置加速前）：2 樣本 d1 23 ms；6 樣本 d1 56 ms、d2 166 ms（約 7×）；12 樣本 d1 100 ms、d2 308 ms（約 13×）。每個決策約 82 次回覆前向（平均 7.7 步）、約 65 ms；轉置加速再省 20–25%。
+  - 5090 distill（18 worker）每輪：現行 8–13 s；6 樣本 d2 32–54 s；12 樣本 d2 66–96 s。超過 5× 的目標。
+
+## zoo-v3 `2026-10-25-zoo-t-d2s12`：用跨回合搜尋蒸餾
+
+- 設定：`python train/ppo.py --decks warlock-zoo warlock-discard --resume models/selfplay/warlock-zoo-v2.pt --timers --swap --device cuda --eval-every 10 --eval-games 512 --keep-every 10 --lag 50 --seed 2 --distill --tau 0.01 --lr 3e-4 --mono 1 --iters 150 --workers 18 --search 12 --depth 2 --expand 4 --replies 1`（回覆網路預設 zoo-v2）。5090，每輪 66–96 s，150 輪約 3.7 小時。
+- 第 769 輪時 `OSError: Too many open files` 中斷：`Pool` 的讀取執行緒卡在號誌上、一直抓著 Pool，評估用完的 node 程序的 stdout 管線從沒關掉。修法：`Pool.close` 先設 `closed` 並放開每個號誌讓讀取執行緒結束，`Arena.close` 也關 stdout（5 次建立／關閉 Pool 後 fd 和執行緒數回到原值）。從 `ckpt/iter-0760.pt` 接著跑完 761–800（`--seed 3`；Adam 本來每次 resume 就重來）。
+- 訓練中的讀數：對 rush 90–94%（比 zoo-v2 的 87.7% 高）；對起點（zoo-v2，512 局）46.3–55.7%，看不出趨勢，第 800 輪 51.4%。這個讀數和下面的正式對打差很多，不能拿來當停止條件。
+- 對打（`selfplay-match.mjs`，先後手各 1000 局，種子 1，貪婪，Wilson 95%；5090 的 `runtime/zoo-d2-eval/`）：
+
+  | 對戰 | zoo-v3 | zoo-t-gen2（回合內搜尋的第二代） |
+  |---|---|---|
+  | 動物園鏡像，對 zoo-v2 | **54.5%**（52.3–56.7） | 52.6%（50.5–54.8） |
+  | 新版動物園 對 zoo-v2 棄牌 | 38.8%（36.7–41.0） | 38.9% |
+  | 新版棄牌 對 zoo-v2 動物園 | 66.8%（64.7–68.8） | 64.6% |
+
+- 結論：過了門檻（≥ 53%，區間不含 50%），匯出為 `models/selfplay/warlock-zoo-v3.{pt,json}`。用同一個起點、同樣 150 輪，跨回合搜尋的老師比回合內搜尋多約 2 分；代價是每輪慢 7–10 倍。
+
+## zoo-v4 `2026-10-25-zoo-v3-gen2`：跨回合搜尋第二代
+
+- 設定：和 zoo-v3 相同，只換起點、種子與回覆網路：`--resume models/selfplay/warlock-zoo-v3.pt --seed 4 --reply models/selfplay/warlock-zoo-v3.json`，第 801–950 輪。腳本 `runtime/depth2/next.sh`（5090）。
+- 老師的增益（zoo-v3 對 zoo-v3，動物園席，先後手各 300 局）：不搜尋 37.8%、2 樣本 d1 38.0%、12 樣本 d2 46.3%（+8.5；zoo-v2 是 +14.8）。
+- 訓練中的讀數：對隨機 99.4–100%、對 rush 90.4–93.4%；對起點 47.1–55.3%，第 950 輪 54.5%。
+- 對打（`selfplay-match.mjs`，先後手各 1000 局，種子 1，貪婪，Wilson 95%；5090 的 `runtime/zoo-v4-eval/`）：
+
+  | 對戰 | zoo-v4（對 zoo-v3） | zoo-v3（對 zoo-v2） |
+  |---|---|---|
+  | 動物園鏡像 | **53.3%**（51.1–55.4） | 54.5%（52.3–56.7） |
+  | 新版動物園 對 舊版棄牌 | 38.8%（36.6–40.9） | 38.8% |
+  | 新版棄牌 對 舊版動物園 | 65.8%（63.7–67.8） | 66.8% |
+
+- 結論：剛好過門檻（≥ 53%，區間不含 50%），匯出為 `models/selfplay/warlock-zoo-v4.{pt,json}`。每代增益從 +4.5 縮到 +3.3，兩副混搭也沒進步；同一個老師再蒸餾的空間不大，下一步要換方法。
+
+## dh-cthun（2026-10-25，只進模擬器，尚無網路）
+
+- 牌組 `decks/dh-cthun`，模擬器與編碼器加 `extra` 旗標（obs 最後多 1 格；只有 Remnant/Cavern/Studies 的費用顯示折扣後數字），詞彙隨牌組聯集。
+- `train/ppo.py --decks` 可接 3 副以上（decks[0] 對其餘之一，`--mix`、`--mirror`），`--resume` 按牌名搬 `body.0`/`step.0` 的輸入欄位；zoo-v4 展開到 zoo+discard+dh-cthun 後在舊牌盤面上最大差 3.1e-6（`train/test_expand.py`）。
+- 細節與簡化見 STATUS.md「2026-10-25 C'Thun DH 進模擬器」。
+
+## 盤面分數 shaping 試驗（2026-10-25，未產生新版本）
+
+- 從 zoo-v4 用 PPO 接 300 輪，三組：control、`--shape models/selfplay/board-score.json --shape-scale 0.5`、`--shape-scale 1.5`，其餘相同，seed 5。
+- 對 zoo-v4（先後手各 1000 局，種子 1）：
+
+  | 組 | 鏡像 | 駕駛 zoo 對 v4 discard | 駕駛 discard 對 v4 zoo |
+  |---|---|---|---|
+  | control | 52.9%（50.7–55.0） | 37.4% | 57.9% |
+  | shape 0.5 | 48.5% | 33.1% | 62.5% |
+  | shape 1.5 | 47.2% | 32.9% | 56.9% |
+
+  v4 自己對自己的「動物園對棄牌」是 36.3% 對 63.6%。
+- 沒有一組過門檻，**不寫 v5**。control 在 Kazakus 局面會先出 Kazakus 並選 Grueling（100/100），shaping 兩組不會。
+- 細節見 STATUS.md「2026-10-25：盤面分數校準＋PPO reward shaping」。
+
+## zoo-v5 `2026-10-26-zoo-v4-mixed-l01`：PPO 混合搜尋蒸餾（λ=0.1）
+
+- 做法：`train/ppo.py --distill-weight λ`（`--distill-decay-to μ`、`--distill-frac`，測試 `train/test_mixed.py`）。PPO 之外，對學習者 25% 的決策用回合內搜尋（12 樣本 d2，`--reply` = zoo-v4）當老師，loss 加 λ × 模仿它。不帶旗標時行為與舊版相同（log.csv 只有秒數欄不同）。
+- 設定：從 zoo-v4 第 950 輪接 300 輪到 1250，`--decks warlock-zoo warlock-discard --timers --swap --lag 50`，seed 5，λ=0.1。腳本 `train.sh` 在 5090 `~/side_projects/jev-hearthstone-mixdistill-20261025/`，本機副本 `runtime/scratch/eq2/`。
+- 對打（`selfplay-match.mjs`，先後手各 1000 局，種子 1，貪婪，Wilson 95%；對手 zoo-v4）：
+
+  | 組 | 鏡像 | zoo 對 v4 discard | discard 對 v4 zoo | 隨機／rush | Kazakus／Grueling |
+  |---|---|---|---|---|---|
+  | control（純 PPO，seed 5） | 52.9%（50.7–55.0） | 37.4% | 57.9% | 98.9／89.6 | 100／100 |
+  | 純 PPO，seed 6 | 50.7%（48.5–52.9） | 35.4% | 59.2% | 99.3／89.2 | 0／0 |
+  | **λ=0.1（v5）** | **55.9%（53.7–58.1）** | 39.2% | 63.7%（61.6–65.8） | 99.6／91.0 | 100／98 |
+  | λ=0.3 | 53.1%（50.9–55.3） | 38.3% | 64.7% | 99.2／91.0 | 0／0 |
+  | λ 1.0→0.1 | 52.4%（50.2–54.6） | 37.0% | 66.3% | 99.5／92.5 | 0／0 |
+
+  v4 對 v4：zoo 對 discard 36.3%、discard 對 zoo 63.6%。
+- 曲線：50 輪副本對 v4 的鏡像，λ=0.1：52.2、52.6、52.7、56.8、55.4（第 1000–1200 輪），其餘三組與純 PPO 見 STATUS.md「2026-10-26」。對隨機／rush 全程平坦（99+／88–93）；混合組的「對第一份副本」穩在 47–55，純 PPO 掉到 43–47；約 1150–1250 輪 plateau。
+- 結論：門檻（鏡像 ≥ 53% 且區間不含 50%、discard 對 zoo ≥ 61.6%）λ=0.1、0.3 都過，衰減組鏡像差 0.6 分沒過，兩組純 PPO 都沒過。取鏡像最高的 λ=0.1 匯出為 `models/selfplay/warlock-zoo-v5.{pt,json}`。搜尋蒸餾錨確實擋住 PPO 在 discard 上的退化（63.7–66.3% vs 純 PPO 57.9–59.2%）；λ 之間（0.1／0.3）單種子分不出高下，Kazakus 開局只有 λ=0.1 保留，像是種子運氣。5 選 1 有選擇偏差，v5 對 v4 的實際增益可能比 +3 小。
+
+## warlock-zoo-dhmix（2026-10-26，未取代 v5）
+- 從 dh-basic（v4 展開成 zoo＋discard＋C'Thun DH 詞彙、DH 主駕 PPO 120 輪）接 depth-2 distill 150 輪，`--decks warlock-zoo warlock-discard dh-cthun --mirror 0.15`，reply = dh-basic。
+- 對 v4：鏡像 57.5%、對 v4 discard 37.0%（v4 36.3%）、對 dh-basic DH 64.8%（v4 54.5%）。對 v5：鏡像 50.9%、對 v5 discard 37.1%（v5 39.5%）、對 DH 64.8%（v5 56.3%）。細節見 STATUS.md「2026-10-26 DH 基礎訓練＋zoo 對混合對手」。
+
+## zoo-v7 `2026-10-27-eggpriest`：把蛋牧加進對手池（未改 `MODELS`）
+
+- 原因：2026-10-27 05:52 實戰輸給蛋牧（The Egg of Khelos），zoo 每打破一次蛋就更接近對面的 20/20 嘲諷。這一版要把「不理蛋、直接打臉」學進去。
+- 新牌組 `decks/priest-egg/`（30 張，HSReplay 代碼解碼）進模擬器：蛋的五階段亡語、Medivh's Triumph 減費、Shadow Word: Ruin／Hold Them Off!、N'Zoth 減費等，覆蓋表 `docs/priest-egg-sim-coverage.md`、測試 `test/priest-egg-sim.test.mjs`。
+- 設定（5090 `~/side_projects/jev-hearthstone-eggpriest-20261027`）：三組平行，都從 zoo-v6 接 150 輪（第 1400→1550 輪），`--seed 41 --timers --swap --mirror 0.15 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01 --opp-lr 1e-4 --opp-refresh 5 --opp-pool 4 --workers 6`。
+  - A：`--decks warlock-zoo warlock-discard dh-cthun priest-egg --mix 0.25 0.25 0.5`、λ=0.1，`--opp warlock-discard=v5 dh-cthun=dh-long priest-egg`。
+  - B：同 A，λ=0.3。
+  - C（對照）：`--decks warlock-zoo warlock-discard dh-cthun --mix 0.5 0.5`、λ=0.1，不加蛋牧。
+- 蛋牧那一席誰駕駛：照 dh-cthun 的先例用網路，不是規則。訓練時是「自己的對手副本」（`--opp`，1e-4 持續微調、池子 4 份）；評測時用兩個固定對手：**PA**＝A 的對手副本第 1550 輪，**P**＝中性試打網路（從 A 的副本第 1490 輪接 200 輪 priest-vs-zoo 自戰到第 1690 輪；對隨機 99.6%、對 rush 90.2%）。門檻以 P 為準，PA 太弱（v6 就贏 85%）而且 A 訓練時打的就是它。
+- 對打（`selfplay-match.mjs`，貪婪，先後手各 1000 局＝2000 局，種子 11/12/13/15/31，Wilson 95%）：
+
+  | 組 | 對 v6 鏡像 | 對 v5 discard | 對 P（蛋牧） | 對 PA | 蛋攻擊／局 | 孵出 Khelos |
+  |---|---|---|---|---|---|---|
+  | v6 | 50.0%（47.8–52.2） | 43.2%（41.0–45.4） | 61.3%（59.1–63.4） | 85.0%（83.3–86.5） | 1.344 | 41.0% |
+  | A λ=0.1 | 50.2%（48.0–52.4） | 42.7%（40.5–44.9） | 84.2%（82.5–85.7） | 97.8%（97.1–98.4） | 0.276 | 19.6% |
+  | **B λ=0.3（v7）** | 50.0%（47.8–52.1） | 43.1%（40.9–45.3） | **85.9%（84.3–87.4）** | 98.0%（97.3–98.6） | 0.318 | 16.7% |
+  | C 對照 | 51.5%（49.3–53.7） | 43.3%（41.1–45.5） | 64.8%（62.7–66.9） | 86.6%（85.0–88.0） | 1.171 | 37.9% |
+
+  「蛋攻擊」是 `runtime/egg-attacks.mjs` 對 P 打 1000 局數 zoo 手下打在 DINO_410／t2–t5 的次數（不含孵出的 Khelos）。
+- 結論：門檻三条（對蛋牧高於 v6 且區間不重疊、鏡像 ≥ 50%、對 v5 discard 不掉超過 1.5 分）A、B 都過，C 只過後兩條。匯出 B 為 `models/selfplay/warlock-zoo-v7.{pt,json}`（`f87a6b90…`／`b394c8ac…`，與 5090 `ppo/B/policy.pt`、`eval/B.json` 一致）；A 與 B 在誤差內（84.3–85.7 重疊），照「主指標優先」取 B。
+- 腳本 rush sanity（`runtime/rush-check.mjs`，兩席 warlock-zoo、1000 局、種子 41）：v6 92.1%、A 91.7%、B 91.6%、C 92.7%，沒有退步。訓練紀錄裡 A/B 的「against rush」74–75% 是對整份對手菜單平均（A/B 多了一半蛋牧），不是變弱。
+- 判讀：+19～21 分幾乎全是行為改變——蛋攻擊 1.34→0.28 次／局、孵出 Khelos 的局 41%→17–20%，同時鏡像與 discard 沒掉；C 只多訓練拿到 +3.5 且區間重疊，說明課表貢獻約 20 分。對 PA 的 97–98% 不能當實力（PA 弱、又是 A 的訓練對手）。P 從 A 的副本起訓，對 A 可能仍有殘留偏好；`MODELS` 沒改，實戰換不換由使用者決定。細節見 STATUS.md「2026-10-27 zoo-v7」。
+
+## 2026-10-27 shaman-cthun 候選 A／B：對薩滿 +4 分，但對 discard 退 1.7 分，未達門檻（未匯出）
+
+- 原因：2026-10-26 天梯前 20 場最常遇到的非訓練對手是薩滿（4 場），其中第 10、12 場是同一套 Mug'Zee + C'Thun 薩滿（`runtime/ranked-2026-10-26T22-18-25-750Z/game-0010-Power.log`、`game-0012-Power.log`）。這一版要把 zoo 對這副的打法練進網路。
+- 新牌組 `decks/shaman-cthun/`（30 張、18 種，HSReplay 最熱門的那套，卡 id 由 `data/cards.enUS.json` 的 dbfId 轉出）：打法 `decks/shaman-cthun/strategy.md`，模擬器覆蓋表 `docs/shaman-cthun-sim-coverage.md`、測試 `test/shaman-cthun-sim.test.mjs`（13 個）。18 種牌全部有模型，Mug'Zee 的 Zee's Might 被動、Tiny Pal 的選彈藥、Elemental of Madness／Witch's Apprentice 拿的法術是近似（見覆蓋表「簡化」）。
+- 設定（5090 `~/side_projects/jev-hearthstone-shaman-20261027`）：兩組平行，都從 zoo-v7 接 150 輪（第 1551→1700 輪），`--seed 41 --timers --swap --mirror 0.15 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01 --distill-frac 0.1 --opp-lr 1e-4 --opp-refresh 5 --opp-pool 4 --workers 9`，`--decks warlock-zoo warlock-discard dh-cthun priest-egg shaman-cthun --mix 0.25 0.25 0.4 0.6`，`--opp warlock-discard=v5 dh-cthun=dh-long priest-egg shaman-cthun`，08:59–10:10（71 分鐘）。
+  - A：混合蒸餾 λ=0.3（上一輪蛋牧的最佳設定）；B：λ=0.1。
+- 薩滿那一席誰駕駛：照蛋牧／dh-cthun 的先例用網路，不是規則。訓練時是每組自己的對手副本（1e-4 持續微調、池子 4 份）；評測用 **P**（`ppo/P`）＝從 A 的對手副本第 1700 輪接 150 輪 shaman-vs-zoo 自戰（`--decks shaman-cthun warlock-zoo --mix 1.0 --mirror 0.1 --timers --extra --swap`，種子 77）到第 1850 輪，對隨機 100%、對腳本 rush 87.5%、對第一份副本 51.9%。
+- 對打（`selfplay-match.mjs`，貪婪，先後手各 1000 局＝2000 局，種子 11/12/13/15/16，Wilson 95%；zoo 那席勝率）：
+
+  | 組 | 對 v7 鏡像 | 對 v5 discard | 對 P（蛋牧） | 對 P（薩滿） | 對 zakajz | rush |
+  |---|---|---|---|---|---|---|
+  | v7 | 50.0%（47.8–52.2） | 43.0%（40.8–45.1） | 86.2%（84.6–87.6） | 79.5%（77.7–81.2） | 49.1%（47.0–51.3） | 91.6% |
+  | A λ=0.3 | 52.3%（50.1–54.5） | 41.3%（39.2–43.5） | 84.5%（82.9–86.1） | **83.7%（82.0–85.2）** | 51.1%（48.9–53.3） | 91.9% |
+  | B λ=0.1 | 51.2%（49.0–53.4） | 41.2%（39.1–43.4） | 86.0%（84.4–87.5） | **83.5%（81.9–85.1）** | 49.4%（47.2–51.5） | 92.3% |
+
+  蛋牧那一欄比上一輪低 0.3 分（上一輪 v7 是 85.9%）：模擬器這輪加了薩滿的牌（`race`、`reborn`、新衍生牌），同一副對局重跑會有一點位移。三組都在同一份模擬器上跑，組間比較成立。
+- 門檻：① 對薩滿高於 v7 且區間不重疊：A +4.2、B +4.0，都過（82.0–85.2、81.9–85.1 對 77.7–81.2）。② 鏡像 ≥ 50%：A 52.3、B 51.2，都過。③ 對 discard、蛋牧都不低於 v7 超過 1.5 分：A 兩項都 −1.7（43.0→41.3、86.2→84.5），**沒過**；B 蛋牧 −0.2 過、discard −1.8（43.0→41.2），**沒過**。
+- 結論：**沒有組別過門檻，這一輪不匯出 `models/selfplay/warlock-zoo-v8.{pt,json}`**，`src/selfplay-shadow.mjs` 的 `MODELS` 沒動。B 只超出容許 0.3 分，區間又與 v7 大量重疊（39.1–43.4 對 40.8–45.1），但不是單一組種子的雜訊：換種子 22／23 重跑 discard 與蛋牧，A 41.3／84.7、B 41.2／86.3、v7 43.0／86.2，差距原樣重現。權重留在 5090 `ppo/A/policy.pt`、`ppo/B/policy.pt`（`eval/A.json`、`eval/B.json`），要不要接受這個取捨由使用者決定。
+- 判讀：+4 分集中在薩滿這一場，同時鏡像 +1.2～+2.3 沒退步、zakajz 持平到 +2.0；代價落在 discard（A、B 都 −1.7～−1.8）與 A 的蛋牧（−1.7）。B 的取捨明顯比 A 好（蛋牧只 −0.2、鏡像 +1.2），是本輪最接近門檻的設定。P 從 A 的副本起訓，對 A 可能有殘留偏好，但 B 對 P 的結果與 A 相同（83.5 對 83.7），看不出來。所有數字都是實驗室裡的對打，實戰換不換由使用者決定。細節見 STATUS.md「2026-10-27 shaman-cthun…」。
+
+## 2026-10-27 蛋的階段進編碼、蛋牧駕駛重練、zoo-v9（對新蛋牧 +2.6 分，過門檻匯出）
+
+- 原因：`src/sim.mjs` 的蛋牧修正（Haunt／Ectoplasm 的複製品保留 cardId 與階段、重播亡語不觸發重生）讓 v7 與舊蛋牧駕駛的訓練環境失效；另外蛋的五個階段在編碼共用一格，網路看不出還差幾次破殼（`docs/priest-egg-sim-coverage.md`）。這一輪補編碼、重練駕駛、再從 v8 接續 zoo。
+- 編碼：`vocabulary(...,{stages:true})` 多 14 格（每席 7 格），值＝剩餘破殼/5（DINO_410＝1…t5＝.2，孵出的 Khelos 與非蛋為 0）。舊 ckpt 沒有 `stages` 維持原長度；接續時 `resume_state` 補 0。`--stages`、decks 含 `priest-egg`、或續接網路自己有 `stages` 時開啟。測試 `test/selfplay-encode-egg.test.mjs`，npm test 824 過、1 跳過。
+- 蛋牧駕駛 P2（5090 `~/side_projects/jev-hearthstone-egg-20261027`）：從舊 P（shaman 目錄 `ppo/priest-P/policy.pt`，第 1690 輪）接 450 輪（上次 200 輪的 2.25 倍）到第 2140 輪，`--decks priest-egg warlock-zoo --mix 1.0 --mirror 0.1 --timers --extra --stages --swap --seed 79 --workers 18`，15:47–15:58。
+- zoo v8：上一輪 shaman 候選 B（λ=0.1），`ppo/B/policy.pt`／`eval/B.json`（`22792566…`／`cb194dd0…`），本輪放進 `models/selfplay/warlock-zoo-v8.{pt,json}`，當 zoo 的起點。
+- zoo v9 設定：A、B 平行，各從 v8 接 150 輪（1701→1850），`--seed 41 --timers --swap --mirror 0.15 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01 --distill-frac 0.1 --opp-lr 1e-4 --opp-refresh 5 --opp-pool 4 --workers 9`，`--decks warlock-zoo priest-egg shaman-cthun warlock-zakajz dh-cthun --mix 0.45 0.2 0.2 0.15`，`--opp priest-egg=ppo/P2/policy.pt shaman-cthun=ppo/shaman-P.pt warlock-zakajz=models/selfplay/warlock-zakajz-v1.pt dh-cthun=ppo/dh-long.pt`，15:58–17:07（69 分鐘）。A λ=0.1、B λ=0.3。warlock-discard 不在池子、不在門檻。
+- 對打（種子 1、貪婪、先後手各 1000 局＝2000 局、Wilson 95%；zoo 那席勝率）：
+
+  | 組 | 對蛋牧 P2（新） | 對薩滿 | 對 zakajz | 對 dh-cthun | 鏡像對 v8 |
+  |---|---|---|---|---|---|
+  | v8（基準） | 79.0%（77.2–80.8） | 83.7%（82.0–85.3） | 49.3%（47.1–51.5） | 49.3%（47.1–51.5） | 50.0%（47.8–52.2） |
+  | A λ=0.1 | **81.6%（79.8–83.2）** | 83.5%（81.8–85.0） | 51.0%（48.8–53.1） | 49.6%（47.5–51.8） | 52.0%（49.8–54.1） |
+  | B λ=0.3 | 79.7%（77.8–81.4） | 82.3%（80.5–83.9） | 49.6%（47.5–51.8） | 49.9%（47.7–52.0） | 50.5%（48.3–52.7） |
+
+- 駕駛變強：v8 對舊 P 86.8%（85.2–88.2）→ 對新 P2 79.0%（77.2–80.8），區間不重疊；P2 對舊 P 72.8%（70.8–74.7）。自破蛋（`runtime/egg-20261027/egg-crack.mjs`，對 v9 各 500 局、種子 7）：指定自己的蛋出牌 1.23→1.42 次／局、孵出 Khelos 的局 17.0%→19.2%。
+- 門檻：① 蛋牧區間下界 > v8 點估計：A 79.8 > 79.0 過（+2.6）、B 77.8 沒過（+0.6）。② 薩滿／zakajz／dh／鏡像不掉超過 1.5 分：A −0.25／+1.65／+0.35／+1.95、B −1.45／+0.35／+0.55／+0.5，都過。→ **A 過門檻**。
+- 匯出 `models/selfplay/warlock-zoo-v9.{pt,json}`（＝A）：`d859beb8…`／`c2add057…`，obs 620、act 238、stages=true、第 1850 輪。新蛋牧駕駛存成 `models/selfplay/priest-egg-pilot-v2-20261027.{pt,json}`（`4b8434cc…`／`41b16f6a…`，第 2140 輪）。`src/selfplay-shadow.mjs` 的 `MODELS` 依限制沒動。
+- 判讀：主指標 +2.6 分是唯一過門檻的組，鏡像同時 +2.0；λ=0.3 這輪反而較差（與上一輪相反），λ 在 ±1～2 分內不是穩定槓桿。薩滿被蛋牧權重擠壓（−0.25），之後若薩滿變多再調課表。所有數字都是實驗室對打，實戰換不換由使用者決定。細節見 STATUS.md「2026-10-27 蛋的階段進編碼…」。

@@ -14,6 +14,8 @@
     "override": "node --env-file-if-exists=.env.local src/override.mjs",
     "gestures": "node src/gesture-report.mjs",
     "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
+    "game-zoo": "node src/game-zoo.mjs",
+    "game-zakajz": "node src/game-zoo.mjs warlock-zakajz",
     "selfplay": "node src/selfplay.mjs",
     "selfplay-train": "python train/ppo.py",
     "bc-export": "node src/bc-export.mjs",

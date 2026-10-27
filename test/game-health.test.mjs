@@ -32,3 +32,8 @@ test('repeated rule_fallback stops the run; one transient does not', ()=>{
   assert.match(modelTrouble([fb,fb,fb]),/3 rule_fallback/);
   assert.equal(modelTrouble([]),null);
 });
+
+test('JEV_OFFLINE rule picks are chosen, not fallen back to, and never stop the run', ()=>{
+  const off={source:'rules_offline'};
+  assert.equal(modelTrouble(Array(60).fill(off)),null);
+});

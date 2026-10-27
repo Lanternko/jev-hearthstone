@@ -3,12 +3,14 @@
 // sizes (v5 knows 19 names, zoo-v1 53) can share a game. Both play greedy (the top step), as the
 // numbers of docs/selfplay-versions.md are read.
 //
-//   node src/selfplay-match.mjs <modelA> <modelB> [games=200] [seed=1] [deckA] [deckB] [--look a|b|both]
-//       [--samples 2] [--beam 8] [--prior 0.001] [--json]
+//   node src/selfplay-match.mjs <modelA> <modelB> [games=200] [seed=1] [deckA] [deckB | --decks A B] [--look a|b|both]
+//       [--samples 2] [--beam 8] [--prior 0.001] [--depth 1] [--expand 4] [--replies 2] [--reply <model>] [--json]
 //       `games` games with A first and as many with B first; each net plays the first deck of its file
-//       unless the deck is named (decks/<name>). --look lets that net look ahead before every step as
-//       train/ppo.py --search does (src/selfplay-search.mjs, its own value network); --json adds one
-//       line of the tallies for a script to add up.
+//       unless the deck is named (decks/<name>), after the games or with --decks A B (A for model A, B for
+//       model B; say `--decks warlock-zoo dh-cthun`). --look lets that net look ahead before every step as
+//       train/ppo.py --search does (src/selfplay-search.mjs, its own value network); --depth 2 looks on
+//       through the other side's next turn, played by --reply (the looking net itself unless named);
+//       --json adds one line of the tallies for a script to add up.
 import {pathToFileURL} from 'node:url';
 import {moves,apply} from './sim.mjs';
 import {newGame,loadList,winner} from './selfplay.mjs';
@@ -19,10 +21,10 @@ import {search} from './selfplay-search.mjs';
 // The step of train/ppo.py's think with a look ahead: the best score plus `prior` times the log of the
 // policy's own probability, clipped at -10. The deals are those of src/selfplay-env.mjs's plan: one
 // set for every step of a turn. -> {pick, scores, logits}
-export function lookStep(net,s,legal,{samples=2,width=8,prior=1e-3,seed=1}={}){
+export function lookStep(net,s,legal,{samples=2,width=8,prior=1e-3,seed=1,turns=1,expand=4,replies=2,reply=net}={}){
   const {logits}=net.forward(...Object.values(encode(s,legal,net.vocab)));
   if(legal.length<2)return {pick:0,scores:[0],logits};
-  const g=search(s,legal,net.vocab,{samples,width,seed:Math.imul(seed,7919)+Math.imul(s.turn,104729)});
+  const g=search(s,legal,net.vocab,{samples,width,turns,expand,replies,reply,seed:Math.imul(seed,7919)+Math.imul(s.turn,104729)});
   let r=g.next();
   while(!r.done)r=g.next(r.value.map(net.value));
   const top=Math.max(...logits),lse=top+Math.log(logits.reduce((a,x)=>a+Math.exp(x-top),0));
@@ -33,7 +35,7 @@ export function lookStep(net,s,legal,{samples=2,width=8,prior=1e-3,seed=1}={}){
 }
 
 // nets[k] plays seat k (seat 0 moves first) with lists[k]; look[k], when given, is that seat's look
-// ahead ({samples,width,prior}) and onLook sees each of its decisions. -> [first won, drawn, second
+// ahead ({samples,width,prior}, and turns, expand, replies, reply for two turns) and onLook sees each of its decisions. -> [first won, drawn, second
 // won]; a game still going after maxSteps counts as drawn and also in `cut`.
 export function match(nets,lists,{games=200,seed=1,maxSteps=1500,look=[],onLook}={}){
   const tally=[0,0,0];let cut=0;
@@ -68,13 +70,17 @@ export function wilson(k,n,z=1.96){
 if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
   const args=process.argv.slice(2),flag=(name,dflt)=>{const i=args.indexOf(`--${name}`);return i<0?dflt:args.splice(i,2)[1]};
   const json=args.includes('--json');if(json)args.splice(args.indexOf('--json'),1);
-  const who=flag('look',''),opt={samples:Number(flag('samples',2)),width:Number(flag('beam',8)),prior:Number(flag('prior',1e-3))};
-  const [a,b,games=200,seed=1,deckA,deckB]=args;
-  if(!a||!b||!['','a','b','both'].includes(who))throw Error('usage: node src/selfplay-match.mjs <modelA> <modelB> [games] [seed] [deckA] [deckB] [--look a|b|both] [--samples N] [--beam N] [--prior x] [--json]');
+  const who=flag('look',''),opt={samples:Number(flag('samples',2)),width:Number(flag('beam',8)),prior:Number(flag('prior',1e-3)),
+    turns:Number(flag('depth',1)),expand:Number(flag('expand',4)),replies:Number(flag('replies',2))};
+  const reply=flag('reply',null);
+  if(reply)opt.reply=loadNet(reply);
+  const named=args.indexOf('--decks'),pair=named<0?[]:args.splice(named,3).slice(1);
+  const [a,b,games=200,seed=1,...decks]=args,[deckA,deckB]=pair.length?pair:decks;
+  if(!a||!b||!['','a','b','both'].includes(who))throw Error('usage: node src/selfplay-match.mjs <modelA> <modelB> [games] [seed] [deckA] [deckB] [--look a|b|both] [--samples N] [--beam N] [--prior x] [--depth 1|2] [--expand N] [--replies N] [--reply model] [--json]');
   const nets=[loadNet(a),loadNet(b)],lists=nets.map((n,k)=>loadList([deckA,deckB][k]??n.decks[0]));
-  const looks=[who==='a'||who==='both'?opt:null,who==='b'||who==='both'?opt:null];
+  const looks=[0,1].map(k=>who==='both'||who===['a','b'][k]?{...opt,reply:opt.reply??nets[k]}:null);
   const deck=[deckA??nets[0].decks[0],deckB??nets[1].decks[0]];
-  const label=[a,b].map((p,k)=>`${p.replace(/^.*[\/]/,'').replace(/\.json$/,'')}(${deck[k]})${looks[k]?'+look':''}`);
+  const label=[a,b].map((p,k)=>`${p.replace(/^.*[\/]/,'').replace(/\.json$/,'')}(${deck[k]})${looks[k]?looks[k].turns>1?'+look2':'+look':''}`);
   const pct=([lo,hi])=>`${(100*lo).toFixed(1)}–${(100*hi).toFixed(1)}%`;
   const share=(k,n)=>`${k} (${(100*k/n).toFixed(1)}%, ${pct(wilson(k,n))})`;
   const total=[0,0,0],n=Number(games),orders=[];

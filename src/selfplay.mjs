@@ -15,28 +15,55 @@ export const cardDb=()=>db??=Object.fromEntries(read('../data/cards.enUS.json').
 export const loadList=name=>read(`../decks/${name}/list.json`);
 
 // A card of the database in the shape Power.log gives one, so the simulator reads both alike.
-const TAGS=['TAUNT','RUSH','CHARGE','DIVINE_SHIELD','STEALTH','POISONOUS','LIFESTEAL','WINDFURY'];
+const TAGS=['TAUNT','RUSH','CHARGE','DIVINE_SHIELD','STEALTH','POISONOUS','LIFESTEAL','WINDFURY','ELUSIVE'];
 export const rawCard=(c,entityId)=>({entityId,cardId:c.id,CARDTYPE:c.type,name:c.name,text:c.text??'',COST:c.cost??0,
+  legendary:c.rarity==='LEGENDARY'||!!c.elite,race:c.race??null,
   ...(c.attack!=null?{ATK:c.attack}:{}),...(c.health||c.durability?{HEALTH:c.health||c.durability}:{}),
   ...Object.fromEntries((c.mechanics??[]).filter(m=>TAGS.includes(m)).map(m=>[m,1]))});
 
 function context(cards){
   const minions={};
   for(const c of Object.values(cards))if(c.collectible&&c.type==='MINION')(minions[c.cost]??=[]).push(rawCard(c,0));
-  return {minions,extra:Object.fromEntries([['Shred of Time','TIME_025t'],['Accelerated Whelp','CATA_210t'],["C'thrax Brute",'BE_085t'],
+  // Every collectible minion by name, for Watfin's Discover.
+  const allMinions=Object.values(cards).filter(c=>c.collectible&&c.type==='MINION').map(c=>rawCard(c,0));
+  // Blessing of the Moon's pool: every collectible Priest minion and spell (sim.mjs keeps the ones it can play).
+  const priest=Object.values(cards).filter(c=>c.collectible&&c.cardClass==='PRIEST'&&(c.type==='MINION'||c.type==='SPELL')).map(c=>rawCard(c,0));
+  return {minions,allMinions,priest,allById:Object.fromEntries(allMinions.map(c=>[c.cardId,c])),
+    // Cards the simulator summons by id (decks/priest-egg: the five Egg stages and the Khelos they hatch;
+    // decks/shaman-cthun: Skywall Sentinel's Soldier of Al'Akir).
+    tokens:Object.fromEntries(['DINO_410t2','DINO_410t3','DINO_410t4','DINO_410t5','DINO_410t','CAP_805t','CATA_565t'].map(id=>[id,rawCard(cards[id],0)])),
+    extra:Object.fromEntries([['Shred of Time','TIME_025t'],['Accelerated Whelp','CATA_210t'],["C'thrax Brute",'BE_085t'],
     ['Faceless Fanatic','BE_013t5'],['Voidlord','LOOT_368'],['Rushed Trial','CAP_405tb1'],['Grueling Trial','CAP_405tb2'],
-    ['Unending Trial','CAP_405tb3']].map(([name,id])=>[name,rawCard(cards[id],0)]))};
+    ['Unending Trial','CAP_405tb3'],
+    // decks/shaman-cthun: Fire Fly's Elemental, the Herald token and the four basic Totems.
+    ['Flame Elemental','UNG_809t1'],["Soldier of Al'Akir",'CATA_565t'],
+    ['Searing Totem','CS2_050'],['Stoneclaw Totem','CS2_051'],['Wrath of Air Totem','CS2_052'],['Healing Totem','NEW1_009'],
+    // The C'Thun demon hunter: its tokens, the demons and Portals of Broxigar's chain, the Outcast cards.
+    ['Naga Monstrosity','CATA_528t'],['Hound Dreadseed','EDR_840t'],['Crow Dreadseed','EDR_840t1'],['Serpent Dreadseed','EDR_840t2'],
+    ['Gorishi Stinger','TLC_630t'],['Silithid Grub','TLC_903t'],
+    ['Second Portal to Argus','TIME_020t3'],['Third Portal to Argus','TIME_020t4'],['Final Portal to Argus','TIME_020t5'],
+    ["Fleeing Ur'zul",'TIME_020t2t'],['Fleeing Incubus','TIME_020t3t'],['Fleeing Wrathguard','TIME_020t4t'],['Fleeing Terrorguard','TIME_020t5t'],
+    ...OUTCAST.map(id=>[cards[id].name,id])].map(([name,id])=>[name,rawCard(cards[id],0)])),
+    // Illidari Studies finds one of these; byId resolves a pick named by its card id.
+    outcast:OUTCAST,byId:Object.fromEntries([...OUTCAST,...Object.values(cards).filter(c=>/^EDR_820[ab]$/.test(c.id)).map(c=>c.id)].map(id=>[id,rawCard(cards[id],0)]))};
 }
+const OUTCAST=['CORE_BT_480','CORE_BT_491','CS3_017','BT_814'];
 const contexts=new WeakMap();
 
 function seat(k,list,cards,s){
   const ids=Object.entries(list.cards).flatMap(([id,n])=>Array(n).fill(id));
   for(const id of [list.hero,list.power,...ids])if(!cards[id])throw Error(`unknown card ${id}`);
-  const deck=ids.map((id,i)=>rawCard(cards[id],(k+1)*100+i));
+  let deck=ids.map((id,i)=>rawCard(cards[id],(k+1)*100+i));
+  // Broxigar's Start of Game: he disappears; the Portals to Argus bring him back to the hand.
+  const brox=deck.find(c=>c.cardId==='TIME_020')??null;
+  if(brox)deck=deck.filter(c=>c!==brox);
   for(let i=deck.length-1;i>0;i--){const j=roll(s,i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}
   const p=rawCard(cards[list.power],(k+1)*100+99),t=textOf(p);
   return {seat:k,hand:[],deck,weapon:null,locations:0,sites:[],mana:0,crystals:0,fatigue:0,discardCount:0,spellTax:0,timers:[],
+    died:0,cthunSeen:[],cthunStart:ids.includes('BE_013'),brox,studies:0,grave:[],rattles:0,slimePile:[],
     power:{id:p.entityId,name:p.name,cost:p.COST,gain:heroAttackGain(p),draw:/\bdraw a card\b/i.test(t)?1:0,
+      summon:/summon a random basic totem/i.test(t)?1:0,
+      heal:Number(/restore #?(\d+) health/i.exec(t)?.[1]??0),
       selfHit:Number(/take \$?(\d+)\s*damage/i.exec(t)?.[1]??0),used:false}};
 }
 const heroBody=(c,k,side)=>({...body(rawCard(c,k+1),side),canAttack:false,rushOnly:false,targets:new Set(),maxAttacks:1});

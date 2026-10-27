@@ -1,6 +1,12 @@
 // Confidence measures support for our classification, NOT a calibrated probability
 // that an effect triggers next turn. Strength is a coarse removal premium, not mana.
-const flat=t=>(t??'').replace(/\[x\]|<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+const FLAT=new Map();
+const flat=t=>{
+  t??='';
+  let v=FLAT.get(t);
+  if(v===undefined){v=t.replace(/\[x\]|<[^>]+>/g,' ').replace(/\s+/g,' ').trim();if(FLAT.size>=20000)FLAT.clear();FLAT.set(t,v)}
+  return v;
+};
 const on=v=>v===1||v==='1'||v===true;
 const rules=[
  {ids:['NEW1_012','WON_031'],zone:'PLAY',trigger:'cast a spell: gain +1 Attack',repeat:'repeatable',strength:2,text:/^Whenever you cast a spell, gain \+1 Attack\.$/i},

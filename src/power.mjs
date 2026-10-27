@@ -14,8 +14,8 @@ export async function latestLog(root=LOG_ROOT){
 // went on. feed() takes complete lines only; snapshot() holds back a trailing partial line.
 export function createParser(){
   let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,handOwner=null,revision=0,gameNumber=0,optionsOpen=false;
-  let choices=new Map(),shownTurn=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
-  let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null;
+  let choices=new Map(),shownTurn=0,played=0,playedAt=null,playDepth=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
+  let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null,kazRuns=new Map(),kazLast=null;
   // A card that leaves the hand for the graveyard without being the card played was discarded. The
   // game keeps no count of its own in the log, and the self-play network was trained with one.
   const leaves=(e,id,zone)=>{if(zone==='GRAVEYARD'&&e.tags.ZONE==='HAND'&&id!==playing){const c=Number(e.tags.CONTROLLER);discards.set(c,(discards.get(c)??0)+1)}};
@@ -37,11 +37,17 @@ export function createParser(){
     // GameState is the server's view and runs up to 8.5s ahead of the screen: it hands us our
     // turn while the opponent's is still being animated, and clicks then are dropped. The
     // PowerTaskList copy of the same line is written as the client plays it back.
+    // Every playback line moves `played`: while it keeps moving the client is still animating
+    // (a ritual firing at the start of our turn plays for ~5s after the turn is shown).
+    if(line.includes('PowerTaskList.DebugPrintPower()')){played++;playedAt=line.match(/^\w (\d\d:\d\d:\d\d\.\d+)/)?.[1]??playedAt;
+      // an open block is still being animated, even through a pause (the ritual's 3s between its
+      // summons and leaving play)
+      if(/DebugPrintPower\(\) -\s*BLOCK_START/.test(line))playDepth++;else if(/DebugPrintPower\(\) -\s*BLOCK_END/.test(line))playDepth=Math.max(0,playDepth-1)}
     m=line.match(/PowerTaskList\.DebugPrintPower\(\) -\s*TAG_CHANGE Entity=GameEntity tag=TURN value=(\d+)/);
     if(m){shownTurn=Number(m[1]);continue}
     m=line.match(/GameState\.DebugPrintPower\(\) -\s*(.*)/);
     if(m){const s=m[1];
-      if(s==='CREATE_GAME'){shownTurn=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;handOwner=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;gameNumber++;continue}
+      if(s==='CREATE_GAME'){shownTurn=0;played=0;playedAt=null;playDepth=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;handOwner=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;kazRuns=new Map();kazLast=null;gameNumber++;continue}
       if(s.startsWith('BLOCK_START')){
         effectStack.push(s.match(/\bcardId=(\S*)/)?.[1]??'');
         const play=s.match(/^BLOCK_START BlockType=PLAY Entity=\[(.*?)\](?:\s+EffectCardId=|\s*$)/);
@@ -59,7 +65,12 @@ export function createParser(){
         // The starting decks are created before any block opens; anything made inside one is a copy
         // or a token, and never left the deck the list describes.
         if(effectStack.length)block.created=true;
-        if(effectStack.includes('TIME_026'))block.generatedByContinuity=true;continue}
+        // The trial card Kazakus plots lands in hand right after the third pick; it keeps the two effects picked for it.
+        if(/^CAP_405tb[1-3]$/.test(a[2])&&kazLast)block.trialEffects=kazLast;
+        if(effectStack.includes('TIME_026'))block.generatedByContinuity=true;
+        // Twilight Timehopper and Tachyon Barrage shuffle Shreds of Time in too. drawHazards reads generatedByContinuity as
+        // a 3-damage draw for Continuity's pair and stays on that flag; hiddenDeck counts either.
+        if(effectStack.some(id=>id==='TIME_025'||id==='TIME_026'||id==='TIME_027'))block.generatedShred=true;continue}
       a=s.match(/(?:SHOW_ENTITY|CHANGE_ENTITY) - Updating Entity=(.+) CardID=(\S*)/);if(a){const id=resolve(a[1]);block=id==null?null:ensure(id);if(block)block.cardId=a[2];
         // Only a reveal of a card with a preceding public PLAY fills its record.
         // Hidden hand/deck cards never create public-play evidence.
@@ -96,7 +107,16 @@ export function createParser(){
         // The server's result closes the choice whoever made it.
         choices.delete(id);continue}
       const entry=m[1].match(/^Entities\[\d+\]=(.+)/);
-      if(entry&&chosenPacket){const id=resolve(entry[1]);if(id!=null)chosenPacket.kept.push(id)}
+      if(entry&&chosenPacket){const id=resolve(entry[1]);if(id!=null)chosenPacket.kept.push(id);
+        // Godfather Kazakus: the two effects picked so far (CAP_405t1..9), cleared when the trial (CAP_405tb1b..3b, a b more than
+        // the card in hand) is picked. The game offers all three as GENERAL choices, so these lines are the only record.
+        const pick=/\bcardId=(CAP_405t(?:[1-9]|b[1-3]b))\b/.exec(entry[1])?.[1];
+        if(pick&&chosenPacket.playerId!=null){
+          const run=kazRuns.get(chosenPacket.playerId)??[];
+          if(pick.startsWith('CAP_405tb')){kazLast=run.slice(0,2);kazRuns.set(chosenPacket.playerId,[])}
+          else kazRuns.set(chosenPacket.playerId,[...run,pick]);
+        }
+      }
       continue;
     }
     m=line.match(/GameState\.DebugPrintEntityChoices\(\) -\s*(.*)/);
@@ -111,7 +131,7 @@ export function createParser(){
   return api;
   }
   function ownHand(){const n=new Map();for(const e of entities.values())if(e.tags?.ZONE==='HAND'&&e.cardId){const c=Number(e.tags.CONTROLLER);n.set(c,(n.get(c)||0)+1)}const r=[...n].sort((a,b)=>b[1]-a[1]);return r.length&&(r.length===1||r[0][1]>r[1][1])?r[0][0]:null}
-  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,discards,localPlayer:ownHand()??handOwner??localPlayer,revision,gameNumber,shownTurn,optionsOpen})};
+  const api={feed,result:()=>({entities,game:entities.get(game),options,choice,choices,chosenResults,publicPlays,initialHeroHealth,discards,kazRuns,localPlayer:ownHand()??handOwner??localPlayer,revision,gameNumber,shownTurn,played,playedAt,playDepth,optionsOpen})};
   return api;
 }
 export const parsePower=text=>createParser().feed(text).result();

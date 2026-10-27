@@ -1,0 +1,96 @@
+D 13:37:56.5295166 GameState.DebugPrintPowerList() - Count=126
+D 13:37:56.5295166 GameState.DebugPrintPower() - CREATE_GAME
+D 13:37:56.5295166 GameState.DebugPrintPower() -     GameEntity EntityID=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=CARDTYPE value=GAME
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ZONE value=PLAY
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ENTITY_ID value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=937 value=268
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=SPAWN_TIME_COUNT value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=GAME_SEED value=1675389237
+D 13:37:56.5295166 GameState.DebugPrintPower() -     Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115202425897799 lo=62924327]
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=CONTROLLER value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=CARDTYPE value=PLAYER
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=PLAYER_ID value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=HERO_ENTITY value=64
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAXHANDSIZE value=10
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=STARTHANDSIZE value=4
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=TEAM_ID value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ZONE value=PLAY
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ENTITY_ID value=2
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAXRESOURCES value=10
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=SPAWN_TIME_COUNT value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAX_EXCAVATE_TIER value=3
+D 13:37:56.5295166 GameState.DebugPrintPower() -     Player EntityID=3 PlayerID=2 GameAccountId=[hi=0 lo=0]
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=CONTROLLER value=2
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=CARDTYPE value=PLAYER
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=PLAYER_ID value=2
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=HERO_ENTITY value=66
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAXHANDSIZE value=10
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=STARTHANDSIZE value=4
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=TEAM_ID value=2
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ZONE value=PLAY
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=ENTITY_ID value=3
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAXRESOURCES value=10
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=SPAWN_TIME_COUNT value=1
+D 13:37:56.5295166 GameState.DebugPrintPower() -         tag=MAX_EXCAVATE_TIER value=3
+D 13:37:56.5295166 GameState.DebugPrintGame() - PlayerID=1, PlayerName=史詩魅魔#4384
+D 13:37:56.5295166 GameState.DebugPrintGame() - PlayerID=2, PlayerName=旅店老闆
+D 13:39:42.0736814 GameState.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=TURN value=7 
+D 13:40:01.2687603 GameState.DebugPrintEntityChoices() - id=3 Player=史詩魅魔#4384 TaskList=205 ChoiceType=GENERAL CountMin=1 CountMax=1
+D 13:40:01.2687603 GameState.DebugPrintEntityChoices() -   Source=[entityName=教父卡札克斯 id=14 zone=PLAY zonePos=2 cardId=CAP_405 player=1]
+D 13:40:01.2687603 GameState.DebugPrintEntityChoices() -   Entities[0]=[entityName= id=99 zone=SETASIDE zonePos=0 cardId=CAP_405t1 player=1]
+D 13:40:01.2687603 GameState.DebugPrintEntityChoices() -   Entities[1]=[entityName=走私判刑 id=100 zone=SETASIDE zonePos=0 cardId=CAP_405t3 player=1]
+D 13:40:01.2687603 GameState.DebugPrintEntityChoices() -   Entities[2]=[entityName=虛晃毒襲 id=101 zone=SETASIDE zonePos=0 cardId=CAP_405t5 player=1]
+D 13:40:09.6365378 GameState.SendChoices() - id=3 ChoiceType=GENERAL
+D 13:40:09.6365378 GameState.SendChoices() -   m_chosenEntities[0]=[entityName=虛晃毒襲 id=101 zone=SETASIDE zonePos=0 cardId=CAP_405t5 player=1]
+D 13:40:09.9490674 GameState.DebugPrintEntitiesChosen() - id=3 Player=史詩魅魔#4384 EntitiesCount=1
+D 13:40:09.9490674 GameState.DebugPrintEntitiesChosen() -   Entities[0]=[entityName=虛晃毒襲 id=101 zone=SETASIDE zonePos=0 cardId=CAP_405t5 player=1]
+D 13:40:10.1003246 GameState.DebugPrintEntityChoices() - id=4 Player=史詩魅魔#4384 TaskList=206 ChoiceType=GENERAL CountMin=1 CountMax=1
+D 13:40:10.1003246 GameState.DebugPrintEntityChoices() -   Source=[entityName=教父卡札克斯 id=14 zone=PLAY zonePos=2 cardId=CAP_405 player=1]
+D 13:40:10.1003246 GameState.DebugPrintEntityChoices() -   Entities[0]=[entityName=罪犯契約 id=102 zone=SETASIDE zonePos=0 cardId=CAP_405t6 player=1]
+D 13:40:10.1003246 GameState.DebugPrintEntityChoices() -   Entities[1]=[entityName=走私判刑 id=103 zone=SETASIDE zonePos=0 cardId=CAP_405t3 player=1]
+D 13:40:10.1003246 GameState.DebugPrintEntityChoices() -   Entities[2]=[entityName=共謀定罪 id=104 zone=SETASIDE zonePos=0 cardId=CAP_405t2 player=1]
+D 13:40:11.6606336 GameState.SendChoices() - id=4 ChoiceType=GENERAL
+D 13:40:11.6606336 GameState.SendChoices() -   m_chosenEntities[0]=[entityName=共謀定罪 id=104 zone=SETASIDE zonePos=0 cardId=CAP_405t2 player=1]
+D 13:40:11.9409012 GameState.DebugPrintEntitiesChosen() - id=4 Player=史詩魅魔#4384 EntitiesCount=1
+D 13:40:11.9409012 GameState.DebugPrintEntitiesChosen() -   Entities[0]=[entityName=共謀定罪 id=104 zone=SETASIDE zonePos=0 cardId=CAP_405t2 player=1]
+D 13:40:12.0920209 GameState.DebugPrintEntityChoices() - id=5 Player=史詩魅魔#4384 TaskList=207 ChoiceType=GENERAL CountMin=1 CountMax=1
+D 13:40:12.0920209 GameState.DebugPrintEntityChoices() -   Source=[entityName=教父卡札克斯 id=14 zone=PLAY zonePos=2 cardId=CAP_405 player=1]
+D 13:40:12.0920209 GameState.DebugPrintEntityChoices() -   Entities[0]=[entityName=無盡審判 id=105 zone=SETASIDE zonePos=0 cardId=CAP_405tb3b player=1]
+D 13:40:12.0920209 GameState.DebugPrintEntityChoices() -   Entities[1]=[entityName=嚴厲審判 id=106 zone=SETASIDE zonePos=0 cardId=CAP_405tb2b player=1]
+D 13:40:12.0920209 GameState.DebugPrintEntityChoices() -   Entities[2]=[entityName=倉促審判 id=107 zone=SETASIDE zonePos=0 cardId=CAP_405tb1b player=1]
+D 13:40:13.7831070 GameState.SendChoices() - id=5 ChoiceType=GENERAL
+D 13:40:13.7831070 GameState.SendChoices() -   m_chosenEntities[0]=[entityName=無盡審判 id=105 zone=SETASIDE zonePos=0 cardId=CAP_405tb3b player=1]
+D 13:40:14.0477434 GameState.DebugPrintEntitiesChosen() - id=5 Player=史詩魅魔#4384 EntitiesCount=1
+D 13:40:14.0477434 GameState.DebugPrintEntitiesChosen() -   Entities[0]=[entityName=無盡審判 id=105 zone=SETASIDE zonePos=0 cardId=CAP_405tb3b player=1]
+D 13:40:14.1658708 GameState.DebugPrintPower() - FULL_ENTITY - Creating ID=108 CardID=CAP_405tb3
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=CONTROLLER value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=CARDTYPE value=SPELL
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=TAG_SCRIPT_DATA_NUM_1 value=4
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=ZONE value=SETASIDE
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=ENTITY_ID value=108
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=ELITE value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=CLASS value=WARLOCK
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=CREATOR value=14
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=QUEST_PROGRESS_TOTAL value=4
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=1037 value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=CREATOR_DBID value=127067
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=SPAWN_TIME_COUNT value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=OBJECTIVE value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     tag=4901 value=1
+D 13:40:14.1658708 GameState.DebugPrintPower() -     TAG_CHANGE Entity=108 tag=ZONE value=HAND 
+D 13:40:22.9065663 GameState.DebugPrintPower() - BLOCK_START BlockType=PLAY Entity=[entityName=無盡審判 id=108 zone=HAND zonePos=3 cardId=CAP_405tb3 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 
+D 13:40:22.9065663 GameState.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=無盡審判 id=108 zone=HAND zonePos=3 cardId=CAP_405tb3 player=1] tag=ZONE value=SECRET 
+D 13:40:29.2903284 GameState.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=TURN value=8 
+D 13:40:30.4072867 GameState.DebugPrintPower() -     TAG_CHANGE Entity=GameEntity tag=TURN value=9 
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() - id=6 Player=史詩魅魔#4384 TaskList=256 ChoiceType=GENERAL CountMin=1 CountMax=1
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() -   Source=[entityName=克蘇恩儀式 id=19 zone=SECRET zonePos=0 cardId=BE_726 player=1]
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() -   Entities[0]=[entityName=克蘇恩之怒 id=112 zone=SETASIDE zonePos=0 cardId=BE_013t1 player=1]
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() -   Entities[1]=[entityName=克蘇恩領域 id=113 zone=SETASIDE zonePos=0 cardId=BE_013t2 player=1]
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() -   Entities[2]=[entityName=克蘇恩怒視 id=114 zone=SETASIDE zonePos=0 cardId=BE_013t3 player=1]
+D 13:40:30.4229277 GameState.DebugPrintEntityChoices() -   Entities[3]=[entityName=克蘇恩僕從 id=115 zone=SETASIDE zonePos=0 cardId=BE_013t4 player=1]
+D 13:40:42.5389955 GameState.SendChoices() - id=6 ChoiceType=GENERAL
+D 13:40:42.5389955 GameState.SendChoices() -   m_chosenEntities[0]=[entityName=克蘇恩僕從 id=115 zone=SETASIDE zonePos=0 cardId=BE_013t4 player=1]
+D 13:40:42.8157186 GameState.DebugPrintEntitiesChosen() - id=6 Player=史詩魅魔#4384 EntitiesCount=1
+D 13:40:42.8157186 GameState.DebugPrintEntitiesChosen() -   Entities[0]=[entityName=克蘇恩僕從 id=115 zone=SETASIDE zonePos=0 cardId=BE_013t4 player=1]
+D 13:40:43.1165720 GameState.DebugPrintPower() -         TAG_CHANGE Entity=[entityName=無盡審判 id=108 zone=SECRET zonePos=0 cardId=CAP_405tb3 player=1] tag=QUEST_PROGRESS value=1 

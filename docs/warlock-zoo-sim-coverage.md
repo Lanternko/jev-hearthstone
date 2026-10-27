@@ -26,7 +26,8 @@
 | Twilight Egg (CATA_210) | 2 | 1 | 0/2，亡語召喚雛龍，雛龍每回合在手 +1/+1 | `gameModel` 白板 + `rattle` | 已建模：0/2；死亡後召喚 2/1 Accelerated Whelp（`s.game.extra`）。手牌成長沒做 |
 | Floating Lessons (BE_094) | 2 | 1 | 指定隨從加攻血，另外隨機一張手牌隨從也加 | `gameModel` `lessons` | 已建模：目標是任一方的隨從（敵方潛行、休眠除外），+X/+X，X＝`costOf` 算過 Mawman／稅的費用×2（Mawman 在場為 +4/+4）；手上隨機一張隨從同樣 +X/+X，沒有就只加目標。場上沒有隨從目標時不能出 |
 | Ritual of C'Thun (BE_726) | 2 | 1 | 2 回合後觸發的延遲選擇 | `gameModel` `ritual` + 座位計時器 | 已建模：我方第 2 個回合開始時 4 選 1（Wrath 7 點隨機分配、Domain 兩隻其他隨機友方隨從 +2/+3、Glare 吸血 5 傷並選敵方隨從、Servants 兩隻 2/3 嘲諷）。沒有敵方隨從時選項裡沒有 Glare |
-| Darkest Depths (BE_087) | 1 | 2 | 召喚兩個 0/3 嘲諷，Assemble | `gameModel` `tokens` | 已建模：兩個 0/3 嘲諷 Depthguard。Assemble 沒做 |
+| Fatebreaker (TIME_028) | 1 | 4 | 4/4 吸血，戰吼從牌庫施放一張 Shred 獲得 +3/+3（2026-10-25 取代 Darkest Depths） | `gameModel` `fatebreaker` | 已建模：牌庫有 Shred 就拿掉一張、自己英雄受 3、本身變 7/7；沒有 Shred 是 4/4。吸血由關鍵字處理 |
+| Darkest Depths (BE_087) | 0 | 2 | 召喚兩個 0/3 嘲諷，Assemble | `gameModel` `tokens` | 已建模：兩個 0/3 嘲諷 Depthguard。Assemble 沒做 |
 | Cult Neophyte (CORE_SCH_713) | 2 | 2 | 3/2，戰吼：對手下回合法術 +1 費 | `gameModel` `tax` | 已建模：3/2；對手座位 `spellTax` +1，對手回合結束時歸零 |
 | Twilight Timehopper (TIME_025) | 2 | 2 | 4/4，戰吼洗 2 張 Shred of Time 進牌庫 | `SHREDS` + `shuffleShreds` | 已建模：4/4，牌庫 +2 Shred（和 Entropic Continuity 共用） |
 | Tachyon Barrage (TIME_027) | 2 | 2 | 6 點隨機分配給敵人，洗 2 張 Shred | `SPLIT` → `volley` + `shuffleShreds` | 已建模：6 點隨機分配、牌庫 +2 Shred |

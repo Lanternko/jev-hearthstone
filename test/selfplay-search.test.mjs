@@ -4,7 +4,7 @@ import {moves,apply} from '../src/sim.mjs';
 import {newGame,loadList,rushPolicy,winner} from '../src/selfplay.mjs';
 import {vocabulary} from '../src/selfplay-encode.mjs';
 import {lethalOnBoard} from '../src/selfplay-audit.mjs';
-import {redeal,search,keepBestOrder} from '../src/selfplay-search.mjs';
+import {redeal,search,keepBestOrder,replies} from '../src/selfplay-search.mjs';
 import {Arena} from '../src/selfplay-env.mjs';
 
 const LIST=loadList('warlock-discard'),LISTS=[LIST,LIST],VOCAB=vocabulary(LISTS);
@@ -132,4 +132,61 @@ test('the order rule changes no score where the value is blind, and can be switc
     const on=run(s,()=>0,{samples:2,width:8,seed}),off=run(s,()=>0,{samples:2,width:8,seed,orders:false});
     assert.deepEqual(on.scores,off.scores,`seed ${seed}`);
   }
+});
+
+// A stand-in for the network of the reply: it prefers the steps in the order moves() gives them.
+const FIRST={vocab:VOCAB,forward:(obs,acts)=>({logits:acts.map((a,i)=>-i),value:0})};
+// A value that differs from state to state, the same each time it is asked.
+const hashed=obs=>{let h=0;for(let i=0;i<obs.length;i++)h=Math.imul(h^Math.round(obs[i]*1000),16777619);return (h>>>0)/2**32*1.6-.8};
+
+test('the other side\'s reply is played to our next turn, along each of its best first steps', ()=>{
+  const s=reach(5,(x,legal)=>x.turn>=6&&legal.length>=4),legal=moves(s);
+  const t=apply(s,legal.find(m=>m.kind==='end')).s,before=JSON.stringify(t);
+  assert.notEqual(t.seat,s.seat);
+  const ends=replies(t,FIRST,2);
+  assert.equal(ends.length,Math.min(2,moves(t).length));
+  for(const e of ends)assert.ok(e.seat===s.seat||winner(e)!=null);
+  assert.equal(JSON.stringify(t),before);
+  assert.deepEqual(replies(t,FIRST,1).map(e=>JSON.stringify(e)),[JSON.stringify(ends[0])]);
+});
+
+test('with two turns the best first steps are scored by the worst reply, and the rest never rank above them', ()=>{
+  assert.throws(()=>run(reach(4,(x,legal)=>legal.length>=8),hashed,{turns:2}),/reply/);
+  let checked=0;
+  for(let seed=3;seed<=30&&checked<4;seed++){
+    const s=reach(seed,(x,legal)=>x.turn>=4&&legal.length>=6);
+    if(!s)continue;
+    const one=run(s,hashed,{samples:1,width:4,seed}),two=run(s,hashed,{samples:1,width:4,seed,turns:2,expand:2,replies:2,reply:FIRST});
+    assert.ok(two.asked>one.asked,`${one.asked} and ${two.asked}`);
+    assert.equal(two.scores.length,one.scores.length);
+    assert.ok(two.scores.every(v=>v>=-1&&v<=1));
+    // The two steps looked at again are those that scored best in one turn; nothing else beats the worse of them.
+    const top=one.scores.map((v,r)=>[v,r]).sort((x,y)=>y[0]-x[0]).slice(0,2).map(([,r])=>r);
+    const low=Math.min(...top.map(r=>two.scores[r]));
+    one.scores.forEach((v,r)=>{if(!top.includes(r))assert.ok(two.scores[r]<=low+1e-12,`seed ${seed} step ${r}`)});
+    assert.deepEqual(run(s,hashed,{samples:1,width:4,seed,turns:2,expand:2,replies:2,reply:FIRST}),two);
+    checked++;
+  }
+  assert.equal(checked,4);
+});
+
+test('a win on the board still scores a win when the search looks a turn further', ()=>{
+  const s=reach(1,(x,legal)=>lethalOnBoard(x,legal)),legal=moves(s);
+  const {scores}=run(s,()=>0,{samples:2,width:8,turns:2,reply:FIRST});
+  assert.equal(Math.max(...scores),1);
+  assert.ok(scores[legal.findIndex(m=>m.kind==='end')]<1);
+});
+
+test('the arena looks two turns ahead with the network of the file it is given', ()=>{
+  const arena=new Arena({lists:LISTS,n:3,seed:4});
+  for(let k=0;k<20;k++)arena.step(arena.tables.map(t=>Math.max(0,t.legal.length-2)));
+  const tables=[0,1,2].filter(i=>arena.tables[i].legal.length>1),play=opts=>{
+    let r=arena.plan(tables,opts),asked=0;
+    while(r.ask){asked+=r.ask.length;r=arena.answer(r.ask.map(hashed))}
+    return {...r,asked};
+  };
+  assert.throws(()=>arena.plan(tables,{turns:2}),/reply/);
+  const one=play({samples:1,width:4}),two=play({samples:1,width:4,turns:2,reply:'models/selfplay/warlock-discard-v5.json'});
+  assert.ok(two.asked>one.asked);
+  assert.deepEqual(two.scores.map(x=>x.length),one.scores.map(x=>x.length));
 });

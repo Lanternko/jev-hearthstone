@@ -1,7 +1,18 @@
 // Shared, visible-card arithmetic. Unknown/conditional effects stay with Jev and a fresh
 // observation; these helpers never infer hidden cards or read the deck order.
-export const textOf=c=>(c?.text??'').replace(/\[x\]/g,' ').replace(/<[^>]+>/g,'').replace(/&/g,' ')
-  .replace(/\$[a-z]?(\d+)/gi,'$1').replace(/\s+/g,' ').trim();
+// The flat text depends on the printed text alone, so each distinct text is flattened once:
+// self-play asks for the same few dozen texts on every step.
+const FLAT=new Map();
+export const textOf=c=>{
+  const t=c?.text??'';
+  let v=FLAT.get(t);
+  if(v===undefined){
+    v=t.replace(/\[x\]/g,' ').replace(/<[^>]+>/g,'').replace(/&/g,' ').replace(/\$[a-z]?(\d+)/gi,'$1').replace(/\s+/g,' ').trim();
+    if(FLAT.size>=20000)FLAT.clear();
+    FLAT.set(t,v);
+  }
+  return v;
+};
 export const tagOn=(c,t)=>c?.[t]===1||c?.[t]==='1';
 export const isOutcast=c=>/\bOutcast:/i.test(textOf(c));
 export function outcastActive(state,c){

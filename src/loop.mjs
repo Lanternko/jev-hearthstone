@@ -1,6 +1,7 @@
 // Drive a turn: ask Jev for one action, click it, confirm the board moved, repeat.
 // Stops on the first click that changes nothing, because that means the coordinates are wrong.
 import {next,inspect,SHOTS} from './bridge.mjs';
+import {untilQuiet} from './playback-quiet.mjs';
 import {verdict} from './verify.mjs';
 import {plan,run,box as boxOf} from './execute.mjs';
 import {createMulliganRetry,clockToday} from './mulligan-retry.mjs';
@@ -75,6 +76,8 @@ const DEAD_MS=envMs('JEV_DEAD_MS',5000);
 // already aimed at the old slot. When the number of bodies on either board changes, wait for the
 // row to finish sliding.
 const BOARD_SETTLE=envMs('JEV_BOARD_SETTLE',1200);
+// See playback-quiet.mjs: a ritual firing at turn start animates past the fixed settle.
+const PLAYBACK_QUIET=envMs('JEV_PLAYBACK_QUIET',1500),PLAYBACK_CAP=envMs('JEV_PLAYBACK_CAP',12000);
 // 2026-09-30: fixed waits made our attacks exactly 2.7s apart, a bot's fingerprint. Each wait is
 // now its floor plus a random extra -- never less, since each floor was measured -- and now and
 // then a longer pause, as a player takes to look at the board.
@@ -99,7 +102,8 @@ async function onScreen(turn,ms=20000){
   await wait(250);
  }
  console.log(`${stamp()} turn ${turn} on screen after ${Date.now()-t0}ms`);
- await wait(loose(TURN_SETTLE));
+ const q=await untilQuiet(async()=>{try{const p=(await inspect()).parsed;return {played:p.played,depth:p.playDepth}}catch{return null}},{min:loose(TURN_SETTLE),quiet:PLAYBACK_QUIET,cap:PLAYBACK_CAP,wait});
+ if(q.extra>0)console.log(`${stamp()} playback still moving; waited ${q.extra}ms more${q.quiet?'':' (cap)'}`);
 }
 
 // Pictures of the game, so the user can point at a position: one when each of our turns is on

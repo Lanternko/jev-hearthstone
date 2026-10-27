@@ -51,7 +51,7 @@ test('the state does not tell which cards the other hand holds or how either dec
 test('a table asks the seat to act, reports a finished game once and deals the next', ()=>{
   const a=new Arena({lists:LISTS,n:8,seed:11}),pick=caller(11);
   let v=a.views(),ended=0;
-  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false});
+  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false,extra:false,stages:false});
   for(let i=0;i<2500;i++){
     v.forEach((e,k)=>{
       assert.equal(e.seat,a.tables[k].s.seat);
@@ -177,6 +177,18 @@ test('a packed reply carries every number of every view, in float32, and the cou
     assert.equal(at,s.length);
   }
   assert.deepEqual(packed({envs:[],tally:[[1,0,0]]},a.dims),{envs:[],tally:[[1,0,0]]});
+});
+
+test('a raw packed reply names the length of each block and holds the same floats as the base64 one', ()=>{
+  const a=new Arena({lists:LISTS,n:4,seed:32,rival:'rush'}),out={envs:a.views()};
+  const p=packed(out,a.dims),r=packed(out,a.dims,{raw:true});
+  assert.deepEqual(Object.keys(r.raw),['obsBin','actsBin']);
+  for(const k of ['obsBin','actsBin']){
+    assert.equal(r.raw[k],r.blocks[k].byteLength);
+    assert.deepEqual(Buffer.from(r.blocks[k].buffer,r.blocks[k].byteOffset,r.blocks[k].byteLength),Buffer.from(p[k],'base64'));
+  }
+  assert.deepEqual(r.envs,p.envs);
+  assert.deepEqual(packed({envs:[],tally:[[1,0,0]]},a.dims,{raw:true}),{envs:[],tally:[[1,0,0]]});
 });
 
 test('with swap the second list goes first on odd seeds, the vocabulary stays and held arenas still match', ()=>{

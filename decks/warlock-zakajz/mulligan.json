@@ -1,0 +1,30 @@
+{
+  "source": "Public deck stats screenshot supplied by the user, 2026-10-25 (this 動物園 Warlock list; the screenshot's list has Zakajz the Corruptor, and this deck is the Zakajz + Glacial Shard version).",
+  "note": "mulliganWR = win rate of games where the card stayed in the opening hand; kept = share of those opening hands where players kept it. relativeToDeck records the site's up/down arrow. Glacial Shard is not in the screenshot, so it has no stat and falls back to the whitelist.",
+  "deckWinrate": 69.7,
+  "deckWinrateNote": "Not shown directly; inferred from the site's up/down arrows (70.1 marked up, 69.4 marked down).",
+  "combosNote": "小T (國服, 2026-10-25 直播, runtime/videos/xiaot-20261025/decisions d46): 「这套前期留牌留两个仪式加卡扎」. Both halves in the opening hand both stay, over the win-rate bands; today all three are >=70% and stay anyway, the pairs keep the rule if the stats change. His conditional keeps (Twilight Egg only going first beside Kazakus, a 2-cost minion always, going second plan Coin into a 2-drop and toss Cursed Catacombs) need the turn order, which this schema cannot say: they are in strategy.md, Opening and mulligan.",
+  "combos": [
+    ["Ritual of Summoning", "Godfather Kazakus"],
+    ["Ritual of C'Thun", "Godfather Kazakus"],
+    ["Ritual of Summoning", "Ritual of C'Thun"]
+  ],
+  "cards": {
+    "Cursed Catacombs": {"mulliganWR": 65.5, "kept": 19.4, "relativeToDeck": "below"},
+    "Entropic Continuity": {"mulliganWR": 69.4, "kept": 19.4, "relativeToDeck": "below"},
+    "Floating Lessons": {"mulliganWR": 70.1, "kept": 18.6, "relativeToDeck": "above"},
+    "Platysaur": {"mulliganWR": 64.4, "kept": 35.4, "relativeToDeck": "below"},
+    "Ritual of C'Thun": {"mulliganWR": 73.4, "kept": 97.7, "relativeToDeck": "above"},
+    "Twilight Egg": {"mulliganWR": 69.3, "kept": 91.7, "relativeToDeck": "below"},
+    "Cult Neophyte": {"mulliganWR": 66.3, "kept": 41.6, "relativeToDeck": "below"},
+    "Ritual of Summoning": {"mulliganWR": 76.5, "kept": 96.4, "relativeToDeck": "above"},
+    "Tachyon Barrage": {"mulliganWR": 63.1, "kept": 22.6, "relativeToDeck": "below"},
+    "Twilight Timehopper": {"mulliganWR": 69.3, "kept": 88.1, "relativeToDeck": "below"},
+    "Godfather Kazakus": {"mulliganWR": 74.7, "kept": 85.1, "relativeToDeck": "above"},
+    "Mawman Cultist": {"mulliganWR": 64.0, "kept": 29.6, "relativeToDeck": "below"},
+    "Blasphemy": {"mulliganWR": 67.8, "kept": 8.4, "relativeToDeck": "below"},
+    "Zakajz the Corruptor": {"mulliganWR": 65.8, "kept": 42.1, "relativeToDeck": "below"},
+    "Ruinous Velocidrake": {"mulliganWR": 66.8, "kept": 4.3, "relativeToDeck": "below"},
+    "Vaultkeeper": {"mulliganWR": 65.0, "kept": 2.8, "relativeToDeck": "below"}
+  }
+}

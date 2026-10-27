@@ -618,3 +618,10 @@
 - P3：從 P2 第 2140 輪接 900 輪到 3040，`--decks priest-egg warlock-zoo --mix 1.0 --mirror 0.1 --timers --extra --stages --imbue --egg --swap --workers 18`，zoo 固定 v9。
 - 結果（P2 → P3）：對 v9 2000 局 8.9% → 17.8%（16.2–19.5）；E-251 設定 10.75% → 22.5%（18.7–26.8）、T14.33 → T15.86、孵出 Khelos 12.25% → 24.25%。匯出 `models/selfplay/priest-egg-pilot-v3-20261028.{pt,json}`（`53e3d179…`／`56c6fe1e…`）。細節見 memory/experiments.md E-252。
 - 加訓 P3c（3040→3490，seed 85）：E-251 設定 2000 局（5 個不重疊區塊）v3 22.85%（21.1–24.7）、P3c 22.0%（20.2–23.9），對 v9 17.8% 對 17.9%；P3c 孵蛋較少，不匯出，維持 v3。見 E-253。
+
+## 2026-10-28 zoo-v10：對蛋牧 P3 訓練（對蛋牧 +5.3 分，過門檻匯出）
+
+- 設定：從 v9（第 1850 輪）接 150 輪到 2000，`run_v10.sh`：seed 43，對手 priest-egg=P3b、shaman-P、zakajz-v1、dh-long，`--opp-lr 1e-4 --opp-refresh 5 --opp-pool 4 --opp-fresh`（v9 那輪的 --opp 檔案被 checkpoint 對手蓋掉，v9 其實沒對到 P2，F-857）。A λ0.1、B λ0.3，各 9 workers，5090 04:49–05:58。
+- 判定（第一次照 G3 走）：新程式碼、模擬器 `26db915e1733`、seed 10001＋20001（每邊 4000 局），`src/selfplay-compare.mjs`。A：蛋牧 79.4% → **84.7%（83.6–85.8）**、shaman +0.6、zakajz +1.8、dh −0.1、鏡像 +1.1，全過；B 也全過但蛋牧只 +2.7。詳表見 memory/experiments.md E-254。
+- 匯出 `models/selfplay/warlock-zoo-v10.{pt,json}`（＝A，`7ab4a73c…`／`b0a77f4a…`，obs/act 630/242，imbue=true）。MODELS 未動；實戰 encoder 要能給 Imbue 計數才能上線。
+- 注意：seed 1 的內建評估把 v9 對 P3 算成 82.2%，獨立種子是 79.4%；單一種子的差距會差到 3 分，這是 G3／G4 要多種子、不重疊的原因（L-047）。

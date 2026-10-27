@@ -2911,3 +2911,21 @@
 - 結論：P3c 沒有比 P3b 好（勝率持平、少孵蛋、局更短），不匯出，維持 priest-egg-pilot-v3-20261028（＝P3b）。P3b 的 2000 局點估計 22.85% 高於 22%，但下界 21.1% 沒過「穩過」標準；勝率在 450→900 輪後已經平台（P3 20.0% → P3b 22.85% → P3c 22.0%），再加輪數不是槓桿。
 - 下一步：蛋牧駕駛維持 v3；要再往上需要改模擬或課表（例如對手池、局長），不是加輪數。可以開始用 v3 訓練 zoo。等使用者決定。
 
+### E-254
+- 日期：2026-10-28
+- 假設：zoo 從 v9 接續、對蛋牧駕駛 v3（P3b）等對手訓練 150 輪，蛋牧對局 Wilson 下界能超過 v9 點估計，其他對手不掉超過 1.5 分。
+- 設定：App 自己在 5090 跑（ds-local 餘額不足）。runtime/zoo-20261028/run_v10.sh（本機與 5090 `~/side_projects/jev-hearthstone-egg-20261028/runtime/`）：照 run_v9.sh，seed 43，對手 priest-egg=ppo/P3b/policy.pt、shaman-P、zakajz-v1、dh-long，--opp-lr 1e-4 --opp-refresh 5 --opp-pool 4 **--opp-fresh**（F-857）；A λ0.1、B λ0.3，各 9 workers。之後自動匯出並評估（zoo/eval/，各 1000 局×2 座位，蛋牧局帶 --guard egg），完成寫 zoo/V10-DONE 或 zoo/V10-FAILED，摘要 zoo/eval/summary.txt。
+- 結果：訓練 04:49–05:58 完成（1850→2000 輪），內建評估 05:59 完成（seed 1，挑模型用）。正式判定（狀態更新 2026-10-28）：role-audit 在新程式碼（模擬器 26db915e1733）以 seed 10001、20001（各 1000 局×2 座位，與挑模型的 1–1000 不重疊）重測，`node src/selfplay-compare.mjs`，每邊 4000 局（zoo 那席勝率，Wilson 95%）：
+
+  | 對手 | V9（base） | A λ0.1 | B λ0.3 |
+  |---|---|---|---|
+  | 蛋牧 P3（--beat） | 79.4%（78.1–80.6） | **84.7%（83.6–85.8）+5.3 PASS** | 82.1%（80.9–83.3）+2.7 PASS |
+  | shaman（--max-drop 1.5） | 83.4%（82.2–84.5） | 84.0% +0.6 PASS | 82.8% −0.6 PASS |
+  | zakajz | 49.7%（48.2–51.2） | 51.5% +1.8 PASS | 49.8% +0.1 PASS |
+  | dh | 50.8%（49.3–52.3） | 50.7% −0.1 PASS | 50.0% −0.8 PASS |
+  | 鏡像對 V9 | 50.0% | 51.1% +1.1 PASS | 50.0% 0.0 PASS |
+
+  證據：runtime/audit-v10b/（30 個 match 檔＋10 份 compare-*.txt）；5090 `~/side_projects/jev-hearthstone-audit-v10/out2/`。第一次 role-audit（派工 agy 20261028-061047-956ae1，seed 2、3）作廢：與 seed 1 牌局重疊 998 局以上（L-047），檔案在 runtime/audit-v10/。
+- 結論：A 過門檻（兩組都過，A 每項不輸 B），匯出 `models/selfplay/warlock-zoo-v10.{pt,json}`＝5090 zoo/A/policy.pt（`7ab4a73c…`／`b0a77f4a…`，obs/act 630/242，第 2000 輪，imbue=true，sim=null：訓練用的是 G2 之前的 ppo.py）。json 與評估用的 zoo/eval/A.json 除新增的 sim 欄位外逐字相同。MODELS 未動。
+- 下一步：上線前實戰 encoder 要能給 Imbue 計數（v10 json 帶 imbue=true）；換不換由使用者決定。
+

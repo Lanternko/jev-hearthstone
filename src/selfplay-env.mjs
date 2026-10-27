@@ -4,7 +4,7 @@
 //
 // One JSON object a line on stdin, one a line back:
 //   {"cmd":"reset","n":64,"seed":1,"decks":["warlock-discard","warlock-discard"],"rival":null}
-//       -> {"obs":<state length>,"act":<step length>,"names":[...],"envs":[view,...]}
+//       -> {"obs":<state length>,"act":<step length>,"names":[...],"sim":<src/sim-version.mjs>,"envs":[view,...]}
 //   {"cmd":"step","actions":[index,...]}   -> {"envs":[view,...]}
 //   {"cmd":"stats"}                        -> {"stats":{...}}   (after a reset with "audit":true)
 //   {"cmd":"plan","tables":[i,...],"samples":2,"width":8[,"turns":2,"expand":4,"replies":2,"reply":"<net.json>"]}
@@ -79,6 +79,7 @@ import {loadNet} from './selfplay-net.mjs';
 import {phi} from './board-score.mjs';
 import {eggGuard} from './egg-guard.mjs';
 import {RestartPool,seedPool,unit as hash} from './selfplay-restart.mjs';
+import {simVersion} from './sim-version.mjs';
 
 // The networks that play the other side's turn in a look ahead of two turns, read once each.
 const replyNets=new Map();
@@ -316,7 +317,7 @@ if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
       if(m.cmd==='reset'){
         arena=new Arena({lists:(m.decks??['warlock-discard','warlock-discard']).map(loadList),n:m.n,seed:m.seed,rival:m.rival??null,audit:!!m.audit,hold:!!m.hold,swap:!!m.swap,timers:!!m.timers,extra:!!m.extra,stages:!!m.stages,imbue:!!m.imbue,egg:!!m.egg,mix:m.mix??null,mirror:m.mirror??0,shape:m.shape??null,marks:!!m.marks,seatDecks:!!m.seatDecks,restart:m.restart??null,oracle:!!m.oracle});
         bin=!!m.bin;raw=bin&&!!m.raw;
-        out={...arena.dims,envs:arena.views()};
+        out={...arena.dims,sim:simVersion(),envs:arena.views()};
       }else if(m.cmd==='step')out={envs:arena.step(m.actions)};
       else if(m.cmd==='deal')out={envs:arena.dealAt(m.tables,m.seeds)};
       else if(m.cmd==='stats')out={stats:arena.stats};

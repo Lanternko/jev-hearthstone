@@ -30,3 +30,7 @@
 - **收工**：新發現、實驗、裁決、教訓各寫進對應檔，然後**覆寫** `handoff.md`。
 - 欄位定義與範例寫在各檔檔頭。
 - 「來源」欄：從舊 STATUS.md 搬來的條目指向 `archive/STATUS-2026-10-27.md` 的行號；新條目可寫 commit、log 路徑或對話來源，沒有就省略。
+
+## 角色（2026-10-28 起，草稿）
+
+六個角色各有一份 skill：`.claude/skills/role-lead`（研究主管）、`role-env`（環境）、`role-train`（訓練）、`role-opponent`（對手建模）、`role-audit`（評估與審計）、`role-deploy`（部署）。派工時 task 開頭寫「用 role-xxx skill」；不是 Claude 的 agent 直接讀那份 SKILL.md。角色之間仍然只透過這個資料夾交接。

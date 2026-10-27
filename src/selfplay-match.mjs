@@ -10,7 +10,10 @@
 //       model B; say `--decks warlock-zoo dh-cthun`). --look lets that net look ahead before every step as
 //       train/ppo.py --search does (src/selfplay-search.mjs, its own value network); --depth 2 looks on
 //       through the other side's next turn, played by --reply (the looking net itself unless named);
-//       --json adds one line of the tallies for a script to add up.
+//       --json adds one line of the tallies for a script to add up, with the simulator version the games
+//       were played in (sim, src/sim-version.mjs) and the one each net was trained in (trained); a net
+//       trained in another version is named on stderr (gate G2). src/selfplay-compare.mjs compares
+//       such lines and refuses lines of different versions (gate G3).
 import {pathToFileURL} from 'node:url';
 import {moves,apply} from './sim.mjs';
 import {newGame,loadList,winner} from './selfplay.mjs';
@@ -18,6 +21,7 @@ import {loadNet} from './selfplay-net.mjs';
 import {encode} from './selfplay-encode.mjs';
 import {search} from './selfplay-search.mjs';
 import {eggGuard} from './egg-guard.mjs';
+import {simVersion} from './sim-version.mjs';
 
 // The step of train/ppo.py's think with a look ahead: the best score plus `prior` times the log of the
 // policy's own probability, clipped at -10. The deals are those of src/selfplay-env.mjs's plan: one
@@ -82,7 +86,10 @@ if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
   const named=args.indexOf('--decks'),pair=named<0?[]:args.splice(named,3).slice(1);
   const [a,b,games=200,seed=1,...decks]=args,[deckA,deckB]=pair.length?pair:decks;
   if(!a||!b||!['','a','b','both'].includes(who))throw Error('usage: node src/selfplay-match.mjs <modelA> <modelB> [games] [seed] [deckA] [deckB] [--look a|b|both] [--samples N] [--beam N] [--prior x] [--depth 1|2] [--expand N] [--replies N] [--reply model] [--guard egg] [--json]');
-  const nets=[loadNet(a),loadNet(b)],lists=nets.map((n,k)=>loadList([deckA,deckB][k]??n.decks[0]));
+  const nets=[loadNet(a),loadNet(b)],sim=simVersion();
+  for(const [k,p] of [a,b].entries())if(nets[k].sim!==sim)
+    console.error(`G2: ${p} was trained in simulator ${nets[k].sim??'(not recorded)'}, these games are played in ${sim}`);
+  const lists=nets.map((n,k)=>loadList([deckA,deckB][k]??n.decks[0]));
   const looks=[0,1].map(k=>who==='both'||who===['a','b'][k]?{...opt,reply:opt.reply??nets[k]}:null);
   const deck=[deckA??nets[0].decks[0],deckB??nets[1].decks[0]];
   const label=[a,b].map((p,k)=>`${p.replace(/^.*[\/]/,'').replace(/\.json$/,'')}(${deck[k]})${looks[k]?looks[k].turns>1?'+look2':'+look':''}`);
@@ -97,5 +104,5 @@ if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
     console.log(`${label[i]} first v ${label[j]}: ${n} games, ${label[0]} ${share(winsA,n)}, ${label[1]} ${share(winsB,n)}, drawn ${tally[1]} (cut off ${cut})`);
   }
   console.log(`together: ${2*n} games, ${label[0]} ${share(total[0],2*n)}, ${label[1]} ${share(total[2],2*n)}, drawn ${total[1]}`);
-  if(json)console.log(JSON.stringify({a,b,deck,look:who,seed:Number(seed),orders}));
+  if(json)console.log(JSON.stringify({a,b,deck,look:who,guard:guard?'egg':'',seed:Number(seed),sim,trained:nets.map(x=>x.sim),orders}));
 }

@@ -6871,7 +6871,23 @@
 - 日期：2026-10-28
 - 說法：train/test_cheap_opp.py 在未改動的 b7a3389 就失敗（the decisions of a run without --opp changed），既有問題。
 - 證據：派工子 session 用 b7a3389 的 worktree 重跑同樣失敗（子 session 自報，App 未重跑）
-- 狀態：待驗
-- 相關：E-252
+- 狀態：已驗（2026-10-28）：失敗的是 (a) 不帶 --opp 的參考雜湊 REFERENCE，模擬改動後過時；不影響 --opp 訓練。但因為 (a) 在檔案最上面就 assert，(b)–(e) 都沒在跑，更新雜湊前這個檔案沒有保護作用。
+- 相關：E-252、F-857
 - 來源：派工 ds-local 20261028-032710-9eaf64
 
+### F-857
+- 日期：2026-10-28
+- 說法：train/ppo.py 的 --resume 若接續的 checkpoint 存有對手（ck['opp']），對手一律從 checkpoint 接續，--opp DECK=檔案 被忽略。所以 zoo-v9 那輪（E-250 前，run_v9.sh）實際對手是 v8 checkpoint 裡的對手，不是 ppo/P2；v9「對蛋牧 P2 訓練」不成立。
+- 證據：5090 egg-20261027/ppo/A.txt 開頭「priest-egg: the opponent goes on from models/selfplay/warlock-zoo-v8.pt, not from ppo/P2/policy.pt」；v10 第一次啟動同樣訊息；train/ppo.py `if deck in saved:` 分支。
+- 狀態：已修（2026-10-28）：新增 --opp-fresh，帶了檔案的對手從檔案開始；train/test_opp_fresh.py 驗證。
+- 相關：E-254、L-045
+- 來源：2026-10-28 App 跑 zoo-v10
+
+
+### F-858
+- 日期：2026-10-28
+- 說法：關卡 G2／G3 建好。G2：模型記下訓練時的模擬器版本。`src/sim-version.mjs` 對 src/sim.mjs、src/selfplay.mjs 的 import 閉包＋data/*.json＋decks/*/*.json（含路徑、CRLF 轉 LF）取 sha256 前 12 碼（目前 26db915e1733）；env reset 回傳 sim → ppo.py 存 ck['sim'] → export.py 寫 doc['sim'] → loadNet().sim；selfplay-match.mjs 的 --json 行帶 sim（對局時版本）與 trained（各網路訓練時版本），stderr 印 G2 行。G3：`src/selfplay-compare.mjs --base <run...> --cand <run...> [--beat] [--max-drop p]`，缺 sim、sim 不同、或兩邊對手／牌組／seed／局數／look／guard 不一致就拒絕（exit 2），多個 seed 相加後算 Wilson 區間；只有一個 seed 會提醒。
+- 證據：test/sim-version.test.mjs（6 項）、train/test_opp_fresh.py 的 G2 檢查；npm test 864/864。
+- 狀態：已驗（2026-10-28）。限制：v9、v10、P3 等既有模型與 5090 上 v10 評估都沒有 sim 欄位（舊程式碼），compare 會拒絕它們；要比較得用新程式碼重跑 match。match 不會因 trained≠sim 而拒跑，只警告（舊模型仍要能用）。
+- 相關：E-254、L-046
+- 來源：2026-10-28 App（使用者「G2+G3 GO」）

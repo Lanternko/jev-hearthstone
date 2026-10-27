@@ -68,7 +68,7 @@ export function loadNet(path=MODEL){
     const top=Math.max(...logits),e=logits.map(x=>Math.exp(x-top)),sum=e.reduce((a,b)=>a+b,0);
     return {value,steps:legal.map((move,i)=>({move,logit:logits[i],p:e[i]/sum})).sort((a,b)=>b.logit-a.logit)};
   }
-  return {vocab,decks:doc.decks,iters:doc.iters,forward,value,rank};
+  return {vocab,decks:doc.decks,iters:doc.iters,sim:doc.sim??null,forward,value,rank};
 }
 
 if(import.meta.url===pathToFileURL(process.argv[1]??'').href){

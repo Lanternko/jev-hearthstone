@@ -376,3 +376,27 @@
 - 相關：E-253
 - 來源：2026-10-28 App 跑 P3c
 
+### L-045
+- 日期：2026-10-28
+- 發生什麼：(1) 接續訓練時以為 --opp 檔案就是對手，其實被 checkpoint 存的對手蓋掉，v9 整輪沒對到 P2（F-857），log 第二行就寫了卻沒看。(2) 啟動指令被斷線打斷後以為沒啟動，又啟動一次，兩組訓練同時寫同一目錄。(3) 遠端 `pkill -f "run_v10.sh"`／`pgrep -f` 比對到 ssh 自己的 bash -c 命令列，把自己的連線殺掉（exit 255）。
+- 規則：(1) 長訓練啟動後立刻讀 log 開頭，確認對手／resume 來源訊息符合預期；resume 時要換對手就加 --opp-fresh。(2) ssh 失敗後重新啟動前先 `pgrep` 看是否已在跑。(3) 遠端殺程序用 PID（先 `ps -eo pid,args` 列出），不要用 `pkill -f` 比對會出現在自己命令列上的字串。
+- 對應測試或關卡：train/test_opp_fresh.py（只涵蓋 (1)）
+- 相關：F-857、E-254、L-044
+- 來源：2026-10-28 App 跑 zoo-v10
+
+
+### L-046
+- 日期：2026-10-28
+- 發生什麼：比較新舊模型時，兩邊的勝率常是不同模擬器版本（蛋牧修 bug、加 Imbue 前後）或不同 guard／seed 跑出來的，數字直接相減。
+- 規則：門檻比較一律用 `node src/selfplay-compare.mjs`，兩邊用同一份程式碼重跑 `selfplay-match.mjs --json`，盡量給多個 seed；它拒絕（exit 2）就重跑，不要手算繞過。
+- 對應測試或關卡：test/sim-version.test.mjs（G3 拒絕條件）
+- 相關：F-858
+- 來源：2026-10-28 App
+
+### L-047
+- 日期：2026-10-28
+- 發生什麼：zoo-v10 的 role-audit 用 seed 2、3 各 1000 局「獨立重測」。但 selfplay-match 第 g 局用牌局 seed+g，seed 1／2／3 共用 998 局以上，等於同一批牌局重跑三次；G3 compare 把兩個 seed 當獨立樣本相加，區間被假性縮小，結果和 seed 1 幾乎一樣。App 核對時發現數字跟 seed 1 一模一樣才抓到。
+- 規則：多種子評估時 seed 間距要 ≥ 局數（例如 1000 局用 10001、20001），也要避開挑模型時用過的範圍（seed 1 → 1–1000）。compare 現在會拒絕同一邊牌局範圍重疊的 run。
+- 對應測試或關卡：test/sim-version.test.mjs（G3: runs of a side whose seeds are closer than their games…）
+- 相關：F-858、E-254、L-046
+- 來源：2026-10-28 App 審 role-audit 結果

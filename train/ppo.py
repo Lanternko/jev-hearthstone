@@ -110,7 +110,8 @@ opponent has an Adam of its own and learns by plain PPO (no look ahead, no imita
 the learner is playing anyway, with the generalised advantage of that seat's result; every --opp-refresh
 iterations the copy that plays is synced from the learning network and the copy it replaces joins the --opp-pool
 earlier ones, and each game draws uniformly from that pool and the present copy, so the learner is not taught to
-beat only the newest. The checkpoint holds the weights of each opponent under "opp" (--resume goes on from them),
+beat only the newest. The checkpoint holds the weights of each opponent under "opp" (--resume goes on from them;
+with --opp-fresh a deck given a DECK=policy.pt starts from that file instead, as for a new opponent),
 and every --keep-every iterations <run>/ckpt gets opp-<deck>-iter-XXXX.pt, a policy.pt that train/export.py can
 export. The log gains opp_decisions, opp_policy_loss, opp_value_loss and learner_searched. Without --opp nothing
 changes.
@@ -167,6 +168,7 @@ class Arena:
         """The reply to the reset."""
         r = self.recv()
         self.obs, self.act, self.names, self.envs = r['obs'], r['act'], r['names'], r['envs']
+        self.sim = r.get('sim')  # src/sim-version.mjs: the simulator these games are played in (gate G2)
         self.oracle = r.get('oracle', 0)
 
     def call(self, **m):
@@ -1291,6 +1293,7 @@ def main():
     p.add_argument('--opp-eps', type=float, default=0.1, help='with --opp: chance that an opponent takes its second best step')
     p.add_argument('--opp-lr', type=float, default=0.0, help='with --opp: learning rate of the opponents, 0 keeps them as they are')
     p.add_argument('--opp-refresh', type=int, default=5, help='with --opp-lr: iterations between syncing the playing copy of each opponent from its learning network')
+    p.add_argument('--opp-fresh', action='store_true', help='with --opp and --resume: a DECK=policy.pt opponent starts from that file, not from the opponent saved in the checkpoint')
     p.add_argument('--opp-pool', type=int, default=4, help='with --opp-lr: earlier playing copies of each opponent that games are also drawn from')
     p.add_argument('--restart-frac', type=float, default=0.0, help='PPO: this share of the games begins at a hard position of the pool instead of a new deal, see above')
     p.add_argument('--restart-pool', type=int, default=5000, help='with --restart-frac: positions of the ring the training games fill')
@@ -1442,7 +1445,7 @@ def main():
         loaded = {}
         for deck in args.decks[1:]:
             path = opps.get(deck)
-            if deck in saved:
+            if deck in saved and not (args.opp_fresh and path):
                 sd, width = remapped(saved[deck], ck, arena), ck['width']
                 print(f'{deck}: the opponent goes on from {args.resume}' + (f', not from {path}' if path else ''))
             elif path:
@@ -1547,7 +1550,7 @@ def main():
             pool.append(copy.deepcopy(net).eval())
             del pool[:-args.pool]
         ck = {'net': {k: v.cpu() for k, v in net.state_dict().items()}, 'obs': arena.obs, 'act': arena.act, 'width': args.width,
-              'names': arena.names, 'decks': args.decks, 'iters': it, 'timers': TIMERS}
+              'names': arena.names, 'decks': args.decks, 'iters': it, 'timers': TIMERS, 'sim': arena.sim}
         if net.oracle:
             ck['oracle'] = net.oracle
         if EXTRA:  # networks of the older vocabularies keep the checkpoint they always had

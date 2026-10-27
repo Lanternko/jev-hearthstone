@@ -41,12 +41,22 @@ const MADE={
 // demon hunter's: one more cell at the very end (how many C'Thun abilities have been triggered, of
 // four), and the costs of the hand as the cards now cost, discounts included. `stages` adds one cell
 // for each body of each chair with how much of the Egg of Khelos is left (breaks remaining / 5, 0 for
-// a body that is not an egg), so the network can tell the five cracked stages apart.
-export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false}={}){
+// a body that is not an egg), so the network can tell the five cracked stages apart. `imbue` adds one
+// cell for each chair with how often its hero power has been imbued (Blessing of the Moon: the count
+// over five, capped at 1), and makes sure the cards of the Imbue priest list have places of their own:
+// an older network's vocabulary does not hold them and they all shared the "other" slot (F-853).
+export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false,imbue=false}={}){
   const ids=lists.flatMap(l=>Object.keys(l.cards));
-  const names=[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name))])];
-  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages};
+  const names=[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name)),
+    ...(imbue?IMBUE_IDS.filter(id=>cards[id]).map(id=>cards[id].name):[])])];
+  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages,imbue};
 }
+
+// decks/priest-egg, the 2026-10-27 Imbue list. A network trained with `imbue` knows every one of its
+// cards by its own slot even when the list is not among its training decks, so a vocabulary can be
+// reused for the list without the cards falling back to "other".
+const IMBUE_IDS=['CORE_CS1_130','BE_223','TIME_447','CORE_EX1_193','JAIL_940','DINO_411','EDR_449','END_025','BE_221',
+  'CAP_801','EDR_970','DINO_410','TIME_432','JAIL_998','TLC_816','EDR_856','CORE_EX1_197','CAP_805','TIME_427','CATA_308','JAIL_912'];
 
 // What a Ritual or a Kazakus trial does when its clock runs out: the two rituals and the nine effects.
 const DELAYED=['summon','cthun',...Array.from({length:9},(_,i)=>`CAP_405t${i+1}`)];
@@ -57,7 +67,10 @@ const SLOT=8,FOE=6,SCALARS=30,TARGET=7;
 const EGG_STAGE={DINO_410:5,DINO_410t2:4,DINO_410t3:3,DINO_410t4:2,DINO_410t5:1};
 const STAGE_COLS=14;  // seven bodies of each chair, as the blocks above
 const breaks=b=>EGG_STAGE[b.cardId]??0;
-export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0);
+// How often each chair's hero power has been imbued: mine, then the other chair's, over five and capped.
+const IMBUE_COLS=2,MAX_IMBUE=5;
+const imbues=p=>Math.min((p?.bless??0)/MAX_IMBUE,1);
+export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0)+(v.imbue?IMBUE_COLS:0);
 export const actSize=v=>KINDS.length+v.size+3+TARGET+v.size;
 
 const t=n=>(n??0)/10;
@@ -102,6 +115,11 @@ function observe(s,v){
     // How many breaks each egg on the table still has, mine first and then the other chair's.
     minions(s.me).slice(0,7).forEach((b,i)=>{o[k+i]=breaks(b)/5});
     minions(s.opp).slice(0,7).forEach((b,i)=>{o[k+7+i]=breaks(b)/5});
+    k+=STAGE_COLS;
+  }
+  if(v.imbue){
+    // Blessing of the Moon cuts its offer by one for each Imbue, so the count is the whole of the power.
+    o[k]=imbues(s.power);o[k+1]=imbues(th.power);
   }
   return o;
 }

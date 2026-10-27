@@ -20,6 +20,7 @@ def main(path, out, check=None):
     doc['timers'] = bool(ck.get('timers', False))
     doc['extra'] = bool(ck.get('extra', False))
     doc['stages'] = bool(ck.get('stages', False))
+    doc['imbue'] = bool(ck.get('imbue', False))
     doc['tensors'] = {k: {'shape': list(v.shape), 'data': base64.b64encode(v.float().numpy().astype('<f4').tobytes()).decode()}
                       for k, v in net.state_dict().items() if not k.startswith('oracle_value.')}  # the --oracle head plays no game
     with open(out, 'w') as f:

@@ -6847,6 +6847,31 @@
 - 日期：2026-10-27
 - 說法：未修：編碼看不到 Imbue 等級，也沒有新牌的詞彙格。
 - 證據：src/selfplay-encode.mjs
-- 狀態：待驗
+- 狀態：已修（2026-10-28，見 F-854、E-252）
 - 相關：E-251
 - 來源：archive/STATUS-2026-10-27.md 第 31 行（2026-10-27 蛋牧升級：真人 Imbue 牌表、月之祝福、交織命運／心靈咒術師、Haunt 上蛋（未重訓））
+
+### F-854
+- 日期：2026-10-28
+- 說法：編碼加 opt-in `imbue`：每席 2 格 Imbue（bless/5，上限 5）＋新 Imbue 牌表 21 張卡的專屬詞彙格；不是逐卡祝福池（牧師 531 張只有 280 張可建模）。舊 ckpt 長度不變（P2 obs 420 仍可讀），zoo-v9 當對手時 state 與 step 和改前相同。
+- 證據：src/selfplay-encode.mjs、src/selfplay-net.mjs、train/ppo.py、train/export.py；test/selfplay-encode-imbue.test.mjs（含 v9 golden test/fixtures/zoo-v9-logits.json，由未改程式產生，生成器 runtime/egg-20261028/make-v9-golden.mjs 留在複本）
+- 狀態：已驗（npm test 858 過）
+- 相關：F-853、E-252
+- 來源：派工 ds-local 20261028-032710-9eaf64
+
+### F-855
+- 日期：2026-10-28
+- 說法：Haunt guard 進自戰：Arena `egg` 選項把當事席縮成單一 Haunt 決策（PPO 看到 1 動作決策，不偏梯度），訓練用 `--egg`，評估用 selfplay-match `--guard egg`。
+- 證據：src/selfplay-env.mjs、src/selfplay-match.mjs；test/selfplay-encode-imbue.test.mjs 第 5–7 項
+- 狀態：已驗
+- 相關：E-252
+- 來源：派工 ds-local 20261028-032710-9eaf64
+
+### F-856
+- 日期：2026-10-28
+- 說法：train/test_cheap_opp.py 在未改動的 b7a3389 就失敗（the decisions of a run without --opp changed），既有問題。
+- 證據：派工子 session 用 b7a3389 的 worktree 重跑同樣失敗（子 session 自報，App 未重跑）
+- 狀態：待驗
+- 相關：E-252
+- 來源：派工 ds-local 20261028-032710-9eaf64
+

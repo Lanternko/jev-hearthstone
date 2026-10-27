@@ -158,7 +158,7 @@ class Arena:
         self.p = subprocess.Popen(['node', str(ROOT / 'src' / 'selfplay-env.mjs')], cwd=ROOT,
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         self.send(cmd='reset', n=n, seed=seed, decks=list(decks), rival=rival, audit=audit, bin=True, raw=True, hold=hold, swap=swap, timers=TIMERS,
-                  extra=EXTRA, stages=STAGES, mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'seatDecks': True} if SEATDECKS else {}),
+                  extra=EXTRA, stages=STAGES, imbue=IMBUE, egg=EGG, mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'seatDecks': True} if SEATDECKS else {}),
                   **({'restart': restart} if restart else {}), **({'oracle': True} if oracle else {}))
         if wait:
             self.started()
@@ -341,6 +341,8 @@ WORKERS = 1  # node processes the training games and the measuring games are spl
 TIMERS = False  # whether the state holds the clocks of rituals and trials (src/selfplay-encode.mjs): --timers, or the network's own
 EXTRA = False  # whether it holds the demon hunter's extra cell and the hand's costs as they are now: --extra, three decks or more, dh-cthun, or the network's own
 STAGES = False  # whether it holds each egg's breaks remaining: --stages, priest-egg among the decks, or the network's own
+IMBUE = False  # whether it holds each chair's Imbue count: --imbue, priest-egg among the decks, or the network's own
+EGG = False  # whether the egg guard plays Haunt on our own Egg of Khelos: --egg, priest-egg among the decks, or the network's own
 MIX = None  # with three decks or more: the weights of the decks after the first as the rival of the first (--mix)
 MIRROR = 0.0  # the share of games the first deck plays against itself (--mirror)
 SHAPE = None  # the board score's weights of --shape, None without it
@@ -348,6 +350,23 @@ MARKS = False  # whether the views say which tables have a step of a card whose 
 SEATDECKS = False  # whether the views say which deck sits in which seat (--opp)
 TIMER_COLS = 33  # the clocks of the state: three blocks of the eleven effects of DELAYED in src/selfplay-encode.mjs
 STAGE_COLS = 14  # the egg stages of the state: seven bodies of each chair in src/selfplay-encode.mjs
+IMBUE_COLS = 2  # the Imbue counts of the state: one cell for each chair in src/selfplay-encode.mjs
+
+
+def vocab_flags(args):
+    """Set the cells of the state and the steps from the flags, the decks and the network's own (the globals above).
+
+    These must be set on the module, not in main: Arena, load and the checkpoint read the module globals, so a
+    local of the same name leaves them False and the arena then builds a state the checkpoint cannot be mapped
+    onto (--imbue once did exactly that: 428 cells against a network that wanted its 430)."""
+    global TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
+    TIMERS = args.timers
+    EXTRA = args.extra or len(args.decks) >= 3 or 'dh-cthun' in args.decks
+    STAGES = args.stages or 'priest-egg' in args.decks
+    IMBUE = args.imbue or 'priest-egg' in args.decks
+    EGG = args.egg or 'priest-egg' in args.decks
+    MIX = args.mix
+    MIRROR = args.mirror
 
 
 def make(n, seed, decks, rival=None, swap=False, restart=None, oracle=False):
@@ -365,25 +384,34 @@ def state_sources(old, new):
     """For each number of the new state the number of the old one that means the same, None where there was none.
 
     The state is a head that every vocabulary shares, four blocks with a slot for each card, the clocks
-    (--timers), the extra cell (--extra) and the egg stages (--stages), see src/selfplay-encode.mjs;
+    (--timers), the extra cell (--extra), the egg stages (--stages) and the Imbue counts (--imbue), see
+    src/selfplay-encode.mjs;
     old and new are {names, obs, timers, extra, stages} of the two networks."""
     v0, v1 = len(old['names']) + 1, len(new['names']) + 1
-    head = old['obs'] - 4 * v0 - TIMER_COLS * old['timers'] - old['extra'] - STAGE_COLS * old['stages']
-    if head != new['obs'] - 4 * v1 - TIMER_COLS * new['timers'] - new['extra'] - STAGE_COLS * new['stages']:
+    blocks = lambda d: TIMER_COLS * d['timers'] + d['extra'] + STAGE_COLS * d['stages'] + IMBUE_COLS * d['imbue']
+    head = old['obs'] - 4 * v0 - blocks(old)
+    if head != new['obs'] - 4 * v1 - blocks(new):
         raise SystemExit('the two networks do not see the same head of the state: the layout changed, there is nothing to map by name')
-    if (old['timers'] and not new['timers']) or (old['extra'] and not new['extra']) or (old['stages'] and not new['stages']):
-        raise SystemExit('the network has clocks, the extra cell or egg stages that the new one would not show: add --timers, --extra or --stages')
+    if (old['timers'] and not new['timers']) or (old['extra'] and not new['extra']) or (old['stages'] and not new['stages'])             or (old['imbue'] and not new['imbue']):
+        raise SystemExit('the network has clocks, the extra cell, egg stages or Imbue counts that the new one would not show: '
+                         'add --timers, --extra, --stages or --imbue')
     slots = card_slots(old['names'], new['names'])
     src = list(range(head))
     for b in range(4):
         src += [None if s is None else head + b * v0 + s for s in slots]
+    at = head + 4 * v0
     if new['timers']:
-        src += [head + 4 * v0 + i if old['timers'] else None for i in range(TIMER_COLS)]
+        src += [at + i if old['timers'] else None for i in range(TIMER_COLS)]
+        at += TIMER_COLS
     if new['extra']:
-        src += [old['obs'] - 1 - STAGE_COLS * old['stages'] if old['extra'] else None]
+        src += [at if old['extra'] else None]
+        at += 1
     if new['stages']:
-        at = head + 4 * v0 + TIMER_COLS * old['timers'] + old['extra']
         src += [at + i if old['stages'] else None for i in range(STAGE_COLS)]
+        at += STAGE_COLS
+    if new['imbue']:
+        src += [at + i if old['imbue'] else None for i in range(IMBUE_COLS)]
+        at += IMBUE_COLS
     return src
 
 
@@ -555,11 +583,13 @@ def pairing_lines(decks, pairs):
 
 def load(path):
     """A saved network; the games it is then measured in are encoded as it was trained, with or without the clocks and the extra cell."""
-    global TIMERS, EXTRA, STAGES, MIX, MIRROR
+    global TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
     ck = torch.load(path, weights_only=True, map_location='cpu')
     TIMERS = bool(ck.get('timers', False))
     EXTRA = bool(ck.get('extra', False))
     STAGES = bool(ck.get('stages', False))
+    IMBUE = bool(ck.get('imbue', False))
+    EGG = bool(ck.get('egg', False))
     MIX = ck.get('mix')
     MIRROR = ck.get('mirror', 0.0)
     net = Net(ck['obs'], ck['act'], ck['width'], ck.get('oracle', 0))
@@ -883,8 +913,9 @@ def opp_choose(net, obs, acts, args, state):
 
 def remapped(sd, c, arena):
     """The weights sd of the saved network c as one of this run's vocabulary (by card name, see resume_state)."""
-    old = {'names': c['names'], 'obs': c['obs'], 'act': c['act'], 'timers': bool(c.get('timers', False)), 'extra': bool(c.get('extra', False)), 'stages': bool(c.get('stages', False))}
-    new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES}
+    old = {'names': c['names'], 'obs': c['obs'], 'act': c['act'], 'timers': bool(c.get('timers', False)), 'extra': bool(c.get('extra', False)),
+           'stages': bool(c.get('stages', False)), 'imbue': bool(c.get('imbue', False))}
+    new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE}
     return sd if old == new else resume_state(sd, old, new)
 
 
@@ -1201,6 +1232,8 @@ def main():
     p.add_argument('--mirror', type=float, default=0.0, help='the share of the training games that the first deck plays against itself')
     p.add_argument('--extra', action='store_true', help="show the network the demon hunter's extra cell (on its own with three decks or more, or dh-cthun among them)")
     p.add_argument('--stages', action='store_true', help="show the network each egg's breaks remaining (on its own with priest-egg among the decks)")
+    p.add_argument('--imbue', action='store_true', help="show the network how often each chair's hero power was imbued (on its own with priest-egg among the decks)")
+    p.add_argument('--egg', action='store_true', help='play Haunt on our own Egg of Khelos whenever it can (src/egg-guard.mjs; on its own with priest-egg among the decks)')
     p.add_argument('--iters', type=int, default=50)
     p.add_argument('--envs', type=int, default=128)
     p.add_argument('--batch', type=int, default=8192, help='learner decisions an iteration')
@@ -1281,17 +1314,13 @@ def main():
     p.add_argument('--rollout-temp', type=float, default=1.0, help='with --rollout-temp-decay: the temperature at the branch')
     p.add_argument('--rollout-temp-decay', type=float, default=None, help='with --rollout: play the copies at --rollout-temp * this^(steps since the branch) instead of greedily')
     args = p.parse_args()
-    global DEVICE, WORKERS, TIMERS, EXTRA, STAGES, MIX, MIRROR, SHAPE, MARKS, SEATDECKS
+    global DEVICE, WORKERS, SHAPE, MARKS, SEATDECKS, TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
     if len(args.decks) < 2:
         raise SystemExit('--decks needs two decks or more')
     if args.mix is not None and len(args.mix) != len(args.decks) - 1:
         raise SystemExit(f'--mix needs a weight for each of the {len(args.decks) - 1} decks after the first')
     WORKERS = args.workers
-    TIMERS = args.timers
-    EXTRA = args.extra or len(args.decks) >= 3 or 'dh-cthun' in args.decks
-    STAGES = args.stages or 'priest-egg' in args.decks
-    MIX = args.mix
-    MIRROR = args.mirror
+    vocab_flags(args)
     if args.shape:
         if args.distill:
             raise SystemExit('--shape is a reward of PPO; --distill has none')
@@ -1381,13 +1410,16 @@ def main():
     if ck:
         EXTRA = EXTRA or bool(ck.get('extra', False))  # the cells of the network that goes on are the ones it had
         STAGES = STAGES or bool(ck.get('stages', False))
+        IMBUE = IMBUE or bool(ck.get('imbue', False))
+        EGG = EGG or bool(ck.get('egg', False))
     arena = make(args.envs, args.seed, args.decks, swap=args.swap, restart={'frac': args.restart_frac, 'cap': args.restart_pool} if args.restart_frac else None,
                  oracle=args.oracle)
     net = Net(arena.obs, arena.act, args.width, arena.oracle).to(DEVICE)
     done_iters = 0
     if ck:
-        old = {'names': ck['names'], 'obs': ck['obs'], 'act': ck['act'], 'timers': bool(ck.get('timers', False)), 'extra': bool(ck.get('extra', False)), 'stages': bool(ck.get('stages', False))}
-        new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES}
+        old = {'names': ck['names'], 'obs': ck['obs'], 'act': ck['act'], 'timers': bool(ck.get('timers', False)), 'extra': bool(ck.get('extra', False)),
+               'stages': bool(ck.get('stages', False)), 'imbue': bool(ck.get('imbue', False))}
+        new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE}
         if old != new:
             # Another vocabulary, the clocks or the extra cell: each card keeps the weights of its own place.
             gone = [n for n in old['names'] if n not in new['names']]
@@ -1522,6 +1554,10 @@ def main():
             ck.update(extra=True, mix=MIX, mirror=MIRROR)
         if STAGES:
             ck['stages'] = True
+        if IMBUE:
+            ck['imbue'] = True
+        if EGG:
+            ck['egg'] = True
         if sparring:
             ck['opp'] = {d: {k: v.cpu() for k, v in o.net.state_dict().items()} for d, o in sparring.items()}
         torch.save(ck, out / 'policy.pt')

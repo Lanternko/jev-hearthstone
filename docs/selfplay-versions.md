@@ -610,3 +610,11 @@
 - 門檻：① 蛋牧區間下界 > v8 點估計：A 79.8 > 79.0 過（+2.6）、B 77.8 沒過（+0.6）。② 薩滿／zakajz／dh／鏡像不掉超過 1.5 分：A −0.25／+1.65／+0.35／+1.95、B −1.45／+0.35／+0.55／+0.5，都過。→ **A 過門檻**。
 - 匯出 `models/selfplay/warlock-zoo-v9.{pt,json}`（＝A）：`d859beb8…`／`c2add057…`，obs 620、act 238、stages=true、第 1850 輪。新蛋牧駕駛存成 `models/selfplay/priest-egg-pilot-v2-20261027.{pt,json}`（`4b8434cc…`／`41b16f6a…`，第 2140 輪）。`src/selfplay-shadow.mjs` 的 `MODELS` 依限制沒動。
 - 判讀：主指標 +2.6 分是唯一過門檻的組，鏡像同時 +2.0；λ=0.3 這輪反而較差（與上一輪相反），λ 在 ±1～2 分內不是穩定槓桿。薩滿被蛋牧權重擠壓（−0.25），之後若薩滿變多再調課表。所有數字都是實驗室對打，實戰換不換由使用者決定。細節見 STATUS.md「2026-10-27 蛋的階段進編碼…」。
+
+## 2026-10-28 Imbue 進編碼、蛋牧駕駛 P3（對 zoo-v9 8.9% → 17.8%）
+
+- 原因：蛋牧模擬換成真人 Imbue 牌表後，P2 沒見過新牌也看不到 Imbue 等級，勝率掉到 10.7%（E-251）。
+- 編碼：`vocabulary(...,{imbue:true})`，每席 2 格 Imbue（bless/5）＋21 張新牌表卡的專屬格；`--imbue`，舊 ckpt 長度不變，zoo-v9 的編碼由 golden 測試釘住。自戰 `--egg`／對打 `--guard egg` 開 Haunt guard。
+- P3：從 P2 第 2140 輪接 900 輪到 3040，`--decks priest-egg warlock-zoo --mix 1.0 --mirror 0.1 --timers --extra --stages --imbue --egg --swap --workers 18`，zoo 固定 v9。
+- 結果（P2 → P3）：對 v9 2000 局 8.9% → 17.8%（16.2–19.5）；E-251 設定 10.75% → 22.5%（18.7–26.8）、T14.33 → T15.86、孵出 Khelos 12.25% → 24.25%。匯出 `models/selfplay/priest-egg-pilot-v3-20261028.{pt,json}`（`53e3d179…`／`56c6fe1e…`）。細節見 memory/experiments.md E-252。
+- 加訓 P3c（3040→3490，seed 85）：E-251 設定 2000 局（5 個不重疊區塊）v3 22.85%（21.1–24.7）、P3c 22.0%（20.2–23.9），對 v9 17.8% 對 17.9%；P3c 孵蛋較少，不匯出，維持 v3。見 E-253。

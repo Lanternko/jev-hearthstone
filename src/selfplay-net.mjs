@@ -50,7 +50,7 @@ export function loadNet(path=MODEL){
   const layer=name=>({w:weight(doc.tensors[`${name}.weight`]),b:tensor(doc.tensors[`${name}.bias`])});
   const L={body0:layer('body.0'),body2:layer('body.2'),step0:layer('step.0'),
     score0:layer('score.0'),score2:layer('score.2'),value0:layer('value.0'),value2:layer('value.2')};
-  const vocab={names:doc.names,index:new Map(doc.names.map((n,i)=>[n,i])),size:doc.names.length+1,timers:!!doc.timers,extra:!!doc.extra,stages:!!doc.stages};
+  const vocab={names:doc.names,index:new Map(doc.names.map((n,i)=>[n,i])),size:doc.names.length+1,timers:!!doc.timers,extra:!!doc.extra,stages:!!doc.stages,imbue:!!doc.imbue};
   if(obsSize(vocab)!==doc.obs||actSize(vocab)!==doc.act)
     throw Error(`${path}: made for states of ${doc.obs} and steps of ${doc.act}, the encoder now gives ${obsSize(vocab)} and ${actSize(vocab)}`);
   // -> {logits:[one per step], value}; the value is for the seat to act, between about -1 and 1.

@@ -359,3 +359,20 @@
 - 規則：改了牌表或卡牌模型之後，舊網路的數字只能當「沒重訓」的下限，不能拿來判斷改動好壞；要評估改動，先重訓（新詞彙＋必要的觀察欄位），或至少同時列「舊牌表＋新程式」把模型改動和換牌的影響分開。
 - 對應測試或關卡：評估時固定列出「舊牌表、新程式」對照列（E-251 的做法）；無自動關卡
 - 相關：E-251、F-851、F-853
+
+### L-043
+- 日期：2026-10-28
+- 發生什麼：train/ppo.py 的 main() 用區域變數指派 IMBUE／EGG，模組全域仍是 False，`--imbue` 完全失效；Arena 建出 428 格 state 對上 P2 要的 430 格，訓練一啟動就退出才發現。
+- 規則：命令列旗標改模組層設定時統一經 vocab_flags() 寫 global；新增旗標要在 test_expand.py 的 vocab_flags 檢查列進去。
+- 對應測試或關卡：train/test_expand.py（vocab_flags sets the module globals）
+- 相關：E-252、F-854
+- 來源：派工 ds-local 20261028-032710-9eaf64
+
+### L-044
+- 日期：2026-10-28
+- 發生什麼：用一條 ssh 同時 `nohup setsid bash 腳本 ... &` 再 `sleep; tail`，本機 ssh 一直不返回（遠端訓練有正常跑），只好停掉再另開連線查。
+- 規則：在 5090 啟動長工作用一條只負責啟動的 ssh（`ssh -f` 或啟動後立刻 exit），完成判斷靠腳本最後 touch 的 DONE／FAILED 旗標，用另一條背景 ssh `until [ -f DONE ] || [ -f FAILED ]; do sleep 60; done` 等。
+- 對應測試或關卡：無自動關卡
+- 相關：E-253
+- 來源：2026-10-28 App 跑 P3c
+

@@ -51,7 +51,7 @@ test('the state does not tell which cards the other hand holds or how either dec
 test('a table asks the seat to act, reports a finished game once and deals the next', ()=>{
   const a=new Arena({lists:LISTS,n:8,seed:11}),pick=caller(11);
   let v=a.views(),ended=0;
-  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false,extra:false,stages:false});
+  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false,extra:false,stages:false,imbue:false});
   for(let i=0;i<2500;i++){
     v.forEach((e,k)=>{
       assert.equal(e.seat,a.tables[k].s.seat);

@@ -1,0 +1,31 @@
+{
+ "model": "warlock-zoo-v9",
+ "file": "models/selfplay/warlock-zoo-v9.json",
+ "deck": "warlock-zoo",
+ "at": "2026-10-29T09:42:24.272Z",
+ "parsed": "synth",
+ "summary": {
+  "pass": 0,
+  "ok": 0,
+  "fail": 0,
+  "unsupported": 0,
+  "error": 0,
+  "categories": 1
+ },
+ "questions": [
+  {
+   "id": "cat:f881:warlock-zoo",
+   "kind": "category",
+   "evidence": "measured",
+   "result": "measured",
+   "dry": 404,
+   "tach": 53,
+   "stale": 0,
+   "rate": 0.1311881188118812,
+   "meanPTach": 0.2543317958527299,
+   "indexed": 404,
+   "generator": "warlock-zoo-v9",
+   "seconds": 3
+  }
+ ]
+}

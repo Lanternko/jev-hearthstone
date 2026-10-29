@@ -13,6 +13,7 @@
     "loop": "node src/loop.mjs",
     "override": "node --env-file-if-exists=.env.local src/override.mjs",
     "gestures": "node src/gesture-report.mjs",
+    "regress": "node src/regress.mjs",
     "game": "node src/await-game.mjs && node src/loop.mjs > runtime/last-game.log 2>&1",
     "game-zoo": "node src/game-zoo.mjs",
     "game-zakajz": "node src/game-zoo.mjs warlock-zakajz",

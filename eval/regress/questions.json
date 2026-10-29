@@ -1,0 +1,1370 @@
+{
+ "_doc": "Regression question bank (exam only, NEVER training data). Run: npm run regress -- --deck <deck> | --all-live. position: grade the deck network on a recorded live state; best = pass, ok = ok, a top move in forbidden or outside best/ok = fail; with no best, the question passes whenever the top move is not forbidden. An id starting with re: is a regular expression. category: a generated family of positions (see src/regress-f881.mjs). unsupported: the reason it cannot be graded; it is listed and never counted as a pass.",
+ "version": 1,
+ "questions": [
+  {
+   "id": "eval:g6t1r425",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g6t1r425",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "xface"
+   ],
+   "ok": [
+    "o0"
+   ],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-25 #6: 要攻擊選擇對手的臉 -- a damage spell never aims at our own hero",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g7t1r436",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g7t1r436"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-25 #7: Soul Barrage (kept by 18% of players) is tossed in the mulligan",
+   "unsupported": "mulligan decision: shadowView returns null for MULLIGAN actions (the live bridge never asks the network for a mulligan), so there is nothing to grade"
+  },
+  {
+   "id": "eval:g7t5r440",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g7t5r440",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "c3e85"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-25 #7: 應該是要棄掉行尸（因為場面低）",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g8t6r447",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g8t6r447",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o4",
+    "o5"
+   ],
+   "ok": [
+    "o1",
+    "o2"
+   ],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-25 #8: 應該是打手下，而不是離斬殺很遠還用法術打臉 -- Soul Barrage into an empty board at 30 hp",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g1t7r515",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g1t7r515",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "xtap",
+    "o1",
+    "o2",
+    "o4"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #10, our turn 4: 應該先抽牌再出牌 or 打 1+3 費",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g1t13r530",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g1t13r530",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o5"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #10: 先抽牌才對。白白浪費一個魔眼",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g1t15r534",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g1t15r534",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o3"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #10: 一樣要先抽牌再打 buff",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g2t7r560",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g2t7r560",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #11, our turn 4: 應該先用武器攻擊，以維持場面的血量",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g3t7r586",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g3t7r586",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #12, our turn 4: 應該打連鎖。因為打完連鎖，最低費變成魔像",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g4t7r616",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g4t7r616",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o7t6"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #13, our turn 4: 應該棄掉靈魂彈幕，因為 325 本來就會在鴨嘴龍死掉後棄置",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g4t9r621",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g4t9r621",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1",
+    "o4"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-26 #13, our turn 5: 先打公爵，確保隨機棄牌不會棄掉有價值的公爵",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g4t11r1187",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g4t11r1187",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "xplay"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-29 #15, our turn 6: Frozen hero: Chronoclaws cannot discard this turn, so the Eggs are played, not kept",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g1t20r1242",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g1t20r1242",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-29 #16, turn 20: 遇到聖盾手下，應該先讓低攻擊的人先破盾 -- Occultist before the hero swings into the shield",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g4t10r1308",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g4t10r1308",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "xplay"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-29 #19, turn 10: 為何一直不打地獄公爵？明明就成長到很大了",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g4t14r1313",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g4t14r1313",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o5t0",
+    "o8t0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-29 #19, turn 14: 沒有自殺 1/1 以打出公爵 / 11 撞掉聖盾 再用公爵衝刺最佳",
+   "unsupported": null
+  },
+  {
+   "id": "eval:g6t8r1359",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/positions.json",
+    "id": "g6t8r1359",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "c4e142"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "09-29 #21, turn 8: 應該棄靈魂彈幕。然後 0 費繼續找牌",
+   "unsupported": null
+  },
+  {
+   "id": "fx:dormant-buff-tap",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/dormant-buff-tap.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o2"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [
+    "F-223",
+    "F-224"
+   ],
+   "note": "o2 best, o1 forbidden",
+   "unsupported": null
+  },
+  {
+   "id": "fx:draw-only-trades",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/draw-only-trades.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o3t1",
+    "o1t1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-388"
+   ],
+   "note": "trades that only draw",
+   "unsupported": null
+  },
+  {
+   "id": "fx:full-board-catacombs-draws",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/full-board-catacombs-draws.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "c5e158"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-394"
+   ],
+   "note": "full board: the Catacombs pick that draws",
+   "unsupported": null
+  },
+  {
+   "id": "fx:g4-body-before-buff",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/g4-body-before-buff.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o2"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [],
+   "note": "play the body before the buff",
+   "unsupported": null
+  },
+  {
+   "id": "fx:g4-occultist-barrage",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/g4-occultist-barrage.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o5t0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "Occultist then Barrage line",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game120-turn2-coin-occultist",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game120-turn2-coin-occultist.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "coin"
+   ],
+   "ok": [],
+   "forbidden": [
+    "egg",
+    "tap",
+    "end"
+   ],
+   "rulings": [
+    "R-061",
+    "F-256",
+    "F-258"
+   ],
+   "note": "turn 2: Coin into Ocular Occultist (first step of the ruled line)",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game13-whispers-thin-board",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game13-whispers-thin-board.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1",
+    "o2"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o4"
+   ],
+   "rulings": [
+    "F-419",
+    "R-105"
+   ],
+   "note": "thin board: o1 or o2, not o4",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game137-ongoing-effect-trade",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game137-ongoing-effect-trade.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t1",
+    "o2t0"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o2t1"
+   ],
+   "rulings": [
+    "R-053"
+   ],
+   "note": "ongoing-effect trade",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game148-board-before-draw",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game148-board-before-draw.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t2"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-052",
+    "F-227"
+   ],
+   "note": "board before draw",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game153-ectoplasm",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game153-ectoplasm.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-232"
+   ],
+   "note": "Ectoplasm line",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game17-soulfire-guarantees-barrage",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game17-soulfire-guarantees-barrage.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o5t0"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o6t0",
+    "o7t0",
+    "o3",
+    "o0",
+    "o1"
+   ],
+   "rulings": [
+    "F-415",
+    "R-102",
+    "R-104"
+   ],
+   "note": "Soulfire guarantees the Barrage",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game175-engine-removal",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game175-engine-removal.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o4t1",
+    "o5t1",
+    "o6t1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-238"
+   ],
+   "note": "remove the engine minion",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game179-discover-first",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game179-discover-first.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-051",
+    "F-210"
+   ],
+   "note": "discover first",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game179-draw-before-whispers",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game179-draw-before-whispers.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o2"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-051",
+    "F-210"
+   ],
+   "note": "draw before Whispers",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game18-chronoclaws-wastes-barrage",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game18-chronoclaws-wastes-barrage.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1",
+    "o2",
+    "o4",
+    "o5"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o6"
+   ],
+   "rulings": [
+    "F-417",
+    "R-103"
+   ],
+   "note": "Chronoclaws (o6) wastes the Barrage; o1/o2/o4/o5 are fine",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game27-occultist-discards-weapon",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game27-occultist-discards-weapon.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t0"
+   ],
+   "ok": [
+    "o2"
+   ],
+   "forbidden": [
+    "o0",
+    "o1t1"
+   ],
+   "rulings": [
+    "R-099",
+    "R-101"
+   ],
+   "note": "Occultist discards the weapon",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game34-coin-keeps-occultist",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game34-coin-keeps-occultist.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-098"
+   ],
+   "note": "Coin keeps Occultist",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game46-turn1-coin",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game46-opening.json",
+    "state": "state",
+    "options": "recordedOptions",
+    "index": 1
+   },
+   "evidence": "user",
+   "best": [
+    "o0"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o2"
+   ],
+   "rulings": [
+    "F-176"
+   ],
+   "note": "turn 1 with the Coin: o0 best, o2 forbidden",
+   "unsupported": null
+  },
+  {
+   "id": "fx:game46-draw-risk",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game46-draw-risk.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [
+    "o3"
+   ],
+   "rulings": [
+    "F-191"
+   ],
+   "note": "Life Tap (o3) is forbidden at this life total",
+   "unsupported": null
+  },
+  {
+   "id": "fx:linked-barrage-copy",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/linked-barrage-copy.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o4"
+   ],
+   "rulings": [
+    "F-388"
+   ],
+   "note": "linked Barrage copy",
+   "unsupported": null
+  },
+  {
+   "id": "fx:morning-g1-t16-golem-under-lethal",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/morning-g1-t16-golem-under-lethal.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [],
+   "note": "do not play the Golem under lethal",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game10-acolytes-buff",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game10-acolytes-buff.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o3"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-076",
+    "F-340"
+   ],
+   "note": "Acolytes then buff",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game10-temporary-party",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game10-temporary-party.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o3"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-077",
+    "F-344"
+   ],
+   "note": "temporary party card",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game18-combo-input",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game18-combo-input.json",
+    "state": "state",
+    "options": "actions"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-319"
+   ],
+   "note": "combo input",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game18-weapon-acolytes-buff",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game18-weapon-acolytes-buff.json",
+    "state": "decision.state",
+    "options": "decision.options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-072"
+   ],
+   "note": "Chronoclaws first, the weapon attack discards the Acolytes",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game3-swing-before-replace",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game3-swing-before-replace.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "re:^o3t"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o2"
+   ],
+   "rulings": [],
+   "note": "swing before the replace (o3*), not o2",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game9-fatal-party",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game9-fatal-party.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [
+    "F-334"
+   ],
+   "note": "fatal party card",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-game9-single-buff",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game9-single-buff.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-337"
+   ],
+   "note": "a single buff",
+   "unsupported": null
+  },
+  {
+   "id": "fx:single-body-occultist",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/single-body-occultist.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t0"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-218"
+   ],
+   "note": "single body Occultist",
+   "unsupported": null
+  },
+  {
+   "id": "fx:swarm-free-trades-before-tap",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/swarm-free-trades-before-tap.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [
+    "o0",
+    "o1"
+   ],
+   "rulings": [
+    "F-392"
+   ],
+   "note": "free trades before Life Tap",
+   "unsupported": null
+  },
+  {
+   "id": "fx:swarm-free-trades-no-end",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/swarm-free-trades-no-end.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [
+    "o0"
+   ],
+   "rulings": [
+    "F-392"
+   ],
+   "note": "do not end the turn with free trades",
+   "unsupported": null
+  },
+  {
+   "id": "fx:swarm-occultist-barrage",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/swarm-occultist-barrage.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1t4"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-383"
+   ],
+   "note": "swarm: Occultist into Barrage",
+   "unsupported": null
+  },
+  {
+   "id": "fx:temporary-guldan-idle-mana",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/temporary-guldan-idle-mana.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-388"
+   ],
+   "note": "temporary Gul-dan with idle mana",
+   "unsupported": null
+  },
+  {
+   "id": "fx:weapon-soaks-low-attack-taunts",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/weapon-soaks-low-attack-taunts.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o2"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o0",
+    "re:^o[6-9]t"
+   ],
+   "rulings": [
+    "F-392"
+   ],
+   "note": "the weapon soaks the low attack taunts",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game1-chamber-walking-dead",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game1-chamber-walking-dead.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "Chamber and Walking Dead",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game1-preserve-duke-before-weapon",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game1-preserve-duke-before-weapon.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "preserve the Duke before the weapon",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game2-buff-before-queued-attacks",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game2-buff-before-queued-attacks.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o5"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "first step: buff before the queued attacks",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game2-shield-pop-alternatives",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game2-shield-pop-alternatives.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1",
+    "o3"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o2"
+   ],
+   "rulings": [],
+   "note": "shield pop: o1 or o3, not o2",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game3-temporary-free-325",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game3-temporary-free-325.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o2",
+    "o0"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [],
+   "note": "temporary free 325: avoid o1",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game3-two-buffs-before-queued-attacks",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game3-two-buffs-before-queued-attacks.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o3"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-359"
+   ],
+   "note": "first step: two buffs before the queued attacks",
+   "unsupported": null
+  },
+  {
+   "id": "fx:validation10-game4-barrage-acolytes-linked-duke",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/validation10-game4-barrage-acolytes-linked-duke.json",
+    "state": "state",
+    "options": "options"
+   },
+   "evidence": "user",
+   "best": [
+    "o1",
+    "o6"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "Barrage, Acolytes, linked Duke (o1; o6 is the alternative)",
+   "unsupported": null
+  },
+  {
+   "id": "fx:new50-forty-opening-counts",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-forty-opening-counts.json"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "",
+   "unsupported": "a table of opening counts from 40 games, no recorded decision state"
+  },
+  {
+   "id": "fx:game46-opening",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game46-opening.json",
+    "index": 0,
+    "state": "state",
+    "options": "recordedOptions"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "F-176"
+   ],
+   "note": "",
+   "unsupported": "mulligan decision (BEGIN_MULLIGAN): shadowView returns null for MULLIGAN actions"
+  },
+  {
+   "id": "fx:game120-opening-payoffs",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/game120-opening-payoffs.json"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-066",
+    "F-272"
+   ],
+   "note": "",
+   "unsupported": "opening mulligan with no recorded options; the network is not asked for mulligans through the live bridge"
+  },
+  {
+   "id": "fx:new50-game14-mulligan",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/new50-game14-mulligan.json"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-059",
+    "F-246"
+   ],
+   "note": "",
+   "unsupported": "mulligan decision: shadowView returns null for MULLIGAN actions"
+  },
+  {
+   "id": "fx:ranked22-mulligan-misfire",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked22-mulligan-misfire.json"
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "",
+   "unsupported": "mulligan click misfire: a client-layer case, not a decision the network makes"
+  },
+  {
+   "id": "net-review:game15-t6",
+   "kind": "position",
+   "deck": "warlock-discard",
+   "source": {
+    "file": "eval/net-review-positions.jsonl",
+    "line": 1
+   },
+   "evidence": "user",
+   "best": [],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [],
+   "note": "",
+   "unsupported": "a review mark with no stated best answer (the note only doubts the network Life Tap and the deck reconstruction)"
+  },
+  {
+   "id": "cat:f881:warlock-zoo",
+   "kind": "category",
+   "deck": "warlock-zoo",
+   "category": "f881",
+   "generator": "warlock-zoo-v9",
+   "index": "eval/regress/f881-index.json",
+   "evidence": "measured",
+   "rulings": [
+    "F-881",
+    "E-280"
+   ],
+   "note": "Tachyon Barrage castable (Coin counted) on own turn 1-3, empty enemy board, best non-Tachyon line plays only Coin / Life Tap / end (DRY). E-280 judged casting it a mistake (T-H -8.0 points). Metric: share of DRY positions where the greedy line casts Tachyon (lower is better), and mean P(Tachyon).",
+   "unsupported": null
+  },
+  {
+   "id": "cat:f881:warlock-zakajz",
+   "kind": "category",
+   "deck": "warlock-zakajz",
+   "category": "f881",
+   "generator": "warlock-zoo-0.2.0",
+   "index": "eval/regress/f881-index.json",
+   "evidence": "measured",
+   "rulings": [
+    "F-881",
+    "E-280"
+   ],
+   "note": "Tachyon Barrage castable (Coin counted) on own turn 1-3, empty enemy board, best non-Tachyon line plays only Coin / Life Tap / end (DRY). E-280 judged casting it a mistake (T-H -8.0 points). Metric: share of DRY positions where the greedy line casts Tachyon (lower is better), and mean P(Tachyon).",
+   "unsupported": null
+  }
+ ]
+}

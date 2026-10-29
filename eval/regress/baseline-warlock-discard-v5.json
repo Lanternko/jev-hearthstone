@@ -1,0 +1,790 @@
+{
+ "model": "warlock-discard-v5",
+ "file": "models/selfplay/warlock-discard-v5.json",
+ "deck": "warlock-discard",
+ "at": "2026-10-29T09:42:21.300Z",
+ "parsed": "synth",
+ "summary": {
+  "pass": 32,
+  "ok": 1,
+  "fail": 23,
+  "unsupported": 7,
+  "error": 0,
+  "categories": 0
+ },
+ "questions": [
+  {
+   "id": "eval:g6t1r425",
+   "kind": "position",
+   "evidence": "user",
+   "top": "xface",
+   "result": "pass",
+   "pBest": 0.6483,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g7t1r436",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "mulligan decision: shadowView returns null for MULLIGAN actions (the live bridge never asks the network for a mulligan), so there is nothing to grade"
+  },
+  {
+   "id": "eval:g7t5r440",
+   "kind": "position",
+   "evidence": "user",
+   "top": "c3e85",
+   "result": "pass",
+   "pBest": 0.9923,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown",
+    "discover option not in deck: Soul Barrage"
+   ]
+  },
+  {
+   "id": "eval:g8t6r447",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o5",
+   "result": "pass",
+   "pBest": 0.7083,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 23->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g1t7r515",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "pass",
+   "pBest": 0.8178,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g1t13r530",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o5",
+   "result": "pass",
+   "pBest": 0.8294,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 26->11",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g1t15r534",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.2326,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 27->8",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g2t7r560",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1t0",
+   "result": "pass",
+   "pBest": 0.4369,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 23->18",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g3t7r586",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.9431,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 21->19",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g4t7r616",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o7t6",
+   "result": "pass",
+   "pBest": 0.52,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 18->16",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g4t9r621",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.9798,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 20->13",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g4t11r1187",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o6t0",
+   "result": "fail",
+   "pBest": 0.1655,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 25->16",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g1t20r1242",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o3",
+   "result": "fail",
+   "pBest": 0.3651,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 26->7",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g4t10r1308",
+   "kind": "position",
+   "evidence": "user",
+   "top": "xplay",
+   "result": "pass",
+   "pBest": 0.9861,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 22->10",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g4t14r1313",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o8t0",
+   "result": "pass",
+   "pBest": 0.3621,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 18->5",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "eval:g6t8r1359",
+   "kind": "position",
+   "evidence": "user",
+   "top": "c4e142",
+   "result": "pass",
+   "pBest": 0.7368,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->18",
+    "discardCount unknown",
+    "discover option not in deck: Soul Barrage"
+   ]
+  },
+  {
+   "id": "fx:dormant-buff-tap",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "pass",
+   "pBest": 0.9969,
+   "pForbidden": 0.0029,
+   "notes": [
+    "deck trimmed 25->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:draw-only-trades",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2t0",
+   "result": "fail",
+   "pBest": 0.1691,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 25->20",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:full-board-catacombs-draws",
+   "kind": "position",
+   "evidence": "user",
+   "top": "c5e157",
+   "result": "fail",
+   "pBest": 0.0904,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 22->14",
+    "discardCount unknown",
+    "discover option not in deck: Hand of Gul'dan",
+    "discover option not in deck: Duke of Below"
+   ]
+  },
+  {
+   "id": "fx:g4-body-before-buff",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "pass",
+   "pBest": 0.9929,
+   "pForbidden": 0.0071,
+   "notes": [
+    "deck trimmed 25->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:g4-occultist-barrage",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o4",
+   "result": "fail",
+   "pBest": 0.0049,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game120-turn2-coin-occultist",
+   "kind": "position",
+   "evidence": "user",
+   "top": "coin",
+   "result": "pass",
+   "pBest": 0.9549,
+   "pForbidden": 0.0451,
+   "notes": [
+    "deck trimmed 30->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game13-whispers-thin-board",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.5592,
+   "pForbidden": 0.0047,
+   "notes": [
+    "deck trimmed 24->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game137-ongoing-effect-trade",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2t0",
+   "result": "pass",
+   "pBest": 0.4815,
+   "pForbidden": 0.4471,
+   "notes": [
+    "deck trimmed 25->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game148-board-before-draw",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1t0",
+   "result": "fail",
+   "pBest": 0.2743,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 25->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game153-ectoplasm",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.0038,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 28->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game17-soulfire-guarantees-barrage",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o7t0",
+   "result": "fail",
+   "pBest": 0.0691,
+   "pForbidden": 0.4954,
+   "notes": [
+    "deck trimmed 24->23",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game175-engine-removal",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.0225,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game179-discover-first",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.1873,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game179-draw-before-whispers",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "fail",
+   "pBest": 0.2581,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 27->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game18-chronoclaws-wastes-barrage",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o6",
+   "result": "fail",
+   "pBest": 0.2666,
+   "pForbidden": 0.6437,
+   "notes": [
+    "deck trimmed 26->23",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game27-occultist-discards-weapon",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "ok",
+   "pBest": 0.2039,
+   "pForbidden": 0.0466,
+   "notes": [
+    "deck trimmed 26->25",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game34-coin-keeps-occultist",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o0",
+   "result": "pass",
+   "pBest": 0.9026,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game46-turn1-coin",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o0",
+   "result": "pass",
+   "pBest": 0.9619,
+   "pForbidden": 0.0381,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:game46-draw-risk",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2t0",
+   "result": "pass",
+   "pBest": null,
+   "pForbidden": 0.0002,
+   "notes": [
+    "deck trimmed 17->2",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:linked-barrage-copy",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o6",
+   "result": "fail",
+   "pBest": 0.018,
+   "pForbidden": 0.018,
+   "notes": [
+    "deck trimmed 23->20",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:morning-g1-t16-golem-under-lethal",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "pass",
+   "pBest": null,
+   "pForbidden": 0.1077,
+   "notes": [
+    "deck trimmed 27->16",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game10-acolytes-buff",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.3174,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 23->17",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game10-temporary-party",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.1502,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 25->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game18-combo-input",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.8882,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game18-weapon-acolytes-buff",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.9916,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game3-swing-before-replace",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o4",
+   "result": "fail",
+   "pBest": 0.5583,
+   "pForbidden": 0.079,
+   "notes": [
+    "deck trimmed 27->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game9-fatal-party",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o3",
+   "result": "pass",
+   "pBest": null,
+   "pForbidden": 0.0197,
+   "notes": [
+    "deck trimmed 28->6",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-game9-single-buff",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o0",
+   "result": "pass",
+   "pBest": 0.9423,
+   "pForbidden": null,
+   "notes": [
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:single-body-occultist",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o3",
+   "result": "fail",
+   "pBest": 0.0309,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 26->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:swarm-free-trades-before-tap",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2t0",
+   "result": "pass",
+   "pBest": null,
+   "pForbidden": 0.0367,
+   "notes": [
+    "deck trimmed 25->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:swarm-free-trades-no-end",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1t0",
+   "result": "pass",
+   "pBest": null,
+   "pForbidden": 0.0008,
+   "notes": [
+    "deck trimmed 24->20",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:swarm-occultist-barrage",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.0446,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:temporary-guldan-idle-mana",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.8048,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 27->9",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:weapon-soaks-low-attack-taunts",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "pass",
+   "pBest": 0.4682,
+   "pForbidden": 0.5082,
+   "notes": [
+    "deck trimmed 25->19",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game1-chamber-walking-dead",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.9779,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 24->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game1-preserve-duke-before-weapon",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1",
+   "result": "pass",
+   "pBest": 0.5021,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 26->20",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game2-buff-before-queued-attacks",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o1t1",
+   "result": "fail",
+   "pBest": 0.0111,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 23->22",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game2-shield-pop-alternatives",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o2",
+   "result": "fail",
+   "pBest": 0.0321,
+   "pForbidden": 0.616,
+   "notes": [
+    "deck trimmed 24->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game3-temporary-free-325",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o3t0",
+   "result": "fail",
+   "pBest": 0.1455,
+   "pForbidden": 0.0037,
+   "notes": [
+    "deck trimmed 28->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game3-two-buffs-before-queued-attacks",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o3",
+   "result": "pass",
+   "pBest": 0.9743,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 25->24",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:validation10-game4-barrage-acolytes-linked-duke",
+   "kind": "position",
+   "evidence": "user",
+   "top": "o8t0",
+   "result": "fail",
+   "pBest": 0.0541,
+   "pForbidden": null,
+   "notes": [
+    "deck trimmed 22->21",
+    "discardCount unknown"
+   ]
+  },
+  {
+   "id": "fx:new50-forty-opening-counts",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "a table of opening counts from 40 games, no recorded decision state"
+  },
+  {
+   "id": "fx:game46-opening",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "mulligan decision (BEGIN_MULLIGAN): shadowView returns null for MULLIGAN actions"
+  },
+  {
+   "id": "fx:game120-opening-payoffs",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "opening mulligan with no recorded options; the network is not asked for mulligans through the live bridge"
+  },
+  {
+   "id": "fx:new50-game14-mulligan",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "mulligan decision: shadowView returns null for MULLIGAN actions"
+  },
+  {
+   "id": "fx:ranked22-mulligan-misfire",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "mulligan click misfire: a client-layer case, not a decision the network makes"
+  },
+  {
+   "id": "net-review:game15-t6",
+   "kind": "position",
+   "evidence": "user",
+   "result": "unsupported",
+   "reason": "a review mark with no stated best answer (the note only doubts the network Life Tap and the deck reconstruction)"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "model": "priest-egg-0.1.0",
+ "file": "models/selfplay/priest-egg-0.1.0.json",
+ "deck": "priest-egg-hsr",
+ "at": "2026-10-29T09:42:26.009Z",
+ "parsed": "synth",
+ "summary": {
+  "pass": 0,
+  "ok": 0,
+  "fail": 0,
+  "unsupported": 0,
+  "error": 0,
+  "categories": 0
+ },
+ "questions": [],
+ "note": "no questions for priest-egg-hsr yet (no recorded states, no F-881 category)"
+}

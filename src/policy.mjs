@@ -1,7 +1,8 @@
 import {isCurse,roles,mulliganWR,mulliganKept,mulliganRelative,bodies,summoned,buffImpact,valuableBuff,buffManaReserve} from './describe.mjs';
 import {lethalStrike,enemyHero,heroHp,faceDamage} from './lethal.mjs';
 import {isCoin} from './power.mjs';
-import {deckFor} from './deck.mjs';
+import {deckFor,deckName} from './deck.mjs';
+import {mulliganTable} from './mulligan-table.mjs';
 import {immediateDraws,heroAttackGain,heroCanSwing} from './mechanics.mjs';
 import {drawImpact} from './draw-risk.mjs';
 import {resourceDrawWindow,OBJECTIVE_WEIGHTS} from './matchup-objective.mjs';
@@ -110,8 +111,16 @@ export function mulliganCombos(cards,state){
  }
  return keep;
 }
+// User ruling R-154 (2026-10-29): a deck with a learned table (E-281, src/mulligan-table.mjs) keeps exactly
+// what the table keeps; three cards offered is going first. The rules below are the fallback.
 function mulliganConstraint(state,actions){
  const cards=(state.choice.entities??[]).filter(c=>!isCoin(c));
+ const table=mulliganTable(deckName(state));
+ if(table){
+  const back=new Set(table({hand:cards.map(c=>({id:c.entityId,name:c.name})),first:cards.length===3}));
+  const exact=actions.filter(a=>a.replace?.length===back.size&&a.replace.every(id=>back.has(id)));
+  if(exact.length)return exact;
+ }
  const combo=mulliganCombos(cards,state);
  const toss=cards.filter(c=>mulliganVerdict(c,state)==='toss'&&!combo.has(c.entityId)).map(c=>c.entityId);
  const keep=cards.filter(c=>mulliganVerdict(c,state)==='keep'||combo.has(c.entityId)).map(c=>c.entityId);

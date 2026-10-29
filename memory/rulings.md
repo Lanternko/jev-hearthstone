@@ -1292,3 +1292,126 @@
 - 落在：src/egg-guard.mjs eggGuard；src/net-guards.mjs guardPick 的 haunt_own_egg
 - 相關：F-849
 - 來源：archive/STATUS-2026-10-27.md 第 11 行（2026-10-27 蛋牧升級：真人 Imbue 牌表、月之祝福、交織命運／心靈咒術師、Haunt 上蛋（未重訓））
+
+### R-141
+- 日期：2026-10-28
+- 情境：蛋牧模擬器缺的卡效果（E-256 逐卡統計後使用者逐條裁決）
+- 裁決：
+  - Elder Word: Flay／Foresight：要做「下一張暗影法術重複」。
+  - Prepare（Defias Smuggler、Soothsayer）：花掉剩下全部法力 X，這張牌減 X+1 費。
+  - Kaldorei Priestess 的 −2 攻擊只維持雙方各一回合（到我方下一回合開始）。
+  - 每次 Imbue 都讓英雄能力（月之祝福）降費。
+  - Kindred（Gravedawn Sunbloom）：上一回合打過同類（神聖）牌，這回合減費。
+- 理由：遊戲規則
+- 落在：src/sim.mjs（elderWord／afterPlay、prepare 步驟、chill、SUNBLOOM 的 lastKinds）；test/priest-egg-rules.test.mjs
+- 實作假設（未經使用者確認）：Prepare 每張牌一次、X=0 也可（減 1）、只在自戰、編碼借 'use' 格、`^prepare` 也套到 Hold Them Off!／Hijacked Securitybot。Imbue 的解讀已由 R-142 定案。
+- 相關：F-851、F-852、F-860、F-861
+- 來源：2026-10-28 App 對話
+
+### R-142
+- 日期：2026-10-28
+- 情境：R-141 的「每次 Imbue 都會降費天生技」問是選項降費還是英雄能力本身降費
+- 裁決：~~第一次 Imbue 把英雄能力換成月之祝福（2 費）；第二次起每次 Imbue 讓英雄能力降 1 費（最低 0）。~~ 2026-10-28 使用者附卡圖更正：英雄能力固定 2 費，只有月之祝福給的牌減費（減 Imbue 次數，第一次 Imbue 時卡面寫 (1)），也就是 F-851 原本的模型。
+- 理由：遊戲規則（使用者回覆，附卡圖）
+- 落在：src/sim.mjs imbue()；test/priest-egg-imbue.test.mjs
+- 卡圖：Blessing of the Moon 2 費，「Choose a playable Priest minion or spell to add to your hand. It costs (1) less, but is Temporary.」
+- 相關：R-141、F-851
+- 來源：2026-10-28 App 對話
+
+### R-143
+- 日期：2026-10-28
+- 裁決：新訓練的預設配方＝PPO＋λ0.1 混合搜尋蒸餾並行（`--distill-weight 0.1 --distill-frac 0.1 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01`，--reply 用對手模型），駕駛網路也一樣；改用純 PPO 或其他 λ 要在 E- 設定欄寫理由。
+- 理由：使用者「canonical 不是要求 lambda 0.1 的搜尋蒸餾和 PPO 並行嗎？」、「訓練 P5」；主線 zoo-v5、v8–v10 都是這個配方（L-034），蛋牧駕駛漏用（L-050）。
+- 相關：L-034、L-050、E-259
+- 來源：2026-10-28 App
+
+### R-144
+- 日期：2026-10-29
+- 裁決：版本號照 basketball-autochess（其 R-018、R-019、R-023）改用分軌 `0.MINOR.PATCH`：軌道 `zoo`、`discard`、`zakajz`、`egg`、`sim`；實驗寫「基準＋E 編號」；變強才升 MINOR，其他採用升 PATCH；sim 只改資料加字母。規則全文在 memory/README.md「版本號」。
+- 細節：起點對照（舊檔名不改）——`zoo 0.1.0` = warlock-zoo-v9（實戰中，MODELS）；`discard 0.1.0` = warlock-discard-v5；`zakajz 0.1.0` = warlock-zakajz-v1；`egg 0.1.0` = priest-egg-pilot-v6-20261028（P6A；P1–P5 視為 0.1 之前）；`sim 0.1.0` = 38f4c93a3f4b。待採用：warlock-zoo-v10 改稱 `zoo 0.1.0+E254`，依 R-145 它若採用只能是 PATCH（`zoo 0.1.1`），且它是在 sim 26db915e1733 上量的，要在 sim 0.1.0 上重測。1.0 = 某條網路軌道上實戰且 ranked 批次過 G5。
+- 理由：舊的 vN／日期檔名每次匯出就 +1，看不出哪些是真的變強、哪些只是重訓或換模擬器。
+- 狀態：有效；egg 起點 2026-10-29 由 R-150 改為 P7
+- 相關：R-145、E-254、E-261、F-784、R-150
+- 來源：使用者 2026-10-29「查看一下 basketball-autochess 的專案。把他們的版本號規則抄過來」
+
+### R-145
+- 日期：2026-10-29
+- 裁決：只對很弱的模擬對手（模擬蛋牧）變強，大概率不會讓實戰變強；這種進步不算「變強」，不構成升 MINOR 或上線的理由。打天梯不會因此上分，除非目的是蒐集更多實戰數據。
+- 細節：zoo-v10 對 P3 +5.3，其他對手 −0.1～+1.8，屬於這種情況。ranked 批次的目的改寫成「蒐集實戰數據」（例如實戰蛋牧對局，E-260 只有 5 場），不是驗證 v10。
+- 理由：模擬蛋牧比真人弱（F-784：模擬 86%、實戰 0–3；E-260 樣本不足以推翻）。
+- 狀態：有效
+- 相關：R-144、E-254、E-260、F-784
+- 來源：使用者 2026-10-29「如果只是打我們很弱的模擬蛋牧變強，那大概率實戰也不會變強。除非你想要更多的實戰數據，不然打天梯也不會上分」
+
+### R-146
+- 日期：2026-10-29
+- 裁決：現在的動物園術已經沒有 Fatebreaker，換成 Zakajz the Corruptor 和 Glacial Shard，也就是 `decks/warlock-zakajz` 這份（−Fatebreaker −Tachyon Barrage −Vaultkeeper，+Zakajz +Glacial Shard×2）。`decks/warlock-zoo`（Fatebreaker 版）是 2026-10-25 的舊清單；拿「ZOO」當對手或重播時，應該用 `warlock-zakajz`。
+- 細節：F 段 Brox meta 對照也說，快攻術 ≈ `warlock-zakajz`（28/30）。之前的重播（zoo-shaman、zoo-dh、brox-zoo、imbue-zoo）和蛋牧對 ZOO 的評估都用 `warlock-zoo`。zoo-v9 的對手池裡有 `warlock-zakajz`，兩份清單都會打。
+- 狀態：有效
+- 相關：R-121
+- 來源：使用者 2026-10-29「zoo的牌組應該沒有fatebreaker了吧？換成zakajz和冰川裂片了」
+
+### R-147
+- 日期：2026-10-29
+- 裁決（2026-10-29 修訂，見下方「修訂」）：Cursed Catacombs（0 費，從牌庫發現一張並設為 Temporary）這回合要打的話，排在攻擊與其他出牌之前先打。這回合打不打，看打完後剩下的費用夠不夠用發現的牌；用不起就留著，不然會連同牌庫那張一起燒掉。
+- 原裁決：要在攻擊與其他出牌之前先打（無條件）。結果是隨機的，先看拿到什麼（衝鋒、buff、解場法術）再決定怎麼攻擊；而且 Temporary 牌回合結束就消失，先打才能留下整回合的法力給它。
+- 細節：重播 brox-zak.json 第 2 局第 20 步（T9，ZOO 5 費，手 Blasphemy／Mawman Cultist／Catacombs，場上三隻可攻擊），zoo-v9 只給 Catacombs 38%，其餘是攻擊 Soothsayer 或 Blasphemy（「猶豫」）。可寫成 guard：手上有 Catacombs 且無待選時，排在攻擊之前（同 F-873「0 費牌先打」候選）。
+- 狀態：有效
+- 相關：F-873、R-139
+- 來源：使用者 2026-10-29「這裡應該無條件先看cursed catacombs。因為這個是隨機效果，先看拿什麼牌再決定要不要攻擊」
+- 修訂：2026-10-29 E-265 搜尋顯示這個局面最佳線是 Mawman＋Life Tap、Catacombs 留手；使用者同意改成有條件版（「R-147 要改成『這回合要打 Catacombs 才先打』嗎？ 要改」）。guard 條件因此要加「打完後費用夠用發現的牌」的判斷，或交給搜尋。
+
+### R-148
+- 日期：2026-10-29
+- 裁決（TODO，未實作）：駕駛網路要依對手職業調整。方向：每個職業一組權重（或職業條件化的輸入），沒遇過的職業用預設權重；遇過的職業但牌組和訓練時的對手不同，逐漸退回預設權重。
+- 細節：起因是蛋牧 T4 跳幣準備 Soothsayer（brox-zak 第 2 局第 7 步）。準備時先跳幣只在對手可能有 Cult Neophyte（中立卡，法術 +1 費）時有利，其他時候留硬幣較好；但 `src/selfplay-encode.mjs` 沒有對手職業／牌組輸入，網路分不出來。判斷標準是對手牌組會不會有加法術費的牌，不是職業本身（Neophyte 也在 dh-void 的 mulligan.json 裡）。
+- 狀態：有效
+- 相關：R-147、F-873
+- 來源：使用者 2026-10-29「觀察對方職業加入TODO。可能我們可以面對每個職業都用不同權重。然後如果是沒遇過的職業就用預設權重，對方是遇過的職業，但是牌組和訓練過的對手不同時，漸漸變回預設權重」
+
+### R-149
+- 日期：2026-10-29
+- 裁決（遊戲規則）：Cursed Catacombs 發現到 Shred of Time（Casts When Drawn）時，Shred 照樣施放（打自己英雄 3），然後隨機抽牌庫下一張補上。
+- 細節：sim 實作為 strike 之後 `pull(s,1)`；補抽的牌當普通抽牌處理（不是 Temporary），這點使用者沒特別說，是推定。
+- 狀態：有效（已實作）
+- 相關：F-875、E-265
+- 來源：使用者 2026-10-29「確認了。選了之後會先扣3血，然後再隨機抽下一張牌」
+
+### R-150
+- 日期：2026-10-29
+- 裁決：`egg 0.1.0` 改為 P7（主流牌表 priest-egg-hsr 的蛋牧駕駛，E-268），檔案改名 `models/selfplay/priest-egg-0.1.0.{pt,json}`（原 priest-egg-pilot-v7-20261029）。P6A（priest-egg-pilot-v6-20261028）與更早的 P1–P6 都視為 0.1 之前。
+- 細節：P7 在 sim c661d9b4b263 上量（＝sim 0.1.0 只加 decks/priest-egg-hsr 牌組檔，依 README 記為 `sim 0.1.0a`）；全新 seed 對 zoo-v9 49.5%（47.9–51.0），P6A 同牌表 34.0%。之後的蛋牧實驗寫 `egg 0.1.0+E編號`。以前寫「egg 0.1.0＝P6A」的紀錄（R-144、E-263–E-267 重播等）指的是 P6A，不改原文。
+- 理由：模擬蛋牧改用主流牌表才像實戰對手（F-869），P7 是第一個在主流牌表上專訓的駕駛。
+- 狀態：有效
+- 相關：R-144、E-268、F-869、F-870
+- 來源：使用者 2026-10-29「這個牧師的版本號我們就把它定為0.1」
+
+### R-151
+- 日期：2026-10-29
+- 裁決：zoo 0.2.0 = E-271 B 臂（`models/selfplay/warlock-zoo-0.2.0.{pt,json}`，json sha256 0de0e2e0bc0a…、pt cfc19f4f3386…；sim b31012f48995、iter 2255、學習方牌組 warlock-zakajz、imbue=true）。0.2.0 = 0.1.0（v9）+ E-254（v10）+ E-270（中止前 105 輪）+ E-271。v10 不另給版號。
+- 細節：全新 seed 對 V10，egg 0.1.0 +5.7、zakajz-v1 +3.6、鏡像 52.9%、shaman +2.2、dh +1.8，全 PASS，對蛋牧以外的對手也進步，所以是 MINOR（R-145 的限制不適用）。基準是 v10 不是 v9，B 對 v9 沒直接量。仍只是模擬勝率；MODELS 未動。
+- 狀態：有效
+- 相關：R-144、R-145、R-146、E-271
+- 來源：使用者 2026-10-29「好。那就定為0.2.」
+
+### R-152
+- 日期：2026-10-29
+- 裁決：使用者要專門訓練 warlock-zakajz 的起手留牌。直覺：一費 Ritual of C'Thun、二費 Ritual of Summoning、三費 Godfather Kazakus 是核心；沒有就全換去找，有才留搭配牌或一費手下；不要留二費傷害法術、沒前期手下時不要留 Floating Lessons。目標：新留牌搭 0.2.0 勝率要贏純 0.2.0，並用模擬（新舊策略各約 2000 局以上）證明。接受結果可能只適合 0.2.0 的打法。
+- 細節：結果在 E-281／F-883；直覺規則本身沒有贏，學出來的表贏。已採用並接到實戰（R-154）。
+- 狀態：有效
+- 相關：E-281、F-883
+- 來源：使用者 2026-10-29
+
+### R-153
+- 日期：2026-10-29
+- 裁決：F-881（硬幣＋Tachyon 打空場，E-280 判定錯招）不加推論期規則（net-guards），改由下次 zoo 訓練修：對手池加會用儀式的牌組，並讓一小部分自我對弈從這類局面開局。
+- 細節：使用者在 A（net-guards 規則）／B（訓練）之間選 B。修完後要用 E-280 的成對推演方法複測同一母體（DRY，T−H 應接近 0 或轉正），並確認整體門檻不退步。
+- 狀態：有效
+
+### R-154
+- 日期：2026-10-29
+- 裁決：E-281 的起手留牌表升成 PATCH：**zoo 0.2.1 = zoo 0.2.0 網路 + E-281 留牌表**（`models/mulligan/warlock-zoo-0.2.1.json`，sha256 b1d6532a…，`net: warlock-zoo-0.2.0`）。網路檔不變（MODELS 仍指 `warlock-zoo-0.2.0`）。
+- 細節：實戰 warlock-zakajz 的換牌改由 `src/policy.mjs` mulliganConstraint 照表只留表選的那組（`src/mulligan-table.mjs` TABLES）；三張是先手、四張是後手；表的 `net` 和實際駕駛網路不同（JEV_NET_MODEL 指別的）就退回舊規則。測試 `test/selfplay-mulligan.test.mjs` 檢查 TABLES 的 net 等於 MODELS。模擬裡要用這張表：`src/selfplay-mulligan.mjs … --policy models/mulligan/warlock-zoo-0.2.1.json`（selfplay-match／compare 仍是全留，數字和 0.2.0 相同）。換駕駛網路時要重擬表（E-281 流程）。
+- 狀態：有效
+- 相關：R-152、E-281、F-883、R-144、R-151
+- 來源：使用者 2026-10-29「效果看起來不錯 可以升級成patch」

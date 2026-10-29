@@ -2929,3 +2929,545 @@
 - 結論：A 過門檻（兩組都過，A 每項不輸 B），匯出 `models/selfplay/warlock-zoo-v10.{pt,json}`＝5090 zoo/A/policy.pt（`7ab4a73c…`／`b0a77f4a…`，obs/act 630/242，第 2000 輪，imbue=true，sim=null：訓練用的是 G2 之前的 ppo.py）。json 與評估用的 zoo/eval/A.json 除新增的 sim 欄位外逐字相同。MODELS 未動。
 - 下一步：上線前實戰 encoder 要能給 Imbue 計數（v10 json 帶 imbue=true）；換不換由使用者決定。
 
+
+### E-255
+- 日期：2026-10-28
+- 假設：蛋牧駕駛 P3b 弱是因為不會規劃（單步 PPO、沒做過搜尋蒸餾）：打牌時直接開前瞻，勝率會明顯上升。
+- 設定：5090 `~/side_projects/jev-hearthstone-audit-v10`（新程式碼，模擬器 26db915e1733），`diag_look.sh`（本機 runtime/diag-look/run.sh）。P3b（eval/P3.json）對 zoo-v9，--guard egg，三組同牌局：plain（貪婪）、look（`--look a`，depth 1、samples 2、beam 8）、look2（`--look a --depth 2 --reply eval/V9.json`）；每組 8 個 run，seed 30001+250k，每 run 250 局×2 座位，共 4000 局，牌局範圍不重疊。compare 依設計拒絕 look 不同的兩邊（setting 含 look），所以用 readRun＋wilson 手加。
+- 結果：| 組 | 牧師勝/局 | 勝率（Wilson 95%） |
+  |---|---|---|
+  | plain | 805/4000 | 20.1%（18.9–21.4） |
+  | look | 1197/4000 | **29.9%（28.5–31.4）** |
+  | look2 | 1187/4000 | 29.7%（28.3–31.1） |
+  檔案 runtime/diag-look/out/。
+- 結論：前瞻 +9.8 分，區間不重疊：打法規劃是蛋牧的主要瓶頸之一。看到對手下一回合（depth 2）沒有再多。即使開前瞻也只有 30%，模擬器缺的卡效果（F-852）與牌組本身仍可能壓著上限。
+- 下一步：對蛋牧駕駛做搜尋蒸餾（`train/ppo.py --distill`，從 P3b 接），驗收是不開前瞻的勝率往 30% 靠；等使用者決定。
+- 相關：F-859、E-252、E-253
+- 來源：2026-10-28 App（使用者「先跑診斷」）
+
+### E-256
+- 日期：2026-10-28
+- 假設：逐卡的抽到／打出勝率能指出蛋牧哪些牌沒被用好。
+- 設定：新工具 `src/selfplay-cardwin.mjs`（測試 test/selfplay-cardwin.test.mjs），P3b 對 zoo-v9，--guard egg，seed 70001，每座位 1000 局，本機。輸出 runtime/diag-look/cardwin-P3b-v9.txt。
+- 結果：牧師總勝率 19.5%。打出率最低：Gravedawn Sunbloom 20.5%（抽到 776 局只打 159）、Ectoplasm 18.6%、Intertwined Fate 51.5%、Soothsayer 52.0%、Defias Smuggler 54.5%、Power Word: Barrier 54.6%、Undeath Sentence 55.7%、Cleansing Lightspawn 57.3%。打出勝率不高於「抽到沒打」勝率（打了沒幫助的跡象）：Kaldorei Priestess 23.0% 對 30.6%、Psychic Conjurer 22.7% 對 32.5%、Slime 'em! 25.9% 對 30.9%、Shadow Word: Ruin 25.9% 對 27.4%、Elder Word: Flay 19.2% 對 19.9%、Foresight 23.6% 對 22.3%。打出勝率最高的是晚打的牌（Ectoplasm 65.4%、Soothsayer 41.9%、Smuggler 37.1%），主要是局長偏誤。
+- 結論：勝率是相關不是因果（晚打的牌只出現在撐得久的局）。可疑名單：Gravedawn 幾乎不打、Slime 'em! 打了但 Ectoplasm 很少叫回、Priestess／Conjurer 打出反而比沒打差。
+- 下一步：抽 Slime 'em!、Priestess、Gravedawn 的實際決策看（打的時機、目標）；對照前瞻組是否打得不同。
+- 相關：F-860、F-852、E-255
+- 來源：2026-10-28 App（使用者「哪些卡打出的勝率很低」）
+
+### E-257
+- 日期：2026-10-28
+- 假設：P3（priest-egg-pilot-v3-20261028）在新模擬器（38f4c93a3f4b，R-141／R-142 規則補完）對 zoo-v9 的勝率和舊模擬器的 20.1%（E-255 plain）不同；先量新基準，後面 P4 才有對照。
+- 設定：5090 新目錄 `~/side_projects/jev-hearthstone-egg-pile-20261028`（主 repo 未 commit 的工作樹；383 檔 sha256 一致，runtime/egg-pile-20261028/deploy.json；5090 npm test 876 筆 0 失敗 2 skip；`python train/test_expand.py` 全過，exit 0，runtime/egg-pile-20261028/test_expand.out）。`runtime/egg-pile-20261028/base_p3.sh`：`selfplay-match priest-egg-pilot-v3-20261028.json warlock-zoo-v9.json 250 <seed> --decks priest-egg warlock-zoo --guard egg --json`，8 個 run、seed 30001+250k（k=0..7）、每 run 250 局×2 座位＝4000 局，不開前瞻（同 E-255 plain 組的設定與牌局範圍）。
+- 結果：牧師 1060/4000＝**26.5%（Wilson 25.2–27.9%）**，模擬器 38f4c93a3f4b。對照：E-255 plain 在 26db915e1733 是 20.1%（18.9–21.4）。輸出 runtime/egg-pile-20261028/eval/P3-{30001,…,31751}.txt、compare-P3-self.txt（base 對自己，只確認 compare 能讀、版本一致）；5090 同名在 `~/side_projects/jev-hearthstone-egg-pile-20261028/eval/`。
+- 結論：同一個沒重訓的 P3，換到 38f 版模擬器勝率 +6.4 分（26db 版→38f 版，兩次不是同一段程式，不能做 compare；只當參考）。原因未拆：R-141 的 Elder Word 重複、Prepare 減費、Priestess −2 縮短、Kindred 讓蛋牧的牌變強，或 P3 與新規則恰好互補；沒做分項。P4 要超過它：Wilson 下界要 > 26.5%。
+- 下一步：P4 重訓（E-258）。
+- 相關：E-255、F-862、F-863、R-141、R-142
+- 來源：派工 20261028-151434-1ec69f
+
+### E-258
+- 日期：2026-10-28
+- 假設：用 `pile`（Slime 'em! 清單 4 格）重訓蛋牧（P4），Ectoplasm 打出率與勝率會高於 P3 的 26.5%（E-257）。
+- 設定：`runtime/egg-pile-20261028/pilot_v4.sh`＝pilot_v3b.sh 的參數（`--decks priest-egg warlock-zoo --mix 1.0 --mirror 0.1 --timers --extra --stages --imbue --egg --swap --workers 18`），`--resume ppo/P3b/policy.pt --iters 450 --seed 86 --out ppo/P4`。評估腳本 `eval_p4.sh`（export、同 seed 同局數 8×500、selfplay-compare --beat）已寫好未跑。
+- 結果：**沒訓練成。** 啟動後 log 第一行 `state 434`（P3b 的 430 ＋ 4 格 pile；pile 確實開了），第二行 `iter 3040` 後，第一輪結束寫 checkpoint 時 `AttributeError: 'Pool' object has no attribute 'sim'`（train/ppo.py 1562 行 `arena.sim`），ppo/P4-FAILED，沒有 policy.pt。log 在 runtime/egg-pile-20261028/P4-crash.txt。原因見 F-864。依派工限制（不改 train/ 邏輯，發現 bug 就停）在此停下。P4 勝率、平均結束回合、Slime 'em!／Ectoplasm 使用率都**沒有量**，沒有匯出任何模型。
+- 結論：無（實驗未完成）。修好 ppo.py 後原樣重跑 pilot_v4.sh 即可（資料與 P3b checkpoint 已在 5090；重跑前先 `rm -rf ppo/P4 ppo/P4-FAILED`，避免殘留檔混進來）。
+- 2026-10-28 第 2 輪：F-864 修好後 train/ppo.py（sha256 7a116550…b353dcb54）已同步到 5090，煙霧測試（`--iters 1 --workers 2 --out ppo/smoke`，已刪）通過；`pilot_v4.sh` 於約 15:25 用 nohup 啟動，log 第一行 `state 434`（pile 開），iter 3099 時一輪約 2 秒、正常。約 15:32 VPN 斷線，ssh 連續逾時 2 次（VPN keepalive log 停在 `5090 unreachable; starting VPN`），依規定停止。**訓練是否跑完、P4-DONE 有沒有出現未知**；eval_p4.sh、compare、平均結束回合、cardwin 使用率、匯出判定都沒做。
+- 下一步：VPN 恢復後 `ls ppo/` 看 P4-DONE／P4-FAILED；若 DONE 就跑 eval_p4.sh；若程序被中斷就 `rm -rf ppo/P4 ppo/P4-FAILED` 重跑 pilot_v4.sh。原計畫：匯出規則：P4 的 Wilson 下界 > 26.5% 才匯出成 `models/selfplay/priest-egg-pilot-v4-20261028.{pt,json}`。
+- 2026-10-28 第 3 輪（App）：使用者要 App 自己重連，跑一次 NTNU VPN Keepalive，15:37:57 `VPN up; 5090 reachable`。P4 已跑完（ppo/P4-DONE，iter 3490，訓練局 18–19 回合，對第一份複本 53.9%）。eval_p4.sh：**P4 1117/4000＝27.9%（26.6–29.3）**，P3 26.5%（25.2–27.9），+1.4 分，compare --beat PASS（模擬器 38f4c93a3f4b，8 seeds）。cardwin（seed 70001，各 2000 局，--guard egg）：P3 27.6%、P4 28.7%；Ectoplasm 打出率 P3 153/699＝22% → P4 241/689＝35%（打出時勝率 78% → 68%）；Slime 'em! 打出率不變（約 77%）；Lunarwing 平均打出回合 8.1 → 6.7、Intertwined Fate 12.1 → 10.8。平均結束回合：match JSON 沒有回合數，沒量。檔案 runtime/egg-pile-20261028/eval/（P4-*.txt、compare-P4-P3.txt、cardwin-P3.txt、cardwin-P4.txt）。
+- 結論：過匯出門檻但只是邊緣（下界 26.6% 對 26.5%，兩個區間重疊）。pile 讓網路更會叫回 Ectoplasm（+13 分打出率），勝率小漲。已匯出 `models/selfplay/priest-egg-pilot-v4-20261028.{pt,json}`（json b8579286…、pt 82d02daa…；sim 38f4c93a3f4b、pile、imbue），未 commit。下一步仍是搜尋蒸餾（E-255：前瞻 +9.8 分）。
+- 相關：E-257、F-863、F-864、L-049
+- 來源：派工 20261028-151434-1ec69f；第 3 輪 App
+
+### E-259
+- 日期：2026-10-28
+- 假設：蛋牧駕駛改用主線配方（R-143，PPO＋λ0.1 混合搜尋蒸餾）能比純 PPO 的 P4（27.9%，E-258）更強；E-255 顯示前瞻 +9.8 分。
+- 設定：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028`，`runtime/egg-pile-20261028/pilot_v5.sh`＝pilot_v4.sh 加 `--distill-weight 0.1 --distill-frac 0.1 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01 --reply models/selfplay/warlock-zoo-v9.json`，`--resume ppo/P4/policy.pt --iters 150 --seed 87 --eval-every 10 --keep-every 10 --workers 18 --out ppo/P5`，模擬器 38f4c93a3f4b。煙霧測試 1 輪通過（imitation 1.124 at λ 0.100）。約 15:50 nohup 啟動 `pilot_v5.sh && eval_p5.sh`（log ppo/P5-orchestrate.log），每輪 24–26 秒，預計約 17:00 訓練完。eval_p5.sh：匯出 eval/P5.json，同 E-257 seed 4000 局，`compare --beat` 對 P4（eval/compare-P5-P4.txt，DONE 標記 eval/P5-DONE）。
+- 結果：16:42 VPN 斷線、重連失敗；之後 SSH 自行恢復，nohup 訓練沒中斷。P5 跑完 150 輪（iter 3640，訓練局約 17 回合，distill loss 約 1.08–1.12）。eval_p5.sh（2026-10-28 16:57）：**P5 1281/4000＝32.0%（30.6–33.5）**，P4 1117/4000＝27.9%（26.6–29.3），+4.1 分，compare --beat PASS（模擬器 38f4c93a3f4b，8 seeds），兩個區間不重疊。cardwin（`node src/selfplay-cardwin.mjs eval/P5.json models/selfplay/warlock-zoo-v9.json 2000 70001 --decks priest-egg warlock-zoo --guard egg`）：表頭寫 **4000 games**（E-258 的 P4 表頭是 2000 games，同指令參數為何局數不同未查；seed 起點相同，比率可比，絕對數不可比），勝率 32.5%。對照 P4：The Egg of Khelos 打出率 83% → 85%、平均打出回合 10.2 → 8.7；Ectoplasm 打出率 35%（241/689）→ 31%（401/1288），打出時勝率 68% → 75%；Slime 'em! 打出率約 76% → 68%；Lunarwing 回合 6.7 → 6.8；Intertwined Fate 10.8 → 10.1。檔案 runtime/egg-pile-20261028/eval/cardwin-P5.txt；5090 上 eval/compare-P5-P4.txt。
+- 結論：搜尋蒸餾有效：同樣從 P4 起算，加 λ0.1 蒸餾 150 輪就 +4.1 分，比 P3→P4 的 pile 重訓（+1.4，450 輪）大，支持 R-143 主線配方。進步主要像是更早打蛋（8.7 回合），而不是多叫 Ectoplasm。已匯出 `models/selfplay/priest-egg-pilot-v5-20261028.{pt,json}`（json 715765e8…、pt 4c03964a…；sim 38f4c93a3f4b、imbue、pile），未 commit。注意：這只是模擬勝率；模擬蛋牧和真人差很多（F-784），v5 不代表實戰更強。
+- 相關：E-255、E-258、R-143、L-050
+- 來源：2026-10-28 App（使用者「訓練 P5」）
+
+### E-260
+- 日期：2026-10-28
+- 假設：模擬蛋牧（P3、P4、P5）的對局長度、出牌時機與蛋的表現，和實戰蛋牧的分佈一樣（F-784：模擬蛋牧比真人弱？）。
+- 設定：新工具 `src/opp-likeness.mjs`（`extract` 讀 Power.log、`report` 算分數與報告；測試 `test/opp-likeness.test.mjs` 9 項）；`src/selfplay-cardwin.mjs` 加 `--records`（只加欄位）。實戰：`D:/遊戲/Hearthstone/Logs/*/Power_old.log`（4 個 log、90 場，蛋牧 8 場；5 場打出蛋用於比對，每場的 log 路徑與起始行在 `runtime/likeness-egg-20261028/report.md` 第 1 節）。模擬：5090 `~/side_projects/jev-hearthstone-likeness-20261028`，`node src/selfplay-cardwin.mjs <P3|P4|P5> warlock-zoo-v9.json 1500 90001 --decks priest-egg warlock-zoo --guard egg --json --records`（seed 90001–91500、兩座位各 1500＝每駕駛 3000 局，模擬器 38f4c93a3f4b；打出蛋的 2003／1792／1792 局用於比對）。回合一律用蛋牧自己的回合，引擎回合 t → ceil(t/2)；局長＝蛋牧開始過的回合數。分數＝局長 W1、打出率 MAD、首打回合 MAD、蛋指標四項各除以人為尺度後平均（尺度見 `SCALE`），95% CI＝對實戰 5 場 bootstrap 2000 次。
+- 結果：合成分數 P3 0.92（0.72–2.00）、P4 1.01（0.71–2.10）、P5 0.91（0.68–2.00）；雜訊底（真人＝模擬時 5 場期望的分數）0.68–0.70。局長：實戰平均 9.4 個蛋牧回合（引擎 T 18.8），模擬 8.1–8.2（T 16.4–16.6），W1 1.4 vs 雜訊底 1.2。蛋打出回合 4.4 vs 4.6–5.4，蛋牧 8 場中 5 場打出蛋（62%）vs 模擬 60–67%。孵化率 60% vs 30–38%（3/5，不顯著）。蛋被攻擊次數／局 2.40 vs 0.30–0.40（p<0.0001）。牌表外的牌每局 2.0 張（13%）vs 0.9 張（6.5%）。首打回合 MAD 2.0 vs 雜訊底 1.3（核心牌實戰晚 2–4 回合，單張 n=1–3）。總勝率 26.9%／26.9%／33.1%，與 E-257–E-259 一致。
+- 結論：5 場太少，三個駕駛分不出誰更像真人，整體也不能拒絕「模擬＝真人」；只有「蛋被攻擊次數」差得大，而那是對手（動物園）端的行為，不是蛋牧駕駛。模擬的長度、蛋時機、蛋打出率都在雜訊內。要比 P3／P4／P5 需要更多實戰蛋牧對局（工具可重跑，新 log 自動加入）。產出：`runtime/likeness-egg-20261028/`（report.md、score.json、real-egg.json、sim-P3／P4／P5.json）。
+- 相關：F-784、F-860、F-865、F-866、F-867、F-868、L-051
+- 來源：派工 20261028-170249-65c7fc 第 1 輪（role-opponent）
+
+### E-261
+- 日期：2026-10-28
+- 假設：P5 再用主線配方多訓 200 輪會更強（A：λ0.1）；把蒸餾權重拉到 λ0.3 會吸收更多前瞻收益（B，E-255 前瞻 +9.8、P5 只拿到 +4.1）。
+- 設定：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028`，`runtime/egg-pile-20261028/pilot_v6.sh`：兩臂並行，各 9 workers，`--resume ppo/P5/policy.pt --iters 200`，A seed 88 λ0.1（ppo/P6A），B seed 89 λ0.3（ppo/P6B），其餘旗標同 pilot_v5.sh。`eval_p6.sh`：挑選用 E-257 的 seed 30001 起 8×250 局（P5 已打過），判定用全新 seed 50001 起 8×250 局（P5 也重打），compare --beat。模擬器 38f4c93a3f4b。
+- 結果：兩臂都跑到 iter 3840（每輪 20–29 秒），訓練局約 17.5 回合；對第一份複本 A 50.4%、B 43.8%（iter 3675）。
+  - 挑選 seed（30001）：P5 32.0%（30.6–33.5）；**P6A 32.8%（31.4–34.3）+0.8 FAIL**；P6B 29.1%（27.7–30.5）−2.9 FAIL。
+  - 全新 seed（50001）：P5 29.3%（27.9–30.7）；**P6A 31.2%（29.8–32.6）+1.9 PASS**；P6B 28.4%（27.0–29.8）−0.8 FAIL。
+  - 合計 8000 局：P6A 2560＝32.0%，P5 2451＝30.6%，+1.4。
+- 結論：λ0.3 變差，主線維持 λ0.1。P6A 在全新 seed 過門檻（邊緣，區間重疊），已匯出 `models/selfplay/priest-egg-pilot-v6-20261028.{pt,json}`（未 commit）。P5 在全新 seed 只有 29.3%，比挑選它的 seed 低 2.7 分，說明 32.0% 含挑選偏差（L-046）。同一份牌表、同一配方繼續加輪數收益已很小（+1–2 分）。檔案：runtime/egg-pile-20261028/eval/compare-{,F-}P6{A,B}-P5.txt；5090 eval/。
+- 相關：E-259、E-255、R-143、L-046、F-869、F-870
+- 來源：2026-10-28 App（使用者「蛋牧勝率不滿意，繼續提升」）
+
+### E-262
+- 日期：2026-10-29
+- 假設：F-860 的可疑牌（Gravedawn 很少打、Ectoplasm 很少叫回、Slime 'em! 打出勝率低）是駕駛決策錯誤，強制多打會提高勝率。
+- 設定：P6A（`priest-egg-pilot-v6-20261028`）對 zoo-v9，--guard egg，模擬器 38f4c93a3f4b，本機。追蹤：`runtime/cardwin-suspects-20261029/trace-suspects.mjs`，seed 80001，每座位 300 局，在這三張牌是合法出牌的每個決策點記下駕駛選了什麼與局面（analyze.txt）。介入：`force.mjs`，seed 100001，每座位 1500 局（每組 3000 局，三組同 seed）：none＝原樣；gravedawn＝能打就只給它；ecto＝pile 不空且能打就只給它。
+- 結果：介入勝率 none **33.2%**（996/3000）、強制 Gravedawn **29.0%**（−4.2）、強制 Ectoplasm **30.8%**（−2.4）。追蹤：三張牌都沒有「能打卻結束回合」，駕駛都是把費用花在別的牌上。Slime 'em! 打出時對手場面身材 34.5 對我方 3.9（沒打時 23.0 對 8.5），208 次中只有 5 次是我方較大。Ectoplasm 沒打的 461 個回合裡 167 個 pile 是空的，其餘大多只會叫回蛋。Gravedawn 沒打的回合對手場面身材 27.4（打的時候 16.6），97 個回合手牌已 ≥8。
+- 結論：三張牌少打或晚打都是駕駛判斷正確；打出勝率低是選擇偏誤（Slime 'em! 只在落後時打）。F-860 不成立，不必為這幾張牌改駕駛或加 guard。逐卡勝率只能找候選，要用強制出牌的介入實驗判斷因果（L-053）。順帶：Shred of Time「抽到 202、打出 0」是 Psychic Conjurer 從對手牌庫複製進手的，打了只扣自己 3 血，不打正確；牌庫抽到的會在 `pull` 裡施放（sim.mjs 1153）。cardwin 表頭局數＝2×games 參數，E-259 的 P4／P5 差異只是參數不同。
+- 相關：F-860、F-872、E-256、E-259、L-053
+- 來源：2026-10-29 App（使用者「查逐卡疑點」）
+
+### E-263
+- 日期：2026-10-29
+- 假設：同名分票（兩張同名牌、兩隻一樣的目標把佔比拆開，貪婪選到合計較低的步）讓蛋牧駕駛少贏。
+- 設定：P6A 對 zoo-v9，--guard egg，模擬器 38f4c93a3f4b，本機。`runtime/replay-viewer/splitvote.mjs`，seed 140001 起 3000 局（先後手交替），兩臂同 seed：greedy＝照現在；grouped＝蛋牧的非 guard、非選擇決策把外觀相同的步（牌名＋費用＋目標的陣營／名字／攻血／聖盾／嘲諷／能否攻擊）佔比相加後選最大。
+- 結果：greedy **32.3%**（968/3000），grouped **32.2%**（966/3000）；約 82k 個決策中 2.9%（2406）兩種選法不同。
+- 結論：沒有差別，不用改選步方式。重播頁的佔比照樣把同名合併顯示，避免誤判「猶豫」。
+- 相關：F-873、L-053
+- 來源：2026-10-29 App（使用者「視覺化蛋牧 vs ZOO 對局，看打法哪裡有問題」）
+
+### E-264
+- 日期：2026-10-29
+- 假設：Brox 主流清單（priest-egg-hsr）由 P6A 駕駛，對現行 ZOO（warlock-zakajz，R-146）的勝率和 Imbue 清單差不多。
+- 設定：P6A 對 zoo-v9，`node src/selfplay-cardwin.mjs ... 2000 170001 --decks <蛋牧清單> warlock-zakajz --guard egg`，先後手各 2000 局，共 4000 局，本機。輸出在 `runtime/replay-viewer/wr-brox-zak.txt`、`wr-imbue-zak.txt`。
+- 結果：Brox **35.7%**（1429/4000，約 ±1.5）；Imbue **34.2%**（1369/4000）。後手（有 The Coin 的局）Brox 29.6%、Imbue 28.8%。之前對舊 Fatebreaker ZOO，Imbue 是 32.3%（E-263，不同 seed）。
+- 結論：兩份清單差 1.5 個百分點，大約在誤差邊緣。P6A 從沒用 Brox 清單訓練過（主流核心卡不在詞表），所以這是駕駛的下限，不是這套牌的強度。
+- 相關：R-146、E-263、F-873
+- 來源：2026-10-29 App（使用者「稍微讓brox牧師 多打一點zakajz術士的場次看勝率」）
+
+### E-265
+- 日期：2026-10-29
+- 假設：前瞻搜尋在 Catacombs 局面會因 strategy fusion（每個抽樣裡 Catacombs 前的步驟偷看了結果）而偏好先攻擊（R-147）。
+- 設定：重建 brox-zak.json 第 2 局第 20 步（seed 160002、ZOO 先、--guard egg、sim c661d9b4b263，手牌與場面和重播一致），zoo-v9 跑 `selfplay-search.search`，width 8，turns=1（16、64 樣本）與 turns=2（16 樣本，回應用 P6A）。腳本 `runtime/cata-search/cata-search.mjs`（輸出的數字被多除了一次樣本數，排序不受影響；下面是乘回去的值）。
+- 結果：turns=1／64 樣本：Catacombs **+0.58**、Life Tap +0.45、Mawman +0.45、Neophyte 攻擊 +0.26、Blasphemy +0.26、Brute 攻擊 −0.32、Timehopper 攻擊 −0.58（16 樣本排序相同）。turns=2：Life Tap +0.22、Mawman +0.14、Catacombs −0.13、Neophyte 攻擊 −0.43，三個攻擊都在最後。網路本身：Catacombs 38%，攻擊合計 42%。
+- 結論：這個局面偏差沒有翻盤：搜尋把所有攻擊排在 Catacombs（及 Life Tap、Mawman）之後，問題在網路沒學到，搜尋蒸餾理論上能教。turns=2 讓 Life Tap 排第一，Life Tap 也是先拿資訊（先抽牌），不衝突。只有一個局面，strategy fusion 是否在別處造成影響仍未驗。
+- 追加（同日，使用者質疑 Life Tap 不該贏 Catacombs）：turns=2 改 64 樣本、兩個 seed，Life Tap +0.05、Mawman +0.05／+0.01、Catacombs −0.22／−0.15，差距穩定不是雜訊。逐步追最佳路線（`runtime/cata-search/cata-lines.mjs`）：Life Tap → Mawman Cultist → 結束回合，Catacombs **留在手上不打**；先打 Catacombs 的路線是選 Blasphemy → Mawman → Life Tap → 結束，Blasphemy（Temporary）沒打就燒掉。也就是搜尋偏好的不是「先抽牌再看 Catacombs」，而是「這回合 5 費給 Mawman（3，所有法術 +1 費）＋Life Tap，Catacombs 留到有費用用它的回合」；先打 Catacombs 卻用不起結果，等於燒掉 Catacombs 和牌庫一張牌。
+- 修正後的結論：R-147 的精確版應是「這回合要打 Catacombs 的話，排在攻擊和其他決定之前」，而不是無條件先打；這回合該不該打，取決於打完後的費用夠不夠用發現的牌。這是搜尋的判斷，未經對局驗證；Catacombs 留手的價值完全來自 value 網路的估值。
+- 追加 2（使用者問：Catacombs 能發現 ≤2 費牌和 Mawman 同回合打嗎）：`runtime/cata-search/cata-cheap.mjs`，24 個重洗牌庫，先打 Catacombs 後逐步用搜尋（turns=2、16 樣本）走完這回合。約 16／24 次拿到便宜牌（Ritual of C'Thun、Ritual of Summoning、Floating Lessons）並和 Mawman 同回合打出，所以搜尋有考慮這條路。約 5／24 次發現的牌沒打（#0、#10 選 Shred of Time；#1、#15 選第二張 Mawman；#4 選 Platysaur）。**更正（L-055）**：當初說成燒牌瑕疵是錯的。64 樣本複查 `cata-choice.mjs`：#1、#15 打的是臨時那張 Mawman、原本那張留手；#0、#10 是把 Shred of Time（抽到打自己 3）抽離牌庫，正是「爛蘋果選一個」；#4 是真瑕疵（E-267：Platysaur → Mawman 31% 對搜尋線 14.5%）。即使如此，根節點仍偏好 Life Tap＋Mawman＋Catacombs 留手：value 網路看重手牌數（多抽一張＋留 Catacombs）勝過多一個 2 費單位。誰對要用同 seed 強制兩種第一手、讓網路打完的勝率比較才知道。
+- 相關：R-147、F-873、E-255
+- 來源：2026-10-29 App（使用者「跑搜尋看看」、「我不認為抽牌會比catacombs好」、「所以他不認為catacombs能發現兩費以下的牌可以比mawman早並同回合打出？」）
+
+### E-266
+- 日期：2026-10-29
+- 假設：E-265 搜尋偏好 Life Tap＋Mawman、Catacombs 留手；用實際打完的勝率驗證，而不是 value 網路的估值。
+- 設定：`node runtime/cata-search/cata-force.mjs 600 500001`。從 brox-zak 第 2 局第 20 步（ZOO 5 費）強制第一手，之後 zoo-v9 與 P6A（egg guard）都取最高分打到終局；每局用 `redeal` 重洗暗資訊，各臂共用同一組 seed（500001–500600）。輸出 `runtime/cata-search/force-600.txt`。
+- 結果（ZOO 勝率，600 局）：Life Tap **15.3%（±2.9）**、Mawman 11.5%、Catacombs 10.2%、網路自己選 10.2%（它本來就選 Catacombs，與 Catacombs 臂相同）、Neophyte 攻擊 Soothsayer 7.0%。
+- 結論：實際勝率和搜尋一致：先 Life Tap 比先 Catacombs 高約 5 個百分點（約 2.7 個標準誤），先攻擊最差。這個局面 ZOO 本來就大劣（真實那局也是蛋牧贏），value 網路估 ZOO +0.5 明顯過度樂觀。限制：第一手之後由網路接手，Catacombs 臂的後續選擇也是網路做的；只有一個局面。
+- 相關：E-265、R-147、L-055
+- 來源：2026-10-29 App（使用者「GO」）
+
+### E-267
+- 日期：2026-10-29
+- 假設：E-265 #4（Catacombs 給 Twilight Egg／Platysaur／Entropic Continuity，三張都是 1 費）搜尋選 Platysaur 卻改打 Mawman＋Life Tap，是錯的（使用者：「前兩個手下都是可以打出的啊」）。
+- 設定：`node runtime/cata-search/cata-d4.mjs 400`。從第 20 步、deal 1004 打 Catacombs，強制選牌與這回合的步驟，之後雙方網路打完；每局在回合結束後用 seed 700001–700400 重洗暗資訊，各線共用。輸出 `runtime/cata-search/d4-400.txt`。
+- 結果（ZOO 勝率，400 局）：**Platysaur → Mawman 31.0%（±4.5）**；搜尋選的「Platysaur 選了不打：Mawman → Life Tap」14.5%；Egg 選了不打 15.8%、Entropic 選了不打 14.8%、Egg → Mawman 14.5%、Entropic → Mawman 8.0%。
+- 結論：使用者對。搜尋的最佳線比打出 Platysaur 少一半勝率，錯在 value 網路（搜尋寬度 8 有這條線，是估值把它排低），guard 修不乾淨。這也削弱 E-266：Catacombs 臂之後是網路接手，可能也沒把發現的牌用好，所以「先 Life Tap 比先 Catacombs 好」只代表現在這個網路自己打的結果。
+- 相關：E-265、E-266、F-874、L-055
+- 來源：2026-10-29 App
+
+### E-268
+- 日期：2026-10-28～29
+- 假設：蛋牧駕駛換到主流牌表 priest-egg-hsr（F-869）後，用主線配方從 P6A 接著訓，在主流牌表上會明顯強於 P6A（F-870：P5 在 hsr 只有 29.0%，三張核心牌不在詞彙裡）。
+- 設定：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028`（同步 decks/priest-egg-hsr、egg-guard、ppo.py 前綴比對等；模擬器 → **c661d9b4b263**，加牌組檔就會換版本；npm test 887/0、test_expand.py 過；煙霧 1 輪過，state 446）。腳本 `runtime/egg-hsr-20261028/pilot_v7.sh`（5090 上放在 runtime/egg-pile-20261028/）：兩臂並行各 9 workers，`--decks priest-egg-hsr warlock-zoo --resume ppo/P6A/policy.pt --iters 300`，A seed 90、B seed 91，其餘同 pilot_v6 A（λ0.1）。`eval_p7.sh`：hsr 對 zoo-v9、--guard egg；挑選 seed 110001 起、判定全新 seed 130001 起，各 8×250 局，P6A 兩段都重打當基準。
+- 結果：兩臂跑到 iter 4140（每輪約 40 秒）。
+  - P6A 在 hsr：挑選 33.0%（31.5–34.4），全新 34.0%（32.6–35.5）。
+  - 挑選 seed：P7A 50.4%（48.9–52.0）、**P7B 50.6%（49.0–52.1）**，都 PASS（+17.5／+17.6）。
+  - 全新 seed：P7A 50.2%（48.7–51.8）+16.2 PASS；**P7B 49.5%（47.9–51.0）+15.5 PASS**。
+  - 對第一份複本 P7B 在 iter 4100 約 55%，對 50 輪前 48.8–49.6%：還在小幅進步或已平。
+- 結論：換主流牌表＋訓練是目前最大的一步：在主流牌表上 34% → 約 50%（+15～16 分），遠大於 P5→P6 的 +1.9。照規則挑選 seed 較高的 B（兩臂實質相同），已匯出 `models/selfplay/priest-egg-pilot-v7-20261029.{pt,json}`（2026-10-29 依 R-150 改名 `priest-egg-0.1.0.{pt,json}`，即 egg 0.1.0）（json c3f90644…、pt e2186655…；sim c661d9b4b263、牌組 priest-egg-hsr、imbue／pile／stages），未 commit。注意：(1) 牌表不同，不能和 P6 在 priest-egg 的 31% 直接比較，是「主流牌表＋專訓駕駛」整體的數字；(2) 仍只是模擬勝率（F-784），實戰沒驗證。檔案 runtime/egg-hsr-20261028/eval7/compare-*.txt；5090 eval7/。
+- 相關：E-261、F-869、F-870、L-052、R-143
+- 來源：2026-10-28 App（使用者「Train on mainstream list」）
+
+### E-269
+- 日期：2026-10-29
+- 假設：egg 0.1.0（P7B）只在舊 Fatebreaker 清單 `warlock-zoo` 上評估過（E-268）；換成現行動物園清單 `warlock-zakajz`（R-146）勝率可能不同。
+- 設定：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028` 同步到模擬器 **b31012f48995**（本機 16 檔，npm test 889/0）。`runtime/egg-zakajz-20261029/run.sh`：`priest-egg-0.1.0` 對 `warlock-zoo-v9`，`--decks priest-egg-hsr warlock-zakajz --guard egg`，seed 210001＋250k、8×250 局×2 座位＝4000 局；同 seed 再打 `warlock-zoo` 清單當對照。
+- 結果（蛋牧那席，Wilson 95%）：對 zakajz 清單 **2093/4000 52.3%（50.8–53.9）**；對舊 zoo 清單 2000/4000 50.0%（48.5–51.5）。
+- 結論：egg 0.1.0 對現行動物園清單（v9 駕駛）約五五波，略高於舊清單。注意對手是 zoo-v9，沒對強蛋牧訓練過；zoo-v10 與之後的 zoo 重訓（E-270）都還沒和 egg 0.1.0 量過。只是模擬勝率（F-784）。
+- 相關：E-268、R-146、R-150、E-270
+- 來源：2026-10-29 App（使用者「go」）
+
+### E-270
+- 日期：2026-10-29
+- 假設：（另一個 session 的實驗，這裡先佔號）zoo-v10 從 v10 接 200 輪，學習方牌組 `warlock-zakajz`，對手池放 P6A 蛋牧（priest-egg 與 priest-egg-hsr 共用一個 pt）、shaman-P、warlock-zoo＝v9、dh-long，可修 F-874（v9 value 對蛋牧中段過度樂觀）。
+- 設定：5090 `~/side_projects/jev-hearthstone-zoo-p6-20261029/zoo/run_p6.sh`（模擬器 b31012f48995），seed 47，A：蛋牧占對手 0.35、B：0.5，其餘同 run_v10.sh A（λ0.1），各 9 workers；完成寫 zoo/P6-DONE。**腳本開頭寫 E-268，但 E-268 已是 P7（L-057），本實驗改記 E-270**。
+- 結果：2026-10-29 03:34 依使用者決定中止（狀態更新 2026-10-29），兩臂停在 iter 2105／2103，沒有匯出也沒有評估。原因：egg 0.1.0（52% 對 zakajz）比 P6A（約 35%）強得多，剩下 95 輪對 P6A 收益小。A 臂 policy.pt（iter 2105）複製為 5090 egg-pile 目錄 `runtime/zoo-E271-egg010/ppo/start-A2105.pt`，由 E-271 接著練。原本排的 zoo_vs_egg010.sh 已一併停掉。
+- 結論：中止，沒有結論；A 臂權重是 E-271 的起點。
+- 相關：E-254、E-269、F-874、L-057
+- 來源：2026-10-29 另一個 session；佔號由 App 寫
+
+### E-271
+- 日期：2026-10-29
+- 假設：zoo 從 E-270 A 臂（v10＋105 輪對 P6A）接著練，對手池的蛋牧換成 egg 0.1.0（priest-egg-hsr），對 egg 0.1.0 的勝率會明顯高於 V10，其他對手不退步。
+- 設定：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028/runtime/zoo-E271-egg010/run.sh`（模擬器 b31012f48995）。學習方 warlock-zakajz；對手 priest-egg-hsr＝`priest-egg-0.1.0.pt`、shaman-P、warlock-zoo＝v9、dh-long（拿掉 Imbue 版 priest-egg）；鏡像 0.15、λ0.1、--opp-lr 1e-4 --opp-fresh、reply v10，150 輪。A：蛋牧占對手 0.35（seed 48），B：0.5（seed 49），各 9 workers。煙霧 1 輪過（iter 2106）。完成後匯出、挑選評估（seed 1、每座位 1000 局，基準 V10；對 egg 0.1.0、shaman-P、DH、zakajz-v1、鏡像 V10），寫 DONE／FAILED，摘要 eval/summary.txt。判定要另用沒碰過的 seed（L-046／L-047）。
+- 結果：兩臂練到 iter 2255（05:48／05:53 完成，中途 VPN 斷線不影響）。
+  - 挑選（seed 1，每組 2000 局，zoo 那席）：V10／A／B 對 egg 0.1.0 55.5／56.7／**60.4%**、shaman 79.3／80.8／81.3、dh 50.2／52.5／54.1、zakajz-v1 51.2／53.3／54.5、鏡像對 V10 50.0／52.9／52.5。B 除鏡像外全高於 A，選 B。
+  - 判定（全新 seed 250001＋250k，8×250 局×2 座位＝每項 4000 局，`selfplay-compare`，B 對 V10）：egg 0.1.0 54.0% → **59.7%（58.2–61.2）+5.7 PASS（--beat）**；shaman 81.0 → 83.2% +2.2；dh 51.5 → 53.3% +1.8；zakajz-v1 50.6 → 54.3%（52.7–55.8）+3.6；鏡像對 V10 50.0 → 52.9%（51.3–54.4）+2.9；後四項 --max-drop 1.5 全 PASS。
+  - B：policy.pt sha256 cfc19f4f3386…、json 0de0e2e0bc0a…；sim b31012f48995、iter 2255、obs/act 646/248、imbue=true。本機複本 `runtime/zoo-E271-egg010/B.{pt,json}`（含 run.sh、judge.sh、judge/compare-*.txt、eval/summary.txt）。
+- 結論：B 在全新 seed 上對每個對手都進步，不只對模擬蛋牧：zakajz（+3.6，區間不重疊）與鏡像（下界 51.3 > 50）也顯著。依 README「版本號」夠升 MINOR（zoo 0.2.0），但版本號由使用者定，尚未匯出到 models/selfplay。仍只是模擬勝率（F-784）。另：V10 對 egg 0.1.0 已有 54–55%，egg 0.1.0 對 v9 是 48–52%（E-269），v10 本來就較會打蛋牧。
+- 相關：E-270、E-269、E-254、F-874、R-146、R-145
+- 來源：2026-10-29 App（使用者「是否把訓練停掉，改成面對egg 0.1」→「GO」）
+
+### E-272
+- 日期：2026-10-29
+- 假設：只重訓 zoo-v9 的 value 頭（`train/ppo.py --value-only --resume`，trunk 與 policy 凍結），對手含 egg 0.1.0，可修 F-874（對蛋牧中段高估 0.3–0.4），且 policy 與走法完全不變。
+- 設定（預註冊，2026-10-29，訓練前凍結）：
+  - 起點 `warlock-zoo-v9.pt`（sha256 d859beb8…7ff08，json c2add057…21c73；iters 1850）。學習方牌組 `warlock-zakajz`，詞彙固定為 v9 的 names（新增 `vocabulary({names})`、reset 訊息 `names`），obs 620／act 238，json 與 v9 同形，imbue／pile 不開。
+  - 只有 `net.value` 進 Adam，只算 value loss（`--vf` 係數），rollout 仍 on-policy＋GAE。
+  - 指令（待 GPU 空出後在新 5090 目錄跑）：`python train/ppo.py --resume warlock-zoo-v9.pt --value-only --decks warlock-zakajz priest-egg-hsr shaman-cthun warlock-zakajz dh-cthun --egg --opp priest-egg-hsr=priest-egg-0.1.0.pt --iters 150 --lr 3e-4 --seed 7000000 --save-every 25`，對手占比：egg 0.1.0 0.35、shaman 0.2、zakajz 鏡像 0.2、dh 0.25。**選定檢查點＝第 150 輪（最後一個），不看評估結果挑輪**。
+  - 評估 seed（皆不在 900001–900400 與訓練 seed 範圍內，間距 ≥ 局數）：P6A（`priest-egg-pilot-v6-20261028`）920001–920400；egg 0.1.0 930001–930400；v9 原對手 zakajz-v1 940001–940400、dh-cthun-basic 950001–950400。腳本 `runtime/cata-search/calib-param.mjs`（400 局，蛋牧側帶 egg-guard）。
+  - v9 基準（同 seed，已量，ECE 為 10 格）：P6A ECE 0.1578（勝 271/400；中段三格偏差 +0.29／+0.35／+0.29）；egg 0.1.0 ECE 0.3283（勝 181/400；偏差 +0.48／+0.74／+0.79）；zakajz-v1 ECE 0.0489；dh-cthun ECE 0.0347。檔 `runtime/cata-search/calib-e272/v9-*.json`。
+  - 驗收：(a) 對 P6A 與 egg 0.1.0 各 400 新 seed 局，估值落 [−0.6,0.6) 的三個中段桶各 |平均估值−平均結果| < 0.15，且 ECE 低於 v9；(b) v9 原對手（zakajz-v1、dh-cthun-basic；shaman-P 若匯出也量）ECE 升幅 ≤ 0.02；(c) policy logits 與 v9 逐位相同（`test/fixtures/zoo-v9-logits.json`），任何 compare 勝率差在誤差內；(d) 回歸檢查 `cata-d4` Platysaur 局面，Mawman 線（31%）排在 14.5% 線之前——此局面已看過答案，**不算證據**。
+  - 匯出 `models/selfplay/warlock-zoo-0.1.1+E272.{pt,json}`（R-144，json 帶 sim）。
+  - 已知限制：ppo.py 學習方與對手共用一份詞彙，egg 0.1.0 重映射到 v9 詞彙後比真實 P6A／egg 對局弱（hsr 專屬牌掉進 other），可能讓 (a) 的泛化打折；若不過，備案是節點端用真實編碼收集對局、監督式擬合 value。P6A 不在訓練對手內（只在評估），是泛化檢驗。
+  - 程式 sha256：calib-param.mjs 94b0232f…63fcb37；ppo.py 6b5d3eba…11eb6；selfplay-encode.mjs 2e29294c…7d7；selfplay-env.mjs 4e0edaa7…4063bf；test_value_only.py e62b09b7…7de07。sim b31012f48995。
+- 結果：未開跑（2026-10-29）。5090 GPU 被 E-271（兩臂）與另外兩個 ppo.py 佔用，依任務規則停手；程式與測試已備（test_value_only.py 過）。
+- 結論：（待填）
+- 相關：F-874、F-877、E-265、E-267、E-270、E-271、R-144
+- 來源：2026-10-29 派工 role-train
+
+- 修訂（2026-10-29）：原案未開跑，改為監督式擬合（狀態：修訂後執行中，2026-10-29；上面原案文字不動）。原因：原案的備案條件已成立（ppo.py 共用詞彙讓 egg 0.1.0／P6A 的對局被重映射、與真實對局不同），且 5090 GPU 被佔用；改在節點端用各自的真實編碼收集 zoo-v9 自己的對局，離線擬合 value 頭。下面數字在收資料前全部固定，收到資料後不改（L-026）。
+  - 方法：收集（5090 CPU）→ 擬合（本機 CPU，`train/fit_value.py`）→ 匯出 → 驗收 (a)–(d) → E-275 重量 headroom。trunk 與 policy 完全不動，只訓練 `net.value`（256→256 ReLU→1，線性輸出）；因 trunk 凍結，先算一次 `net.body(obs)` 嵌入，再只在嵌入上擬合。
+  - 收集（`runtime/value-fit-20261029/collect.mjs`＋`run_collect.sh`，5090 `~/side_projects/jev-hearthstone-valuefit-20261029`，模擬器 b31012f48995；該目錄 src 是 E-273 的 headroom 目錄複本，與本機只差 `src/selfplay-shadow.mjs` 的 MODELS 表，收集與對戰腳本都不載入該檔）：
+    - zoo＝`warlock-zoo-v9.json`（c2add057…21c73），牌組 warlock-zakajz，每步貪婪（取最大 logit，平手取最小索引），用 v9 自己的 `loadNet` 與編碼器；對手也用自己的 `loadNet` 與編碼器（避免共用詞彙，L-058）。座位逐局交替（`order = g%2 ? [1,0] : [0,1]`）。只記 zoo 座位的決策：原始 v9 obs（620 維 float32）、局 seed、步序、回合、剩餘回合數、zoo 的結果 z（贏 +1、輸 −1）、節點算的 value。3000 步內沒打完的局丟棄並計數。
+    - 五個對手，各 4000 局＝16 個 shard × 250 局：egg 0.1.0（`priest-egg-0.1.0.json` c3f90644…03b2，牌組 priest-egg-hsr，`--guard egg`）seed 1000001＋250k；zakajz-v1（`warlock-zakajz-v1.json` 73ac2d59…963b，warlock-zakajz）1010001＋250k；dh（`dh-long-E254.json` 91b6c6e5…753e6b，dh-cthun）1020001＋250k；zoo-v9 鏡像（v9 對 v9，只記其中一座位的 zoo 側）1030001＋250k；shaman-P（`shaman-P.json` 6567eef9…3837d，shaman-cthun）1040001＋250k；k＝0..15。範圍互不重疊（間距 ≥ 4000 局數），不在 1–1000、10001、20001、30001+、900001–900400、920001–950400、960001–980400、E-274 的 1200001／1210001／1250001 內（L-046、L-047）。P6A 不收（留作樣本外）。
+    - 指令：`WORKERS=4 nohup nice -n 10 bash runtime/value-fit-20261029/run_collect.sh > runtime/value-fit-20261029/out/run.log 2>&1 < /dev/null &`；輸出在 5090 `runtime/value-fit-20261029/out/`。
+  - 驗證（擬合前）：每個 shard 的前 2 局存節點算的 obs、合法動作、logits 與 value；python 載入 `warlock-zoo-v9.pt` 重算，logits 最大差必須 < 1e-5（節點用 float32 讀 json，與 python 預期差 ~4e-6，不是逐位相同）；不過就停手回報，不換方法。另印 python v9 value 對節點 value 在全部決策上的最大差。
+  - 擬合（`train/fit_value.py`，常數寫死：lr 1e-3、batch 1024、epoch 上限 40、耐心 6、隨機種子 0、torch 4 執行緒）：目標＝z（未折現，不用 γ），損失＝加權 MSE，Adam，起點＝v9 自己的 value 頭。權重＝每個對手總權重相同（每筆權重＝1/該對手決策數，再正規化到平均 1）。90/10 依整局切：局 seed % 10 == 0 為驗證集（只用來早停與選 epoch），其餘訓練。epoch 1..上限為候選（epoch 0＝未動的 v9 頭，不可選），用加權驗證損失最低的那一個；連續 6 個 epoch 沒有刷新最低就停。
+  - 匯出：`models/selfplay/warlock-zoo-0.1.1+E272.{pt,json}`（R-144）；.pt 是 v9 的 state dict 只換 `value.*`、`sim`＝b31012f48995（價值頭是在這個模擬器上擬合的）；json 由 `train/export.py` 產生，帶 `sim`，imbue／pile 與 v9 相同（關）。新增測試 `test/value-fit-e272.test.mjs`：除 value 四個張量外所有張量逐位元組等於 v9、新 json 在 `zoo-v9-logits.json` 夾具的各步 logits 與 v9 json 的 logits 逐位相同（`Object.is`）、`sim` 有值、value 輸出確實不同。
+  - 驗收（腳本 `runtime/cata-search/calib-param.mjs`，每個 400 局；v9 與新網路同 seed 同對手各量一次，新 seed 皆不在訓練 seed 內）：P6A（`priest-egg-pilot-v6-20261028`）seed 920001；egg 0.1.0（egg-guard）930001；zakajz-v1 940001；dh-cthun-basic 950001；shaman-P 1050001（v9 與新網路都在這個 seed 量，因為沒有既有 v9 基準）。
+    - (a) 對 P6A 與 egg 0.1.0：估值落 [−0.6,0.6) 的三個中段桶（[−0.6,−0.2)、[−0.2,0.2)、[0.2,0.6)）各 |平均估值−平均結果| < 0.15，**且** ECE（10 格）低於 v9（P6A 0.1578、egg 0.1.0 0.3283）。桶內沒有局的記為不通過。
+    - (b) zakajz-v1（v9 0.0489）、dh-cthun-basic（v9 0.0347）、shaman-P（v9 當場量）：新 ECE − v9 ECE ≤ 0.02。
+    - (c) policy logits 與 v9 逐位相同：上述測試通過；另外 E-275 的 plain 勝場應與 E-273 逐項相等（貪婪走法完全相同）。
+    - (d) 回歸檢查 `runtime/cata-search/cata-d4.mjs` Platysaur 局面：Mawman 線（31%）排在 14.5% 線之前。此局面已看過答案，**不算證據**，只確認沒把原本能做的事弄壞。
+    - 任何一項不過就照實報，不調參數重擬（L-026）。(a)(b) 不過仍照 E-275 規則量 headroom（兩者並列報告）；verify 失敗或 (c) 不過則不量 headroom。
+  - 樣本內外：訓練對手（egg 0.1.0、zakajz-v1、dh、鏡像、shaman-P）的驗收 seed 與訓練 seed 不重疊，但同一批對手與牌組；P6A 完全不在訓練內，是泛化檢驗，(a) 對 P6A 的通過才算有跨對手的證據。
+  - 程式 sha256：collect.mjs `ae6707ad6404dfc95cd3043bdf87160a9f2b94e868443979a4afb6fa6d761b55`；run_collect.sh `43f4969c1ff637059634f22adbe99c73d7b65bcfa60a8c23009ab9f0231c9c2f`；fit_value.py `cda81760f0e081b7b08f51876111fa7c208c6b5b458948b3457239cc1491bb77`；calib-param.mjs `94b0232f71409a8eb985628bdd92a7a788fc78850e657e83b4790c36663fcb37`；cata-d4.mjs `b5aef52fb10196d0bae04ff825022569800823d334d1f00bc0b77799344f25ae`。v9 .pt sha256 `d859beb89e666914f4b389b7a44bdc464d94c8664fa6b3ff28f4f50477b7ff08`。
+  - 結果（修訂）：（待填）
+  - 預註冊 sha256（上面「- 修訂（2026-10-29）」那一行到本行前一行，換行正規化成 LF、UTF-8、行尾有換行；含最後一行「結果（修訂）：（待填）」）：`fec80fd537c54fd29355623bbc7f36fa9d0212f36b325296697f8db79fd80de3`，收資料前凍結。
+  - 結果補記（2026-10-29，role-train；以下為追加，上面凍結段落不動）：
+    - 注意：上面凍結段的「結果（修訂）：（待填）」保留原文以維持預註冊 sha256；實際結果就是本補記。E-275 的結果見 E-275 條。
+    - 程式變更聲明：`train/fit_value.py` 在預註冊之後、擬合之前只改了 `load_shards(d, net)`（每個 shard 先過凍結的 trunk 取 256 維 embedding 再串接，避免整批 obs 一次進記憶體時 numpy ArrayMemoryError）；lr、batch、cap、patience、seed、目標、權重、切分都沒動。sha256 由預註冊的 `cda81760f0e081b7b08f51876111fa7c208c6b5b458948b3457239cc1491bb77` 變成 `986826479609262fb3558da24eda43f5c33804e46e8d03a9b05fbaf580592571`。這是預註冊 sha 與實際程式不符的一例，已寫成 L-060。
+    - 收集（5090，sim b31012f48995，0 局未完成）：egg 0.1.0 4000 局 148,990 決策（zoo 勝 1888）；zakajz-v1 4000／105,882（1925）；dh 4000／130,482（2035）；鏡像 4000／105,793（2036）；shaman-P 4000／114,304（3201）。合計 605,451 決策。
+    - 驗證：python v9 對節點 logits 最大差 6.676e-6（< 1e-5，非逐位相同）、value 最大差 5.96e-7；全部決策上 python v9 value 對節點 value 最大差 9.5e-7。
+    - 擬合：訓練 545,097／驗證 60,354 決策；epoch 0（v9 頭）驗證損失 0.7101，跑 10 輪後耐心 6 停止，選第 4 輪，驗證損失 0.6291。各對手驗證損失 v9 → 第 4 輪：egg 1.154 → 0.775、dh 0.687 → 0.664、鏡像 0.660 → 0.645、zakajz 0.688 → 0.670、shaman-P 0.356 → 0.383（變差）。
+    - 匯出：`warlock-zoo-0.1.1+E272.pt` sha256 `7501ec72dadcec97f21fc516e0772af053db26660d69f08ca2bcd07bea8f8cf0`；`.json` `68300661ae8985d73b99fc8d92940c1ddb338695b3f11792e2a4e63896890b61`（v9 json `c2add057c4601065f56afd65068e98c2075a157a74f2131264c715d6d8b21c73`）。測試 `test/value-fit-e272.test.mjs`（新）：兩份 json 只差 `value.*` 四個張量、標頭與詞彙旗標相同；固定對局 125 步 logits 逐位 `Object.is` 相同、value 在過半步數上不同。
+    - 驗收（各 400 局，新網路與 v9 同 seed 同對手，勝場與決策數完全相同）：
+      - P6A（seed 920001，勝 271，決策 14355）：ECE 0.1578 → 0.0799（−0.078）；中段三桶偏差（估−實）−0.23／−0.24／−0.07，v9 是 +0.29／+0.35／+0.29。
+      - egg 0.1.0（930001，勝 181，14873）：ECE 0.3283 → 0.1040（−0.224）；中段偏差 +0.16／+0.28／+0.30，v9 是 +0.48／+0.74／+0.79。
+      - zakajz-v1（940001，勝 200，10609）：ECE 0.0489 → 0.0188（−0.030）。
+      - dh（950001，勝 268，11997）：ECE 0.0347 → 0.1082（**+0.074**）；估值偏低（中段偏差 −0.16／−0.32／−0.31）。
+      - shaman-P（1050001，勝 325，11157）：ECE 0.0345 → 0.0713（**+0.037**）；估值偏低（−0.46／−0.29／−0.21）。
+      - (a) **不過**：P6A、egg 0.1.0 的 ECE 都低於 v9，但中段桶 |偏差| 全部 ≥ 0.15 沒有小於（P6A 的 [-0.6,-0.2) −0.23 與 [-0.2,0.2) −0.24；egg 的 +0.16／+0.28／+0.30；只有 P6A 的 [0.2,0.6) −0.07 達標）。
+      - (b) **不過**：zakajz-v1 過；dh +0.074、shaman-P +0.037 都超過 +0.02。
+      - (c) 過（logits 逐位相同的測試通過；E-275 plain 勝場與 E-273 逐項比對見 E-275 結果）。
+      - (d) 過（回歸檢查，不算證據）：`cata-d4.mjs` 的複本（只換網路路徑，原檔不動，sha256 `a81c914f552ef08982ce7fb4419979bb470bc833507fdce356e892e3e81db586`）400 局：Platysaur → Mawman 124/400＝31.0%，排在 Platysaur／Egg／Entropic 選了不打 Mawman → Life Tap 的 14.5%／15.5%／14.8% 之前，與 v9 相同（policy 沒動所以預期如此）。
+    - 判讀：以預註冊的標準 (a)(b) 都沒過，不調參數重擬（L-026）。池化加權擬合把校準往對手平均拉：對 egg／P6A 這類 v9 嚴重高估的對手改善很多但仍留偏差，對原本校準好的 dh、shaman-P 反而變差。
+
+### E-273
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：zoo-v9（牌組 warlock-zakajz）打牌時的規劃還有空間：同一個網路開前瞻（`--look a`）比貪婪（plain）明顯更強。這是 E-255（蛋牧）的 zoo 版，用來決定下一步該做搜尋蒸餾還是把力氣放在實戰。
+- 設定：5090 `~/side_projects/jev-hearthstone-headroom-20261029`（本機工作樹 src/data/decks 複製；**模擬器 b31012f48995**，src/ 逐檔 sha256 清單排序後的總 sha256 `67f23cd887ac2b325aa51c0b813df925fc29dba394e56f81c7203a51c7d76b7e`，本機與 5090 相同）。腳本 `runtime/headroom-20261029/run.sh`（sha256 `245b3b6b8084270e59d75d119d6ebfc0bac2451da200c534956a5c2018591d9d`）、`analyze.mjs`（`fc553854b1f608b179a104b9d84d680dfb6ad02960ecbbac836551e9dc5f42ae`）。
+  - 被測方 A：`warlock-zoo-v9.json`（sha256 `c2add057c4601065f56afd65068e98c2075a157a74f2131264c715d6d8b21c73`），牌組 warlock-zakajz，永遠是 A。
+  - 三個對手（對手一律貪婪、不開前瞻）：
+
+    | 對手 | 網路（sha256） | 牌組 | 額外 | seed（run k=0..7） |
+    |---|---|---|---|---|
+    | egg 0.1.0 | priest-egg-0.1.0.json（`c3f906441e889611dc1eee9ac33d44daf25a1ca3b57771659907642ffba803b2`） | priest-egg-hsr | `--guard egg` | 960001+250k |
+    | zakajz-v1 | warlock-zakajz-v1.json（`73ac2d59cfddf3a8fef6f3156ad396055a180836f4b83bfffcab963d2eb9963b`） | warlock-zakajz | — | 970001+250k |
+    | dh | dh-long（E-254 用的 5090 `DH.json` → `dh-long-E254.json`，`91b6c6e562190c3dd71ae0a53506f11ef7e41ca2723442a3ee7b1adba5753e6b`） | dh-cthun | — | 980001+250k |
+
+  - 三個條件，同一個對手三條件用**同一組 seed**（同牌局，配對）：plain（無旗標）、look（`--look a --samples 2 --beam 8`，depth 1）、look2（look 再加 `--depth 2 --reply <該對手網路>`，只當輔助）。
+  - 每對手每條件 8 個 run × 250 局 × 2 座位 = 4000 局；run 內間距 250 ≥ 局數；三個對手的 seed 範圍（960001–962000、970001–972000、980001–982000）互不重疊，也不在 1–1000、10001、20001、30001+、900001–900400、920001–950400 內（L-046、L-047）。「三條件共用 seed」是刻意的配對設計，不是重疊：同一條件內的 run 不重疊。
+  - 因 compare 依設計拒絕 look 不同的兩邊，用 readRun＋wilson 手加（analyze.mjs）。
+  - 注意：本次用目前工作樹模擬器（F-875 改過 sim），**不能和 E-254／E-255 的數字混著比**；plain 基準線也在同一個 sim 重量。
+- 判定規則（開跑前訂，以三對手合計 12000 局的 look−plain 為準，另列各對手）：
+  - 有空間：look 與 plain 的 Wilson 95% 區間不重疊**且**差 ≥ 5 分 → 下一步做搜尋蒸餾（`train/ppo.py --distill`）。
+  - 到頂：差 < 2 分，或區間重疊 → 力氣放到實戰（不做蒸餾）。
+  - 待定：其餘（區間不重疊但差在 2–5 分）→ E-272 價值校準做完後重量。
+  - 各對手不一致時（例如只有某個對手有空間）照實寫，不改規則。look2 只當輔助，不進判定。
+- 已知限制（會讓 headroom 被低估）：v9 的 value 對強對手高估 0.3–0.8（F-874、F-877），前瞻靠 value 排序候選，估值偏差會削弱前瞻的增益；所以「到頂」只代表「用現在的 value 看不到空間」，不代表搜尋沒用。結果看過之後不挑參數重跑當證據（L-026）。
+- 結果：全部 72 個 run 完成（5090，2026-10-29 04:59–05:55，6 工作程序），analyze.mjs 檢查 seed、sim b31012f48995、局數、look 旗標皆無問題。zoo-v9 勝率（平手與截斷皆 0）：
+
+  | 對手 | 條件 | 勝/局 | 勝率（Wilson 95%） | look−plain（分） | 差的 95%（Newcombe，保守） | 區間 |
+  |---|---|---|---|---|---|---|
+  | egg 0.1.0 | plain | 1964/4000 | 49.1%（47.6–50.6） | | | |
+  | | look | 2147/4000 | 53.7%（52.1–55.2） | +4.6 | +2.4 至 +6.8 | 不重疊，待定 |
+  | | look2 | 1881/4000 | 47.0%（45.5–48.6） | −2.1 | −4.3 至 +0.1 | 重疊 |
+  | zakajz-v1 | plain | 1924/4000 | 48.1%（46.6–49.6） | | | |
+  | | look | 2170/4000 | 54.3%（52.7–55.8） | +6.2 | +4.0 至 +8.3 | 不重疊，有空間 |
+  | | look2 | 2162/4000 | 54.0%（52.5–55.6） | +5.9 | +3.8 至 +8.1 | 不重疊 |
+  | dh（E-254 網路） | plain | 2007/4000 | 50.2%（48.6–51.7） | | | |
+  | | look | 2090/4000 | 52.3%（50.7–53.8） | +2.1 | −0.1 至 +4.3 | 重疊，到頂 |
+  | | look2 | 2030/4000 | 50.7%（49.2–52.3） | +0.6 | −1.6 至 +2.8 | 重疊 |
+  | 合計 | plain | 5895/12000 | 49.1%（48.2–50.0） | | | |
+  | | look | 6407/12000 | 53.4%（52.5–54.3） | **+4.3** | +3.0 至 +5.5 | 不重疊，差 2–5 分 |
+  | | look2 | 6073/12000 | 50.6%（49.7–51.5） | +1.5 | +0.2 至 +2.7 | 重疊 |
+
+  檔案：5090 `~/side_projects/jev-hearthstone-headroom-20261029/out/`，本機 `runtime/headroom-20261029/out/`（72 個 run 檔＋jobs.txt、run.log、DONE），表在 `runtime/headroom-20261029/result.md`。命令見 run.sh（`WORKERS=6 nohup nice -n 10 bash runtime/headroom-20261029/run.sh`）。預註冊段落（本條「結果」之前）的 sha256 `8d458c43ac158090a73ba058490b9ad286056d0034f43cff65128ab3bd4315ce`（含結果與結論欄的「（待填）」兩行，開跑前凍結）。
+- 結論：照預註冊規則，合計 look−plain = +4.3 分、區間不重疊但差在 2–5 分，**落在「待定」**：不直接做搜尋蒸餾，等 E-272 價值校準做完後重量。但三個對手不一致：zakajz-v1 有空間（+6.2）、egg 0.1.0 待定（+4.6）、dh 到頂（+2.1，區間重疊）。規劃空間集中在對 zoo 鏡像與蛋牧，對 dh 小。look2 只當輔助，不進判定；它對 egg 反而比 plain 低 2.1 分（對 zakajz 與 look 相當、對 dh 與 plain 相當），原因未查（可能 depth 2 的對手回合預測與 egg guard 或 egg 的牌效果不合，未驗證，不當結論）。所有對手的 plain 都在 48–50%，不是在 E-255 的環境，不可與 E-254／E-255 混著比（F-875 改過 sim）。價值高估（F-874、F-877）會讓 look 的增益被低估，「待定」可能偏保守。
+- 下一步：E-272 完成後用同腳本、同 seed 重量 look（只換 v9 為校準後的網路），再依預註冊規則定「有空間」或「到頂」；先不看答案挑參數（L-026）。
+- 相關：E-255、E-254、E-272、F-874、F-877、F-875、L-046、L-047
+- 來源：2026-10-29 派工（role-audit 風格診斷）
+
+### E-274
+- 日期：2026-10-29
+- 假設（F-876）：潛在式 shaping 對牌序零訊號（E-176）；改成 (1) 終局 Φ 不歸零（`--shape-final`，整局加總＝Φ終局−Φ起點，勝勢局繼續壓場才有分）、(2) 抽牌／發現／暫時牌選擇的決策一律問前瞻當蒸餾目標（`--distill-info`，env 標 `info:1`），不用 guard，zoo 會在牌序（先抽再攻）與 Catacombs 選牌上變強，且 value 對 egg 0.1.0 的中段高估（F-874）縮小。
+- 設定：spec `runtime/shape-20261029/spec.md`（檔內原寫 E-272，已改）。5090 `~/side_projects/jev-hearthstone-shape-20261029/runtime/shape-20261029/run.sh`（5090 上的註解仍寫 E-272；模擬器 b31012f48995，src/test/train/data/decks/models 401 檔 sha256 與本機相同）。配方完全照 E-271 A（學習方 warlock-zakajz，起點 `start-A2105.pt`，對手 egg 0.1.0 0.35／shaman-P／zoo-v9／dh-long，鏡像 0.15，λ0.1、search 12、seed 48、150 輪、各 9 workers），兩臂：**S**＝`--shape models/selfplay/board-score.json --shape-scale 0.2 --shape-gamma 1.0 --shape-final`；**SI**＝S＋`--distill-info`。對照組＝E-271 A（同起點同 seed，不重跑）。完成後匯出、挑選評估照 E-271（seed 1、每座位 1000 局，S／SI／A 對 egg010、shaman-P、DH、zakajz、鏡像 V10）＋校準（`runtime/shape-20261029/calib.mjs`，S／SI／A／V10 各對 egg 0.1.0 400 局 seed 900001，估值區間→實際、T 區段→估值／實際）。run.sh 先煙霧再等 E-271 的 DONE／FAILED 才開兩臂。
+- 程式改動（未 commit）：`src/selfplay-rollout.mjs` 新 `infoStep`／`touchesInfo`；`src/selfplay-env.mjs` reset 旗標 `info`（view 多 `info:1`）、shape 開著時 `ended.phiEnd=[Φ_seat0,Φ_seat1]`；`train/ppo.py` `--shape-final`（需 --shape）、`--distill-info`（需 --distill-weight）、log.csv 新欄 `info_searched`。測試：`train/test_shaping.py` final 案例、`test/selfplay-env.test.mjs` 三個新測試；npm test 895/895。HEAD 等價：改動還原的基準副本，`--seed 7 --batch 1500` 兩輪，log.csv 除秒數欄逐格相同、policy.pt 位元相同。本機煙霧 1 輪：8458 決策、4714 搜尋、info_searched 4291（約 91%，CPU 457 秒）。
+- 結果：2026-10-29 04:32 run.sh 在 5090 開跑（煙霧過，L-045 檢查過：resume iter 2105、旗標與對手正確），之後等 E-271 結束（約 06:00）才開兩臂。**05:10 起 5090 連不上**（VPN keepalive 重連後 f5fpc 回「no active session」，ssh 逾時），兩臂狀態未知；run.sh 用 setsid/nohup 起的，應該沒受斷線影響。待 VPN 恢復後看 `orchestrate.log`、`DONE`／`FAILED`，再收 `eval/summary.txt`、`eval/calib-*.txt`。
+  - 05:47 5090 恢復：E-271 A 在 iter 2254（共到 2255），兩臂都還在跑；E-274 run.sh 煙霧 ok、在等 E-271 DONE。
+  - 05:55 E-271 DONE，S、SI 同時開跑。06:50 S 70/150（約 63 秒／輪），SI 27/150（約 166 秒／輪，每輪約 4000 次搜尋），SI 預計約 12:30 才練完，之後挑選評估與校準。09:56 S 練完；12:03 SI 116/150；12:58 SI 練完，12:59 DONE。
+  - 挑選評估（seed 1，各 2000 局，勝率％）：egg010 A 56.7／S 56.1／SI 57.3；shaman-P 80.8／80.1／80.4；DH 52.5／52.6／52.0；zakajz 53.3／53.1／52.1；鏡像 V10 52.9／52.0／51.7。校準（seed 900001，400 局）[0.6,1) 估值→實際：A 0.82→0.71（高估 0.11）、S 0.85→0.61（0.24）、SI 0.81→0.74（0.07）、V10 0.79→0.35（0.44）。S／SI 的估值超出 ±1（[-9,-0.6) 平均 −1.1），是 shaping 項進了 value 目標。
+  - 13:04 判定派給 agy（task 20261029-130422-67534b，seed 1200001／1210001，校準 1250001，輸出 runtime/shape-20261029/judge-r1/）。
+  - 本實驗是使用者目標「shaping／蒸餾配方搜尋」（2026-10-29）的**第 1 輪**（S＝改 shaping，SI＝S＋只改 --distill-info）。判定照 `runtime/shape-20261029/judge-spec.md`（第 1 輪 seed 1200001／1210001，校準 1250001），另開 role-audit session；連續三輪沒有顯著進步就停。
+  - 注意：S／SI 的 value 目標含 shaping 項，對 ±1 結果的校準可能因此偏移，判讀 [0.6,1) 高估時要記這點。
+  - 判定（2026-10-29 14:05，agy 跑在 5090，App 逐檔核對；`judge-spec.md` 第 1 輪，seed 1200001＋1210001，每邊 4000 局，模擬器 b31012f48995；檔案 `runtime/shape-20261029/judge-r1/`）：
+
+    | 對手 | A | S（差） | SI（差） |
+    |---|---|---|---|
+    | egg 0.1.0（--beat） | 56.9 | 55.1（−1.9 FAIL） | 54.8（−2.2 FAIL） |
+    | shaman-P（--max-drop 1.5） | 82.4 | 81.3（−1.1 PASS） | 80.2（−2.1 FAIL） |
+    | DH | 54.1 | 53.0（−1.1 PASS） | 52.3（−1.8 FAIL） |
+    | zakajz | 54.4 | 52.3（−2.0 FAIL） | 53.1（−1.2 PASS） |
+    | 鏡像 V10 | 53.0 | 52.0（−1.0 PASS） | 51.7（−1.3 PASS） |
+
+    校準（seed 1250001，400 局）[0.6,1) 估值→實際：A 0.82→0.75（高估 0.07）、S 0.86→0.69（0.17）、SI 0.82→0.74（0.08）。
+- 結論：**沒有顯著進步**（目標第 1 輪，連續 1 輪）。兩臂對 egg 0.1.0 都比 A 低約 2 分，五個對手全部是負差；校準 S 變差、SI 持平。終局 Φ shaping（scale 0.2）在這個起點上是淨傷害；加 --distill-info 也沒有補回來。挑選 seed 1 上 SI 看似 +0.6，全新 seed 變 −2.2（L-046 的又一例）。agy 判定這次逾時未抄回（dispatch_review partial），數字由 App 從 5090 檔案直接核對。
+- 相關：F-876、F-874、E-176、E-271、E-267、L-045、L-046、L-047、L-057、E-283
+- 來源：2026-10-29 App（使用者「如果有除了遙遠的勝負以外…其他加分項目」→ 否決 guard →「GO」）；sonnet 子代理實作
+
+### E-275
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：**這是 E-273「待定」區的重量**（E-273 合計 look−plain ＋4.3 分，落在 2–5 分的待定區，原定「E-272 價值校準做完後重量」；E-272 因 ppo.py 路線未開跑，改以監督式擬合完成，見 E-272 的 2026-10-29 修訂）。zoo 的價值頭校準之後（`warlock-zoo-0.1.1+E272`，policy 與 v9 逐位相同），同一個網路開前瞻（`--look a`）比貪婪（plain）是否有 ≥ 5 分的空間。
+- 設定：與 E-273 逐項相同，只把被測方 A 從 `warlock-zoo-v9.json` 換成 `warlock-zoo-0.1.1+E272.json`（E-272 修訂產出，sha256 於匯出後記在結果欄）。5090 `~/side_projects/jev-hearthstone-valuefit-20261029`（E-273 headroom 目錄複本；模擬器 b31012f48995；與本機 src 只差 `selfplay-shadow.mjs` 的 MODELS 表，對戰腳本不載入該檔）。腳本在 `runtime/headroom-e275-20261029/`：`run.sh`（sha256 `dd71456699cf0199eb5f3a93f5cef0f4003ed5da605c9a7a6dc99c14d09c315f`，與 E-273 的 run.sh 只差三行：註解、A 的路徑、cd 後備路徑，其餘邏輯逐字相同）、`analyze.mjs`（`fc553854b1f608b179a104b9d84d680dfb6ad02960ecbbac836551e9dc5f42ae`，與 E-273 的檔逐位元組相同；表頭仍寫「zoo-v9」，指的是被測方 A，實際是新網路）、`sanity.mjs`（`920e22a357ec1de0327ed9ba027dc01ca0086dd9e5e85cc503d2584072310fbe`，新增，只比 plain）。
+  - 三個對手、三個條件、seed 全部與 E-273 相同：egg 0.1.0（`--guard egg`，960001＋250k）、zakajz-v1（970001＋250k）、dh（`dh-long-E254.json`，980001＋250k）；plain／look（`--look a --samples 2 --beam 8`）／look2（再加 `--depth 2 --reply <對手網路>`，只當輔助）；對手貪婪、被測方永遠是 A；每對手每條件 8 run × 250 局 × 2 座位＝4000 局，同對手三條件共用 seed（配對）。命令（專案根）：`mkdir -p out && WORKERS=6 nohup nice -n 10 bash runtime/headroom-e275-20261029/run.sh > out/run.log 2>&1 < /dev/null &`；輸出在專案根 `out/`。
+  - 同 seed 同 sim，所以 E-273 的 v9 數字可直接配對比較（與 E-254／E-255 不能混比，F-875）。
+- 判定規則（與 E-273 逐字相同，以三對手合計 12000 局的 look−plain 為準，另列各對手）：
+  - 有空間：look 與 plain 的 Wilson 95% 區間不重疊**且**差 ≥ 5 分 → 下一步做搜尋蒸餾（`train/ppo.py --distill`）。
+  - 到頂：差 < 2 分，或區間重疊 → 力氣放到實戰（不做蒸餾）。
+  - 待定：其餘（區間不重疊但差在 2–5 分）。
+  - 各對手不一致時照實寫，不改規則。look2 只當輔助，不進判定。
+- 健全性檢查（跑完先做，`sanity.mjs`）：新網路的 plain 勝率必須和 E-273 的 v9 plain 在誤差內（三個對手 Wilson 區間都重疊）。因為 policy logits 逐位相同、同 seed、同 sim、貪婪不看 value，預期勝場與 E-273 逐項相等（egg 1964、zakajz 1924、dh 2007，合計 5895/12000）；若不相等但在誤差內，照實記並查原因；若不在誤差內，結果不解讀，先查（sim 版本、檔案、非決定性）。
+- 已知限制：(1) look 靠 value 排序候選，新 value 只是對 zoo-v9 自己的貪婪對局擬合，前瞻中走到的局面分布與貪婪不同，校準在前瞻局面上不一定成立；(2) E-272 驗收 (a)(b) 若不過，本實驗仍量（並列報告），此時「到頂」只代表用現在的 value 看不到空間；(3) 結果看過之後不挑參數重跑當證據（L-026），zone 只依上面規則判。
+- 結果：（待填）
+- 結論：（待填）
+- 相關：E-273、E-272、E-255、F-874、F-877、F-875、L-026、L-046、L-047、R-144
+- 來源：2026-10-29 派工 role-train（E-272 修訂的後續）
+- 預註冊 sha256（本條 `### E-275` 到「來源」行，換行正規化成 LF、UTF-8、行尾有換行）：`a4a644ac969d94c628069ec1b2c0f7546a815732077c04bca7621a0ac8f86560`，開跑前凍結。
+- 結果補記（2026-10-29，role-train；追加。上面「結果」「結論」兩欄保留（待填）原文，以維持預註冊 sha256；實際結果在此）：
+  - 執行：5090 `~/side_projects/jev-hearthstone-valuefit-20261029/out/`，`WORKERS=6 nohup nice -n 10 bash runtime/headroom-e275-20261029/run.sh`，06:30:30 開跑、07:29:42 `DONE`（約 59 分，72 個 run 檔全在，全部 sim b31012f48995）；已拷回本機 `runtime/headroom-e275-20261029/out/`。網路 `warlock-zoo-0.1.1+E272.json`（sha256 `68300661ae8985d73b99fc8d92940c1ddb338695b3f11792e2a4e63896890b61`，5090 複本相同）。程式 sha256：run.sh `dd71456699cf0199eb5f3a93f5cef0f4003ed5da605c9a7a6dc99c14d09c315f`、analyze.mjs `fc553854b1f608b179a104b9d84d680dfb6ad02960ecbbac836551e9dc5f42ae`（與 E-273 相同）、sanity.mjs `920e22a357ec1de0327ed9ba027dc01ca0086dd9e5e85cc503d2584072310fbe`。
+  - 健全性檢查（E-272 (c) 的第二半）：新網路 plain 與 E-273 的 v9 plain 勝場逐項相等：egg 1964/4000、zakajz 1924/4000、dh 2007/4000，合計 5895/12000，區間全部重疊 → 通過，結果可以解讀。
+  - 結果（`analyze.mjs`；表中標「zoo-v9」的欄位名是腳本寫死的標題，實際被測方是新網路；「區間重疊」＝look 的 Wilson 下界 ≤ plain 的上界，單側，不是兩區間相交）：
+    | 對手 | 條件 | 新網路 勝/局 | 勝率 (Wilson 95%) | look−plain (pt) | 差的 95% (Newcombe) | E-273 v9 同條件 |
+    |---|---|---|---|---|---|---|
+    | egg | plain | 1964/4000 | 49.1% (47.6–50.6) | | | 1964（相同） |
+    | egg | look | 923/4000 | 23.1% (21.8–24.4) | −26.0 | −28.0 至 −24.0 | 2147（53.7%，+4.6） |
+    | egg | look2 | 991/4000 | 24.8% (23.5–26.1) | −24.3 | −26.4 至 −22.3 | 1881（47.0%，−2.1） |
+    | zakajz | plain | 1924/4000 | 48.1% (46.6–49.6) | | | 1924（相同） |
+    | zakajz | look | 1633/4000 | 40.8% (39.3–42.4) | −7.3 | −9.4 至 −5.1 | 2170（54.3%，+6.2） |
+    | zakajz | look2 | 2024/4000 | 50.6% (49.1–52.1) | +2.5 | 0.3 至 4.7 | 2162（54.0%，+5.9） |
+    | dh | plain | 2007/4000 | 50.2% (48.6–51.7) | | | 2007（相同） |
+    | dh | look | 572/4000 | 14.3% (13.2–15.4) | −35.9 | −37.7 至 −34.0 | 2090（52.3%，+2.1） |
+    | dh | look2 | 1585/4000 | 39.6% (38.1–41.2) | −10.6 | −12.7 至 −8.4 | 2030（50.7%，+0.6） |
+    | 合計 | plain | 5895/12000 | 49.1% (48.2–50.0) | | | 5895（相同） |
+    | 合計 | look | 3128/12000 | 26.1% (25.3–26.9) | **−23.1** | −24.2 至 −21.9 | 6407（53.4%，+4.3，待定） |
+    | 合計 | look2 | 4600/12000 | 38.3% (37.5–39.2) | −10.8 | −12.0 至 −9.5 | 6073（50.6%，+1.5） |
+  - 判定（預註冊規則，合計 look−plain）：**到頂**（差 < 2 分；實際是 −23.1 分，三個對手的 look 都低於 plain，各對手一致）。look2 只當輔助：除 zakajz 外也都低於 plain。
+  - 解讀與限制（不改規則）：這個「到頂」量的是新網路，不是 v9；換上擬合後的 value 頭，前瞻反而把勝率從 53.4% 打到 26.1%（plain 相同、只差 value 頭與它排序候選的方式），所以 E-273 對 v9 的「待定（+4.3）」並沒有因此被解開，仍是待定。可能原因（未驗證）：擬合只用 v9 貪婪對局的局面，前瞻展開到的局面分布不同，新頭在那裡校準更差，排序被誤導（E-272 驗收也顯示新頭在 dh、shaman-P 偏低 0.2–0.5）；dh 的 look 掉得最多（−35.9）與其估值偏低一致。不能據此推論「搜尋沒有空間」。
+  - 結論：用池化 MSE 擬合出來的 value 頭不能拿去做前瞻（E-272 (a)(b) 不過，E-275 look 大幅變差）；對 zoo-v9 是否有搜尋蒸餾空間仍是 E-273 的待定，要另用不依賴 value 排序的方式或更多資料決定。不 commit、模型不上線（`warlock-zoo-0.1.1+E272` 只留檔）。
+
+### E-276
+- 日期：2026-10-29
+- 假設：zoo 0.2.0（R-151，E-271 B）接上實戰後能正常駕駛 warlock-zakajz，不出現新的點擊或規則問題。
+- 設定：本機 `npm run game-zakajz`，MODELS `warlock-zakajz → warlock-zoo-0.2.0`，決策引擎 silverfish-v1-veto-audit-v1。1 局，我方後手（PlayerID 2，史詩魅魔#4384），對手惡魔獵人（Maiev Shadowsong、Agent of the Old Ones、Lotus Bookie、Pristine Statue）。
+- 結果：**勝**（06:16:20 對手第 9 回合投降，PLAYSTATE WON）。18 個動作。打出 Ritual of C'Thun、Twilight Timehopper、Servants of C'Thun（發現）、Entropic Continuity、Tachyon Barrage、Zakajz、Faceless Fanatic、Blasphemy。
+  - 一次失手：第 5 回合 `o3t1` Floating Lessons → 自己的 Twilight Timehopper（id 60，場上第 1 格）點兩次都沒變化，被移出該回合選單（F-879）。之後同回合的 Entropic Continuity、Tachyon Barrage、Timehopper 攻擊都正常。
+- 結論：0.2.0 實戰可用，1 局樣本不能談勝率。Floating Lessons 打不出來要另查。
+- 相關：R-151、E-271、F-879
+- 來源：2026-10-29 App（使用者「改 MODELS 並開打」）
+
+### E-277
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：**E-273「待定」區的第二次重量，這次用 zoo 0.2.0**。E-273 對 zoo-v9 量到 look−plain ＋4.3 分（待定）；E-275 換成只擬合 value 頭的 0.1.1+E272 反而 −23.1（到頂但不可解讀為沒有空間）。zoo 0.2.0（R-151，E-271 B 臂）是 v9 → v10（對 P6A 105 輪）→ E-271 B 臂續練 150 輪（PPO，對手池：egg 0.1.0、shaman-P、v9、dh-long；reply v10）的結果。問題：E-271 的訓練是否已把 v9 靠前瞻才拿到的那 ＋4.3 分吸收進 policy。兩種可能：(i) 吸收了 → 0.2.0 的 look−plain 縮到 < 2 分（到頂）或不再為正；(ii) 沒吸收 → look−plain 仍 ≥ 2 分甚至 ≥ 5 分（待定／有空間）。另一個問題：0.2.0 的 plain 是否高於 v9 plain（E-271 沒有直接與 v9 在這三個對手上配對量過）。
+- 設定：與 E-273 逐項相同（腳本邏輯、seed、sim、條件參數、對手、牌組），只把被測方 A 換成 `models/selfplay/warlock-zoo-0.2.0.json`（牌組 warlock-zakajz）。
+  - 被測方 A：`warlock-zoo-0.2.0.json` sha256 `0de0e2e0bc0a75f186e17a6a3e34adaa6077808b1afccbf666e0537db706e0fa`（與 R-151 相同）、`.pt` `cfc19f4f3386aee6324b8d12080a298f6f95a01ba5bff5a2c1dadebd4c4ec64a`。json 內 imbue=true；詞彙表（`vocabulary({imbue})`、`loadNet` 讀 `doc.imbue`）自動處理，**不需要任何旗標**，對戰命令與 E-273 逐字相同。
+  - 對手（貪婪，與 E-273 相同檔）：egg 0.1.0 `priest-egg-0.1.0.json` `c3f906441e889611dc1eee9ac33d44daf25a1ca3b57771659907642ffba803b2`（牌組 priest-egg-hsr，`--guard egg`，seed 基底 960001）；zakajz-v1 `warlock-zakajz-v1.json` `73ac2d59cfddf3a8fef6f3156ad396055a180836f4b83bfffcab963d2eb9963b`（牌組 warlock-zakajz，970001）；dh-long-E254 `dh-long-E254.json` `91b6c6e562190c3dd71ae0a53506f11ef7e41ca2723442a3ee7b1adba5753e6b`（牌組 dh-cthun，980001）。
+  - seed 表：每對手 run k＝0..7 用 seed ＝ 基底 ＋ 250k（egg 960001, 960251, …, 961751；zakajz 970001, …, 971751；dh 980001, …, 981751）；每 run 250 局 × 2 座位；同對手三個條件共用同一組 seed（同牌局配對）；每格（對手 × 條件）8 × 250 × 2 ＝ 4000 局，共 9 格 36000 局。
+  - 條件：plain（貪婪）；look ＝ `--look a --samples 2 --beam 8`；look2 ＝ look 再加 `--depth 2 --reply <該對手網路>`（只當輔助）。
+  - 模擬器：b31012f48995（G2／G3，三條件與 E-273 相同）。本機與 5090 `src/*.mjs` 114 檔逐檔 sha256 相同；`(cd src; sha256sum *.mjs | LC_ALL=C sort -k2 | sha256sum)` ＝ `3e0eca7fce7e105f8e2f0fc64111a673dbb887386c55011e14eaa70f752ee132`（E-273 的 `67f23cd8…` 無法用已知命令重現，所以此處改記明確命令；本機工作樹 src 有他人未提交的改動，我沒有動）。與 E-273 目錄相比只有 `layout.mjs`、`selfplay-shadow.mjs` 兩檔不同，兩者都不在 `selfplay-match.mjs` 的 import 閉包內（17 檔：deck、discard-model、draw-risk、effect-state、egg-guard、matchup-objective、mechanics、mulligan-matchup、opponent-prior、selfplay、selfplay-dominance、selfplay-encode、selfplay-match、selfplay-net、selfplay-search、sim、sim-version）。5090 煙霧測試（2 局 look2、dh）sim 回報 b31012f48995，A 也是在該 sim 訓練。
+  - 5090：`~/side_projects/jev-hearthstone-headroom-020-20261029`（E-273 目錄複本，清空 out/，補上 0.2.0 的 json／pt 與兩個 src 檔）。命令（專案根）：`mkdir -p out && WORKERS=5 setsid nohup nice -n 10 bash runtime/headroom-020-20261029/run.sh > out/run.log 2>&1 < /dev/null &`（5090 負載 load average 約 57／20 核，故 workers 5）。
+  - 程式（`runtime/headroom-020-20261029/`，本機與 5090 sha256 相同）：`run.sh` `a313b46b712aaaea46a1efd97771c865f9ee78bec4bd9aca4358561b8676b8c9`（與 E-273 的 run.sh 只差註解、A 的路徑、cd 後備路徑）；`analyze.mjs` `c6855d9beb5e6e9a307be5b3d96db6f29131e72a05affb2b532d4ecf9a23b3be`（與 E-273 邏輯相同，只多 `--label` 參數取代寫死的標題）；`sanity.mjs` `c3c31911137aa1b347fa347e3291be5c0fdd3a13b46eb45cd4da5ce684667fa1`（新寫，見健全性檢查）；`paired.mjs` `f3959a2681ff58b868058ac4936fb91084bf675d0c8f6836670ede9fd8c70cab`（新寫，見配對比較）。
+- 判定規則（與 E-273 逐字相同，以三對手合計 12000 局的 look−plain 為準，另列各對手）：
+  - 有空間：look 與 plain 的 Wilson 95% 區間不重疊**且**差 ≥ 5 分 → 下一步做搜尋蒸餾（`train/ppo.py --distill`）。
+  - 到頂：差 < 2 分，或區間重疊 → 力氣放到實戰（不做蒸餾）。
+  - 待定：其餘（區間不重疊但差在 2–5 分）。
+  - 各對手不一致時照實寫，不改規則。look2 只當輔助，不進判定。
+- 配對比較（`paired.mjs`，**輔助，不進 zone 判定**）：與 E-273 的 v9 同 seed 同 sim 同對手，E-273 的數字：plain egg 1964、zakajz 1924、dh 2007（合計 5895／12000）；look 2147、2170、2090（6407）；look2 1881、2162、2030（6073）。報告：(a) 0.2.0 plain − v9 plain；(b) (0.2.0 look−plain) − (v9 look−plain)，另列 look2 版；各對手與合計。區間＝差 ± 1.96 × √(四個二項變異相加)，把四個計數當獨立（同 net 的 plain 與 look 共用牌局，所以對 (b) 偏保守）；另列 48 格（3 對手 × 8 run × 2 座位，每格 250 局）配對差的平均與 SE（sd/√48）當交叉檢查。區間不含 0 才寫「0.2.0 與 v9 不同」，含 0 寫「看不出差異」，不引申。兩個網路的 policy 不同，牌局在第一個不同動作之後就分岔，所以「配對」只是共用起始牌序與抽牌，不是逐步對照。
+- 健全性檢查（跑完先做，`sanity.mjs`）：不能再要求 plain 勝場等於 E-273（policy 已經換了）。改查全部 72 個 run 檔：有 `--json` 行；A 路徑＝warlock-zoo-0.2.0.json、B 路徑與牌組與 guard 符合上表；seed ＝ 基底＋250k；sim ＝ b31012f48995；兩個座位各 250 局且 a＋b＋平手＝局數；`look` 欄 plain 為空、其餘為 `a`；表頭有 `+look`／`+look2` 標記且 plain 沒有。另記平手與截斷總數（不設門檻，照實寫）。任一項不符 → 結果不解讀，先查。
+- 已知限制：(1) look 靠 0.2.0 自己的 value 頭排序候選，value 頭好壞直接決定 look 的結果（E-275 已示範 value 頭不好時 look 會大幅掉分）；(2) 0.2.0 的 policy 與 v9 不同，所以 look−plain 的變化不能分開歸因到「policy 吸收了前瞻」或「value 頭變好／變壞」，只能說合起來的結果；(3) plain 勝率本身不是強度證據（R-007）：E-271 的訓練對手池含 egg 0.1.0 與 dh-long，這兩個對手上的 plain 勝率是樣本內（dh-long 與本實驗的 `dh-long-E254.json` 是否同一檔我沒有核對）；zakajz-v1 不在池中；(4) 對手是貪婪、不是人類，結論只對這三個對手成立；(5) 結果看過後不挑參數重跑當證據（L-026），zone 只依上面規則判；(6) 不訓練、不改模型、不 commit。
+- 結果：（待填）
+- 結論：（待填）
+- 相關：E-273、E-275、E-271、E-272、E-255、R-151、F-874、F-877、F-875、L-026、L-046、L-047、L-059
+- 來源：2026-10-29 派工 role-audit 式診斷（用 zoo 0.2.0 重量規劃 headroom）
+- 預註冊 sha256（本條 `### E-277` 到「來源」行，換行正規化成 LF、UTF-8、行尾有換行）：`23ed0d819636ac415ce907efc566b8664a6a35292ec5843f58fcaa0e2a39f8a9`，開跑前凍結。
+- **結果補記（2026-10-29，預註冊凍結後；上面「結果／結論：（待填）」兩行保留不改）**
+  - 執行：5090 `~/side_projects/jev-hearthstone-headroom-020-20261029`，`bash runtime/headroom-020-20261029/run.sh`（WORKERS=5、nice 10、setsid nohup），72 個 job，08:42:35 開跑、09:45:16 `out/DONE`，約 63 分；`out/`（75 檔）已複製回本機 `runtime/headroom-020-20261029/out/`。5090 與本機逐檔 sha256 相同。
+  - 腳本 sha256：`run.sh` a313b46b712aaaea46a1efd97771c865f9ee78bec4bd9aca4358561b8676b8c9；`analyze.mjs` c6855d9beb5e6e9a307be5b3d96db6f29131e72a05affb2b532d4ecf9a23b3be；`sanity.mjs` c3c31911137aa1b347fa347e3291be5c0fdd3a13b46eb45cd4da5ce684667fa1；`paired.mjs` f3959a2681ff58b868058ac4936fb91084bf675d0c8f6836670ede9fd8c70cab；`result.md` 38b91a2f10d69abb04ead50f8c8eac5ef7036b3403869189a758595f7bc3681e；`paired.txt` 4355812352cded92612d6cfe3f706fce0c36610e61de9fc188c1c9b1700a137d。
+  - 健全性：72/72 檔通過（`--json` 行、A/B 路徑、牌組、guard、seed＝base+250k、sim b31012f48995、2 個先後手×250 局、a+b+平手＝局數、look 旗標與標頭 +look／+look2 標記）。共 36000 局，平手 0、被截斷 0。
+  - 結果（0.2.0 勝場／4000，Wilson 95%；look−plain 為 Newcombe 區間）：
+
+| 對手 | plain | look | look−plain | look2 | look2−plain |
+|---|---|---|---|---|---|
+| egg 0.1.0 | 2333（58.3%，56.8–59.8） | 237（5.9%，5.2–6.7） | −52.4（−54.1…−50.7） | 1768（44.2%，42.7–45.7） | −14.1（−16.3…−11.9） |
+| zakajz-v1 | 2192（54.8%，53.3–56.3） | 1589（39.7%，38.2–41.3） | −15.1（−17.2…−12.9） | 2173（54.3%，52.8–55.9） | −0.5（−2.7…+1.7） |
+| dh-long-E254 | 2109（52.7%，51.2–54.3） | 228（5.7%，5.0–6.5） | −47.0（−48.7…−45.3） | 1776（44.4%，42.9–45.9） | −8.3（−10.5…−6.1） |
+| 合計（12000） | 6634（55.3%，54.4–56.2） | 2054（17.1%，16.5–17.8） | −38.2（−39.3…−37.0） | 5717（47.6%，46.7–48.5） | −7.6（−8.9…−6.4） |
+
+  - 判定（預註冊規則，合計 look−plain）：**到頂**（−38.2 分，三個對手的 look 都遠低於 plain）。
+  - 與 E-273 的 v9 配對（`paired.txt`，差值 95% 區間用四個二項變異相加，偏保守）：plain 0.2.0 − v9 合計 +6.2（+4.9…+7.4；egg +9.2、zakajz +6.7、dh +2.5）；(look−plain) 0.2.0 − v9 合計 −42.4（−44.1…−40.7）；(look2−plain) 合計 −9.1（−10.9…−7.3）。48 格配對平均 +6.2／−42.4／−9.1，SE 0.63／2.52／0.67，結論相同。plain 的 egg、dh 對手在 E-271 訓練池裡（樣本內），zakajz-v1 不在池內。
+  - 怎麼讀（不要過度推論）：E-273 的 v9 +4.3 分「待定」沒有被這次解開。0.2.0 的 look 是靠它自己的 value 頭排序，而且崩得很一致（egg／dh 剩約 6%），形狀和 E-275 的壞 value 頭一樣，較可能是 0.2.0 的 value 頭在前瞻狀態上校準失準，而不是「搜尋沒有空間」；這次沒有量 value 校準，所以這只是待驗證的解釋，不是結論。能確定的只有兩點：(1) 預註冊判定為到頂；(2) 0.2.0 plain 比 v9 plain 高 +6.2 分，但 look 用起來比 v9 差很多，E-271 沒有把 look 的 +4.3 吸收進 policy 的證據。
+  - 未做：沒有量 0.2.0 value 頭校準；沒有改任何模型或 `src/`；沒有訓練；沒有 commit／push。
+- 後續（2026-10-29 lead）：「到頂」較可能是量錯東西：搜尋端從對手座位用 0.2.0 自己的 value 估值，而 0.2.0 經 405 輪 `--opp` 訓練已不會估對手座位（F-882，本機 60 局重現：0.2.0 look 4/60、v10 look 33/60）。E-273 的 +4.3 待定維持。
+
+### E-278
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：zoo 0.2.0（R-151，E-271 B 臂，iter 2255）用 E-271 B 的配方（搜尋蒸餾 λ＝0.1）再續訓 150 輪，還有進步空間。預期對 egg 0.1.0 ＋1 至 ＋3 分、對 zakajz-v1 ＋1 至 ＋2 分（相對 0.2.0 本身，同 seed 新抽樣）；D 臂（前瞻的對手回應網路換成 0.2.0 本身）不比 C 臂（沿用 v10）差。
+- 設定：5090 `~/side_projects/jev-hearthstone-distill-020-20261029`，`runtime/distill-020-20261029/run.sh`（本機與 5090 同一份）。起點 `ppo/start-0.2.0.pt`（＝`models/selfplay/warlock-zoo-0.2.0.pt`，`--resume`，檢查點內帶的對手沿用，所以不加 `--opp-fresh`）。兩臂皆 150 輪、9 workers、牌組 `warlock-zakajz priest-egg-hsr shaman-cthun warlock-zoo dh-cthun`、MIXB `--mix 0.5 0.1818 0.1818 0.1364`、`--mirror 0.15 --timers --swap`、`--eval-every 10 --eval-games 256 --keep-every 10`、蒸餾 `--distill-weight 0.1 --distill-frac 0.1 --search 12 --depth 2 --expand 4 --replies 1 --tau 0.01`、對手 `--opp priest-egg-hsr=priest-egg-0.1.0.pt shaman-cthun=ppo/shaman-P.pt warlock-zoo=warlock-zoo-v9.pt dh-cthun=ppo/dh-long.pt --opp-lr 1e-4 --opp-refresh 5 --opp-pool 4`。
+  - C 臂：純續訓，`--reply warlock-zoo-v10.json`，seed 50。D 臂：同 C，但 `--reply eval/V020.json`（0.2.0 的 json），seed 51。
+  - 流程：smoke（1 輪、2 workers、seed 1）→ 等 E-274（`~/side_projects/jev-hearthstone-shape-20261029/runtime/shape-20261029/` 出現 DONE 或 FAILED，期間不開正式訓練、不佔其 GPU）→ C、D 平行 → 匯出 → 挑臂評測 → 判定 → `DONE`。任一步失敗寫 `FAILED` 並結束。
+  - 挑臂（腳本內，不人工）：seed 1、每座位 1000 局，V020、C、D 各打 egg010（guard egg）、shaman-P、DH、zakajz-v1；取 (C 或 D 的勝率 − V020 的勝率) 在這四個對手上的總和較大者送判定，平手送 C。只判定一臂，所以沒有多臂比較。
+  - 判定：`src/selfplay-compare.mjs --base <V020 的 8 個 run> --cand <被挑臂的 8 個 run>`，每對手 8 seeds × 250 局 × 2 座位。seed 清單（run k＝0..7）：5000001、5250001、5500001、5750001、6000001、6250001、6500001、6750001（每對手共用，間隔 250000，遠大於局數，符合 L-047；E-271 用 250001＋250k、E-272 7000000／1000001、E-274 1200001、E-273／E-275／E-277 900001–981751，皆不重疊）。對手 egg010（`--guard egg`，用 `--beat`）；shaman-P、DH、zakajz-v1、鏡像（對手為 V020 本身，牌組 warlock-zakajz）用 `--max-drop 1.5`。輸出 `judge/compare-{egg,shaman,dh,zakajz,mirror}.txt`。
+  - 凍結的 sha256：run.sh `454e68a6bd9e9eeff4bbd6ad3ac5d4548499a985dd8e56bda428194575733ec8`；`train/ppo.py` `6b5d3eba1b2740b7299693e5b803bd747cd584caa455dff8f2fa2f4041911eb6`；起點 `warlock-zoo-0.2.0.pt` `cfc19f4f3386aee6324b8d12080a298f6f95a01ba5bff5a2c1dadebd4c4ec64a`（json `0de0e2e0bc0a75f186e17a6a3e34adaa6077808b1afccbf666e0537db706e0fa`，即 `eval/V020.json`）；reply `warlock-zoo-v10.json` `b0a77f4ac58b0e3b6323b399d6ce84b455cb68c8afde570ea8071b13c795569a`；對手 `priest-egg-0.1.0.pt` `e2186655bdbbf1d18705173d34619c1d417e22c8954a22853bcb0cadfb0e8190`、`ppo/shaman-P.pt` `069a42550902edc2c7d565d850e118c1abefcbd5f99f862c8bd542ea84e55dfd`、`ppo/dh-long.pt` `7018deff896db7c7b0a0004c6b2db28004c5565ee7056e9b2ae39a972a72c538`、`warlock-zoo-v9.pt` `d859beb89e666914f4b389b7a44bdc464d94c8664fa6b3ff28f4f50477b7ff08`；評測用 json：`priest-egg-0.1.0.json` `c3f906441e889611dc1eee9ac33d44daf25a1ca3b57771659907642ffba803b2`、`warlock-zakajz-v1.json` `73ac2d59cfddf3a8fef6f3156ad396055a180836f4b83bfffcab963d2eb9963b`、`shaman-P.json` `6567eef9ff116f7cbe9f77b7340292f3682aa8fdd1780544d9a0e0fc87f3837d`、`DH.json` `91b6c6e562190c3dd71ae0a53506f11ef7e41ca2723442a3ee7b1adba5753e6b`。
+  - 模擬器：b31012f48995（G2；本機與 5090 的整個 src／test／train／data／decks／models 405 檔逐檔 sha256 相同）。
+- 判定規則（預註冊）：被挑臂在全新 seed 上同時 PASS egg010 `--beat`，以及 shaman、dh、zakajz、鏡像四項 `--max-drop 1.5` → 成為 zoo 0.2.1 候選（版本號由使用者定，R-144：實驗不佔版本號）。否則不採用，並記為「0.2.0 在這個配方下已飽和」的證據。沒被挑中的臂只記 pick 階段數字，不補判定。
+- 已知限制：(1) 本機工作樹是他人未提交改動較多的版本，與 E-271 用的 egg-pile 樹的差異只有選用旗標（`--shape-final`、`--distill-info`、`--value-only`、pile／info／names 環境變數、contentBox 實戰改動），本實驗沒用到，預設行為不變，但仍不是逐字同一棵樹；(2) 原派工說明同時寫「seed 250001＋250k」與清單 5000001…6750001，這裡採明確清單；(3) 起點檢查點內的對手（egg 0.1.0 等）沿用，本實驗不重設對手池；(4) 5090 同時還有 E-277 headroom 等他人的工作在共用 CPU，只影響耗時，不影響判定；(5) 挑臂用 seed 1 的 pick 評測，判定用的全新 seed 與它無交集，但兩者都是 0.2.0 的鄰近樣本，不當獨立證據。
+- 結果：（待填）
+- 結論：（待填）
+- 相關：E-271、E-273、E-274、E-277、R-151、R-144、L-026、L-045、L-046、L-047、L-059
+- 來源：2026-10-29 派工（zoo 0.2.0 搜尋蒸餾續訓）
+- 預註冊 sha256（本條 `### E-278` 到「來源」行，換行正規化成 LF、UTF-8、行尾有換行）：`3d47dfb02eb102c0da95a2a5d713459c871eba4c69d68c8db914985e845c3c55`，開跑前凍結。
+
+### E-279
+- 日期：2026-10-29
+- 假設：F-881（zoo 0.2.0 後手 T1 硬幣＋Tachyon Barrage 打空場）是模擬器錯、或自我對弈常見的壞習慣。
+- 設定：腳本 `runtime/f881/freq.mjs`、`live.mjs`、`branch.mjs`（gitignored）。(a) 以 0.2.0 對 egg 0.1.0 與 zakajz 鏡像各 1000 局貪婪自我對弈，記錄回合 ≤4、對手場上無隨從時打 Tachyon 的次數與該局面 Tachyon 機率；(b) 用 shadowView 重建實戰局面（含對手 publicPlays 的 Ritual of C'Thun 計時）；(c) sim 分支：Coin+Tachyon／Coin+Life Tap／hold／網路自選，各 300 局。
+- 結果：(a) 早期空場 Tachyon 0 次（vs egg）與 2 次（鏡像），無 Coin+Tachyon 組合；該類局面 Tachyon 平均機率 0.7–0.9%。(b) 重建局面 Coin 後 Tachyon 0.454、Life Tap 約 0.50（實戰記錄 0.525／0.442）；拿掉對手 Ritual 計時則變 Life Tap 0.82／Tachyon 0.16。手牌偏弱（2 張死牌 Floating Lessons、Kazakus 3 費、Blasphemy 4 費）。(c) 勝場 tach 22／tap 23／hold 31／model 25（各 300），差距在雜訊內，且打補丁後手牌勝率遠低於未補丁基線（133／300），分支的絕對值不可信。
+- 結論：不是 sim 錯（Tachyon 6 點單點隨機打擊、Shreds 洗入、抽到 Shred 受 3 點全建模正確）。是 policy 在 Life Tap 與 Tachyon 間的邊緣選擇，被對手 T1 儀式計時編碼加弱手牌推到 Tachyon 側；自我對弈中罕見（約 0–0.2%）。sim 勝率比較無結論。
+- 相關：F-881、E-276、R-151
+- 來源：2026-10-29 子代理查 F-881
+
+### E-280
+- 日期：2026-10-29（預註冊，大規模跑之前凍結；試點數字在下方，已看過）
+- 假設：F-881（zoo 0.2.0 後手 T1 打硬幣＋Tachyon Barrage 進空場）是錯招，即在「沒有別的牌可出」的局面，硬幣＋Tachyon 的勝率比不打 Tachyon 的最佳替代低。E-279(c) 的勝率比較不可信（樣本小、單一局面、沒有成對）。預期：替代線贏，差距數個百分點。
+- 設計修正（相對派工原稿，看過試點後）：派工原稿要在「所有自然局面」上池化比較 Tachyon 與最佳替代。試點顯示這會量錯問題：0.2.0 自己在自然局面只有約 2% 會打 Tachyon（17／864 個局面），絕大多數局面都有真正的替代出牌（下隨從），強迫打 Tachyon 在全體局面平均輸約 19 分（試點 2592 次推演，T−N −18.8 [−21.1, −16.5]，每對手等權 −21.0），那不是 F-881 的問題。F-881 的情境是「最佳非 Tachyon 線什麼牌都不出」。所以主要母體改成 DRY（定義見下），全體池化與「網路自己選 Tachyon」改列次要。
+- 設定：腳本 `runtime/f881/{lib,run,analyze,live}.mjs`（gitignored，本機與 5090 同一份），5090 `~/side_projects/jev-hearthstone-f881-20261029`（輸出 `out/`），模擬器 b31012f48995（本機與 5090 相同）。
+  - 局面來源：zoo 0.2.0（牌組 warlock-zakajz，貪婪）對 5 個對手各自打自我對弈，種子 `700000+g`，g 偶數 zoo 先手、奇數後手。對手：egg010（`priest-egg-0.1.0.json`，牌組 priest-egg-hsr，加 eggGuard）、dh（`DH.json`，dh-cthun）、shaman（`shaman-P.json`，shaman-cthun）、zakajz（`warlock-zakajz-v1.json`，warlock-zakajz）、mirror（zoo 0.2.0 本身，warlock-zakajz）。局數與 g 範圍：egg010 兩個分片各 8000（100000–107999、108000–115999），dh／zakajz／mirror／shaman 各 20000（100000–119999）。試點用 g<1200，所以主跑不重疊。
+  - 合格局面：zoo 自己回合的第一個決策點、自己第 1–3 個回合、無待選擇、對手場上沒有隨從、Tachyon 可打（含先用硬幣的情況）。記錄對手儀式計時（`ritual`，0＝沒有）、`needCoin`、`ownTurn`、`first`（1＝zoo 先手）。
+  - 成對臂（同一局面、同一組重洗後的狀態，之後雙方網路皆貪婪、maxSteps 1500，勝 1、平手或截斷 0.5）：T＝強迫（需要時先打硬幣，再）Tachyon，之後走策略；N＝這回合把 Tachyon 遮掉的策略最佳線；H＝這回合把 Tachyon 與硬幣都遮掉（即「留著硬幣結束回合」，可能先 Life Tap）；O＝不干預的策略（用來核對基準）。
+  - 推演次數：r＝0 是未重洗的實際局面（O 臂必須等於實際對局結果，作為重現檢查，不進統計）；r≥1 是重洗雙方牌庫與對手手牌的 determinization（新種子，四臂共用）。DRY 局面 R＝24（r＝1..23 進統計），其他局面 R＝2（只有 r＝1）。
+  - DRY 定義：r＝0 狀態下 N 臂那條線除了「The Coin」「英雄能力 Life Tap」「結束回合」外沒有出任何牌。netTach：O 臂在 r＝0 打了 Tachyon。
+  - 實戰局面：後手、全局回合 2、1/1 水晶，手牌 Godfather Kazakus、Floating Lessons×2、Tachyon Barrage、The Coin、Blasphemy，牌庫 25，對手 Warlock zakajz 手牌 3 牌庫 26、已打 Ritual of C'Thun（剩 2）。以 `runtime/ranked-2026-10-29T00-40-05-730Z/game-0001*` 用 shadowView 重建，對手隱藏手牌與牌庫從牌表減去已知牌後重抽 2000 次，對手網路分別用 zoo 0.2.0 與 warlock-zakajz-v1。基準核對：O 臂必須重現實際打法（Coin＋Tachyon）；另跑對照「同一機制、我方手牌換成全牌表隨機 5 張」，其 O 勝率要落在自然局面同母體附近，若偏離大就判重建有誤、丟掉實戰結果。實戰局面只描述，不做判定規則。
+- 統計：每個推演的成對差 d＝T−替代；信賴區間用以「整局」為單位的 cluster bootstrap（比率估計，4000 次重抽，95%）。主要比較的「最佳替代」＝N 與 H 兩臂中，在 DRY 母體上全體平均較高的一個（池化後只選一次，不逐推演取最大，避免選擇偏誤）；同時回報 T−N 與 T−H。
+- 判定規則（預註冊，只套用在主要母體 DRY、池化）：「錯招」＝T−最佳替代 < −1.0 個百分點，且 95% CI 完全在 0 以下；「沒問題或更好」＝95% CI 完全在 −1.0 個百分點以上；其餘「無結論」。次要回報（不做判定）：全體局面池化、NET-CHOOSES（r＝0 時策略自己打 Tachyon 的局面）、依對手／儀式計時／needCoin／ownTurn／先後手分層、每對手等權平均、live-like（後手 T1 需要硬幣）、實戰局面。
+- 樣本量：試點 DRY 只有 57 個局面、每個 3 次推演，T−H −7.6 [−16.1, 1.1]，SE 4.3；其中絕大部分變異是推演內抽樣（每局面 3 次），改成每局面 23 次後預計約 800 個 DRY 局面可達 ±2 個百分點。DRY 出現率試點（每 1200 局）：egg010 31、dh 10、mirror 7、zakajz 7、shaman 2，所以上面的局數預期 DRY 約 egg010 400、dh 170、mirror 120、zakajz 120、shaman 35，合計約 850。若第一輪 DRY 池化 CI 半寬 > 2.0 個百分點，追加一輪同樣大小、g 從 200000 起的局數（事先寫定，不看符號）；只追加一次。
+- 試點（g<1200 每對手，看過）：全體局面 T−N −18.8 [−21.1, −16.5]（等權 −21.0）；DRY T−N −7.0 [−14.3, 0.6]，T−H −7.6 [−16.1, 1.1]（57 局面，無結論）；O 臂平均 52.7 對實際 52.3，策略臂基準合理；NET-CHOOSES 只佔約 2% 局面。實戰局面 smoke（n＝40）與完整 2000 次（對 zoo 0.2.0：T 0.8、N 2.3、H 13.7；對 zakajz-v1：T 2.1、N 3.9、H 13.8；單位百分點）在看到主跑結果前已看過，不用來調整判定規則。
+- 已知限制：(1) 對手都是自我對弈網路，不是真人；(2) 後續全是貪婪策略，不含搜尋；(3) 「最佳替代」是策略下的 N 與 H 兩條，沒有窮舉所有出牌序列；(4) DRY 以 r＝0 的 N 線分類，換成別種分類（例如 H 優於 N 才算）會改變母體；(5) 實戰局面手牌極弱（勝率 1–14%），差距的絕對大小不代表一般局面。
+- 結果（2026-10-29，主跑完成；5090 輸出 `~/side_projects/jev-hearthstone-f881-20261029/out/main-*.jsonl`，本機副本 `runtime/f881/main/`，彙整 `analysis.txt`（替代=N）與 `analysis-H.txt`（替代=H）；38147 次推演、14475 個局面、10268 局，cut=0）：
+  - **主要（DRY 池化，預註冊）**：1076 個局面／1056 局／24748 次推演。T 35.8、N 43.1、H 43.8、O 42.8。最佳替代＝H（留硬幣結束回合；H 平均較高，池化只選一次）。**T−H −8.0 [−8.9, −7.1]**，T−N −7.3 [−8.1, −6.5]（單位百分點）。CI 半寬 0.9 < 2.0，不觸發追加一輪。
+  - DRY 分層 T−H：對手 dh −10.8 [−12.3, −9.1]（288）、egg010 −7.3 [−8.7, −5.9]（402）、mirror −6.3 [−8.3, −4.4]（180）、zakajz −5.1 [−7.0, −3.1]（174）、shaman −18.2 [−23.1, −13.5]（僅 32 個局面）。needCoin=true（後手 T1，與 F-881 同情境）−11.2 [−12.8, −9.6]（300 局面，T 25.1 對 H 36.3）；needCoin=false −6.8 [−7.8, −5.8]。ownTurn 1／2／3：−11.2／−6.7／−9.9。儀式計時 0／1／2：−9.1 [−10.1, −8.1]／−4.3 [−9.0, 0.1]（32 局面，唯一 CI 碰到 0 的格）／−4.9 [−6.7, −3.1]。DRY 且 net 自己會打 Tachyon（131 局面）：−2.9 [−5.4, −0.3]。非 DRY：−13.9 [−14.9, −13.0]。
+  - 次要（不做判定）：全體池化 T−H −10.1 [−10.7, −9.4]、T−N −10.8 [−11.5, −10.2]、每對手等權 −11.2 [−12.1, −10.2]；T 34.5 對 N 45.3、H 44.6、O 45.2。全體分層每格 CI 皆在 0 以下（對手 −9.0～−16.3；先手／後手 −10.5／−9.8；live-like（後手 T1 需要硬幣）4791 局面 −11.1 [−12.2, −10.0]）。NET-CHOOSES（r＝0 時策略自己打 Tachyon，361 局面／3243 次推演）：T 44.8 對 H 47.4，**T−H −2.6 [−5.1, −0.1]**；也是負的，但幅度小、CI 貼近 0（其中 needCoin=true 只有 3 個局面，shaman 1 個）。
+  - 基準核對：O 臂平均 45.2 對實際對局 46.1（per rollout，n＝38147），差 0.9，合理。
+  - 實戰局面（後手 T1，手牌 Kazakus、Floating Lessons×2、Tachyon Barrage、Coin、Blasphemy；對手隱藏資訊重抽 2000 次）：對手網路 zoo 0.2.0：T 0.8±0.4、N 2.3±0.7、**H 13.7±1.5**，O 0.8（T−H −12.9±1.5）；對手網路 zakajz-v1：T 2.1±0.6、N 3.9±0.8、**H 13.8±1.5**，O 2.1（T−H −11.7±1.6）。O 臂重現實際打法（Coin＋Tachyon）。核對：同機制、我方手牌換隨機 5 張（smoke，n＝44）O＝36.4，落在自然局面同母體附近，所以重建沒有錯；這手牌本身就極弱（任何打法 1–14%），留硬幣（先 Life Tap 或空過）是三條裡最好。
+  - 異常／要注意：(1) shaman DRY 只有 32 個局面，該格不可靠；(2) NET-CHOOSES 的 needCoin=true 只有 3 個局面；(3) 實戰局面勝率太低，絕對差距不能推到一般局面；(4) 5090 輸出檔跑完才寫出（Node 寫入串流在同步迴圈中不 flush），所以沒有中途進度可看。
+- 結論：**錯招**（依預註冊規則：DRY 池化 T−最佳替代 −8.0 [−8.9, −7.1]，< −1.0 且 CI 全在 0 以下；對 N、H 單獨也都是錯招）。在「對手場上沒有隨從且最佳非 Tachyon 線什麼牌都不出」的局面，打 Tachyon（需要時先花硬幣）平均比留著硬幣結束回合少贏約 8 個百分點，後手 T1（與 F-881 同情境）約 11 個百分點；對 5 個對手方向一致，唯一 CI 碰到 0 的是儀式計時＝1 的小格（32 局面）。實戰局面的重建也一致（H 13.7／13.8 對 T 0.8／2.1）。F-881 的「浪費硬幣和一張解場牌」成立，是 policy 的真錯，不是 sim 錯（E-279）。幅度需要區分：net 平常只有約 2% 的局面會打 Tachyon；它在「自己選了 Tachyon」的局面平均只虧 2.6 [−5.1, −0.1]（邊緣但仍為負），強迫打 Tachyon 在全體局面則虧 10～19 點（那不是 F-881 的問題）。本實驗不決定怎麼修（net-guards 規則或訓練覆蓋是 role-lead 的事）；一個線索：留硬幣 H 在 DRY 和實戰局面都不輸「N 的線」（Life Tap 後空過），DRY 上 H 43.8 對 N 43.1。限制見上（對手是自我對弈網路、貪婪後續、替代只有 N／H 兩條）。
+- 相關：F-881、E-279、R-151
+- 來源：2026-10-29 子代理查 F-881（第二輪：成對推演）
+- 預註冊 sha256（本條 `### E-280` 到「來源」行，換行正規化成 LF、UTF-8、行尾有換行）：`40e984c98ce394eb045fcb60e162eeff3543ef13eff9cf94133d89b556c6ebfe`，開跑前凍結。
+
+### E-281
+- 日期：2026-10-29
+- 假設：warlock-zakajz 用 zoo 0.2.0 駕駛時，學出來的起手留牌表比現行規則（`src/policy.mjs` 的 mulligan，模擬裡用 `oldPolicy`）勝率高；使用者的直覺規則（沒核心牌就全換、有核心才留搭配或 1 費手下）也一併比較。核心＝Ritual of C'Thun、Ritual of Summoning、Godfather Kazakus。
+- 設定：程式 `src/selfplay-mulligan.mjs`（`withMulligan` 在 `newGame` 之後換牌，在 sim 版本範圍外，sim 仍 b31012f48995；策略 all／old／random／hunt0／hunt1／hunt2／hunt1c／表格檔）、`train/mulligan-rows.mjs`、`train/fit_mulligan.py`，測試 `test/selfplay-mulligan.test.mjs`。實驗目錄 `runtime/mulligan-20261029/`（explore.mjs 平行跑、make-jobs.mjs、paired.mjs 成對比較）。學習方 zoo 0.2.0（warlock-zakajz），五個對手：egg＝priest-egg-0.1.0（priest-egg-hsr，`--guard egg`）、shaman＝`runtime/value-fit-20261029/eval/shaman-P.json`（shaman-cthun）、dh＝`dh-long-E254.json`（dh-cthun）、zakajz＝warlock-zakajz-v1、mirror＝0.2.0 自己。本機 6 個低優先、無視窗子程序（5090 當時超載）。
+  1. 探索：random 策略（每張 p＝0.5 留），seed 11000001 起，100k 局（每對手 20k、兩座位各半）→ `explore/`、`rows-explore.jsonl`。
+  2. 擬合：L2 logistic，結果對「留了什麼」特徵（k:牌、k:牌|先後手、k:牌|有無核心、dup:牌、nkept、ncore），控制「發到什麼」與對手×座位；和局算半勝；每對手等權。seed%10＝0 留出。C∈{0.01,0.03,0.1,0.3,1}。`tablePolicy` 枚舉手牌所有子集取分數最高者。
+  3. 挑選：seed 12000001 起，每策略 10k 局，與 old 成對（同 seed、同座位；留牌相同就是同一局）。
+  4. 終測：全新 seed 13000001／13000501／13001001／13001501，每對手每座位 500×4，每臂 20k 局；再用 `src/selfplay-compare.mjs`（蛋牧帶 `--beat`）。
+  5. 蛋牧追加：只用蛋牧局擬合（`--opp priest-egg-hsr`，`fit-egg/`），挑選 seed 12000001–12001000，終測全新 seed 14000001 起每臂 4000 局（`final-egg/`）。
+- 結果：
+  - 擬合（C＝0.01）：留出 log loss 只控制 0.63730 → 加留牌特徵 0.63228。正權重：Ritual of Summoning、第二張 Ritual of C'Thun、Kazakus、ncore:2、Timehopper、Floating Lessons、Platysaur；負權重：Vaultkeeper、Velocidrake、Egg、Tachyon Barrage、Blasphemy、Glacial Shard、Mawman、Catacombs，以及重複的 Shard／Velocidrake／Neophyte。
+  - 挑選（對 old 成對，95% CI）：table-C0.01 +1.76（0.89–2.63）、C1.0 +1.74、C0.1 +1.73；hunt0 +0.26、hunt1 0.00、hunt2 −0.22、hunt1c −0.31；全留 −4.94。選 C0.01。
+  - 終測（每臂 20k）：表格 66.30% 對 old 64.33%，成對 **+1.97（1.35–2.59）**，不一致局 +2231／−1837。compare 每對手 4000 局：egg 63.9→62.9（−0.9，`--beat` FAIL）、shaman 85.0→87.8（+2.9 PASS）、dh 58.1→60.5（+2.3 PASS）、zakajz 60.0→62.1（+2.1 PASS）、mirror 54.7→58.1（+3.5 PASS）。後手的進步大於先手（例 mirror 先 +2.50／後 +4.40）。
+  - 蛋牧追加：蛋牧專用擬合 0.68182→0.68034；挑選 egg-C0.01 +0.20、C0.03 −0.55、通用表 −0.75；全新 seed 終測 old 63.10%、通用表 63.98%（+0.88，−0.58–2.33）、蛋牧表 64.00%（+0.90，−0.46–2.26），兩者 `--beat` 都 FAIL（下界 62.5% 不高於 63.1%）。兩輪全新 seed 合起來對蛋牧約 0。
+  - 表格行為（8000 手）：平均留 1.31 張（old 2.18）、全留 5%（old 21%）、全換 21%（old 5%）。必留三張核心、Timehopper、Floating Lessons；Platysaur 先手留、後手只在有核心時；Entropic Continuity 只在後手且有核心時；Zakajz 先手約一半；Shard、Egg、Mawman、Tachyon、Blasphemy、Velocidrake、Vaultkeeper、Catacombs 一律換。
+- 結論：目標達成。學出來的表對 0.2.0 整體 +1.97 分（CI 不含 0），四個對手 PASS，蛋牧中性。使用者的直覺規則與現行規則打平，沒有比較好。凍結成 `models/mulligan/warlock-zakajz-mulligan-0.1.0.json`（sha256 ca21bf76282cedd90e7726df65f06f49ca2761f8fb090a95955eba1f7472ae0d；2026-10-29 改名為 `models/mulligan/warlock-zoo-0.2.1.json`、加 name／note，sha256 b1d6532ad087b842a2f98835089c3fd65fa7bac2f7dcd04adbfe401660bdd3b0，權重不變，R-154；內容＝`runtime/mulligan-20261029/fit/table-C0.01.json` 的權重），測試鎖住幾手代表性選擇。蛋牧專用表沒有多的好處，只留一張通用表。尚未接到實戰（`src/policy.mjs` 沒改）。
+- 已知限制：只對 0.2.0 的打法擬合（換駕駛要重擬）；對手都是模擬網路；模擬勝率不等於實戰（F-784）；擬合是線性加交互作用，沒有更高階的組合。
+- 相關：F-883、R-152、R-151、L-046、L-047
+- 來源：2026-10-29 App（使用者要求訓練起手留牌）
+
+### E-282
+- 日期：2026-10-29
+- 假設：zoo 0.2.0（R-151）在 2560×1440 全螢幕下能穩定打 ranked 批次。
+- 設定：`JEV_DECK=warlock-zakajz JEV_FOLLOW_NET=1 JEV_OFFLINE=1 node runtime/ranked-continuous.mjs --games=50 --dismiss-results`，決策引擎 silverfish-v1-veto-audit-v1，目錄 `runtime/ranked-2026-10-29T01-08-43-637Z/`，log `runtime/ranked-zoo020-50.log`。之前兩次批次都在第 1 局停（L-062、L-063）。
+- 結果：21 局後因連敗 6 場停（six_consecutive_losses）：**9 勝 12 敗（42.9%）**。順序 W W L L W W W L W L L L W W W L L L L L L。每局 client 都是 2560x1440，「no change after」死點擊每局 0–2 次，沒有換牌失誤或座標停機；game-0002 0 個動作（對手提早投降）。
+- 結論：全螢幕下點擊正常（L-063 的修正有效）。勝率樣本太小（21 局），尾段 6 連敗原因未分析（對手職業、是否有 F-881 類錯招待查）。
+- 相關：R-151、E-276、E-280、L-063
+- 來源：2026-10-29 App（使用者「繼續五十場」）
+
+### E-283
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：使用者目標「shaping／蒸餾配方搜尋」第 2 輪。E-274 顯示終局 Φ shaping 是淨傷害，所以這輪拿掉 shaping，每臂相對對照組 E-271 A 只改一個變數：**I**＝`--distill-info`（抽牌／發現／暫時牌決策一律前瞻蒸餾）；**G**＝`--gamma 0.98`（預設 0.995，小幅勝速項，F-876 (c)）。預期至少一臂對 egg 0.1.0 顯著高於 A、其他對手不退步、[0.6,1) 高估縮小。
+- 設定：5090 `~/side_projects/jev-hearthstone-shape-20261029/runtime/shape-20261029/run-r2.sh`（sha256 31d274cc…2843dc9，本機同一份），輸出 `r2/`。其餘照 E-271 A：起點 start-A2105、seed 48、150 輪、各 9 workers、對手 egg 0.1.0 0.35／shaman-P／zoo-v9／dh-long、鏡像 0.15、λ0.1、search 12；模擬器 b31012f48995。順序：煙霧 → 等 E-278（另一 session）DONE／FAILED → 兩臂 → 匯出 → 挑選評估（seed 1）＋校準（seed 900001）→ `r2/DONE`。
+- 判定：`runtime/shape-20261029/judge-spec.md` 第 2 輪（seed 1300001＋1310001，每邊 4000 局；校準 seed 1350001，400 局），另開 session；候選 I、G，對照 A 同 seed 重量。
+- 結果：2026-10-29 14:05 開跑（煙霧中）。
+- 結論：（待填）
+- 相關：E-274、E-271、F-876、F-874、L-046、L-047
+- 來源：2026-10-29 App（使用者 /goal 配方搜尋）
+
+### E-284
+- 日期：2026-10-29（判定規則在終測開跑前寫定）
+- 假設：使用者認為對控制牌組（蛋牧）前期場面與搶血牌更重要；E-281 的蛋牧專用表沒贏是因為蛋牧資料只有 20k 局。補資料後專用表應贏過通用表（zoo 0.2.1 的表）。
+- 設定：探索 random 策略只打 egg（priest-egg-0.1.0，priest-egg-hsr，`--guard egg`），seed 15000001–15040000，每座位 1000×40＝80k 局（`runtime/mulligan-20261029/explore-egg/`），加 E-281 的 20k 蛋牧局共 100k（`rows-egg-all.jsonl`）。`train/fit_mulligan.py` C∈{0.003,0.01,0.03,0.1} → `fit-egg2/`。留出 log loss：只控制 0.66826 → 加留牌 0.66484（C0.01）。挑選 seed 16000001 起每臂 10k 局（`select-egg2/`）：專用表四個 C 對 old +1.78～+1.85，對通用表 +0.83～+0.90（C0.01 +0.87，0.12–1.62）；通用表對 old +0.95（0.03–1.87）。選 C0.01。
+- 專用表行為（8000 手）：每手留 1.62 張（通用 1.31）、全換 7%（通用 21%）；Mawman Cultist 幾乎都留（通用一律換）、Cult Neophyte 有核心就留、Glacial Shard 先手有核心時留、Zakajz 先手一律留；Tachyon、Blasphemy、Egg、Vaultkeeper 一樣全換。
+- 終測（預先寫定）：全新 seed 17000001–17010000，每座位 1000×10＝每臂 20k 局，臂＝old、通用表（`models/mulligan/warlock-zoo-0.2.1.json`）、專用表 C0.01（`final-egg2/`），`paired.mjs` 成對。**採用條件：專用表對通用表的成對差 95% 下界 > 0**；只跑這一次，不追加。採用時用法＝對手是牧師時換用專用表（留牌時已知對手職業）。
+- 結果：終測（每臂 20k，seed 17000001–17010000）：old 62.74%、通用表 63.48%（對 old +0.73，0.08–1.39）、專用表 63.63%（對 old +0.88，0.30–1.46）。**專用表對通用表 +0.14（−0.39 到 0.68）**，不一致局 +1531／−1502。
+- 結論：**不採用**（預先寫定的條件下界 > 0 沒過）。挑選階段的 +0.87 在全新 seed 縮到 +0.14，是贏家詛咒加雜訊。專用表多留前期手下（Mawman、Neophyte）在 0.2.0 手上和通用表差不多。附帶結果：通用表對蛋牧其實是小幅正的（本次 +0.73、E-281 第二輪 +0.88、挑選 +0.95），E-281 第一輪的 −0.9 是雜訊。zoo 0.2.1 維持一張通用表。
+- 相關：E-281、F-883、R-152、R-154
+- 來源：2026-10-29 App（使用者問蛋牧能否自己訓練）
+
+### E-285
+- 日期：2026-10-29
+- 假設：無（建置量測工具）。用來防止使用者判過的錯、與 E-280 量過的 F-881，在新模型上回來。
+- 設定：題庫 eval/regress/questions.json（65 題）＋ src/regress.mjs、src/regress-f881.mjs（npm run regress -- --deck <牌組> [--model <檔>] [--baseline <報告>]，或 --all-live；輸出在 runtime/regress/）、test/regress.test.mjs（只驗結構，不跑模型）。題只用來考試，不准進訓練。A 類＝錄到的實戰局面，叫牌組的網路選招（shadowView＋net.rank；還原狀態用錄檔重建的 parser 替身，沒有棄牌數、儀式／審判倒數、Shreds）；來源＝eval/positions.json 的 16 筆 ruling＋test/fixtures/user-rulings 的 fixture，全部是 warlock-discard 牌組，證據等級 user（使用者裁定，不是量測）。B 類＝F-881 類別（evidence measured，E-280 的 DRY 定義）：考試種子 EXAM_SEED_BASE＝1500000000＋g（不與訓練小種子、audit 700M、duel 800M、evaluate 900M+n、E-280 的 700000+g 重疊），eval/regress/f881-index.json 存 DRY 局面索引（zoo 404、zakajz 211，各自 8000 局建立；對手 priest-egg-0.1.0＋egg guard），重放約 3 秒。判分：pass／ok／fail＋最佳招機率質量；類別看 DRY 局面中貪婪線打 Tachyon 的比例（退步＝比基準高 >3 個百分點）。無法判的題標 unsupported 並寫原因，不算過。
+- 結果（基準檔 eval/regress/baseline-<模型>.json）：warlock-discard-v5：pass 32／ok 1／fail 23／unsupported 7（fail 全是 user 裁定：eval 3 筆＋fixtures 20 筆；其中多條實戰是靠 net-guards／規劃器擋下，不是原始網路選對，所以原始網路 fail 在預期內）。warlock-zoo-v9：F-881 53／404 DRY ＝ 13.1%，平均 P(Tachyon) 25.4%。warlock-zoo-0.2.0（牌組 warlock-zakajz）：23／211 ＝ 10.9%，平均 P 25.6%（E-280 在 700000+g 上量到 361／1076，局面集合不同、DRY 不同，數字不能互比）。priest-egg-0.1.0：0 題。unsupported 7 題：mulligan 決策 4（shadowView 對 MULLIGAN 回 null，實戰橋接不問網路留牌）、點擊層失誤 1（ranked22-mulligan-misfire）、無決策狀態 1（new50-forty-opening-counts 是 40 場開局統計表）、沒有標準答案 1（net-review:game15-t6）。保真度檢查：用重建 parser 對比 parsed＝null，總數相同，4 題的首選不同、其中 2 題結果翻轉，表示缺的資訊會影響少數題。
+- 結論：工具可用，基準已存。新候選必須用 --baseline 對現役模型的基準跑，已量測題（F-881）不得退步。注意：(1) 沒有 zoo／zakajz／priest-egg 的 A 類題（沒有錄到的局面）；(2) 不考留牌；(3) A 類答案全是 user 裁定、不是 measured，所以 fail 是要交主管判斷的警示，不是證實的退步；只有 F-881 是 measured；(4) rulings.md 裡描述了具體局面但沒錄到狀態的條目（例如 R-134～R-139 的 10/27 zoo 實戰）還不能成題。
+- 相關：F-881、E-280、R-153
+- 來源：2026-10-29 子代理（建題庫）
+
+### E-286
+- 日期：2026-10-29（預註冊，開跑前凍結）
+- 假設：**修過估值座位後重量 headroom（F-882）**。E-277 判 0.2.0「到頂」（look−plain −38.2），lead 認為較可能是量錯了東西：搜尋把「輪到對手」的局面交給被測網路的 value 頭，從對手座位估值再變號，而 0.2.0 經 405 輪 `--opp` 訓練只會估自己座位。這次加 `--own-value`：同一局面改從我方座位看（`seatView`），符號不變。問題：(i) 估值座位對了之後，0.2.0 的 look 是否不再崩，look−plain 回到 ≥ 0；(ii) v9 的 look−plain 是否仍為正（E-273 舊估值方式 +4.3，待定）；(iii) 兩個網路各自落在哪一區。
+- 設定：與 E-277（0.2.0）、E-273（v9）逐項相同（對手、牌組、seed、sim、look 參數），只在 look 條件加 `--own-value`。
+  - 被測方 A：`warlock-zoo-0.2.0.json` `0de0e2e0bc0a75f186e17a6a3e34adaa6077808b1afccbf666e0537db706e0fa`（`.pt` `cfc19f4f3386aee6324b8d12080a298f6f95a01ba5bff5a2c1dadebd4c4ec64a`）；`warlock-zoo-v9.json` `c2add057c4601065f56afd65068e98c2075a157a74f2131264c715d6d8b21c73`。牌組 warlock-zakajz。
+  - 對手（貪婪，與 E-273／E-277 同檔）：egg 0.1.0 `c3f906441e889611dc1eee9ac33d44daf25a1ca3b57771659907642ffba803b2`（priest-egg-hsr，`--guard egg`，seed 基底 960001）；zakajz-v1 `73ac2d59cfddf3a8fef6f3156ad396055a180836f4b83bfffcab963d2eb9963b`（warlock-zakajz，970001）；dh-long-E254 `91b6c6e562190c3dd71ae0a53506f11ef7e41ca2723442a3ee7b1adba5753e6b`（dh-cthun，980001）。
+  - seed：每對手 run k＝0..7 用基底＋250k，每 run 250 局 × 2 座位；同網路同對手三條件共用 seed；每格 4000 局；2 網路 × 3 對手 × 3 條件 ＝ 18 格、72000 局、144 個 job。
+  - 條件：plain（貪婪，必須逐局數重現 E-277／E-273 的 plain）；lookown ＝ `--look a --samples 2 --beam 8 --own-value`；look2own ＝ lookown 再加 `--depth 2 --reply <該對手網路>`（只當輔助）。
+  - `--own-value` 的定義（`src/selfplay-search.mjs` `seatView`／`valueAsk`）：深度 1 交棒後、深度 2 `further` 的端點（含被 cap 截斷的），凡輪到對手的局面，改送 `seatView(t)` 給 value 頭、符號不翻。`seatView` ＝ `flip(t)`（sim.mjs 的 SEAT 欄位全換，含 hand、deck、mana、crystals、timers、slimePile、power 等，兩邊棋盤對調；encode 用到的欄位沒有缺），再把屬於行動者而非座位的 `choice`、`kaz` 設 null、`turn` 減 1；並把這回合「已用完」：mana 0、我方場上（含英雄）全部不能攻擊、地點全部未就緒。去重 key 照舊用行動者視角的 obs。預設關閉時與 HEAD 逐字相同（本機 204 次搜尋深度 1／2 比對 0 差異）。
+  - **已知選擇偏誤**：「回合已用完」這一步是看過本機重現（seed 3000001、對 egg 0.1.0、30 局 × 2 座位）後才加的：只換座位時 0.2.0 lookown 15／60、v10 18／60（plain 0.2.0 36、舊 look 0.2.0 4、v10 33），診斷（seed 4100001 起 12 局）顯示 v10 在有牌可出時選「結束回合」從 17／20 次升到 59 次；加上「用完」後 0.2.0 36／60、v10 34／60。這個設計在 seed 3000001 上是樣本內（L-026）；本實驗的 seed 960001–981751 沒有被用來做這個選擇，是它第一次樣本外的量測。
+  - 模擬器：b31012f48995。5090 目錄 `~/side_projects/jev-hearthstone-headroom-own-20261029` ＝ E-277 目錄（`jev-hearthstone-headroom-020-20261029`，不含 out/）複本，只換 `src/selfplay-search.mjs` `a40ce1e665f94227cefb61e831c4b9f5090dcdbe16d434a2c1acf963160c7967`、`src/selfplay-match.mjs` `a71e5004ace0a239309b355cdf079723a94b95a4634b96adc4c00a3a8da00a6f`（兩檔與 E-277 目錄的差異只有 own-value 的改動，已逐行 diff）；`(cd src; sha256sum *.mjs | LC_ALL=C sort -k2 | sha256sum)` ＝ `e81fd699a6a592012c8591fb1479f1ee30968edce34eb9f05d8a69e9140ee973`。`selfplay-search.mjs` 不在 sim-version 雜湊內，sim 仍回報 b31012f48995。本機工作樹 src 另有他人未提交改動（layout、policy、selfplay-env 等，不在 selfplay-match 的 import 閉包內），所以本機與 5090 不是同一棵樹，以 5090 目錄為準。5090 煙霧測試（0.2.0 對 dh，look2own，2 局 × 2 座位）json 行 `look` ＝ `a+own`、sim b31012f48995。
+  - 命令（專案根）：`mkdir -p out && WORKERS=5 setsid nohup nice -n 10 bash runtime/headroom-own-20261029/run.sh > out/run.log 2>&1 < /dev/null &`；不用 GPU。
+  - 程式（`runtime/headroom-own-20261029/`，本機與 5090 sha256 相同）：`run.sh` `9356e992768e07081e2e276ef27c9791c0064e55dbe0669c8dba5ab1cda19cf8`；`analyze.mjs` `affe2cf55f2cb325cdf0ab5b222591d4f1b10210dcd51eafbe0435d2ae71c4fd`（E-277 analyze 的複本，條件改成 plain／lookown／look2own、多一個網路參數；區間重疊檢查改成對稱，負的差也照規則判）；`sanity.mjs` `10c03a5e47dfc153a4f85bf41fb7d5ad56c1f11584194f1f6de32843ace40949`；`paired.mjs` `99074f40fc13ba42099d8b68341356584c5d2401c8713b95aadd0bd82e44fed7`。
+- 預測（開跑前寫下）：0.2.0 lookown − plain ≥ 0（合計）；v9 lookown − plain 與 E-273 的 ＋4.3 同號（> 0，合計）。
+- 判定規則（與 E-273／E-277 逐字相同，**兩個網路各判一次**，以三對手合計 12000 局的 lookown−plain 為準，另列各對手）：
+  - 有空間：lookown 與 plain 的 Wilson 95% 區間不重疊**且**差 ≥ 5 分 → 下一步做搜尋蒸餾（`train/ppo.py --distill`）。
+  - 到頂：差 < 2 分，或區間重疊 → 力氣放到實戰（不做蒸餾）。
+  - 待定：其餘（區間不重疊但差在 2–5 分）。
+  - 各對手不一致時照實寫，不改規則。look2own 只當輔助，不進判定。0.2.0 與 v9 判定不同時兩個都照實寫；決定下一步以 0.2.0（現役）為準。
+- 配對比較（`paired.mjs`，輔助，不進 zone 判定）：(a) 各網路 lookown − 舊 look（0.2.0 對 E-277、v9 對 E-273）、look2own − 舊 look2；(b) 0.2.0 plain − v9 plain；(c) (0.2.0 lookown−plain) − (v9 lookown−plain)，另列 look2own 版；(d) 0.2.0 lookown − v9 lookown。區間＝差 ± 1.96 × √(各二項變異相加)（共用牌局，偏保守）；另列 48 格配對差平均與 SE。區間不含 0 才寫「不同」。
+- 健全性檢查（跑完先做，`sanity.mjs <out> <E-277 out> <E-273 out>`）：144 個檔都有 `--json` 行；A／B 路徑、牌組、guard、seed＝基底＋250k、sim b31012f48995、兩個座位各 250 局、a＋b＋平手＝局數；`look` 欄 plain 為空、其餘為 `a+own`；表頭 plain 無 `+look`、lookown 有 `+look+own`、look2own 有 `+look2+own`；**plain 每個 run 每個座位的勝場與 E-277（0.2.0）／E-273（v9）完全相同**。任一項不符 → 結果不解讀，先查。另記平手與截斷總數。
+- 已知限制：(1) 「回合已用完」是看過 seed 3000001 後加的（見上）；(2) lookown 仍靠被測網路自己的 value 頭；本機診斷（80 局、每個 A 回合結束點）value 與終局的相關：0.2.0 舊視角 .411、只換座位 .573，v9 .315／.464，v10 .341／.413，說明我方座位的估值比較準，但「準」不等於能當搜尋的排序依據；(3) plain 的 egg、dh 在 0.2.0 訓練池內（樣本內，R-007），zakajz-v1 不在；(4) 對手貪婪；(5) 看過結果不挑參數重跑當證據（L-026）；(6) 不訓練、不改模型、不 commit。
+- 結果：（待填）
+- 結論：（待填）
+- 相關：F-882、E-273、E-277、E-275、E-278、R-151、L-026、L-046、L-047、L-059、L-060
+- 來源：2026-10-29 派工（修尺：前瞻搜尋改從學習方座位估交手後局面，重量 headroom）
+- 預註冊 sha256（本條 `### E-286` 到「來源」行，換行正規化成 LF、UTF-8、行尾有換行）：`5bec50e676ddfd1ce736f30b00c98804e905a6fb1ccf0af9f84747c78d91e116`，開跑前凍結。

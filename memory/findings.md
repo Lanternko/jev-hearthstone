@@ -6831,7 +6831,7 @@
 - 日期：2026-10-27
 - 說法：待驗：月之祝福卡面在資料庫截斷在「It costs (」，「減費 = Imbue 次數」是假設；暫時牌由附魔 EDR_449e（Fleeting Magic）確認。選項池是「模擬器有模型的牧師收藏品」，不是官方池。
 - 證據：data/cards.enUS.json 的 EDR_449p 卡面
-- 狀態：待驗
+- 狀態：已驗（2026-10-28 使用者附卡圖：選項減費、能力固定 2 費，R-142；選項池仍是假設）
 - 相關：E-251
 - 來源：archive/STATUS-2026-10-27.md 第 29 行（2026-10-27 蛋牧升級：真人 Imbue 牌表、月之祝福、交織命運／心靈咒術師、Haunt 上蛋（未重訓））
 
@@ -6891,3 +6891,213 @@
 - 狀態：已驗（2026-10-28）。限制：v9、v10、P3 等既有模型與 5090 上 v10 評估都沒有 sim 欄位（舊程式碼），compare 會拒絕它們；要比較得用新程式碼重跑 match。match 不會因 trained≠sim 而拒跑，只警告（舊模型仍要能用）。
 - 相關：E-254、L-046
 - 來源：2026-10-28 App（使用者「G2+G3 GO」）
+
+### F-859
+- 日期：2026-10-28
+- 說法：蛋牧駕駛 P3b 對 zoo-v9 開前瞻（depth 1）勝率 20.1% → 29.9%（各 4000 局同牌局），depth 2 為 29.7%。單步策略不會規劃是蛋牧弱的主因之一；蛋牧從沒做過搜尋蒸餾（術士 v3、zoo-v2 都靠它打破停滯）。
+- 證據：E-255；runtime/diag-look/out/*.txt。
+- 狀態：已驗（2026-10-28）
+- 相關：E-255、E-253、F-784
+- 來源：2026-10-28 App 診斷
+
+### F-860
+- 日期：2026-10-28
+- 說法：待驗：P3b 的出牌異常——Gravedawn Sunbloom 抽到只打 20.5%；Slime 'em! 打出 80.6% 但它給的 Ectoplasm 只打 18.6%；Kaldorei Priestess、Psychic Conjurer、Slime 'em! 打出勝率低於抽到沒打。都只是相關，原因未查。
+- 證據：E-256；runtime/diag-look/cardwin-P3b-v9.txt。
+- 狀態：不成立（2026-10-29，E-262／F-872：強制多打 Gravedawn／Ectoplasm 勝率下降，Slime 'em! 是選擇偏誤）
+- 相關：E-256、F-852
+- 來源：2026-10-28 App 診斷
+
+### F-861
+- 日期：2026-10-28
+- 說法：Slime 'em! 回收的我方手下有記在座位 `slimePile`（含蛋當下的階段），Ectoplasm 會依階段叫回；但 encoder 沒有這個欄位，網路看不到堆裡有什麼，可能是 Ectoplasm 只打 18.6%（F-860）的原因之一。
+- 證據：test/priest-egg-sim.test.mjs 第 193、202 行；src/selfplay-encode.mjs 無 slimePile。
+- 狀態：待驗（提案：encoder 新旗標 `pile`＝堆數＋堆裡蛋的階段，需 env／net／ppo.py／export.py 一起改）→ 2026-10-28 旗標已做（F-863），網路看不看得懂、Ectoplasm 打出率會不會變，要重訓後才知道
+- 相關：F-860、R-141
+- 來源：2026-10-28 App 對話（使用者問「回收的手下有記錄下來嗎」）
+
+### F-862
+- 日期：2026-10-28
+- 說法：R-141 規則補上後模擬器版本 26db915e1733 → 9305b1b488be；之前所有基準、compare 都不能和新版本混比（G3 會拒絕）。P3（`priest-egg-pilot-v3-20261028`）對 zoo-v9 在新模擬器 200 局（seed 40001，guard egg）24.0%（18.6–30.4），P3 從沒學過 Prepare 與 Elder Word 重複。
+- 證據：`node src/selfplay-match.mjs …pilot-v3… warlock-zoo-v9 100 40001 --guard egg`；test/fixtures/zoo-v9-logits.json 重產（steps 121→125）。
+- 狀態：已驗（2026-10-28 R-142 後版本又換成 e3b35004938f，見 F-863；最終為 38f4c93a3f4b）
+- 相關：R-141、F-858、E-255
+- 來源：2026-10-28 App 實作
+
+### F-863
+- 日期：2026-10-28
+- 說法：encoder 新旗標 `pile`（F-861 提案）已做：觀測最尾端 4 格＝我方回收堆數/7、我方堆中蛋最大剩餘破殼/5、對方兩格同理。priest-egg 在訓練牌組裡時 ppo.py 自動開；舊網路（含 P3、zoo-v9、zoo-v10）不受影響。模擬器版本 9305b1b488be → 38f4c93a3f4b（中間 e3b35004938f 是 R-142 被更正前的錯誤版本，作廢）。
+- 證據：test/selfplay-encode-pile.test.mjs（Slime 後 [2/7,3/5,1/7,0]）；npm test 876/876。train/test_expand.py 沒在本機跑（ppo.Arena 的 node 子程序沒帶 CREATE_NO_WINDOW 會開黑窗），只做了語法檢查。
+- 狀態：已驗（JS 端）；Python 端待在 5090 跑 test_expand.py
+- 相關：F-861、R-142
+- 來源：2026-10-28 App 實作（ds-local 402 餘額不足，派工失敗後 App 自己做）
+
+### F-864
+- 日期：2026-10-28
+- 說法：train/ppo.py（8f78a8c 加 G2 時）的 checkpoint 寫入 `'sim': arena.sim`，但 `--workers` > 1 時 `arena` 是 `Pool`，只有 `Arena` 有 `sim` 屬性（`started()` 裡 `self.sim = r.get('sim')`），Pool 沒轉出來。所以任何 `--workers N`（N≥2）的訓練都會在**第一輪結束寫 checkpoint 時**崩潰。zoo-v10 是用 G2 之前的 ppo.py 訓練的，所以沒碰到（json 的 sim=null，E-254）。修法（沒做，派工限制不改 train/）：Pool.__init__ 加 `self.sim = self.parts[0].sim`。
+- 證據：5090 `~/side_projects/jev-hearthstone-egg-pile-20261028/ppo/P4.txt`（runtime/egg-pile-20261028/P4-crash.txt）：`File "train/ppo.py", line 1562 … AttributeError: 'Pool' object has no attribute 'sim'`；`grep -n "\.sim\b" train/ppo.py` 只有 171（Arena）與 1562。test_expand.py 沒有走到 checkpoint 寫入，所以沒抓到。
+- 狀態：已驗；2026-10-28 App 已修（Pool.__init__ 加 self.sim，train/ppo.py 236 行）；5090 `--iters 1 --workers 2` 煙霧測試通過，checkpoint 有 sim=38f4c93a3f4b、pile=True（尚未加專門測試，L-049 的 check 欄待補）
+- 相關：E-258、L-049、F-858
+- 來源：派工 20261028-151434-1ec69f
+
+### F-865
+- 日期：2026-10-28
+- 說法：實戰裡蛋被攻擊的次數遠多於模擬：5 場平均 2.40 次／局，模擬 P3／P4／P5 為 0.31／0.30／0.40 次／局。這是對手（我方動物園）端的行為差異，不是蛋牧駕駛的差異；實戰對手是當時實戰端的 Jev（未逐場核對模型），模擬是 zoo-v9。
+- 證據：`runtime/likeness-egg-20261028/report.md` 第 3.3 節；`node src/opp-likeness.mjs report runtime/likeness-egg-20261028`；實戰逐場 2.40＝(4+6+0+2+0)/5。每局 p<0.0001（z，5 場，模擬 sd）。
+- 狀態：待驗（實戰只有 5 場，要更多局；也要確認 zoo-v9 在實戰裡打蛋的次數是否也多）
+- 相關：F-784、E-260
+- 來源：派工 20261028-170249-65c7fc
+
+### F-866
+- 日期：2026-10-28
+- 說法：實戰蛋牧的牌表外（發現／生成）牌比模擬多一倍：每局 2.0 張（佔出牌 13.3%）vs 模擬 0.9 張（6.4–6.7%）。實戰常見而模擬少見的有 Ectoplasm（實戰 2/5 局，模擬 10–15%）、Hold Them Off!（2/5 vs 0%）、Unending Trial、Godfather Kazakus、Platysaur。
+- 證據：`runtime/likeness-egg-20261028/report.md` 第 3.2 節（牌名前有「+」者是牌表外）。單張實戰 n=1–2。
+- 狀態：待驗（與 F-851、F-852 的發現池假設、F-860 Ectoplasm 很少被叫回同方向；需要更多局）
+- 相關：F-851、F-852、F-860、E-260
+- 來源：派工 20261028-170249-65c7fc
+
+### F-867
+- 日期：2026-10-28
+- 說法：實戰蛋牧的核心牌打得比模擬駕駛晚：Elder Word: Foresight 8.5 vs 5.0、Kaldorei Priestess 10.0 vs 6.3、Medivh's Triumph 9.0 vs 5.6、Intertwined Fate 9.5 vs 5.7、Defias Smuggler 9.5 vs 5.3（蛋牧自己的回合，實戰每張 n=2）；蛋本身的時機一致（4.4 vs 4.6–5.4）。首打 MAD 2.0 回合（CI 1.1–3.6）vs 雜訊底 1.3。
+- 證據：`runtime/likeness-egg-20261028/report.md` 第 3.2、4 節。
+- 狀態：待驗（偏大但不顯著；假設是模擬駕駛一有牌就出，真人留牌）
+- 相關：F-784、E-260
+- 來源：派工 20261028-170249-65c7fc
+
+### F-868
+- 日期：2026-10-28
+- 說法：實戰對局偏長（蛋牧 9.4 個回合、引擎 T 18.8，範圍 T11–T32）比模擬（8.1–8.2、T 16.4–16.6）長約 1.2 個蛋牧回合，但在雜訊內（W1 1.4 vs 雜訊底 1.2）。孵化率 60% vs 30–38% 也不顯著（3/5）。蛋牧 8 場中 5 場打出蛋（62%）與模擬 60–67% 一致。
+- 證據：`runtime/likeness-egg-20261028/report.md` 第 3.1、3.3 節；score.json。
+- 狀態：待驗（5 場；F-784 的「模擬蛋牧比真人弱」目前沒有被證實也沒有被推翻）
+- 相關：F-784、E-260
+- 來源：派工 20261028-170249-65c7fc
+
+### F-869
+- 日期：2026-10-28
+- 說法：模擬器的 `priest-egg` 牌表（Imbue 型：Flay、PW Barrier、Conjurer、Lunarwing×2、Intertwined Fate×2、Lightspawn…）是少數派。HSReplay 免費牌組頁（Bronze–Gold，約 14k 局）前 6 名蛋牧全是 Servant of Zuramat／Hold Them Off!／Endbringer Umbra／Haunt／Firebolt 型，勝率 60–66%；使用者貼的 Brox 蛋牧代碼與 HSReplay 牌組 ePLphU8Rg7eayuoWZPQmBg（66.4%，2,200 局）完全一致，和我們的牌表約一半不同。已加入 `decks/priest-egg-hsr/`（list.json、strategy.md；測試 `test/priest-egg-hsr.test.mjs`）。
+- 證據：HSReplay 牌組頁文字（內建瀏覽器讀取）；代碼解碼對 `data/cards.enUS.json`。
+- 狀態：已確認（2026-10-28）
+- 相關：F-784、E-260、F-870
+- 來源：2026-10-28 App
+
+### F-870
+- 日期：2026-10-28
+- 說法：P5 換到主流牌表 priest-egg-hsr 時勝率較低：對 zoo-v9 400 局（seed 90001，--guard egg）29.0%，原牌表 37.3%。Endbringer Umbra、Servant of Zuramat、Hold Them Off! 不在 P5 的詞彙裡，落到共用的未知格。實戰對手多半是主流牌表，所以模擬蛋牧（我們的駕駛＋我們的牌表）可能比真人弱的一部分原因是牌表本身（F-784）。
+- 證據：`runtime/egg-hsr-20261028/cardwin-P5-hsr.txt`、`cardwin-P5-imbue.txt`。
+- 狀態：已確認（2026-10-29，E-268：P6A 在 hsr 33–34%，專訓後的 P7 約 50%；主流牌表在模擬裡其實更強，舊駕駛只是不會用）
+- 相關：F-869、F-784、E-261
+- 來源：2026-10-28 App（sonnet 子代理）
+
+### F-871
+- 日期：2026-10-28
+- 說法：Brox 的 meta 牌組對照我們的對手池：快攻術≈`warlock-zakajz`（28/30）；克蘇恩 DH≈`dh-cthun`（23/30，Brox 多 Irida、Watfin、Glacial Shard、Smuggler×2、Frontline Ironborn×2，我們是 Broxigar 包）；法術薩（3/30）和恩佐斯 DK（2/30）在對手池裡沒有對應，要加得先補模擬器卡牌。
+- 證據：使用者貼的代碼（2026-10-28 對話），解碼比對 decks/*/list.json。
+- 狀態：已確認（2026-10-28）
+- 相關：F-845、F-869
+- 來源：2026-10-28 App
+
+### F-872
+- 日期：2026-10-29
+- 說法：P6A 對 Gravedawn Sunbloom、Ectoplasm、Slime 'em! 的取捨是對的：同 seed 3000 局，強制能打就打 Gravedawn 勝率 33.2% → 29.0%，pile 不空就打 Ectoplasm 33.2% → 30.8%。Slime 'em! 的打出勝率低是因為只在大幅落後時打（對手身材 34.5 對 3.9）。
+- 證據：E-262；`runtime/cardwin-suspects-20261029/`（force.mjs、analyze.txt）。
+- 狀態：已驗（2026-10-29）
+- 相關：F-860、E-262
+- 來源：2026-10-29 App
+
+### F-873
+- 日期：2026-10-29
+- 說法：重播 P6A 對 zoo-v9 看到的打法候選問題（都還沒用介入驗證，L-053）：(1) 蛋太晚或沒下：200 局只有 127 局打出 The Egg of Khelos，平均 T9.3；12 局重播中沒下蛋的 3 局都輸（第 2 局 T12／T14 有費有蛋沒下）。(2) Prepare Soothsayer 在對面有場面時花掉整回合（第 9 局 T7）。(3) 0 費 Power Word: Barrier 沒打就結束回合（第 8 局 T6）；200 局有 135 次結束回合時手上有能打的 0 費牌（含 The Coin）。(4) 結束回合時還有手下能攻擊：Holy Eggbearer 48、The Egg of Khelos 42、Kaldorei Priestess 21 次／1489 回合。已排除：同名分票（E-263）；Mawman Cultist 讓法術 +1 費，造成看起來像剩費的回合。
+- 證據：`src/selfplay-replay.mjs`（新工具）、`runtime/replay-p6a-zoo9.json`（12 局，seed 120001）、`runtime/replay-viewer/`（agg.mjs 200 局 seed 130001、scan.txt、重播頁 https://claude.ai/artifact/UdRRNHdiWaSiUVHNhgcuTj）。
+- 狀態：待驗
+- 相關：E-263、F-872、L-053
+- 來源：2026-10-29 App
+
+### F-874
+- 日期：2026-10-29
+- 說法：zoo-v9 的 value 頭對 P6A 蛋牧（priest-egg-hsr 對 warlock-zakajz）系統性過度樂觀，中段約高 0.3–0.4：估值 0.43 實際 0.09、估值 0.01 實際 −0.36、估值 0.83 實際 0.54（+1 勝／−1 負）；兩端（< −0.6）大致準。T1–12 平均估 0.65–0.69、實際 0.36。可能原因：zoo-v9 是對舊、較弱的蛋牧駕駛訓練的（當時對蛋牧 79%+），P6A 強很多但 value 沒跟上。這會讓搜尋高估各線（E-265 turns=1 的 +0.58 就是），但同一回合內比較的偏差多半抵消。
+- 證據：`runtime/cata-search/calib.mjs`、`calib-400.txt`（400 局，seed 900001–900400，ZOO 勝 274/400，ZOO 決策 14545 個）。
+- 狀態：已驗（2026-10-29），只量了這一個對手組合
+- 相關：E-265、E-266、R-148
+- 來源：2026-10-29 App（使用者「太樂觀是瑕疵嗎？能進步嗎？」）
+
+### F-875
+- 日期：2026-10-29
+- 說法：Cursed Catacombs 在模擬器選到 Shred of Time（Casts When Drawn：打自己 3）時不扣血：settle 的預設分支用 `gain()` 放進手牌（臨時、0 費），不走 `pull()` 的 Casts When Drawn。使用者印象實戰會扣 3。實戰 log 已確認發現的牌是從牌庫移到手上（SHOW_ENTITY DECK→HAND，sim 這點對），Shred 也會出現在選項裡（tag 3669），但還沒找到真的選了 Shred 的局，所以扣不扣血未驗。
+- 證據：`src/sim.mjs` settle 最後的 `else if(id!=null)` 分支；Power_old.log（2026-10-26、10-27 三個資料夾）中 TLC_451 的 PLAY block。
+- 狀態：已確認並修正 2026-10-29（使用者看實戰：選了先扣 3 血，再隨機抽下一張。sim 改為 strike 後 `pull(s,1)` 普通抽牌；test/selfplay.test.mjs「a discovered Shred of Time casts」；sim-text-cache golden 重取，第 8 局是唯一選到 Shred 的局）
+- 相關：E-265、L-055
+- 來源：2026-10-29 App（使用者「選了的話 好像還是會扣3血」）
+
+### F-876
+- 日期：2026-10-29
+- 說法：「價值加分項」為什麼沒讓勝率升：(1) E-176 的 --shape 是潛在式（potential-based）shaping，整局加總恆等於 −scale·Φ(起點)，與走法無關，理論上不改最佳策略，只把功勞在時間上重分配；而且 Φ 只在每回合交出時量，同一回合內「先抽牌再攻擊」與「先攻擊再抽牌」交出時的 board／hand／health 相同，對牌序完全沒有訊號。(2) 牌序與發現選牌的真實勝率差只有幾分（E-266 先 Life Tap 比先攻擊 +8 分；E-267 選對牌 +16 分），但 value 頭中段高估 0.3–0.4（F-874），且 14545 個決策裡 8611 個（59%）估值落在 [0.6,1)、平均 0.83，實際只有 0.54：勝勢局面所有候選都估 0.8 上下，優勢差近 0，PPO 沒有梯度去「繼續壓」；E-267 更是把 31% 的線排在 14.5% 的線之下。(3) oracle critic（看得到暗牌）50.5%／51.5% 打平，說明雜訊來源是 ±1 結果本身，不是暗資訊。(4) 實戰端已有規則補牌序：net-guards 的 tapFirst（抽牌先）、affordable_temporary_discover（R-139，Catacombs 選付得起的牌）、R-147；訓練端只有搜尋的 keepBestOrder／reordered，模擬自戰沒有這些 guard，所以策略學到的資料本身就含錯誤牌序。
+- 證據：train/ppo.py shaping()（只在回合最後一個決策加 scale·(γΦ−Φ前)、終局 Φ=0）；runtime/cata-search/calib-400.txt；E-176、E-266、E-267、F-874、oracle 評估（experiments 2026-10-27）；src/net-guards.mjs tapFirst；src/selfplay-search.mjs 檔頭註解。
+- 狀態：已驗（2026-10-29，分析既有證據，沒跑新實驗）
+- 相關：E-176、F-669、F-874、E-267、R-139、R-147
+- 來源：2026-10-29 App（使用者問價值估計為何沒提升勝率、牌序弱）
+
+### F-877
+- 日期：2026-10-29
+- 說法：zoo-v9 的 value 偏樂觀不只對 P6A：對 egg 0.1.0（priest-egg-hsr）更嚴重。同 400 局量法（seed 930001），ECE 0.3283（P6A 0.1578），中段三格偏差 +0.48／+0.74／+0.79，勝率 181/400。對 zakajz-v1（ECE 0.0489）與 dh-cthun-basic（0.0347）準。
+- 證據：`runtime/cata-search/calib-param.mjs`、`runtime/cata-search/calib-e272/v9-{p6a,egg010,zak,dh}.json`（seed 920001／930001／940001／950001，各 400 局）。
+- 狀態：已驗（2026-10-29），單一模型 v9
+- 相關：F-874、E-272
+- 來源：2026-10-29 派工 role-train
+
+### F-878
+- 日期：2026-10-29
+- 說法：zoo-v9（牌組 warlock-zakajz）開前瞻（`--look a`，depth 1、samples 2、beam 8）比貪婪強，但沒有蛋牧那麼多，且因對手而異。模擬器 b31012f48995、每對手每條件 4000 局、同牌局：對 egg 0.1.0 49.1%→53.7%（+4.6），對 zakajz-v1 48.1%→54.3%（+6.2），對 dh（E-254 網路）50.2%→52.3%（+2.1，區間重疊）；三對手合計 49.1%（48.2–50.0）→53.4%（52.5–54.3），+4.3。depth 2（看對手下一回合）不比 depth 1 好，對 egg 還低 2.1 分（原因未查）。
+- 證據：E-273（`runtime/headroom-20261029/out/`、`result.md`）。
+- 狀態：已驗（2026-10-29），單一模型 v9、單一 sim 版本；數字不可與 E-255 混比（F-875 改過 sim）。v9 的 value 對強對手高估（F-874、F-877）可能讓增益被低估。
+- 相關：E-273、E-255、E-272、F-874、F-877
+- 來源：2026-10-29 派工
+
+### F-879
+- 日期：2026-10-29
+- 說法：實戰中 Floating Lessons（BE_094，1 費，目標隨從）指向自己場上的隨從時，點兩次都沒效果。原因未定。
+- 證據：E-276 的 `runtime/last-game.log` 06:14:12–06:14:26：`o3t1 select Floating Lessons -> target Twilight Timehopper` 兩次都是 "no change after 722,637 / 525,403"。gestures 兩次點擊都 fg=true、off by 0。Power.log：Floating Lessons（id 57）06:14:06 剛抽到，手牌第 4 格（共 4 張）；Timehopper 60 在場上第 1 格，Fanatic 99／100 在第 2、3 格；同回合 Timehopper 之後點到 Maiev 有成功，所以場上位置是對的。06:14:04 Servants of C'Thun 的動畫等到上限（12 s cap）。06:14:26 起的選項 60 不在 Floating Lessons 的目標清單。
+- 原因（2026-10-29 查明）：視窗是 1227×739，比 16:9 窄。`src/layout.mjs` 的 `contentBox` 當成上下有黑邊（box 1227×690、y 偏移 24），縱向座標全往中間壓。但 Hearthstone 在 4:3–16:9 之間是用滿高度、左右裁背景（HDT 也這樣算）。最右邊手牌的抓取點本來就在牌頂附近（-111.5·k），被往上壓約 18 px 就點到牌外；中間的牌、場上的隨從離中線近，誤差小，所以同局其他動作都正常。歷史上 208 局都是 2560×1440，這是第一局窄視窗。另外，06:14:26 後決策裡目標少了 60，是 loop 把失敗的 o3t1 移出選單，不是遊戲規則。
+- 狀態：修法錯誤、已還原（2026-10-29）。改成滿高度後，下一局（ranked 批次第 1 局，同樣 1227×739）換牌兩張都沒換到（MULLIGAN RECOVERED），結束回合點 1024,335 連續失敗（舊算法 997,335 上一局有點中；1024 落在 HDT 右側面板上）。所以窄視窗下 x 方向舊的 letterbox 算法才對，「Hearthstone 窄視窗用滿高度」的推論不成立。`contentBox` 已還原，測試改成鎖住舊值（`test/layout.test.mjs`「a narrower client is letterboxed」）。最右手牌那次失手原因又回到未定；目前結論：只在 16:9 視窗打。
+- 相關：E-276、L-061
+- 來源：2026-10-29 App 賽後分析
+
+### F-880
+- 日期：2026-10-29
+- 說法：value 頭在貪婪對局上校準變好，不等於對前瞻搜尋有用。E-272 修訂版（只換 value、policy 逐位同 v9）在 P6A／egg 0.1.0 的 ECE 從 0.158／0.328 降到 0.080／0.104，但同 seed 開前瞻（E-275）勝率從 v9 的 53.4% 掉到 26.1%（look−plain −23.1，三個對手全掉，dh −35.9 最重）；貪婪勝場與 v9 逐項相等，所以是搜尋排線被新 value 誤導。搜尋要的是同一回合內各條線「交出局面」的相對順序，監督式擬合勝負（MSE 對 ±1）只在貪婪軌跡的局面分布上壓絕對偏差，對搜尋展開到的局面沒有保證。E-273 對 v9 的「待定 +4.3」因此沒有被解開，仍以 E-273 為準。
+- 證據：E-272 修訂結果補記、E-275 結果補記；`runtime/headroom-e275-20261029/out/`（72 run，sim b31012f48995）、`runtime/cata-search/calib-e272/`。
+- 狀態：已驗（2026-10-29）；原因（貪婪軌跡 vs 搜尋局面的分布差、或 MSE 壓平同回合內的差異）未分辨。
+- 相關：E-272、E-273、E-275、F-874、F-876、F-877、F-878
+- 來源：2026-10-29 App（lead 收 E-275 結果）
+
+### F-881
+- 日期：2026-10-29
+- 說法：zoo 0.2.0 後手第 1 回合在對手場上沒有隨從時，用硬幣把 Tachyon Barrage（2 費，6 點分給所有敵人）全打在臉上。浪費了硬幣和一張解場牌（使用者指出）。
+- 證據：`runtime/ranked-2026-10-29T00-40-05-730Z/game-0001.log` 08:41:37–08:41:51（o2 The Coin → o2 Tachyon Barrage）；決策時對手場上只有英雄與英雄技能。
+- 狀態：已查（2026-10-29，E-279）：非 sim 錯，是 policy 邊緣選擇。重建實戰局面 Coin 後 Life Tap／Tachyon 約 52／45，拿掉對手 Ritual of C'Thun 計時則翻成 82／16；手牌偏弱（2 張死牌）。自我對弈 2000 局早期空場 Tachyon 僅 2 次，無 Coin+Tachyon。sim 分支勝率差在雜訊內（無結論）。建議：net-guards 加規則「對手場上無隨從且有更便宜替代時否決 barrage」，或補對手儀式計時＋死手牌的訓練覆蓋；未改碼。
+  - 2026-10-29 E-280（成對推演）：**確認為錯招**。DRY（對手空場、最佳非 Tachyon 線沒出牌）1076 局面／24748 次推演，Tachyon 35.8 對留硬幣 43.8、T−H −8.0 [−8.9, −7.1]（預註冊判定「錯招」）；後手 T1 同情境 −11.2 [−12.8, −9.6]；實戰局面留硬幣 13.7／13.8 對 Tachyon 0.8／2.1。net 自己選 Tachyon 的局面 T−H −2.6 [−5.1, −0.1]（邊緣）。尚未決定修法、未改碼。
+- 相關：E-276、R-151
+- 來源：2026-10-29 App（使用者「第一回合為何要硬幣打空氣」）
+
+### F-882
+- 日期：2026-10-29
+- 說法：zoo 0.2.0 開前瞻（`--look a`，深度 1）會崩，不是「沒有規劃空間」，而是搜尋端把交手後的局面從**對手座位**用學習方自己的 value 頭估值再翻號（`src/selfplay-search.mjs` 約 183、219 行 `sign:handed?-1:1`），而 0.2.0 從 v9 起已用 `--opp`（對手是獨立網路）練了 405 輪（E-254 150＋E-270 105＋E-271 150），value 頭幾乎只看過 warlock-zakajz 座位的局面（鏡像 0.15 除外），對蛋牧／DH 座位的估值已經失效。
+- 證據：E-277（0.2.0，4000 局／格）look−plain：egg −52.4、dh −47.0、zakajz −15.1；zakajz 崩得最少，正是唯一有鏡像訓練（對手座位也是 zakajz）的對手。本機重現（seed 3000001、30 局×2 座位、對 egg 0.1.0、`runtime/headroom-020-20261029/repro-local/`）：0.2.0 plain 36/60、0.2.0 look 4/60、**v10 look 33/60**（v10 只在 v9 後用 `--opp` 練 150 輪，仍正常）。訓練時 `train/ppo.py` 的 `look_ahead` 走同一支 node 搜尋，所以 E-271／E-278 的蒸餾目標在蛋牧／DH 局也受同一問題影響（λ0.1 下 E-271 B 仍進步，但目標品質打折）。
+- 狀態：假說，待驗（直接驗法：把搜尋端交手後的估值改成從學習方座位編碼、或對 0.2.0 在對手座位局面量校準；本次沒改碼）。若成立：E-277「到頂」判定作廢（量錯東西）、E-275 的崩法同源、E-278 的蒸餾目標要先修搜尋端再重跑才算數。
+- 相關：E-277、E-273、E-275、E-278、F-878、F-880、R-151
+- 來源：2026-10-29 App（lead 核對 E-277 結果後本機重現）
+
+### F-883
+- 日期：2026-10-29
+- 說法：warlock-zakajz＋zoo 0.2.0 的起手留牌，現行規則留太多；照「留了哪些牌」擬合的表（少留、沒核心就多換）勝率高約 2 分。使用者的直覺規則（沒核心全換、有核心才留搭配或 1 費手下）和現行規則打平。和使用者直覺不同的地方：Floating Lessons 和 Twilight Timehopper 留著對 0.2.0 是加分（即使沒有前期手下），Glacial Shard 這類 1 費手下反而該換。
+- 證據：E-281。終測每臂 20k 局成對 +1.97（1.35–2.59）；hunt 規則挑選階段 −0.31～+0.26；擬合權重 Floating Lessons、Timehopper 為正，Shard 為負。
+- 狀態：模擬中成立（只對 0.2.0）；實戰未驗。
+- 相關：E-281、R-152
+- 來源：2026-10-29 App
+
+### F-884
+- 日期：2026-10-29
+- 說法：zoo 0.2.0 對蛋牧（priest-egg-0.1.0）不需要專用留牌表：用 100k 局蛋牧資料擬合的專用表（多留 Mawman、Neophyte 等前期手下）對通用表只 +0.14（−0.39–0.68）。通用表（zoo 0.2.1）對蛋牧比舊規則好約 +0.7～+0.9。使用者「對控制牌組前期場面更重要」的直覺在擬合權重上有跡象（Mawman 對蛋牧轉正），但勝率差小到量不出來。
+- 證據：E-284（終測每臂 20k 局，成對）；E-281。
+- 狀態：模擬中成立（只對 0.2.0、只對模擬蛋牧，F-784）。
+- 相關：E-284、E-281、R-154
+- 來源：2026-10-29 App

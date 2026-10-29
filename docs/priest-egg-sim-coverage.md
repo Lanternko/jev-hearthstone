@@ -26,31 +26,31 @@
 | 牌 | 張數 | 費 | 卡面重點 | 模擬器 | 狀態 |
 |---|---|---|---|---|---|
 | Holy Smite (CORE_CS1_130) | 2 | 1 | 對一個手下 3 傷 | `boltMinion` 3 傷 | 正確 |
-| Elder Word: Flay (BE_223) | 1 | 1 | 對隨機敵人 3 傷；下一張暗影法術重複 | `flay`：隨機敵方英雄或手下 3 傷 | 部分：**重複效果沒做** |
+| Elder Word: Flay (BE_223) | 1 | 1 | 對隨機敵人 3 傷；下一張暗影法術重複 | `flay`：隨機敵方英雄或手下 3 傷；`elderWord` 等下一張暗影法術重複 | 已建模（2026-10-28） |
 | Power Word: Barrier (TIME_447) | 1 | 1 | 給一個角色聖盾；手牌中的手下 +2 血 | `barrier`（目標友方手下，可無目標） | 部分：只給友方手下聖盾（見假設） |
 | Psychic Conjurer (CORE_EX1_193) | 1 | 1 | 1/2，戰吼複製對手牌庫一張牌到手牌 | `minion conjurer` | 已建模：從 `s.them.deck` 隨機一張，複製不移除 |
 | Undeath Sentence (JAIL_940) | 1 | 1 | 重播一個死過的友方手下的死亡之聲 | `undeath` → `rattleSome(s,1)` | 已建模 |
 | Holy Eggbearer (DINO_411) | 2 | 2 | 1/2，戰吼抽一張 0 攻擊手下 | `minion drawZeroAtk` | 已建模 |
 | Lunarwing Messenger (EDR_449) | 2 | 2 | 3/2 吸血，戰吼 Imbue 英雄能力 | `minion imbue` | 已建模（見 Imbue） |
 | Eternal Firebolt (END_025) | 2 | 3 | 吸血 3 傷；擊殺則回手 | `boltMinion` | 部分：當下回手 |
-| Elder Word: Foresight (BE_221) | 2 | 3 | 抽 1 減 2；下一張暗影法術重複 | `drawReduce` | 部分：重複沒做 |
+| Elder Word: Foresight (BE_221) | 2 | 3 | 抽 1 減 2；下一張暗影法術重複 | `drawReduce`；`elderWord` 重複 | 已建模（2026-10-28） |
 | Haunt (CAP_801) | 2 | 3 | +2/+3、Reborn、嘲諷 | `buffMinion` | 已建模；駕駛會對自己的蛋施放（`egg-guard.mjs`） |
-| Kaldorei Priestess (EDR_970) | 2 | 3 | 3/3，戰吼敵方手下 -2 攻擊；Imbue | `minion priestess imbue` | 部分：-2 攻擊永久；Imbue 正確（舊的「補血 +1」拿掉了） |
+| Kaldorei Priestess (EDR_970) | 2 | 3 | 3/3，戰吼敵方手下 -2 攻擊；Imbue | `minion priestess imbue` | 已建模：-2 攻擊到我方下一回合開始恢復（`chill`，2026-10-28）；Imbue 正確 |
 | The Egg of Khelos (DINO_410) | 1 | 3 | 0/3，裂 5 次孵 20/20 嘲諷 | `minion egg` | 已建模 |
 | Intertwined Fate (TIME_432) | 2 | 3 | 發現一張自己牌庫的複製，再一張對手牌庫的 | `fate` → 選擇 `fate1`、`fate2` | 已建模：各給 3 個不同 cardId，複製不移除 |
-| Defias Smuggler (JAIL_998) | 1 | 3 | 2/3，Prepare；戰吼友方手下 +2 攻擊與衝鋒（Rush） | `minion smuggler`（目標友方，可無目標） | 部分：**Prepare 沒做**；Rush 讓剛下的手下這回合可打手下 |
-| Gravedawn Sunbloom (TLC_816) | 1 | 4 | 抽 2；Kindred 減 2 | `draw n:2` | 部分：Kindred 沒做 |
+| Defias Smuggler (JAIL_998) | 1 | 3 | 2/3，Prepare；戰吼友方手下 +2 攻擊與衝鋒（Rush） | `minion smuggler`（目標友方，可無目標） | 已建模：Prepare 是獨立步驟（2026-10-28）；Rush 讓剛下的手下這回合可打手下 |
+| Gravedawn Sunbloom (TLC_816) | 1 | 4 | 抽 2；Kindred 減 2 | `draw n:2`；上回合打過神聖牌減 2（`lastKinds`） | 已建模（2026-10-28） |
 | Nightmare Lord Xavius (EDR_856) | 1 | 4 | 4/4，發現牌庫手下並給 Dark Gift | `xavius` | 已建模（近似） |
 | Shadow Word: Ruin (CORE_EX1_197) | 1 | 4 | 消滅攻擊 5 以上的手下 | `ruin` | 正確 |
 | Slime 'em! (CAP_805) | 1 | 4 | 全場消滅，各拿 Ectoplasm 叫回 | `slime` | 已建模 |
 | Cleansing Lightspawn (TIME_427) | 1 | 4 | 2/3 吸血，戰吼對敵方手下造成等同自身血量的傷害 | `minion lightspawn`（目標敵方手下，可無目標） | 已建模：傷害 = 當下血量（Barrier 加過就是 5），吸血回英雄 |
 | Medivh's Triumph (CATA_308) | 2 | 5 | 全場 4 傷；有傳說時 1 費 | `aoe` + `costOf` | 正確 |
-| Soothsayer (JAIL_912) | 1 | 7 | 6/6 嘲諷，Prepare；亡語回 6 血、召喚隨機 6 費手下 | `minion` + `rattle` | 已建模；Prepare 沒做 |
+| Soothsayer (JAIL_912) | 1 | 7 | 6/6 嘲諷，Prepare；亡語回 6 血、召喚隨機 6 費手下 | `minion` + `rattle` | 已建模；Prepare 2026-10-28 補上 |
 | Lesser Heal → Blessing of the Moon（英雄能力） | — | 2 | Imbue 前回 2 血；Imbue 後選一張打得出的牧師手下或法術加入手牌，減費 | `power.heal` → `power.bless` | 見 Imbue |
 
 ### Imbue 與月之祝福（Blessing of the Moon, EDR_449p）
 
-- 第一次 Imbue（Lunarwing Messenger、Kaldorei Priestess 的戰吼）把英雄能力換成 Blessing of the Moon（2 費，`power.bless=1`）；之後每次 Imbue `bless` +1。
+- 第一次 Imbue（Lunarwing Messenger、Kaldorei Priestess 的戰吼）把英雄能力換成 Blessing of the Moon（2 費，`power.bless=1`）；之後每次 Imbue `bless` +1；英雄能力固定 2 費，只有給的牌減費（R-142，使用者附卡圖確認）。
 - 使用時從「牧師收藏品手下與法術、模擬器有模型、減費後當下費用付得起」的池子（`context().priest`）隨機給 3 張讓我們選（`bless` 選擇）。選到的牌以暫時牌（`temp`）進手牌，費用減 `bless`，回合結束丟掉。
 - 卡面來源：`EDR_449p` 的文字在 `data/cards.enUS.json` 只到「It costs (」就截斷；暫時牌由附魔 `EDR_449e` Fleeting Magic「Costs less. Discard this at the end of your turn.」確認。**減費 = Imbue 次數**是假設。
 
@@ -65,12 +65,13 @@
 
 ## 簡化
 
-- Kaldorei Priestess 的 -2 攻擊是永久的（實際只到你的下一回合）。
 - Blessing of the Moon：減費 = Imbue 次數（卡面截斷，假設）；3 個選項從有模型的牧師收藏品池隨機（實際池子可能不同）；編碼只看得到英雄能力能不能用，看不到 Imbue 等級。
 - Intertwined Fate：兩邊各給 3 個不同的 cardId；Psychic Conjurer 隨機複製一張對手牌庫的牌。
-- Power Word: Barrier 只給友方手下聖盾（卡面是任一角色）；Elder Word: Flay 的暗影重複沒做；Defias Smuggler 的 Prepare 沒做。
+- Power Word: Barrier 只給友方手下聖盾（卡面是任一角色）。
 - Eternal Firebolt 擊殺後立刻回手（實際是回合結束）。
-- Elder Word: Foresight 的「下一張暗影法術重複」沒做；Gravedawn Sunbloom 的 Kindred 減費沒做；Prepare 的準備流程沒做（Soothsayer、Defias Smuggler 照原費用打出）。
+- Prepare（使用者裁決 R-141）：花掉剩下全部法力 X，這張牌減 X+1 費；每張牌一次、X=0 也可（減 1）；只在自戰，實戰規劃器不提供；編碼借用 'use' 那格。正規式 `^prepare` 也會套到 Hold Them Off!、Hijacked Securitybot。
+- Elder Word 的重複（R-141）：記在座位 `elderWord`，下一張暗影法術打完後重放一次；新的 Elder Word 自己也會觸發舊的再換成新的。
+- Slime 'em! 的回收堆 `slimePile` 有記錄（含蛋的階段），有 `pile` 旗標的網路看得到堆數與堆中蛋的階段（F-863），舊網路看不到。
 - Dissolving Ooze 只摧毀友方手下，Bones 卡沒進手牌。
 - Holy Eggbearer 抽「0 攻擊手下」時，若牌庫有多張就隨機一張（實際可選？卡面沒有指定，這裡照抽牌處理）。
 - Soothsayer 召喚的 6 費手下從收藏品的 6 費池隨機，不是官方「隨機 6 費手下」的完整池。

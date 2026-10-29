@@ -50,6 +50,12 @@ turn that sets up a payoff two turns away is told so before the game ends. Φ is
 hands each of its turns over (its last decision of the turn); the last decision of each turn earns
 --shape-scale * (--shape-gamma * Φ(this turn) - Φ(the turn before)), the first turn measured from the
 seat's first decision, and the end of the game counts as Φ = 0. Without --shape nothing changes.
+--shape-final (with --shape) counts the end of the game as the board score there instead of 0: the last
+decision of each seat earns --shape-scale * (--shape-gamma * Φ(end) - Φ(the turn before)) with Φ(end) from
+the env's phiEnd (the position at the end of the game for that seat; a dead hero counts 0 Health). The sum
+over a game is then --shape-scale * (--shape-gamma * Φ(end) - Φ(start)) when gamma is 1, so a win with
+more Health and board left scores higher than a narrow one, and what is drawn from the deck and picked
+by Discover moves the end. Without --shape-final the sum is the same whatever was played.
 
 --distill-weight λ (PPO only) adds the look ahead of --distill as a second teacher beside the result:
 the loss of each minibatch is the PPO loss plus λ times the cross entropy between the step scorer and
@@ -61,6 +67,11 @@ games and the other draws do not move), with --search/--depth and their flags as
 loss is the mean over the minibatch's decisions that have a target. --distill-decay-to μ moves λ in a
 straight line to μ over the run. The log gains the columns distill (that loss), weight (λ) and
 searched (decisions looked ahead at). Without --distill-weight nothing changes.
+--distill-info (with --distill-weight) always asks the look ahead at the decisions the env marks info:1
+(Life Tap, a draw or Discover card in the legal steps, a pick from a random Discover offer; infoStep in
+src/selfplay-rollout.mjs), not only at the share --distill-frac, since the value of the network cannot tell
+those apart by itself (F-874): the other decisions are still drawn as before. The log gains the column
+info_searched (the marked decisions looked ahead at). Without --distill-info nothing changes.
 
 --rollout (with --distill-weight) takes the targets from games played to the end instead of from the look
 ahead (src/selfplay-rollout.mjs): at a chosen decision the --rollout-k steps the network likes best are each
@@ -159,7 +170,7 @@ class Arena:
         self.p = subprocess.Popen(['node', str(ROOT / 'src' / 'selfplay-env.mjs')], cwd=ROOT,
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         self.send(cmd='reset', n=n, seed=seed, decks=list(decks), rival=rival, audit=audit, bin=True, raw=True, hold=hold, swap=swap, timers=TIMERS,
-                  extra=EXTRA, stages=STAGES, imbue=IMBUE, egg=EGG, mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'seatDecks': True} if SEATDECKS else {}),
+                  extra=EXTRA, stages=STAGES, imbue=IMBUE, pile=PILE, egg=EGG, **({'names': NAMES} if NAMES else {}), mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'info': True} if INFO else {}), **({'seatDecks': True} if SEATDECKS else {}),
                   **({'restart': restart} if restart else {}), **({'oracle': True} if oracle else {}))
         if wait:
             self.started()
@@ -233,7 +244,7 @@ class Pool:
         self.parts = [Arena(self.at[w + 1] - self.at[w], seed + self.at[w], decks, rival, hold=True, wait=False, swap=swap, restart=restart, oracle=oracle) for w in range(k)]
         for a in self.parts:
             a.started()
-        self.obs, self.act, self.names, self.oracle = self.parts[0].obs, self.parts[0].act, self.parts[0].names, self.parts[0].oracle
+        self.obs, self.act, self.names, self.oracle, self.sim = self.parts[0].obs, self.parts[0].act, self.parts[0].names, self.parts[0].oracle, self.parts[0].sim
         self.envs = [e for a in self.parts for e in a.envs]
         self.next = seed + n  # the seed of the next game dealt
         # Every reply is read by its worker's own thread, so that a look ahead can answer whichever
@@ -344,15 +355,19 @@ TIMERS = False  # whether the state holds the clocks of rituals and trials (src/
 EXTRA = False  # whether it holds the demon hunter's extra cell and the hand's costs as they are now: --extra, three decks or more, dh-cthun, or the network's own
 STAGES = False  # whether it holds each egg's breaks remaining: --stages, priest-egg among the decks, or the network's own
 IMBUE = False  # whether it holds each chair's Imbue count: --imbue, priest-egg among the decks, or the network's own
+PILE = False  # whether it holds each chair's Slime 'em! pile: --pile, priest-egg among the decks, or the network's own
 EGG = False  # whether the egg guard plays Haunt on our own Egg of Khelos: --egg, priest-egg among the decks, or the network's own
 MIX = None  # with three decks or more: the weights of the decks after the first as the rival of the first (--mix)
+NAMES = None  # a fixed card vocabulary (--value-only: the names of the network that goes on), None to build it from the decks
 MIRROR = 0.0  # the share of games the first deck plays against itself (--mirror)
 SHAPE = None  # the board score's weights of --shape, None without it
+INFO = False  # whether the views say which tables have a step whose result depends on unseen cards (--distill-info)
 MARKS = False  # whether the views say which tables have a step of a card whose effect comes later (--rollout, --kl-weight)
 SEATDECKS = False  # whether the views say which deck sits in which seat (--opp)
 TIMER_COLS = 33  # the clocks of the state: three blocks of the eleven effects of DELAYED in src/selfplay-encode.mjs
 STAGE_COLS = 14  # the egg stages of the state: seven bodies of each chair in src/selfplay-encode.mjs
 IMBUE_COLS = 2  # the Imbue counts of the state: one cell for each chair in src/selfplay-encode.mjs
+PILE_COLS = 4  # the Slime 'em! piles of the state: two cells for each chair in src/selfplay-encode.mjs
 
 
 def vocab_flags(args):
@@ -361,12 +376,14 @@ def vocab_flags(args):
     These must be set on the module, not in main: Arena, load and the checkpoint read the module globals, so a
     local of the same name leaves them False and the arena then builds a state the checkpoint cannot be mapped
     onto (--imbue once did exactly that: 428 cells against a network that wanted its 430)."""
-    global TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
+    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
     TIMERS = args.timers
     EXTRA = args.extra or len(args.decks) >= 3 or 'dh-cthun' in args.decks
-    STAGES = args.stages or 'priest-egg' in args.decks
-    IMBUE = args.imbue or 'priest-egg' in args.decks
-    EGG = args.egg or 'priest-egg' in args.decks
+    egg = any(d == 'priest-egg' or d.startswith('priest-egg-') for d in args.decks)  # priest-egg-hsr too
+    STAGES = args.stages or egg
+    IMBUE = args.imbue or egg
+    PILE = args.pile or egg
+    EGG = args.egg or egg
     MIX = args.mix
     MIRROR = args.mirror
 
@@ -386,17 +403,17 @@ def state_sources(old, new):
     """For each number of the new state the number of the old one that means the same, None where there was none.
 
     The state is a head that every vocabulary shares, four blocks with a slot for each card, the clocks
-    (--timers), the extra cell (--extra), the egg stages (--stages) and the Imbue counts (--imbue), see
+    (--timers), the extra cell (--extra), the egg stages (--stages), the Imbue counts (--imbue) and the Slime piles (--pile), see
     src/selfplay-encode.mjs;
     old and new are {names, obs, timers, extra, stages} of the two networks."""
     v0, v1 = len(old['names']) + 1, len(new['names']) + 1
-    blocks = lambda d: TIMER_COLS * d['timers'] + d['extra'] + STAGE_COLS * d['stages'] + IMBUE_COLS * d['imbue']
+    blocks = lambda d: TIMER_COLS * d['timers'] + d['extra'] + STAGE_COLS * d['stages'] + IMBUE_COLS * d['imbue'] + PILE_COLS * d['pile']
     head = old['obs'] - 4 * v0 - blocks(old)
     if head != new['obs'] - 4 * v1 - blocks(new):
         raise SystemExit('the two networks do not see the same head of the state: the layout changed, there is nothing to map by name')
-    if (old['timers'] and not new['timers']) or (old['extra'] and not new['extra']) or (old['stages'] and not new['stages'])             or (old['imbue'] and not new['imbue']):
-        raise SystemExit('the network has clocks, the extra cell, egg stages or Imbue counts that the new one would not show: '
-                         'add --timers, --extra, --stages or --imbue')
+    if (old['timers'] and not new['timers']) or (old['extra'] and not new['extra']) or (old['stages'] and not new['stages'])             or (old['imbue'] and not new['imbue']) or (old['pile'] and not new['pile']):
+        raise SystemExit('the network has clocks, the extra cell, egg stages, Imbue counts or Slime piles that the new one would not show: '
+                         'add --timers, --extra, --stages, --imbue or --pile')
     slots = card_slots(old['names'], new['names'])
     src = list(range(head))
     for b in range(4):
@@ -414,6 +431,9 @@ def state_sources(old, new):
     if new['imbue']:
         src += [at + i if old['imbue'] else None for i in range(IMBUE_COLS)]
         at += IMBUE_COLS
+    if new['pile']:
+        src += [at + i if old['pile'] else None for i in range(PILE_COLS)]
+        at += PILE_COLS
     return src
 
 
@@ -503,10 +523,12 @@ def think(net, arena, idx, obs, acts, look=None):
 
 @torch.no_grad()
 def ahead(args):
-    """The options of a look ahead past the end of the turn that --depth and its flags ask for ({} for none)."""
+    """The options of a look ahead past the end of the turn that --depth and its flags ask for ({} for none),
+    and with --own-value the chair the positions of the other side's turn are valued from (F-882)."""
+    own = {'ownValue': True} if getattr(args, 'own_value', False) else {}
     if args.depth < 2:
-        return {}
-    return {'turns': args.depth, 'expand': args.expand, 'replies': args.replies, 'reply': args.reply}
+        return own
+    return {'turns': args.depth, 'expand': args.expand, 'replies': args.replies, 'reply': args.reply, **own}
 
 
 @torch.no_grad()
@@ -585,12 +607,13 @@ def pairing_lines(decks, pairs):
 
 def load(path):
     """A saved network; the games it is then measured in are encoded as it was trained, with or without the clocks and the extra cell."""
-    global TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
+    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
     ck = torch.load(path, weights_only=True, map_location='cpu')
     TIMERS = bool(ck.get('timers', False))
     EXTRA = bool(ck.get('extra', False))
     STAGES = bool(ck.get('stages', False))
     IMBUE = bool(ck.get('imbue', False))
+    PILE = bool(ck.get('pile', False))
     EGG = bool(ck.get('egg', False))
     MIX = ck.get('mix')
     MIRROR = ck.get('mirror', 0.0)
@@ -810,7 +833,13 @@ def collect(net, arena, pool, state, args):
                 orcs = [torch.as_tensor(envs[i]['orc'], dtype=torch.float32) for i in mine]
                 with torch.no_grad():
                     value = net.critic(torch.stack([obs[i] for i in mine]), torch.stack(orcs)).tolist()
-            targets = taught(net, arena, [i for i in mine if len(acts[i]) > 1 and state['ask'].random() < args.distill_frac], obs, acts, args) if 'ask' in state else {}
+            if 'ask' in state:
+                # --distill-info: the marked decisions are always asked; the draw of the others is the same as without it
+                asked = [i for i in mine if len(acts[i]) > 1 and (state['ask'].random() < args.distill_frac or INFO and envs[i].get('info'))]
+                taught.info[0] += sum(1 for i in asked if envs[i].get('info'))
+                targets = taught(net, arena, asked, obs, acts, args)
+            else:
+                targets = {}
             if 'roll' in state:
                 targets = queue_rollouts(net, arena, mine, envs, obs, acts, state, args)
             for j, i in enumerate(mine):
@@ -846,7 +875,7 @@ def collect(net, arena, pool, state, args):
             turns += e['ended']['turns']
             for seat in (0, 1):
                 seq, r, adv, nxt = live[i][seat], 0.0 if w == 'draw' else 1.0 if w == seat else -1.0, 0.0, 0.0
-                shaped = shaping(seq, args.shape_scale, args.shape_gamma) if SHAPE else None
+                shaped = shaping(seq, args.shape_scale, args.shape_gamma, e['ended']['phiEnd'][seat] if args.shape_final else None) if SHAPE else None
                 for t in range(len(seq) - 1, -1, -1):
                     o, ac, a, logp, v = seq[t][:5]
                     rew = r if t == len(seq) - 1 else 0.0
@@ -916,8 +945,8 @@ def opp_choose(net, obs, acts, args, state):
 def remapped(sd, c, arena):
     """The weights sd of the saved network c as one of this run's vocabulary (by card name, see resume_state)."""
     old = {'names': c['names'], 'obs': c['obs'], 'act': c['act'], 'timers': bool(c.get('timers', False)), 'extra': bool(c.get('extra', False)),
-           'stages': bool(c.get('stages', False)), 'imbue': bool(c.get('imbue', False))}
-    new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE}
+           'stages': bool(c.get('stages', False)), 'imbue': bool(c.get('imbue', False)), 'pile': bool(c.get('pile', False))}
+    new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE, 'pile': PILE}
     return sd if old == new else resume_state(sd, old, new)
 
 
@@ -1064,6 +1093,7 @@ def taught(net, arena, idx, obs, acts, args):
 
 
 taught.counts = [0]  # decisions looked ahead at since main last set it to zero
+taught.info = [0]  # of them, the ones marked info:1 by the env (--distill-info)
 
 
 def imitation(logp, targets):
@@ -1087,14 +1117,14 @@ def anchor(args, it, first):
     return args.distill_weight + (args.distill_decay_to - args.distill_weight) * (it - first - 1) / (args.iters - 1)
 
 
-def shaping(seq, scale, gamma):
+def shaping(seq, scale, gamma, final=None):
     """The reward --shape adds to each decision of one seat's game, seq of (..., phi, turn): at the last
     decision of each turn, scale * (gamma * Φ there - Φ at the last decision of the turn before), with
-    Φ at the seat's first decision before its first turn and Φ = 0 where the game ends."""
+    Φ at the seat's first decision before its first turn and Φ = final (default 0) where the game ends."""
     out, before = [0.0] * len(seq), seq[0][5] if seq else 0.0
     for t in range(len(seq)):
         if t == len(seq) - 1:
-            out[t] = scale * (gamma * 0.0 - before)
+            out[t] = scale * (gamma * (0.0 if final is None else final) - before)
         elif seq[t + 1][6] != seq[t][6]:
             out[t] = scale * (gamma * seq[t][5] - before)
             before = seq[t][5]
@@ -1171,7 +1201,7 @@ def kl_to_ref(logits, ref_logits, keep):
     return (refp.exp() * (refp - logp)).sum(-1)[keep].mean()
 
 
-def update(net, opt, data, args, weight=None, ref=None, beta=0.0, teacher=None):
+def update(net, opt, data, args, weight=None, ref=None, beta=0.0, teacher=None, value_only=False):
     """PPO epochs over the decisions; with weight (λ of --distill-weight) also the imitation of their targets, with ref
     (--kl-ref) also beta times its KL to pi_ref on the decisions of more than one step that are not marked late (row[7]), and
     with the hidden cards in row[8] (--oracle) also the loss of the oracle value head towards the same returns.
@@ -1197,7 +1227,7 @@ def update(net, opt, data, args, weight=None, ref=None, beta=0.0, teacher=None):
             policy = -torch.min(ratio * adv[idx], ratio.clamp(1 - args.clip, 1 + args.clip) * adv[idx]).mean()
             critic = (ret[idx] - value).pow(2).mean()
             entropy = dist.entropy().mean()
-            loss = policy + args.vf * critic - args.ent * entropy
+            loss = args.vf * critic if value_only else policy + args.vf * critic - args.ent * entropy  # value_only: the policy is frozen, only the value head learns
             if orc is not None:
                 oracle_loss = (ret[idx] - net.critic(obs[idx], orc[idx])).pow(2).mean()
                 loss = loss + args.vf * oracle_loss
@@ -1235,7 +1265,10 @@ def main():
     p.add_argument('--extra', action='store_true', help="show the network the demon hunter's extra cell (on its own with three decks or more, or dh-cthun among them)")
     p.add_argument('--stages', action='store_true', help="show the network each egg's breaks remaining (on its own with priest-egg among the decks)")
     p.add_argument('--imbue', action='store_true', help="show the network how often each chair's hero power was imbued (on its own with priest-egg among the decks)")
+    p.add_argument('--pile', action='store_true', help="show the network each chair's Slime 'em! pile for Ectoplasm (on its own with priest-egg among the decks)")
     p.add_argument('--egg', action='store_true', help='play Haunt on our own Egg of Khelos whenever it can (src/egg-guard.mjs; on its own with priest-egg among the decks)')
+    p.add_argument('--value-only', action='store_true', help='with --resume: train only the value head on the games of the frozen network (trunk and policy stay bit-identical); '
+                   'the cards and cells of the state are those of the checkpoint, whatever the decks')
     p.add_argument('--iters', type=int, default=50)
     p.add_argument('--envs', type=int, default=128)
     p.add_argument('--batch', type=int, default=8192, help='learner decisions an iteration')
@@ -1277,6 +1310,7 @@ def main():
     p.add_argument('--expand', type=int, default=4, help='with --depth 2: first steps of each deal looked at past the turn, the best of one turn')
     p.add_argument('--replies', type=int, default=2, help="with --depth 2: the other side's best first steps followed, greedy after them")
     p.add_argument('--reply', default='models/selfplay/warlock-zoo-v2.json', help="with --depth 2: the exported network (train/export.py) that plays the other side's turn")
+    p.add_argument('--own-value', action='store_true', help="in a look ahead, value the positions where the other side is to play from the looking seat's own chair (src/selfplay-search.mjs seatView), not from theirs with the sign turned: a network trained with --opp has learned only its own chair (F-882)")
     p.add_argument('--keep-every', type=int, default=10, help='iterations between the numbered copies under <run>/ckpt')
     p.add_argument('--lag', type=int, default=50, help='also measure against the copy this many iterations back')
     p.add_argument('--workers', type=int, default=1, help='node processes to split the games over, in training and in --eval (not --audit, --probe or --compare)')
@@ -1285,6 +1319,8 @@ def main():
     p.add_argument('--shape', default=None, help='PPO: add the potential-based reward of the board score with the weights of this file (train/fit_score.py), see above')
     p.add_argument('--shape-scale', type=float, default=0.5, help='with --shape: the factor on Φ (0.5 turns a logit near even into the units of the result)')
     p.add_argument('--shape-gamma', type=float, default=1.0, help="with --shape: the discount of the next turn's Φ")
+    p.add_argument('--shape-final', action='store_true', help="with --shape: the end of the game counts as the board score there (the env's phiEnd) instead of 0")
+    p.add_argument('--distill-info', action='store_true', help='with --distill-weight: always look ahead at the decisions the env marks info:1 (Life Tap, draws, Discover), besides the share --distill-frac')
     p.add_argument('--distill-weight', type=float, default=None, help='PPO: add this weight (λ) times the imitation of the look ahead of --distill, see above')
     p.add_argument('--distill-decay-to', type=float, default=None, help='with --distill-weight: move λ in a straight line to this over the run')
     p.add_argument('--distill-frac', type=float, default=0.25, help="with --distill-weight: share of the learner's decisions (of more than one step) looked ahead at")
@@ -1317,7 +1353,7 @@ def main():
     p.add_argument('--rollout-temp', type=float, default=1.0, help='with --rollout-temp-decay: the temperature at the branch')
     p.add_argument('--rollout-temp-decay', type=float, default=None, help='with --rollout: play the copies at --rollout-temp * this^(steps since the branch) instead of greedily')
     args = p.parse_args()
-    global DEVICE, WORKERS, SHAPE, MARKS, SEATDECKS, TIMERS, EXTRA, STAGES, IMBUE, EGG, MIX, MIRROR
+    global NAMES, DEVICE, WORKERS, SHAPE, INFO, MARKS, SEATDECKS, TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
     if len(args.decks) < 2:
         raise SystemExit('--decks needs two decks or more')
     if args.mix is not None and len(args.mix) != len(args.decks) - 1:
@@ -1328,6 +1364,11 @@ def main():
         if args.distill:
             raise SystemExit('--shape is a reward of PPO; --distill has none')
         SHAPE = json.loads(Path(args.shape).read_text(encoding='utf8'))['weights']
+    if args.shape_final and not args.shape:
+        raise SystemExit('--shape-final changes the end of --shape; it needs --shape')
+    if args.distill_info and args.distill_weight is None:
+        raise SystemExit('--distill-info marks decisions for --distill-weight; it needs --distill-weight')
+    INFO = args.distill_info
     if args.distill_weight is not None and args.distill:
         raise SystemExit('--distill-weight mixes the look ahead into PPO; --distill is the look ahead alone')
     if args.distill_weight is None and args.distill_decay_to is not None:
@@ -1410,10 +1451,19 @@ def main():
     out = Path(args.out) if args.out else ROOT / 'runtime' / 'selfplay' / time.strftime('%Y-%m-%dT%H-%M-%S')
     out.mkdir(parents=True, exist_ok=True)
     ck = torch.load(args.resume, weights_only=True, map_location='cpu') if args.resume else None
-    if ck:
+    if args.value_only:
+        if not ck or args.distill:
+            raise SystemExit('--value-only trains the value head of the network --resume names, on PPO games')
+        if args.oracle or args.teacher or args.distill_weight is not None or args.kl_weight is not None or args.kl_ref or args.restart_frac or args.opp_lr > 0:
+            raise SystemExit('--value-only changes no policy: it takes none of --oracle, --teacher, --distill-weight, --kl-weight, --kl-ref, --restart-frac, --opp-lr')
+        NAMES = ck['names']  # the state stays the one the checkpoint reads: unknown cards share the "other" slot, as they do when it plays
+        TIMERS, EXTRA, STAGES, IMBUE, PILE = (bool(ck.get(k, False)) for k in ('timers', 'extra', 'stages', 'imbue', 'pile'))
+        EGG = args.egg or bool(ck.get('egg', False))
+    elif ck:
         EXTRA = EXTRA or bool(ck.get('extra', False))  # the cells of the network that goes on are the ones it had
         STAGES = STAGES or bool(ck.get('stages', False))
         IMBUE = IMBUE or bool(ck.get('imbue', False))
+        PILE = PILE or bool(ck.get('pile', False))
         EGG = EGG or bool(ck.get('egg', False))
     arena = make(args.envs, args.seed, args.decks, swap=args.swap, restart={'frac': args.restart_frac, 'cap': args.restart_pool} if args.restart_frac else None,
                  oracle=args.oracle)
@@ -1421,8 +1471,8 @@ def main():
     done_iters = 0
     if ck:
         old = {'names': ck['names'], 'obs': ck['obs'], 'act': ck['act'], 'timers': bool(ck.get('timers', False)), 'extra': bool(ck.get('extra', False)),
-               'stages': bool(ck.get('stages', False)), 'imbue': bool(ck.get('imbue', False))}
-        new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE}
+               'stages': bool(ck.get('stages', False)), 'imbue': bool(ck.get('imbue', False)), 'pile': bool(ck.get('pile', False))}
+        new = {'names': arena.names, 'obs': arena.obs, 'act': arena.act, 'timers': TIMERS, 'extra': EXTRA, 'stages': STAGES, 'imbue': IMBUE, 'pile': PILE}
         if old != new:
             # Another vocabulary, the clocks or the extra cell: each card keeps the weights of its own place.
             gone = [n for n in old['names'] if n not in new['names']]
@@ -1437,7 +1487,11 @@ def main():
         if unexpected or any(not k.startswith('oracle_value.') for k in missing):
             raise SystemExit(f'{args.resume} does not fit this network: missing {missing}, unexpected {unexpected}')
         done_iters = ck['iters']
-    opt = torch.optim.Adam(net.parameters(), lr=args.lr)
+    if args.value_only:
+        for name, q in net.named_parameters():
+            q.requires_grad_(name.startswith('value.'))
+    value_decks = ck['decks'] if args.value_only else None  # the decks the network was made for stay on its file, the export reads the same json as before
+    opt = torch.optim.Adam([q for q in net.parameters() if q.requires_grad], lr=args.lr)
     start = copy.deepcopy(net).eval()  # what a --distill run is measured against: the network it began as
     saved = ck.get('opp', {}) if ck else {}  # the opponents' weights of the run being resumed, in its vocabulary
     sparring = {}
@@ -1493,7 +1547,7 @@ def main():
     log = out / 'log.csv'
     if not log.exists():
         log.write_text('iter,decisions,games,turns,policy_loss,value_loss,entropy,vs_random,vs_rush,vs_first,vs_lag,seconds'
-                       + (',distill,weight,searched' if args.distill_weight is not None else '')
+                       + (',distill,weight,searched' + (',info_searched' if args.distill_info else '') if args.distill_weight is not None else '')
                        + (',opp_decisions,opp_policy_loss,opp_value_loss,learner_searched' if sparring else '')
                        + (',kl' if kl_on else '') + (',restarts' if args.restart_frac else '') + (',oracle_value_loss' if args.oracle else '')
                        + (',teacher,teacher_train_sig,teacher_test_sig,teacher_test_keep' if teacher else '') + '\n')
@@ -1538,8 +1592,9 @@ def main():
             pl, vl, ent = distill(net, opt, [d for batch in recent for d in batch], args)  # ent holds the --mono penalty here
         else:
             taught.counts[0] = 0
+            taught.info[0] = 0
             data, games, turns = collect(net, arena, pool, state, args)
-            pl, vl, ent, il, klv, ovl_o, *tl = update(net, opt, data, args, weight, ref, beta, teacher)
+            pl, vl, ent, il, klv, ovl_o, *tl = update(net, opt, data, args, weight, ref, beta, teacher, value_only=args.value_only)
             if sparring:
                 odec, opl, ovl = opp_learn(sparring, args)
                 if args.opp_lr > 0 and it % args.opp_refresh == 0:
@@ -1550,7 +1605,7 @@ def main():
             pool.append(copy.deepcopy(net).eval())
             del pool[:-args.pool]
         ck = {'net': {k: v.cpu() for k, v in net.state_dict().items()}, 'obs': arena.obs, 'act': arena.act, 'width': args.width,
-              'names': arena.names, 'decks': args.decks, 'iters': it, 'timers': TIMERS, 'sim': arena.sim}
+              'names': arena.names, 'decks': value_decks or args.decks, 'iters': it, 'timers': TIMERS, 'sim': arena.sim}
         if net.oracle:
             ck['oracle'] = net.oracle
         if EXTRA:  # networks of the older vocabularies keep the checkpoint they always had
@@ -1559,7 +1614,9 @@ def main():
             ck['stages'] = True
         if IMBUE:
             ck['imbue'] = True
-        if EGG:
+        if PILE:
+            ck['pile'] = True
+        if EGG and not args.value_only:
             ck['egg'] = True
         if sparring:
             ck['opp'] = {d: {k: v.cpu() for k, v in o.net.state_dict().items()} for d, o in sparring.items()}
@@ -1577,7 +1634,7 @@ def main():
         secs = time.time() - t0
         with log.open('a') as f:
             f.write(f'{it},{len(data)},{games},{turns / games:.1f},{pl:.4f},{vl:.4f},{ent:.4f},{"," if vs is None else f"{vs[0]:.4f},{vs[1]:.4f}"},{selves[0]},{selves[1]},{secs:.0f}'
-                    + ('' if weight is None else f',{il:.4f},{weight:.4f},{taught.counts[0]}')
+                    + ('' if weight is None else f',{il:.4f},{weight:.4f},{taught.counts[0]}' + (f',{taught.info[0]}' if args.distill_info else ''))
                     + (f',{odec},{opl:.4f},{ovl:.4f},{taught.counts[0]}' if sparring else '')
                     + (f',{klv:.5f}' if kl_on else '') + (f',{state["restarts"]}' if args.restart_frac else '') + (f',{ovl_o:.4f}' if args.oracle else '')
                     + (f',{tl[0]:.4f},' + ','.join(f'{x:.4f}' for x in tmeas) if teacher else '') + '\n')

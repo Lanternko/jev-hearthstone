@@ -134,6 +134,17 @@ test('Cursed Catacombs asks which of three different deck cards to take', ()=>{
   assert.ok(moves(s).some(m=>m.kind==='end'));
 });
 
+test('Cursed Catacombs: a discovered Shred of Time casts and a normal draw replaces it', ()=>{
+  const deck=[C('TIME_025t',60),C('KAR_205',61),C('CATA_493',62),C('SCH_147',63)];
+  let s=play(table({hand:[H('TLC_451',50)],deck}),50);
+  const hp=hpOf(hero(s,'me'));
+  s=step(s,{kind:'choose',id:60});
+  assert.equal(hpOf(hero(s,'me')),hp-3);
+  assert.equal(s.hand.length,1);
+  assert.ok(!s.hand[0].temp&&s.hand[0].name!=='Shred of Time');
+  assert.equal(s.deck.length,2);
+});
+
 test('Chamber of Viscidus: open when played, a chosen discard and two cards, then shut for a turn', ()=>{
   let s=play(table({hand:[H('WON_103',50),H('KAR_205',51),H('SCH_147',52)],deck:filler(8),oppDeck:filler(4),mana:3}),50);
   assert.deepEqual([s.locations,s.sites[0].ready],[1,true]);

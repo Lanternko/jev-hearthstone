@@ -319,6 +319,8 @@ const UNDEATH=/^trigger the deathrattle of a random friendly minion that died th
 const UMBRA=/^battlecry: trigger the deathrattles of 5 friendly minions that died this game\.?$/i;
 const OOZE=/^battlecry: destroy a friendly minion\./i;
 const SUNBLOOM=/^draw 2 cards\. kindred: this costs \(2\) less\.?$/i;
+// Prepare: spend all the mana left, X, and the card costs (X+1) less (the user's ruling, 2026-10-28).
+const PREPARE=/^prepare\b/i;
 const SOOTHSAYER=/^prepare, taunt deathrattle: restore #?6 health to your hero\. summon a random 6-cost minion\.?$/i;
 // decks/priest-egg, the Imbue build (2026-10-27): Imbue turns the Hero Power into Blessing of the Moon
 // (EDR_449p) and each further Imbue makes its card one cheaper; the copies of the opponent's deck.
@@ -370,7 +372,7 @@ export function gameModel(c){
     const p=PORTAL.exec(c.text);if(p)return {kind:'portal',stage:Number(p[1])};
     if(SIGHT.test(c.text))return {kind:'draw',n:1,outcast:{draw:1}};
     // decks/priest-egg
-    if(FORESIGHT.test(c.text))return {kind:'drawReduce',n:1,cut:2};
+    if(FORESIGHT.test(c.text))return {kind:'drawReduce',n:1,cut:2,elder:true};
     if(HAUNT.test(c.text))return {kind:'buffMinion',atk:2,hp:3,taunt:true,reborn:true,target:'any'};
     if(SLIME.test(c.text))return {kind:'slime'};
     if(ECTOPLASM.test(c.text))return {kind:'ectoplasm'};
@@ -383,7 +385,7 @@ export function gameModel(c){
     if(SUNBLOOM.test(c.text))return {kind:'draw',n:2};
     if(FATE.test(c.text))return {kind:'fate'};
     if(BARRIER.test(c.text))return {kind:'barrier',target:'friend',optional:true};
-    if(FLAY.test(c.text))return {kind:'flay',damage:3};
+    if(FLAY.test(c.text))return {kind:'flay',damage:3,elder:true};
     return null;
   }
   if(c?.type==='WEAPON')return AXE.test(c.text)||LASH.test(c.text)||EYEMAUL.test(c.text)||TINY_PAL.test(c.text)?{kind:'weapon'}:null;
@@ -445,6 +447,8 @@ export function costOf(s,c){
   for(const b of [...s.me,...s.opp])if(b.type==='MINION'&&b.hp>0&&!b.dormant)tax+=auraOf(b.text);
   // Medivh's Triumph: 1 while a Legendary card of ours is on the board.
   if(MEDIVH.test(c.text)&&s.me.some(b=>b.type==='MINION'&&b.hp>0&&b.legendary))base=1;
+  // Gravedawn Sunbloom's Kindred: two less after a Holy card on our last turn.
+  if(SUNBLOOM.test(c.text)&&(s.lastKinds??[]).includes(c.raw?.school))base=Math.max(0,base-2);
   const k=costKind(c.text);
   if(k===2&&(s.died??0)>0)base=0;                                  // Hungering Cavern
   else if(k===3&&(s.studies??0)>0)base=Math.max(0,base-1);         // Illidari Studies
@@ -453,7 +457,7 @@ export function costOf(s,c){
 // Whether a card's cost follows the demon hunter's state (Remnant of Rage, Hungering Cavern, Illidari Studies).
 export const dhCost=c=>costKind(c.text)>0;
 // Cards whose price follows the board beyond the demon hunter's: Medivh's Triumph and N'Zoth (decks/priest-egg).
-export const stateCost=c=>dhCost(c)||MEDIVH.test(c.text??'')||NZOTH.test(c.text??'');
+export const stateCost=c=>dhCost(c)||MEDIVH.test(c.text??'')||NZOTH.test(c.text??'')||SUNBLOOM.test(c.text??'');
 const COST_KINDS=new Map();
 const costKind=t=>{
   let v=COST_KINDS.get(t);
@@ -620,6 +624,8 @@ export function moves(s){
     out.push({kind:'play',id:c.id});
   }
   for(const x of s.sites??[])if(x.ready&&SITE_DISCARD_DRAW.test(x.text))out.push({kind:'use',id:x.id});
+  // Prepare (whole games only; the live client cannot click it): once a card, spend all the mana left.
+  if(s.game)for(const c of s.hand)if(!c.prepared&&PREPARE.test(c.text)&&modelOf(s,c))out.push({kind:'prepare',id:c.id});
   if(s.game)out.push({kind:'end'});
   return out;
 }
@@ -708,6 +714,12 @@ function applyStep(s0,m){
       else if(!DISCARD_HIGH.test(afterWeapon)){exact=false;notes.push('weapon triggers an unmodelled effect')}
     }
     return {s,exact,note:notes.join('; ')};
+  }
+  if(m.kind==='prepare'){
+    // Prepare: all the mana left (X) is spent and the card costs X+1 less from now on.
+    const c=s.hand.find(x=>x.id===m.id);
+    c.cost=Math.max(0,c.cost-s.mana-1);c.raw={...c.raw,COST:c.cost};c.prepared=true;s.mana=0;
+    return {s,exact:true,note:''};
   }
   if(m.kind==='use'){
     s.sites=s.sites.map(x=>({...x}));
@@ -810,23 +822,8 @@ function applyStep(s0,m){
       for(const x of s.hand)if(x.type==='MINION')growCard(x,0,2);
       return {s,exact:true,note:''};
     }
-    if(model.kind==='flay'){
-      // Elder Word: Flay; the repeat on the next Shadow spell is not modelled.
-      const foes=s.opp.filter(b=>(b.type==='HERO'||b.type==='MINION'&&b.hp>0)&&!b.dormant&&!b.immune);
-      if(foes.length){
-        const t=foes[roll(s,foes.length)],before=hpOf(t);strike({},t,model.damage);
-        if(t.type==='HERO')s.faceDealt+=before-hpOf(t);
-      }
-      return {s,exact:true,note:''};
-    }
-    if(model.kind==='drawReduce'&&s.game){
-      const got=pull(s,model.n);
-      for(const id of got){
-        const d=s.hand.find(x=>x.id===id);
-        if(d){d.cost=Math.max(0,d.cost-model.cut);d.raw={...d.raw,COST:d.cost}}
-      }
-      return {s,exact:true,note:''};
-    }
+    // Elder Word: Flay and Foresight; the repeat on the next Shadow spell is in afterPlay.
+    if(model.kind==='flay'||model.kind==='drawReduce'&&s.game){elderWord(s,model);return {s,exact:true,note:''}}
     if(model.kind==='discover'&&s.game){
       // Three different cards of the deck, never another copy of the spell itself.
       const names=[...new Set(s.deck.filter(d=>d.name!==c.name).map(d=>d.name))];
@@ -940,7 +937,8 @@ function applyStep(s0,m){
       if(model.silence&&m.targetId!=null){const t=[...s.me,...s.opp].find(x=>x.id===m.targetId);if(t)silence(t)}
       if(model.ooze&&m.targetId!=null){const t=s.me.find(x=>x.id===m.targetId);if(t&&t!==b)t.hp=0}
       if(model.priestess){
-        for(const t of s.opp)if(t.type==='MINION'&&!t.dormant)t.atk=Math.max(0,t.atk-2);
+        // -2 Attack until our next turn: what was taken comes back when it begins (beginTurn).
+        for(const t of s.opp)if(t.type==='MINION'&&!t.dormant){const d=Math.min(2,t.atk);t.atk-=d;t.chill=(t.chill??0)+d}
       }
       if(model.imbue)imbue(s);
       if(model.conjurer&&s.game&&s.them.deck.length){
@@ -953,7 +951,7 @@ function applyStep(s0,m){
         if(t&&n>0){strike({},t,n);if(b.lifesteal){const h=hero(s,'me');if(h)h.hp=Math.min(h.maxHp,h.hp+n)}}
       }
       if(model.smuggler&&m.targetId!=null){
-        // Defias Smuggler: +2 Attack and Rush; a body that could not swing yet may now hit minions. Prepare is not modelled.
+        // Defias Smuggler: +2 Attack and Rush; a body that could not swing yet may now hit minions. Prepare is a step of its own.
         const t=s.me.find(x=>x.id===m.targetId&&x!==b);
         if(t){t.atk+=2;t.rush=true;if(!t.canAttack){t.canAttack=true;t.rushOnly=true}}
       }
@@ -1046,7 +1044,7 @@ function applyStep(s0,m){
 
 export function apply(s0,m){
   const r=applyStep(s0,m);
-  if(s0.game){reap(r.s);return r}
+  if(s0.game){if(m.kind==='play')afterPlay(s0,r.s,m);reap(r.s);return r}
   const summoned=r.s.me.some(b=>!s0.me.some(x=>x.id===b.id))||!!r.s.pendingSummons;
   const discarded=(r.s.discarded?.length??0)>(s0.discarded?.length??0)||!!r.s.uncertainDiscard;
   // Do not call a fixed summon/buff exact in the presence of an unmodelled
@@ -1116,7 +1114,7 @@ export const searchSignature=s=>JSON.stringify([
 // random outcome is rolled from s.seed, a player's pick becomes a 'choose' step, and 'end' hands the
 // turn over. Everything the acting side owns sits on s; the other side's hidden half sits in s.them.
 const SEAT=['hand','deck','weapon','power','locations','sites','mana','crystals','fatigue','discardCount','seat','spellTax','timers',
-  'died','cthunSeen','cthunStart','brox','studies','grave','rattles','slimePile'];
+  'died','cthunSeen','cthunStart','brox','studies','grave','rattles','slimePile','elderWord','playedKinds','lastKinds'];
 
 // mulberry32, with the counter kept in the state: equal states roll equal outcomes.
 export function roll(s,n){
@@ -1235,6 +1233,34 @@ function slimeBurst(s){
   if(!ecto)return;
   if(s.hand.length<10)s.hand.push(handCard({...ecto,entityId:-(++s.nextToken)},true));
   if((s.them.hand?.length??0)<10)s.them={...s.them,hand:[...(s.them.hand??[]),handCard({...ecto,entityId:-(++s.nextToken)},true)]};
+}
+// Elder Word: Flay (3 damage to a random enemy) and Foresight (draw a card, two cheaper).
+function elderWord(s,model){
+  if(model.kind==='flay'){
+    const foes=s.opp.filter(b=>(b.type==='HERO'||b.type==='MINION'&&b.hp>0)&&!b.dormant&&!b.immune);
+    if(foes.length){
+      const t=foes[roll(s,foes.length)],before=hpOf(t);strike({},t,model.damage);
+      if(t.type==='HERO')s.faceDealt+=before-hpOf(t);
+    }
+  }else if(model.kind==='drawReduce'){
+    for(const id of pull(s,model.n)){
+      const d=s.hand.find(x=>x.id===id);
+      if(d){d.cost=Math.max(0,d.cost-model.cut);d.raw={...d.raw,COST:d.cost}}
+    }
+  }
+}
+// After a card of a whole game resolves: Kindred remembers its spell school and minion types for the
+// next turn, and a Shadow spell repeats the Elder Word played before it (once; an Elder Word played
+// now waits for the next Shadow spell in turn).
+function afterPlay(s0,s,m){
+  const c=s0.hand.find(x=>x.id===m.id);
+  if(!c)return;
+  const raw=c.raw??{},kinds=[raw.school,...(raw.races??[])].filter(Boolean);
+  if(kinds.length)s.playedKinds=[...(s.playedKinds??[]),...kinds];
+  if(c.type!=='SPELL'||raw.school!=='SHADOW')return;
+  const before=s0.elderWord,model=modelOf(s0,c);
+  s.elderWord=model?.elder?model:null;
+  if(before)elderWord(s,before);
 }
 const growCard=(c,atk,hp)=>{c.atk+=atk;c.hp+=hp;c.raw={...c.raw,ATK:c.atk,HEALTH:c.hp}};
 // A token card of the database (s.game.extra), summoned at its printed stats and keywords.
@@ -1447,6 +1473,7 @@ function targetsOf(s,m){
 
 // A pick the player makes mid-step. One option needs no asking; none skips the pick.
 // Imbue: the first one makes the Hero Power Blessing of the Moon, every one cuts its card by one more.
+// The Hero Power itself stays at 2 (the user's ruling with the card's picture, 2026-10-28, R-142).
 function imbue(s){
   if(!s.power)return;
   s.power={...s.power,name:'Blessing of the Moon',cost:2,gain:0,draw:0,summon:0,heal:0,selfHit:0,bless:(s.power.bless??0)+1};
@@ -1512,7 +1539,11 @@ function settle(s,kind,id){
   }else if(id!=null){
     const raw=s.deck.find(d=>d.entityId===id);
     s.deck=s.deck.filter(d=>d!==raw);
-    gain(s,raw,true);
+    // A discovered Shred of Time is drawn, so it casts and a normal draw replaces it (user, 2026-10-29).
+    if(/\bcasts when drawn\b/i.test(flat(raw.text))){
+      strike({},hero(s,'me'),Number(/deal (\d+) damage to your hero/i.exec(flat(raw.text))?.[1]??0));
+      pull(s,1);
+    }else gain(s,raw,true);
   }
 }
 
@@ -1587,6 +1618,7 @@ export function beginTurn(s){
     else b.canAttack=!b.dormant;
   }
   s.died=0;s.them={...s.them,died:0};
+  for(const b of s.opp)if(b.chill){b.atk+=b.chill;b.chill=0}        // Kaldorei Priestess's -2 Attack wears off
   awaken(s);
   if(s.game&&s.timers?.length)fireTimers(s);                      // after the refresh: new bodies stay sick
   pull(s,1);
@@ -1598,6 +1630,7 @@ function passTurn(s){
   for(const c of s.hand.filter(c=>c.temp))discard(s,'pick',c.id);
   reap(s);
   s.spellTax=0;                                                   // Cult Neophyte's tax lasted one turn
+  s.lastKinds=s.playedKinds??[];s.playedKinds=[];                 // Kindred looks at the turn before
   const h=hero(s,'me');h.atk=0;h.canAttack=false;
   for(const b of s.me)b.frozen=false;                             // a frozen body thaws at the end of its owner's turn
   const f=flip(s);

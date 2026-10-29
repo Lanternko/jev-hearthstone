@@ -45,11 +45,15 @@ const MADE={
 // cell for each chair with how often its hero power has been imbued (Blessing of the Moon: the count
 // over five, capped at 1), and makes sure the cards of the Imbue priest list have places of their own:
 // an older network's vocabulary does not hold them and they all shared the "other" slot (F-853).
-export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false,imbue=false}={}){
+// `pile` adds two cells for each chair with what Slime 'em! put aside for its Ectoplasm: how many
+// minions (over seven, capped) and the most breaks an egg among them has left (over five) (F-861).
+// `fixed` (a network's own names) keeps that vocabulary whatever the decks: a card it does not hold shares the "other" slot,
+// as it does for the network when it plays (train/ppo.py --value-only).
+export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false,imbue=false,pile=false,names:fixed=null}={}){
   const ids=lists.flatMap(l=>Object.keys(l.cards));
-  const names=[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name)),
+  const names=fixed?[...fixed]:[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name)),
     ...(imbue?IMBUE_IDS.filter(id=>cards[id]).map(id=>cards[id].name):[])])];
-  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages,imbue};
+  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages,imbue,pile};
 }
 
 // decks/priest-egg, the 2026-10-27 Imbue list. A network trained with `imbue` knows every one of its
@@ -70,7 +74,10 @@ const breaks=b=>EGG_STAGE[b.cardId]??0;
 // How often each chair's hero power has been imbued: mine, then the other chair's, over five and capped.
 const IMBUE_COLS=2,MAX_IMBUE=5;
 const imbues=p=>Math.min((p?.bless??0)/MAX_IMBUE,1);
-export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0)+(v.imbue?IMBUE_COLS:0);
+// Each chair's Slime 'em! pile: how many minions over seven (capped), then the most breaks an egg in it has left over five.
+const PILE_COLS=4;
+const pileCells=p=>[Math.min((p?.length??0)/7,1),Math.max(0,...(p??[]).map(e=>EGG_STAGE[e.raw?.cardId]??0))/5];
+export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0)+(v.imbue?IMBUE_COLS:0)+(v.pile?PILE_COLS:0);
 export const actSize=v=>KINDS.length+v.size+3+TARGET+v.size;
 
 const t=n=>(n??0)/10;
@@ -120,7 +127,9 @@ function observe(s,v){
   if(v.imbue){
     // Blessing of the Moon cuts its offer by one for each Imbue, so the count is the whole of the power.
     o[k]=imbues(s.power);o[k+1]=imbues(th.power);
+    k+=IMBUE_COLS;
   }
+  if(v.pile)o.splice(k,PILE_COLS,...pileCells(s.slimePile),...pileCells(th.slimePile));
   return o;
 }
 
@@ -142,7 +151,8 @@ function thing(s,id,v){
 function act(s,m,v){
   const a=new Array(actSize(v)).fill(0),V=v.size;
   let k=KINDS.length;
-  a[KINDS.indexOf(m.kind)]=1;
+  // Prepare (a hand card, decks/priest-egg) takes the place of 'use' (a location), so the step vector keeps its size.
+  a[KINDS.indexOf(m.kind==='prepare'?'use':m.kind)]=1;
   const from=m.kind==='power'||m.kind==='end'?null:thing(s,m.id,v);
   if(from){a[k+slot(v,from.name)]=1;a[k+V]=t(from.cost);a[k+V+1]=t(from.atk);a[k+V+2]=t(from.hp)}
   k+=V+3;

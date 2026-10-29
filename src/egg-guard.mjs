@@ -18,3 +18,7 @@ export function eggGuard(s,legal){
   const e=eggHaunt(s);
   return e&&(legal.find(m=>m.kind==='play'&&e.haunts.has(m.id)&&e.eggs.has(m.targetId))??null);
 }
+
+// The egg priest decks (decks/priest-egg and its variants decks/priest-egg-hsr): the ones that get the egg guard
+// and the stages/imbue/pile/egg observation flags. Match on the name, never on a list of exact strings.
+export const isEggDeck=name=>/^priest-egg(-|$)/.test(name??'');

@@ -18,6 +18,8 @@ export const loadList=name=>read(`../decks/${name}/list.json`);
 const TAGS=['TAUNT','RUSH','CHARGE','DIVINE_SHIELD','STEALTH','POISONOUS','LIFESTEAL','WINDFURY','ELUSIVE'];
 export const rawCard=(c,entityId)=>({entityId,cardId:c.id,CARDTYPE:c.type,name:c.name,text:c.text??'',COST:c.cost??0,
   legendary:c.rarity==='LEGENDARY'||!!c.elite,race:c.race??null,
+  // The spell school and the minion types, for Kindred and the Elder Word repeats (decks/priest-egg).
+  school:c.spellSchool??null,races:c.races??(c.race?[c.race]:[]),
   ...(c.attack!=null?{ATK:c.attack}:{}),...(c.health||c.durability?{HEALTH:c.health||c.durability}:{}),
   ...Object.fromEntries((c.mechanics??[]).filter(m=>TAGS.includes(m)).map(m=>[m,1]))});
 
@@ -60,7 +62,7 @@ function seat(k,list,cards,s){
   for(let i=deck.length-1;i>0;i--){const j=roll(s,i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}
   const p=rawCard(cards[list.power],(k+1)*100+99),t=textOf(p);
   return {seat:k,hand:[],deck,weapon:null,locations:0,sites:[],mana:0,crystals:0,fatigue:0,discardCount:0,spellTax:0,timers:[],
-    died:0,cthunSeen:[],cthunStart:ids.includes('BE_013'),brox,studies:0,grave:[],rattles:0,slimePile:[],
+    died:0,cthunSeen:[],cthunStart:ids.includes('BE_013'),brox,studies:0,grave:[],rattles:0,slimePile:[],elderWord:null,playedKinds:[],lastKinds:[],
     power:{id:p.entityId,name:p.name,cost:p.COST,gain:heroAttackGain(p),draw:/\bdraw a card\b/i.test(t)?1:0,
       summon:/summon a random basic totem/i.test(t)?1:0,
       heal:Number(/restore #?(\d+) health/i.exec(t)?.[1]??0),

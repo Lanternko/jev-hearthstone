@@ -4,6 +4,7 @@ import {moves} from '../src/sim.mjs';
 import {newGame,loadList,cardDb,rawCard,playout,randomPolicy,rushPolicy} from '../src/selfplay.mjs';
 import {vocabulary,encode,obsSize,actSize} from '../src/selfplay-encode.mjs';
 import {Arena,packed} from '../src/selfplay-env.mjs';
+import {infoStep,touchesInfo} from '../src/selfplay-rollout.mjs';
 
 const DB=cardDb(),LIST=loadList('warlock-discard'),LISTS=[LIST,LIST],V=vocabulary(LISTS);
 // A caller that picks by its own dice, so a test replays.
@@ -51,7 +52,7 @@ test('the state does not tell which cards the other hand holds or how either dec
 test('a table asks the seat to act, reports a finished game once and deals the next', ()=>{
   const a=new Arena({lists:LISTS,n:8,seed:11}),pick=caller(11);
   let v=a.views(),ended=0;
-  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false,extra:false,stages:false,imbue:false});
+  assert.deepEqual(a.dims,{obs:obsSize(V),act:actSize(V),names:V.names,timers:false,extra:false,stages:false,imbue:false,pile:false});
   for(let i=0;i<2500;i++){
     v.forEach((e,k)=>{
       assert.equal(e.seat,a.tables[k].s.seat);
@@ -242,4 +243,67 @@ test('an Arena made with timers says so in its dims and gives states of that len
   assert.equal(a.dims.timers,true);assert.equal(b.dims.timers,false);
   assert.equal(a.dims.obs,b.dims.obs+33);
   assert.equal(a.views()[0].obs.length,a.dims.obs);
+});
+
+test('with a shape the ended of a game carries the board score of each seat at the end, opposite in sign; without one it does not', ()=>{
+  for(const [w,onlyHealth] of [[{board:1,hand:0.5,health:2,pending:0},false],[{board:0,hand:0,health:1,pending:0},true]]){
+    const a=new Arena({lists:LISTS,n:8,seed:11,shape:w}),b=new Arena({lists:LISTS,n:8,seed:11}),pick=caller(11),pickB=caller(11);
+    let v=a.views(),u=b.views(),ended=0,decided=0;
+    for(let i=0;i<1500;i++){
+      v=a.step(v.map(pick));u=b.step(u.map(pickB));
+      v.forEach((e,k)=>{
+        assert.equal('ended' in e,'ended' in u[k]);
+        if(!e.ended)return;
+        ended++;
+        const [p,q]=e.ended.phiEnd;
+        assert.ok(Number.isFinite(p)&&Number.isFinite(q));
+        assert.ok(Math.abs(p+q)<1e-9,`${p} ${q}`);
+        // with Health alone the one left standing scores above the one whose hero died (a dead hero counts 0)
+        if(onlyHealth&&(e.ended.winner===0||e.ended.winner===1)){
+          decided++;
+          const [x,y]=e.ended.winner===0?[p,q]:[q,p];
+          assert.ok(x>0&&y<0,`${p} ${q}`);
+        }
+        assert.equal('phiEnd' in u[k].ended,false);
+      });
+    }
+    assert.ok(ended>30,`${ended} games`);
+    if(onlyHealth)assert.ok(decided>10,`${decided} decided games`);
+  }
+});
+
+test('with info a view says so when a step draws or picks from a random offer; without it the views are the same as before', ()=>{
+  const a=new Arena({lists:LISTS,n:8,seed:13,info:true}),b=new Arena({lists:LISTS,n:8,seed:13}),pick=caller(13);
+  let v=a.views(),u=b.views(),marked=0,plain=0;
+  for(let i=0;i<600;i++){
+    v.forEach((e,k)=>{
+      const t=a.tables[k],want=touchesInfo(t.s,t.legal);
+      assert.equal(e.info,want?1:undefined,`step ${i} table ${k}`);
+      if(want)marked++;else plain++;
+      const {info,...rest}=e;
+      assert.deepEqual(rest,u[k]);                              // the same view, bar the flag
+      assert.equal('info' in u[k],false);
+    });
+    const acts=v.map(pick);
+    v=a.step(acts);u=b.step(acts);
+  }
+  assert.ok(marked>20&&plain>20,`${marked} marked, ${plain} plain`);
+});
+
+test('infoStep marks Life Tap, a draw or Discover card and a random offer, and not an attack, the end of the turn or a plain minion', ()=>{
+  let s=newGame({lists:LISTS,seed:3});
+  s.mana=10;
+  const legal=moves(s);
+  const tap=legal.find(m=>m.kind==='power');
+  assert.ok(tap&&s.power.draw>0,'Life Tap is available to the warlock');
+  assert.equal(infoStep(s,tap),true);
+  assert.equal(touchesInfo(s,legal),true);
+  assert.equal(touchesInfo(s,legal.filter(m=>m.kind==='power')),true);
+  assert.equal(infoStep(s,{kind:'end'}),false);
+  assert.equal(infoStep(s,{kind:'attack',id:1,targetId:2}),false);
+  assert.equal(touchesInfo(s,[{kind:'end'},{kind:'attack',id:1,targetId:2}]),false);
+  s.choice={kind:'discover',options:['a','b']};
+  assert.equal(infoStep(s,{kind:'choose',id:'a'}),true);
+  s.choice={kind:'cthun',options:['a','b']};
+  assert.equal(infoStep(s,{kind:'choose',id:'a'}),false);
 });

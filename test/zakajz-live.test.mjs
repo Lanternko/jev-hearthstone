@@ -44,10 +44,10 @@ test('game-zoo takes the deck from its argument, warlock-zoo by default',()=>{
   assert.equal(deckArg(['--dry']),'warlock-zoo');
 });
 
-test('warlock-zakajz maps to its own network, named in the MODELS table',async()=>{
+test('warlock-zakajz maps to zoo 0.2.0 (R-151), named in the MODELS table',async()=>{
   await withEnv({JEV_NET_MODEL:null},()=>{
-    assert.equal(MODELS['warlock-zakajz'],'warlock-zakajz-v1');
-    assert.match(modelFile('warlock-zakajz'),/models[\\/]selfplay[\\/]warlock-zakajz-v1\.json$/);
+    assert.equal(MODELS['warlock-zakajz'],'warlock-zoo-0.2.0');
+    assert.match(modelFile('warlock-zakajz'),/models[\\/]selfplay[\\/]warlock-zoo-0\.2\.0\.json$/);
     // The log's first line takes its network name from this table.
     const zoo=checkModel('warlock-zoo');
     assert.equal(zoo.ok,true);

@@ -12,6 +12,12 @@ test('a 16:9 client has no letterbox; a wider one gets pillars', () => {
   assert.equal(wide.w,1920); near(wide.x,320); assert.equal(wide.y,0);
 });
 
+test('a narrower client is letterboxed: the box that hit mulligan and end turn at 1227x739 (F-879)', () => {
+  const s=contentBox(1227,739);
+  assert.equal(s.x,0); assert.equal(s.w,1227); near(s.h,1227*9/16); near(s.y,(739-1227*9/16)/2);
+  // Live 2026-10-29: end turn hit at 997,335 with this box and missed at 1024,335 with a full-height one.
+  near(endTurn(s).x,997,1);
+});
 test('the same fractions land on the same relative spot at 1080p and 1440p', () => {
   for(const [a,b] of [[hand(HD,2,5),hand(QHD,2,5)],[board(HD,3,7,'you'),board(QHD,3,7,'you')],[endTurn(HD),endTurn(QHD)]]){
     near(a.x/1920,b.x/2560,0.001); near(a.y/1080,b.y/1440,0.001);

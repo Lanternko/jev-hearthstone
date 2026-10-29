@@ -28,6 +28,9 @@ export const L={
 };
 
 // Hearthstone renders 16:9 and letterboxes the remainder, so derive the content box.
+// 2026-10-29: a full-height box for a 1227x739 client (F-879) moved the mulligan and end-turn
+// clicks off target in the next live game; this letterbox version had hit them. Only 16:9 is
+// verified live; play at 16:9.
 export function contentBox(width,height){
   if(!(width>0&&height>0))throw Error('Bad client size');
   const w=Math.min(width,height*16/9),h=w*9/16;

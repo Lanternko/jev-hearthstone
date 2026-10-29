@@ -23,7 +23,12 @@
 // side's next turn is played out from the position each of them hands over, by another network's
 // policy (`reply`, as loadNet in src/selfplay-net.mjs gives it) along its `replies` best first steps
 // and greedily after them, and the step scores the worst of what those leave us, by our network.
-import {moves,apply,roll,handCard,hpOf} from './sim.mjs';
+//
+// A position where the other side is to play is valued, by default, from its chair (the network's
+// value for the seat to act, with the sign turned). With `ownValue` it is valued from ours instead
+// (seatView: the same position seen from our chair, the sign kept): a network trained only against
+// other networks (train/ppo.py --opp) has learned to value its own chair, not theirs (F-882).
+import {moves,apply,roll,handCard,hpOf,flip} from './sim.mjs';
 import {winner,cardDb,rawCard} from './selfplay.mjs';
 import {encode} from './selfplay-encode.mjs';
 import {discardGrowth} from './discard-model.mjs';
@@ -54,6 +59,26 @@ export function redeal(s,seed,cards=cardDb()){
 // not entities, so the two copies of a card do not split a line in two. A turn handed over is seen
 // from the other chair, where our own hand and deck are only counts, so those are named beside it.
 const names=cs=>cs.map(c=>c.name).sort().join();
+
+// A position where the other side is to play, seen from the chair that just handed the turn over
+// (or, in a turn of two, the chair whose turn will come back): flip of src/sim.mjs swaps every field
+// of the seat (hand, deck, mana, clocks, the Slime 'em! pile, Blessing of the Moon...) and the two
+// boards. Three things belong to the acting chair rather than a seat and are put back for ours: a
+// pick under way (choice) and a Kazakus pair (kaz) are the other side's, so there is none; and the
+// turn counter goes back to the turn we played, so that seat and turn agree as in every position
+// the network was trained on in its own chair.
+// The turn is over, so nothing of it is left to spend: no mana, nobody on our side ready to attack
+// (the hero too), no location ready. Shown as they were left, unspent mana and minions that never
+// attacked read to the network as the start of a turn still to play, and the look ahead then
+// prefers to end the turn early (F-882, 2026-10-29: plain swap 0.2.0 15/60 and v10 18/60 vs egg 0.1.0,
+// seed 3000001; with the turn spent 36 and 34). The next turn's refresh is the beginTurn of that
+// seat, which this does not play.
+export function seatView(s){
+  const v={...flip(s),choice:null,kaz:null,turn:(s.turn??0)-1};
+  return {...v,mana:0,me:v.me.map(b=>({...b,canAttack:false})),sites:(v.sites??[]).map(x=>({...x,ready:false}))};
+}
+// What the network is shown of a position t to value, and the sign of its answer for `seat`.
+export const valueAsk=(t,seat,vocab,own)=>t.seat===seat||!own?{obs:encode(t,[],vocab).obs,sign:t.seat===seat?1:-1}:{obs:encode(seatView(t),[],vocab).obs,sign:1};
 const key=(s,obs,handed)=>obs.join()+(handed?`|${names(s.them.hand)}|${names(s.them.deck)}`:`|${s.choice?.options.length??''}`);
 
 // A step by the names of what it moves, so that the same steps in another order read the same.
@@ -169,7 +194,7 @@ export function replies(t,net,k,cap=40){
 // mean change of those that were (a guess, so within the bounds of a value), and never above the
 // worst of them: it was not seen to survive the reply, and the reply is what tends to bring a score
 // down.
-function* further(beams,legal,vocab,{expand,replies:k,reply}){
+function* further(beams,legal,vocab,{expand,replies:k,reply,own=false}){
   const seat=beams[0].root.seat,ends=[];
   for(const b of beams){
     b.top=legal.map((_,r)=>r).filter(r=>Number.isFinite(b.best[r])&&b.at[r]).sort((x,y)=>b.best[y]-b.best[x]).slice(0,expand);
@@ -180,7 +205,7 @@ function* further(beams,legal,vocab,{expand,replies:k,reply}){
       b.again.set(r,replies(t,reply,k).map(s=>{
         const w=winner(s),n={v:null};
         if(w!=null)n.v=w==='draw'?0:w===seat?1:-1;
-        else ends.push(Object.assign(n,{obs:encode(s,[],vocab).obs,sign:s.seat===seat?1:-1}));
+        else ends.push(Object.assign(n,valueAsk(s,seat,vocab,own)));
         return n;
       }));
     }
@@ -199,9 +224,10 @@ function* further(beams,legal,vocab,{expand,replies:k,reply}){
 
 // A generator: it yields lists of encoded states and is sent back the network's value of each (seen
 // from the seat to act in that state), and returns one score per legal step, in the root seat's
-// favour. `legal` must be moves(s). `deal(s,seed)` gives each sample its position (redeal; a live view passes
+// favour. With `ownValue` a state where the other side is to play is sent as seatView shows it, and
+// its value is taken as the root seat's. `legal` must be moves(s). `deal(s,seed)` gives each sample its position (redeal; a live view passes
 // opponentDealer of src/opponent-hand.mjs, which also deals the cards of the other side's hand).
-export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal}={}){
+export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal,ownValue=false}={}){
   if(turns>1&&!reply)throw Error('turns=2 needs the network that plays the reply');
   const seat=s.seat,total=legal.map(()=>0);
   if(legal.length<2)return total;
@@ -216,6 +242,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
       const next=new Map();
       for(const n of b.open)moves(n.s).forEach((m,i)=>{
         const t=apply(n.s,m).s,roots=n.roots??[i],w=winner(t),over=w!=null,handed=t.seat!==seat;
+        // Lines are joined by what the acting chair is shown (key), whichever chair values them.
         const obs=over?null:encode(t,[],vocab).obs,k=over?`over ${w}`:key(t,obs,handed),same=next.get(k);
         if(same){for(const r of roots)if(!same.roots.includes(r))same.roots.push(r);return}
         const node={s:t,obs,roots:[...roots],done:over||handed,v:over?(w==='draw'?0:w===seat?1:-1):null,sign:handed?-1:1,
@@ -227,6 +254,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
           node.order=`${[...node.steps].sort().join()}|${node.left}`;
           node.board=standing(t,handed);
         }
+        if(!over&&handed&&ownValue)Object.assign(node,valueAsk(t,seat,vocab,true));
         if(!over)ask.push(node);
         next.set(k,node);
       });
@@ -254,7 +282,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
     if(orders&&dominance)b.lines=keepPlain(b.lines);
     if(orders)settle(b,legal,seat);
   }
-  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply});
+  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply,own:ownValue});
   for(const b of beams){
     const floor=Math.min(...b.best.filter(Number.isFinite));
     b.best.forEach((v,r)=>{total[r]+=(Number.isFinite(v)?v:floor)/samples});

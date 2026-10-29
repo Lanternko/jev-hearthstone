@@ -42,6 +42,7 @@ test('Imbue turns Lesser Heal into Blessing of the Moon, and every Imbue cuts it
   assert.deepEqual([s.power.name,s.power.bless,s.power.cost,s.power.heal],['Blessing of the Moon',1,2,0]);
   s=play(s,51);
   assert.equal(s.power.bless,2);
+  assert.equal(s.power.cost,2,'the Hero Power stays at 2; only its card gets cheaper (R-142)');
   assert.ok(minions(s.me).every(b=>b.lifesteal),'Lunarwing Messenger has Lifesteal');
 });
 

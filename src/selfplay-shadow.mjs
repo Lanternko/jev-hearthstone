@@ -9,7 +9,7 @@ import {tapFirst} from './net-guards.mjs';
 
 export const SHADOW_LOG=new URL('../runtime/shadow.jsonl',import.meta.url);
 // One network per deck; a deck without one is not shadowed and not followed. JEV_NET_MODEL names a file instead.
-export const MODELS={'warlock-discard':'warlock-discard-v5','warlock-zoo':'warlock-zoo-v9','warlock-zakajz':'warlock-zakajz-v1'};
+export const MODELS={'warlock-discard':'warlock-discard-v5','warlock-zoo':'warlock-zoo-v9','warlock-zakajz':'warlock-zoo-0.2.0'};
 const runtimes=new Map();
 let shadowWarned=false;
 

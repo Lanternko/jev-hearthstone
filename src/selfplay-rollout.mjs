@@ -35,6 +35,27 @@ export function delayedStep(s,m){
 }
 export const touchesDelayed=(s,legal)=>legal.some(m=>delayedStep(s,m));
 
+// Does step m of s have a result that depends on cards nobody has seen yet (the deck order, a random
+// Discover offer)? --distill-info always asks the look-ahead about such a position (env flag "info").
+//   - the hero power with power.draw (Life Tap);
+//   - playing a card whose model kind is 'draw', 'drawReduce' (Foresight), 'discover', 'studies' (Discover an
+//     Outcast), or 'fate' (Intertwined Fate), or a minion model with a draw (battlecry draw, outcast.draw,
+//     drawZeroAtk) or discoverMinion (Watfin) field;
+//   - picking from a random offer: s.choice of kind 'discover' (Catacombs' temporary cards), 'discoverMinion',
+//     'studies' or 'fate1'/'fate2'.
+const INFO_KINDS=new Set(['draw','drawReduce','discover','studies','fate']);
+const INFO_PICKS=new Set(['discover','discoverMinion','studies','fate1','fate2']);
+export function infoStep(s,m){
+  if(m.kind==='power')return (s.power?.draw??0)>0;
+  if(m.kind==='choose')return INFO_PICKS.has(s.choice?.kind);
+  if(m.kind!=='play')return false;
+  const c=s.hand.find(h=>h.id===m.id);
+  if(!c)return false;
+  const g=gameModel(c);
+  return !!g&&(INFO_KINDS.has(g.kind)||!!g.draw||!!g.discoverMinion||!!g.outcast?.draw||!!g.drawZeroAtk);
+}
+export const touchesInfo=(s,legal)=>legal.some(m=>infoStep(s,m));
+
 export class Rollouts{
   constructor({follow=27,maxSteps=1500}={}){
     Object.assign(this,{follow,maxSteps,live:[],fresh:[],viewed:0,reqs:new Map(),done:[]});

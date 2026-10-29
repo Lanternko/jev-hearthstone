@@ -49,20 +49,7 @@
 - 沒有在跑的工作。5090 P7 與 eval 已結束（`~/side_projects/jev-hearthstone-egg-pile-20261028`）。
 
 ## 未 commit 的改動
-最後一個 commit 是 `8f78a8c`（G2／G3、角色 skill、zoo-v10）。之後未 commit：
-- 新檔 `src/selfplay-cardwin.mjs`、`test/selfplay-cardwin.test.mjs`。
-- R-141／R-142／pile：`src/selfplay-net.mjs`、`src/selfplay-env.mjs`、`train/ppo.py`、`train/export.py`、`train/test_expand.py`、新測試 `test/selfplay-encode-pile.test.mjs`、`test/priest-egg-imbue.test.mjs`、`test/selfplay-env.test.mjs`；`src/sim.mjs`、`src/selfplay.mjs`（rawCard 加 school／races，seat 加 elderWord／playedKinds／lastKinds）、`src/selfplay-encode.mjs`（prepare 借 'use' 格）、新測試 `test/priest-egg-rules.test.mjs`、`test/sim-text-cache.test.mjs` 的 NEW 集合、重產 `test/fixtures/zoo-v9-logits.json`、`docs/priest-egg-sim-coverage.md`。npm test 876/876。
-- `memory/`：E-255–E-258、F-859–F-864、R-141、R-142、L-048–L-050、R-143、E-259、handoff。
-- 新模型 `models/selfplay/priest-egg-pilot-v4/v5/v6-20261028.{pt,json}`；runtime/egg-pile-20261028/（pilot_v6.sh、eval_p6.sh、eval/compare-*P6*.txt）。
-- 新牌表 `decks/priest-egg-hsr/`、`test/priest-egg-hsr.test.mjs`、`src/egg-guard.mjs` 的 isEggDeck；`train/ppo.py` 前綴比對＋`train/test_expand.py` HsrFlags；runtime/egg-hsr-20261028/。npm test 888/888。
-- `memory/`：E-261、E-268（原誤用 E-262）、F-869–F-871、L-052、L-057、R-150；新測試 `test/memory-ids.test.mjs`。npm test 892/892。
-- 新模型 `models/selfplay/priest-egg-0.1.0.{pt,json}`（P7）；runtime/egg-hsr-20261028/（pilot_v7.sh、eval_p7.sh、eval7/compare-*.txt）。
-- runtime/diag-look/（gitignored）。
-- 新檔 `src/selfplay-replay.mjs`、`test/selfplay-replay.test.mjs`；runtime/replay-viewer/、runtime/replay-p6a-zoo9.json。npm test 889/889。
-- `memory/`：E-262、E-263、F-872、F-873、L-053、L-054、R-144、R-145、README 版本號段。
-- E-274：`src/selfplay-rollout.mjs`（infoStep／touchesInfo）、`src/selfplay-env.mjs`（info 旗標、phiEnd）、`train/ppo.py`（--shape-final、--distill-info、info_searched 欄）、`train/test_shaping.py`、`test/selfplay-env.test.mjs`；runtime/shape-20261029/（spec.md、run.sh、calib.mjs；smoke*／eq-new* 可刪）。npm test 895/895。`memory/`：E-274、L-057 再犯註記。
-- 起手留牌（E-281）：新檔 `src/selfplay-mulligan.mjs`、`train/mulligan-rows.mjs`、`train/fit_mulligan.py`、`test/selfplay-mulligan.test.mjs`、`src/mulligan-table.mjs`、`models/mulligan/warlock-zoo-0.2.1.json`；`src/policy.mjs`（mulliganConstraint 照表）；runtime/mulligan-20261029/。`memory/`：E-281、E-284、F-883、F-884、L-064、R-152、R-154。
-- commit 要等使用者說。
+- 無。2026-10-29 使用者要求把所有 session 的改動一起 commit 並 push（留牌表 `603da4c`，其餘兩個 commit 緊接在後）。runtime/ 本來就不進 git。
 
 ## 下一步（都等使用者決定）
 - **價值訊號提案（F-876，2026-10-29 分析）**：潛在式 shaping 對牌序無訊號且不改策略，不要再試同一種；候選是 (a) 先用 calib.mjs 把 value 頭對現役對手重校（F-874 TODO），(b) 輔助預測頭（下回合 board／hand／health 差）改善表徵而不改目標，(c) 小幅勝速項（每回合 −ε 或 γ 調低）讓勝勢局繼續壓，(d) 把 tapFirst／affordable_temporary_discover 移進模擬自戰當 guard，讓訓練資料的牌序先對。直接加 hand／health／board 非潛在獎勵會改目標（為了場面放棄勝率），只能小尺度試並用 compare 判定。

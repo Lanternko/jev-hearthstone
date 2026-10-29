@@ -4,6 +4,8 @@
 
 > 本檔保留為版本細節筆記。每次訓練／評估的實驗條目（假設、設定、結果、結論）登記在 [memory/experiments.md](../memory/experiments.md)，以 `E-…` ID 查詢；新版本請兩邊都寫：這裡寫細節，experiments 寫一筆條目並指回本檔小節。
 
+> 2026-10-29 起版本號改用分軌 `0.MINOR.PATCH`（memory/README.md「版本號」、R-144）。本表的 vN 是舊名，不改；起點 zoo 0.1.0＝zoo-v9、discard 0.1.0＝v5、zakajz 0.1.0＝zakajz-v1、egg 0.1.0＝P7 `priest-egg-0.1.0`（主流牌表 priest-egg-hsr，R-150；原本是 priest-egg-pilot-v6-20261028）。
+
 讀數的單位：
 
 - 「對 X」都是貪婪出牌（每步取分數最高的），先後手輪流。1000 局的誤差約 ±1.6 個百分點，4000 局約 ±0.8。總表裡 v1 三場對隨機、對快攻是訓練紀錄最後一輪的 512 局（誤差約 ±1.5），所以三場之間 85–89% 的差不算差別。

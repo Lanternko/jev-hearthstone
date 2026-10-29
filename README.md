@@ -37,11 +37,13 @@ npm ci
 
 `.env.local` 不進版本庫，也不要貼進對話。
 
-第一次使用前跑 `npm run calibrate` 校正 `src/layout.mjs`：它只移動游標、不點擊。座標是 16:9 內容區的比例，執行時乘上實際 client rect，所以 1920x1080 視窗與 2560x1440 全螢幕共用同一組數字。
+第一次使用前跑 `npm run calibrate` 校正 `src/layout.mjs`：它只移動游標、不點擊。座標是 16:9 內容區的比例，執行時乘上實際 client rect。但實戰只驗證過 2560x1440 全螢幕：視窗化（1600x900、1227x739）時 HDT 右側面板會蓋住結束回合按鈕，結束回合點擊會連續死掉（L-063）。開局前先跑 `node runtime/check-window.mjs` 確認解析度，完整的實戰操作流程見 [docs/client-runbook.md](docs/client-runbook.md)。
 
 ## 使用
 
 ### 打一場
+
+實戰操作（前置條件、視窗、連打、環境變數、賽後檢查）的單一入口是 [docs/client-runbook.md](docs/client-runbook.md)；下面只是摘要。
 
 1. `npm run smoke` 確認 Jev 可以呼叫。回覆無權限或額度錯誤時先處理；規則備援不是 Jev 在思考。
 2. 在爐石選好模式與套牌。

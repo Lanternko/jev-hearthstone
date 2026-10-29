@@ -95,6 +95,7 @@
 - 規則：排隊前先點掉勝利畫面，並用截圖確認出現「尋找對手」。
 - 對應測試或關卡：無
 - 相關：F-108
+- 狀態：部分過期（2026-10-29）。目前程式（runtime/ranked-continuous.mjs）沒有任何「尋找對手」截圖確認；排隊流程是點掉結算畫面後直接點「開始」，由 src/await-game.mjs 等 Power.log 出現 RUNNING。現行做法見 docs/client-runbook.md。
 - 來源：archive/STATUS-2026-10-27.md 第 1794 行（2026-09-26 第十三局（開放排位，勝））
 
 ### L-010
@@ -111,6 +112,7 @@
 - 規則：批次開始前先把爐石視窗設為最上層（pin.ps1）；每次嘗試開始前先點掉結算畫面，最多重試 10 次。
 - 對應測試或關卡：runtime/ 批次腳本與 pin.ps1（不入庫）
 - 相關：F-161
+- 狀態：部分過期（2026-10-29）。目前 runtime/ranked-continuous.mjs 每場最多嘗試 3 次（不是 10 次），也沒有呼叫 pin.ps1（視窗置頂改由 win.focus() 與 input-worker 的 Arm 在每個手勢前處理）。現行做法見 docs/client-runbook.md。
 - 來源：archive/STATUS-2026-10-27.md 第 1759 行（2026-09-29 棄牌術開放排位十連戰（8 勝 2 敗））
 
 ### L-012
@@ -508,6 +510,7 @@
 - 以後一律：座標幾何要對「非 16:9 的視窗」也有測試；賽後分析先看 `last-game.log` 第 3 行的 client 尺寸，不是 2560×1440 時，把死點擊先當成座標問題查。
 - 對應測試或關卡：`test/layout.test.mjs`「a narrower client keeps full height: no letterbox…（F-879）」
 - 相關：F-879、E-276
+- 狀態：部分被 L-063 推翻（2026-10-29）。「窄視窗要補 letterbox／滿高度的座標」的方向後來證明是治標：L-063 查出 1600×900 的死點擊來自 HDT 右側面板蓋住結束回合，與座標無關，實戰只用 2560×1440 全螢幕。「client 在 last-game.log 第 3 行」也依入口而異，見 docs/client-runbook.md。
 
 ### L-062
 - 日期：2026-10-29

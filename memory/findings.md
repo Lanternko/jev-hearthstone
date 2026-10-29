@@ -7057,7 +7057,7 @@
 - 說法：實戰中 Floating Lessons（BE_094，1 費，目標隨從）指向自己場上的隨從時，點兩次都沒效果。原因未定。
 - 證據：E-276 的 `runtime/last-game.log` 06:14:12–06:14:26：`o3t1 select Floating Lessons -> target Twilight Timehopper` 兩次都是 "no change after 722,637 / 525,403"。gestures 兩次點擊都 fg=true、off by 0。Power.log：Floating Lessons（id 57）06:14:06 剛抽到，手牌第 4 格（共 4 張）；Timehopper 60 在場上第 1 格，Fanatic 99／100 在第 2、3 格；同回合 Timehopper 之後點到 Maiev 有成功，所以場上位置是對的。06:14:04 Servants of C'Thun 的動畫等到上限（12 s cap）。06:14:26 起的選項 60 不在 Floating Lessons 的目標清單。
 - 原因（2026-10-29 查明）：視窗是 1227×739，比 16:9 窄。`src/layout.mjs` 的 `contentBox` 當成上下有黑邊（box 1227×690、y 偏移 24），縱向座標全往中間壓。但 Hearthstone 在 4:3–16:9 之間是用滿高度、左右裁背景（HDT 也這樣算）。最右邊手牌的抓取點本來就在牌頂附近（-111.5·k），被往上壓約 18 px 就點到牌外；中間的牌、場上的隨從離中線近，誤差小，所以同局其他動作都正常。歷史上 208 局都是 2560×1440，這是第一局窄視窗。另外，06:14:26 後決策裡目標少了 60，是 loop 把失敗的 o3t1 移出選單，不是遊戲規則。
-- 狀態：修法錯誤、已還原（2026-10-29）。改成滿高度後，下一局（ranked 批次第 1 局，同樣 1227×739）換牌兩張都沒換到（MULLIGAN RECOVERED），結束回合點 1024,335 連續失敗（舊算法 997,335 上一局有點中；1024 落在 HDT 右側面板上）。所以窄視窗下 x 方向舊的 letterbox 算法才對，「Hearthstone 窄視窗用滿高度」的推論不成立。`contentBox` 已還原，測試改成鎖住舊值（`test/layout.test.mjs`「a narrower client is letterboxed」）。最右手牌那次失手原因又回到未定；目前結論：只在 16:9 視窗打。
+- 狀態：修法錯誤、已還原（2026-10-29）。改成滿高度後，下一局（ranked 批次第 1 局，同樣 1227×739）換牌兩張都沒換到（MULLIGAN RECOVERED），結束回合點 1024,335 連續失敗（舊算法 997,335 上一局有點中；1024 落在 HDT 右側面板上）。所以窄視窗下 x 方向舊的 letterbox 算法才對，「Hearthstone 窄視窗用滿高度」的推論不成立。`contentBox` 已還原，測試改成鎖住舊值（`test/layout.test.mjs`「a narrower client is letterboxed」）。最右手牌那次失手原因又回到未定；目前結論：只在 16:9 視窗打。 補充（2026-10-29，L-063）：之後 1600×900 的驗證局查出死點擊的 hwnd 是 HDT 覆蓋視窗，HDT 右側面板在窄視窗蓋住結束回合；1600×900 與本條 1227×739 的死點擊，最可能的原因都是這個面板，不是座標。見 L-063、docs/client-runbook.md。
 - 相關：E-276、L-061
 - 來源：2026-10-29 App 賽後分析
 

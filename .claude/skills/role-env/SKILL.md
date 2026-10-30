@@ -6,7 +6,7 @@ description: 環境：實作與核驗模擬器規則（src/sim.mjs、mechanics�
 # 環境（role-env）
 
 ## 開工
-讀 `memory/handoff.md`、`lessons.md`、`rulings.md`（rulings 是卡牌怎麼運作的權威）。再 `grep -n "<卡名或機制>" memory/findings.md`。
+讀 `memory/handoff.md`、`lessons.md`、`rulings.md`＋這次牌組的 `rulings-<牌組>.md`（rulings 是卡牌怎麼運作的權威）。再 `grep -n "<卡名或機制>" memory/findings.md`。
 
 ## 負責
 - 模擬器規則：`src/sim.mjs`、`src/selfplay.mjs`、`src/mechanics.mjs`、`src/effect-state.mjs` 等（完整範圍：`node src/sim-version.mjs --files`）。
@@ -21,4 +21,4 @@ description: 環境：實作與核驗模擬器規則（src/sim.mjs、mechanics�
 - 每個規則改動附一個測試（`test/` 下），測試名寫出卡名與行為。
 - 過 G1：`npm test` 全綠。
 - **G2 提醒**：規則一改，`node src/sim-version.mjs` 的版本就變，舊模型的評估數字不能再和新版直接比。在交付說明寫出新舊版本號，並在 handoff 註明「之後的比較要重跑」。
-- 收工寫 memory：規則事實 → `rulings.md`；程式／模擬差異 → `findings.md`；抓到的錯 → `lessons.md`。
+- 收工寫 memory：規則事實 → 該牌組的 `rulings-<牌組>.md`（跟牌組無關的寫 `rulings.md`），ID 補進 `rulings-ids.md`；程式／模擬差異 → `findings.md`；抓到的錯 → `lessons.md`。

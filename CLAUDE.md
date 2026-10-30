@@ -14,8 +14,8 @@ A Hearthstone bot. Jev (called through the AI Gateway) picks the actions, and `s
 
 ## Memory (`memory/`, the user's rule, 2026-10-27)
 - **All agents (Claude, Codex, cloud project threads) talk only through `memory/`.** No handing work over through chat: anything another agent must pick up goes into `memory/handoff.md` or the matching field file. Rules and field definitions: `memory/README.md`.
-- **Start of work:** read `memory/handoff.md`, then `memory/lessons.md`, then `memory/rulings.md`. Look up `findings.md` / `experiments.md` with grep when needed.
-- **End of work:** append new findings to `findings.md`, experiments to `experiments.md`, user rulings and game rules to `rulings.md`, lessons to `lessons.md` (new IDs only; when a status changes, edit that entry's status field with the date, never delete). Then **overwrite** `handoff.md` with the current state.
+- **Start of work:** read `memory/handoff.md`, then `memory/lessons.md`, then `memory/rulings.md` (general rulings); add `memory/rulings-<deck>.md` only when the work touches that deck (zoo, egg, discard). Look up `findings.md` / `experiments.md` with grep when needed.
+- **End of work:** append new findings to `findings.md`, experiments to `experiments.md`, user rulings and game rules to `rulings.md` or the deck's `rulings-<deck>.md` (also list the ID in `rulings-ids.md`), lessons to `lessons.md` (new IDs only; when a status changes, edit that entry's status field with the date, never delete). Then **overwrite** `handoff.md` with the current state.
 - **Every mistake caught becomes a lesson.** If it can be checked automatically, add a test and name it in the lesson's check field.
 - `STATUS.md` is retired; the old log is read-only history in `memory/archive/STATUS-2026-10-27.md`. Model version notes stay in `docs/selfplay-versions.md`.
 

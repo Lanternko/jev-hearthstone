@@ -6,7 +6,7 @@ description: 評估與審計：用 selfplay-match 與 selfplay-compare 在獨立
 # 評估與審計（role-audit）
 
 ## 開工
-讀 `memory/handoff.md`（要評哪個候選、base 是誰、門檻）、`lessons.md`（L-046：比較一律走 compare）、`rulings.md`。
+讀 `memory/handoff.md`（要評哪個候選、base 是誰、門檻）、`lessons.md`（L-030：比較一律走 compare；L-036：seed 間距）、`rulings.md`。
 
 ## 負責
 - 量測：用**同一份程式碼**對 base 與候選跑 `node src/selfplay-match.mjs ... --json > <檔>`，每邊至少 2 個 seed（G4）。selfplay-match 第 g 局用牌局 seed+g，所以 **seed 間距要 ≥ 局數**，且整段範圍要避開挑模型時用過的（例如挑模型用 seed 1 跑 1000 局 → 範圍 1–1000；重測用 10001、20001）。間距不夠 compare 會拒絕（L-047）。

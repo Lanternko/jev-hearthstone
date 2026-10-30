@@ -6,7 +6,7 @@ description: 部署：實戰客戶端控制（src/loop.mjs、點擊、輸入、P
 # 部署（role-deploy）
 
 ## 開工
-讀 `memory/handoff.md`、`lessons.md`、`rulings.md`（出牌邏輯不得違反裁決）。專案 `CLAUDE.md` 的 Workflow 一節是這個角色的硬規則。
+讀 `memory/handoff.md`、`lessons.md`＋`lessons-live.md`、`rulings.md`（出牌邏輯不得違反裁決）。專案 `CLAUDE.md` 的 Workflow 一節是這個角色的硬規則。
 實戰操作（權限、2560×1440 全螢幕、開一場／連打、`JEV_*` 環境變數、賽後檢查）先讀 `docs/client-runbook.md`。
 
 ## 負責

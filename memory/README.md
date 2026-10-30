@@ -8,7 +8,9 @@
 | 檔案 | 用途 | ID |
 | --- | --- | --- |
 | [handoff.md](handoff.md) | 交接說明：**只有「目前狀態」一份**（不是日誌）。進行中的工作、誰在做、未 commit 的改動、下一步、開放問題。每次收工覆寫。 | 無 |
-| [lessons.md](lessons.md) | 經驗教訓：發生什麼、以後一律怎麼做、對應的測試或關卡。 | `L-001`… |
+| [lessons.md](lessons.md) | 經驗教訓（通則）：發生什麼、以後一律怎麼做、對應的測試或關卡。每次都讀。 | `L-001`… |
+| `lessons-<範圍>.md` | 範圍專屬教訓：[train](lessons-train.md)（訓練、5090）、[live](lessons-live.md)（實戰客戶端、ranked、重連）、[jev](lessons-jev.md)（Jev＋policy 時代）。工作碰到那個範圍才讀。 | 同一序列 |
+| [lessons-ids.md](lessons-ids.md) | L-ID 索引：每條在哪個檔、整併時併掉的舊 ID 在哪條。 | — |
 | [rulings.md](rulings.md) | 規則裁決（通則）：跟牌組無關的出牌、版本、訓練、客戶端裁定。每次都讀。 | `R-001`… |
 | `rulings-<牌組>.md` | 牌組專屬裁決：[zoo](rulings-zoo.md)（warlock-zakajz／warlock-zoo）、[egg](rulings-egg.md)（priest-egg）、[discard](rulings-discard.md)（warlock-discard，Jev 時代）。工作碰到那副牌組才讀。 | 同一序列 |
 | [rulings-ids.md](rulings-ids.md) | R-ID 索引：每條在哪個檔、整併時併掉的舊 ID 在哪條。 | — |
@@ -18,14 +20,14 @@
 ## 開工必讀順序
 
 1. `handoff.md`（現在在做什麼、下一步）
-2. `lessons.md`（不要再犯的錯）
+2. `lessons.md`（不要再犯的錯，通則）；這次碰到訓練／實戰客戶端／Jev，再讀 `lessons-train.md`／`lessons-live.md`／`lessons-jev.md`
 3. `rulings.md`（通則裁定，出牌邏輯不得違反）；這次工作碰到哪副牌組，再讀那副的 `rulings-<牌組>.md`
-4. 其餘按需查：`grep -n "關鍵字" memory/findings.md memory/experiments.md`；找某個 R-ID 查 `memory/rulings-ids.md`
+4. 其餘按需查：`grep -n "關鍵字" memory/findings.md memory/experiments.md`；找某個 R-ID 查 `memory/rulings-ids.md`、L-ID 查 `memory/lessons-ids.md`
 
 ## 寫入規則
 
 - **只追加新 ID**：新條目接在檔尾，ID 取該檔目前最大號 +1。不重編號、不刪條目。
-  - 例外：`rulings.md` 在 2026-10-30 經使用者要求整併過（同主題合併、刪過時條目），同日依牌組拆成通則 `rulings.md` 與 `rulings-<牌組>.md`，舊 ID 查 `rulings-ids.md`；新裁決照範圍寫進通則或該牌組的檔，ID 全域共用、照常從 `R-165` 起追加，並補進 `rulings-ids.md`；跟現有條目同主題時在「相關」指向它，若推翻了舊條目的某一點，在舊條目那一點註明被哪個 ID 取代。
+  - 例外：`rulings.md` 在 2026-10-30 經使用者要求整併過（同主題合併、刪過時條目），同日依牌組拆成通則 `rulings.md` 與 `rulings-<牌組>.md`，舊 ID 查 `rulings-ids.md`；新裁決照範圍寫進通則或該牌組的檔，ID 全域共用、照常從 `R-165` 起追加，並補進 `rulings-ids.md`；跟現有條目同主題時在「相關」指向它，若推翻了舊條目的某一點，在舊條目那一點註明被哪個 ID 取代。`lessons.md` 同日也照這個方式整併並依範圍拆成 `lessons.md`（通則）與 `lessons-train/live/jev.md`，舊 ID 查 `lessons-ids.md`，新教訓從 `L-085` 起。
 - **一筆一件事**：一個發現、一次實驗、一條裁決、一個教訓各一筆；彼此用「相關」欄位互指（例如 `F-012、E-034`）。
 - **狀態改變時改原條目**：只改「狀態」欄，括號註明日期與原因，例如 `被推翻（2026-11-02，E-210 重跑後 49.8%）`；同時寫一筆新條目說明新證據，兩筆互指。
 - **數字照量到的寫**：證據欄寫指令、檔案路徑與數字；沒量過的寫「待驗」，不要寫成已證實。

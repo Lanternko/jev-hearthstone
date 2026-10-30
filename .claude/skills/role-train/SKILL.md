@@ -6,7 +6,7 @@ description: 訓練：寫自我對弈訓練配方（train/ppo.py 參數、對手
 # 訓練（role-train）
 
 ## 開工
-讀 `memory/handoff.md`、`lessons.md`（特別是 L-044、L-045：5090 啟動與 resume 對手）、`rulings.md`。再 `grep -n "E-2" memory/experiments.md | tail` 看最近的實驗，`docs/selfplay-versions.md` 看模型版本。
+讀 `memory/handoff.md`、`lessons.md`＋`lessons-train.md`（特別是 L-044：5090 啟動、監看與 resume 對手）、`rulings.md`。再 `grep -n "E-2" memory/experiments.md | tail` 看最近的實驗，`docs/selfplay-versions.md` 看模型版本。
 
 ## 負責
 - 訓練配方：`train/ppo.py` 的參數、對手池、resume 來源；配方寫成 `runtime/<名稱>/run_*.sh`。

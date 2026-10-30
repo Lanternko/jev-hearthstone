@@ -193,7 +193,7 @@ JEV_DECK=warlock-zakajz JEV_FOLLOW_NET=1 JEV_OFFLINE=1 node runtime/ranked-conti
 
 | 項目 | 過期說法 | 程式碼實況 | 處置 |
 |---|---|---|---|
-| L-009 | 開局前會截圖確認「尋找對手」畫面 | `ranked-continuous.mjs` 沒有這個截圖檢查：關結果、點開始、`await-game` 等 RUNNING | 已在 `memory/lessons.md` 補狀態行 |
+| L-009 | 開局前會截圖確認「尋找對手」畫面 | `ranked-continuous.mjs` 沒有這個截圖檢查：關結果、點開始、`await-game` 等 RUNNING | L-009 已於 2026-10-30 整併時刪除（以本手冊為準） |
 | L-011 | 排隊最多重試 10 次、呼叫 `pin.ps1` 釘住視窗 | 最多 3 次、沒有 `pin.ps1`；視窗聚焦由 `win.focus()` 與 worker 的 `Arm()` 做 | 同上 |
 | L-061 | 全螢幕才行、用 `last-game.log` 第 2 行檢查 `client` | 已被 L-063 部分推翻（真因是 HDT 面板）；行號依入口而異（第 2 或第 3 行） | 同上 |
 | F-879 | 視窗大小造成死手勢 | L-063 指出更可能是 HDT 右側面板 | 已在 `memory/findings.md` 補狀態 |

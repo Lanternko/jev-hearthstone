@@ -10,6 +10,12 @@ import {tapFirst} from './net-guards.mjs';
 export const SHADOW_LOG=new URL('../runtime/shadow.jsonl',import.meta.url);
 // One network per deck; a deck without one is not shadowed and not followed. JEV_NET_MODEL names a file instead.
 export const MODELS={'warlock-discard':'warlock-discard-v5','warlock-zoo':'warlock-zoo-v9','warlock-zakajz':'warlock-zoo-0.2.0'};
+// Specialists (the user, 2026-11-01): a network fine-tuned from the deck's own against one opponent class, used when the
+// opponent's hero is of that class; any other class, or a class not seen yet, keeps MODELS. Same deck list, so the
+// specialist only changes the weights. A specialist goes in only after its audit.
+// zoo 0.2.2 = E-303 B (E-304, F-912: Azalina C'Thun +4.5, Moon +2.3, egg -0.3, but DH -2.3), so priests only.
+// dh-v1 = E-305 B (E-306, F-916: DH +4.8, every other class -3.5 to -4.5), so demon hunters only.
+export const SPECIALISTS={'warlock-zakajz':{PRIEST:'warlock-zoo-0.2.2',DEMONHUNTER:'warlock-zakajz-dh-v1-20261101'}};
 const runtimes=new Map();
 let shadowWarned=false;
 
@@ -71,6 +77,11 @@ const PICK=/^(BE_013t[1-5]|CAP_405t[1-9]|CAP_405tb[1-3])b?$/;
 const pickId=e=>PICK.exec(e?.cardId??'')?.[1]??null;
 
 function choiceView(state,s,notes){
+  // Ritual of C'Thun's Glare picks its enemy minion as a TARGET choice; the simulator offers it as 'glare'.
+  if(state.choice?.type==='TARGET'&&state.choice.source?.cardId==='BE_726'){
+    const options=state.choice.entities.map(e=>e.entityId);
+    return options.length?{kind:'glare',options}:null;
+  }
   if(state.choice?.type!=='GENERAL')return null;
   const options=state.choice.entities.map(e=>e.entityId);
   if(!options.length)return null;
@@ -235,20 +246,23 @@ export function shadowRow(net,view,{action,source,state,createdAt=new Date().toI
   };
 }
 
+// The network for this deck against this opponent class (PRIEST, ...): its specialist, else the deck's own.
+const pick=(deck,oppClass)=>(oppClass&&SPECIALISTS[deck]?.[oppClass])??MODELS[deck]??null;
 // The network's name: the file's stem, since JEV_NET_MODEL may point anywhere. null: none for this deck.
-export function modelFor(deck){
+export function modelFor(deck,oppClass){
   if(process.env.JEV_NET_MODEL)return basename(resolve(process.env.JEV_NET_MODEL),'.json');
-  return MODELS[deck]??null;
+  return pick(deck,oppClass);
 }
 // The absolute file of that network, or null for a deck without one. game-zoo checks it before a game.
-export function modelFile(deck){
+export function modelFile(deck,oppClass){
   if(process.env.JEV_NET_MODEL)return resolve(process.env.JEV_NET_MODEL);
-  return MODELS[deck]&&fileURLToPath(new URL(`../models/selfplay/${MODELS[deck]}.json`,import.meta.url));
+  const name=pick(deck,oppClass);
+  return name&&fileURLToPath(new URL(`../models/selfplay/${name}.json`,import.meta.url));
 }
 
 // null: no network for this deck.
 async function runtime(state){
-  const deck=deckName(state),file=modelFile(deck);
+  const deck=deckName(state),file=modelFile(deck,state?.opponent?.heroClass);
   if(!file)return null;
   const key=`${deck}|${file}`;
   if(!runtimes.has(key)){
@@ -306,7 +320,7 @@ export async function netPick({parsed,state,actions}){
     const i=search?.index??greedy;
     const tap=search?.override?-1:tapFirst(rt.net,view,i,deckName(state));
     const guard=tap>=0?{action:actions[tap],guard:'tap_before_play',reason:`the network plays ${withNames(view.s,{move:view.legal[i],p:0}).name} and then Life Taps; drawing first`}:null;
-    return {action:actions[i],...(guard?{guard}:{}),value:ranked.value,unknown:unknownCards(rt.net,view.s),top:ranked.steps.slice(0,3).map(x=>withNames(view.s,x)),...(search?{search}:{})};
+    return {action:actions[i],...(guard?{guard}:{}),model:rt.net.modelName,value:ranked.value,unknown:unknownCards(rt.net,view.s),top:ranked.steps.slice(0,3).map(x=>withNames(view.s,x)),...(search?{search}:{})};
   }catch(e){
     console.warn(`network pick failed: ${e.message}`);
     return null;

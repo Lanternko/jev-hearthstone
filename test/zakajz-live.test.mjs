@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {cardDb,loadList,rawCard} from '../src/selfplay.mjs';
 import {apply,moves} from '../src/sim.mjs';
 import {MODELS,modelFile,shadowView} from '../src/selfplay-shadow.mjs';
@@ -116,4 +117,54 @@ test('the zakajz deck reads its own strategy and stats without Fatebreaker',()=>
   assert.match(deck.mulligan.note,/Glacial Shard/);
   assert.equal(deck.mulligan.cards['Glacial Shard'],undefined);
   assert.equal(deck.mulligan.cards['Zakajz the Corruptor'].mulliganWR,65.8);
+});
+
+// 2026-10-29 ranked game 15: Ritual of C'Thun's Glare asks for its enemy minion as a TARGET choice at the start of
+// the turn. No option was offered, the loop waited ("not my turn") and the user had to click the target.
+test("Glare of C'Thun's TARGET choice is offered, read as the simulator's glare and clicked on the enemy minion",async()=>{
+  const {candidates}=await import('../src/power.mjs');
+  const f=fixture(),A=52,B=53;
+  f.state.opponent.board.push(C('CS2_231',A),C('CS2_231',B));
+  f.state.step='MAIN_START_TRIGGERS';
+  f.state.choice={id:8,type:'TARGET',min:1,max:1,entities:[f.state.opponent.board[2],f.state.opponent.board[3]],source:C('BE_726',29)};
+  const actions=candidates({},f.state);
+  assert.deepEqual(actions.map(a=>[a.type,a.entityId]),[['CHOICE',A],['CHOICE',B]]);
+  const v=shadowView(f.parsed,f.state,actions,{cards,list});
+  assert.equal(v.s.choice.kind,'glare');
+  assert.deepEqual(v.legal.map(m=>[m.kind,m.id]),[['choose',A],['choose',B]]);
+  assert.ok(v.s.opp.some(b=>b.id===A),'the glare target is an enemy minion of the view');
+  const box=contentBox(2560,1440);
+  const [step]=plan(box,f.state,actions[0]);
+  assert.match(step.what,/^pick /);
+  const rival=plan(box,f.state,{type:'POWER',entityId:FOE,option:9})[0];
+  assert.ok(step.y<box.y+box.h/2&&Math.abs(step.y-rival.y)<2,'clicked on the enemy board row');
+});
+
+// L-: a position question rebuilt from the recording alone graded both 2026-10-29 rulings as passes, while the live
+// network had made the mistake (no ritual clocks, Shreds or graveyard in the rebuild). A fixture that records the live
+// pick must rebuild the position the network saw: graded with the live network, its top is that pick.
+test('zoo position questions with a recorded live pick reproduce it from the fixture',async()=>{
+  const {loadQuestions,loadPosition,loadModel,gradePosition,LIVE_MODELS}=await import('../src/regress.mjs');
+  const {net}=loadModel(LIVE_MODELS['warlock-zakajz']);
+  const qs=loadQuestions().filter(q=>q.deck==='warlock-zakajz'&&q.kind==='position'&&!q.unsupported);
+  const withPick=qs.filter(q=>JSON.parse(readFileSync(q.source.file,'utf8')).source?.livePick);
+  assert.ok(withPick.length>=2);
+  await withEnv({JEV_DECK:'warlock-zakajz'},async()=>{
+    for(const q of withPick){
+      const live=JSON.parse(readFileSync(q.source.file,'utf8')).source.livePick;
+      assert.equal(gradePosition(q,net,{cards,list}).top,live,q.id);
+    }
+  });
+});
+
+// User 2026-10-29: the net-guards are to be turned off once the network learns them. A guard is retired (RETIRED in
+// src/net-guards.mjs) for the live model exactly when that model answers every question of the guard (GUARD_QUESTIONS).
+test('net-guards are retired for the live zoo model exactly when it passes their questions',async()=>{
+  const {runDeck,guardStatus}=await import('../src/regress.mjs');
+  await withEnv({JEV_DECK:'warlock-zakajz'},async()=>{
+    const rep=runDeck('warlock-zakajz',{f881:false});
+    const st=guardStatus(rep);
+    assert.ok(st.length>=3);
+    for(const g of st)assert.equal(g.retired,g.retirable,`${g.guard}: ${g.pass}/${g.total} pass, retired ${g.retired}`);
+  });
 });

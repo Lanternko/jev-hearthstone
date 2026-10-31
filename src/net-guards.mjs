@@ -134,6 +134,49 @@ function temporaryDiscover(state,actions,pick,top){
   return {action:pool[0],card:e.name,cost:cost(e),over:`${picked.name} (${cost(picked)})`,mana};
 }
 
+// Cards the opponent hides in our deck that only take up a slot (King Llane, from Garona's Start of Game; R-160).
+const DEAD_CARDS=new Set(['TIME_875t']);
+// Nothing on a Temporary Discover fits the mana, so whatever is taken is discarded at the end of the turn: take the dead
+// card, which then leaves the deck (2026-10-29 ranked game 16, turn 7: 0 mana, it took Twilight Timehopper over King Llane).
+function temporaryDeadCard(state,actions,pick){
+  const ch=state.choice;
+  if(!/make it <b>temporary<\/b>|make it temporary/i.test(ch.source?.text??''))return null;
+  const mana=Number(state.me?.mana??0);
+  const cost=e=>Number(e.COST??e.baseCost??0);
+  const offered=ch.entities??[];
+  if(offered.some(e=>cost(e)<=mana&&!/casts when drawn/i.test(e.text??'')))return null;
+  const dead=offered.find(e=>DEAD_CARDS.has(e.cardId));
+  if(!dead||dead.entityId===pick.entityId)return null;
+  const action=actions.find(a=>a.type==='CHOICE'&&a.entityId===dead.entityId);
+  const picked=offered.find(e=>e.entityId===pick.entityId);
+  return action&&{action,card:dead.name,over:picked?.name??pick.id,mana};
+}
+
+// Godfather Kazakus' trial length (R-157): Rushed finishes now, Grueling at the start of the next turn, Unending in 4.
+// Rushed when it fits the mana, the opponent has minions for the trial to hit now, and it spends at least as much of
+// the turn as the picked length plus the hand cards that fit beside it (2026-10-29 ranked game 14, turn 20: 8 mana,
+// Tachyon Barrage (3) the only card in hand, the network took Grueling and lost before it finished).
+const TRIAL=/^CAP_405tb([123])/;
+function kazakusRushed(state,actions,pick){
+  const ch=state.choice;
+  if(ch.source?.cardId!=='CAP_405')return null;
+  const byId=new Map((ch.entities??[]).map(e=>[e.entityId,e]));
+  const rushed=(ch.entities??[]).find(e=>TRIAL.exec(e.cardId??'')?.[1]==='1');
+  const picked=byId.get(pick.entityId);
+  if(!rushed||!picked||picked===rushed||!TRIAL.test(picked.cardId??''))return null;
+  if(!(state.opponent?.board??[]).some(e=>e.CARDTYPE==='MINION'))return null;
+  const mana=Number(state.me?.mana??0);
+  const cost=e=>Number(e.COST??e.baseCost??0);
+  if(cost(rushed)>mana)return null;
+  const hand=(state.me?.hand??[]).filter(c=>c.CARDTYPE==='MINION'||c.CARDTYPE==='SPELL'||c.CARDTYPE==='WEAPON').map(cost);
+  // the most mana the hand can add within `left` (a hand is at most 10 cards)
+  const fill=left=>{let best=0;for(let m=0;m<1<<hand.length;m++){let n=0;for(let i=0;i<hand.length;i++)if(m>>i&1)n+=hand[i];if(n<=left&&n>best)best=n}return best};
+  const spend=e=>cost(e)+fill(mana-cost(e));
+  if(spend(rushed)<spend(picked))return null;
+  const action=actions.find(a=>a.type==='CHOICE'&&a.entityId===rushed.entityId);
+  return action&&{action,over:picked.name,mana,rushed:spend(rushed),other:spend(picked)};
+}
+
 // Draw before spending (2026-10-27 v9 game 5, turn 7: 4 mana, Twilight Egg, then Life Tap drew Ritual of Summoning
 // with 1 mana left). When the network plays a card and, in the simulator, its next pick is the draw power anyway, the
 // draw goes first: the same mana, and the card drawn can change what the rest of the turn is spent on. -> index in
@@ -227,17 +270,50 @@ function boardWipe(state,actions,pick,top){
     reason:`${wipe.name} ${wAtk}/${wHp} survives; keep ${played.name} out of it`};
 }
 
-// null: keep the network's pick. Otherwise {action,guard,reason}.
-export function guardPick(state,actions,pick,top=[]){
+// Cursed Catacombs with no mana left after it (R-147, R-159): every card in the deck costs 1 or more, so the Temporary
+// pick is discarded unplayed. Keep Catacombs; take the network's next choice, else end the turn (2026-10-29 ranked
+// game 16, turn 7: 0 of 4 mana after Grueling Trial, it opened Catacombs at 0.614).
+const CATACOMBS=/discover another card from your deck\. make it temporary/i;
+function catacombsWithoutMana(state,actions,pick,top){
+  const card=(state.me?.hand??[]).find(c=>c.entityId===pick?.entityId);
+  if(!card||!playOf(pick,card.entityId)||!CATACOMBS.test(plainText(card.text)))return null;
+  const left=Number(state.me?.mana??0)-Number(card.COST??card.baseCost??0);
+  if(left>=1)return null;
+  const alt=(top??[]).map(t=>topAction(t,actions)).find(a=>a&&a.entityId!==card.entityId);
+  const action=alt??actions.find(a=>a?.type==='END_TURN');
+  return action&&{action,card:card.name,left};
+}
+
+// Guards the network is meant to learn to do without (user, 2026-10-29): each names the regression questions of the
+// ruling it enforces. `npm run regress` reports a guard as retirable once a model answers all of them; that model is
+// then listed in RETIRED and the guard stays off while it drives (test/zakajz-live.test.mjs keeps the two in step).
+export const GUARD_QUESTIONS={
+  kazakus_rushed_trial:['fx:ranked1029-g14-kazakus-rushed-trial'],
+  catacombs_without_mana:['fx:ranked1029-g16-catacombs-no-mana'],
+  temporary_discover_dead_card:['fx:ranked1029-g16-catacombs-take-llane'],
+};
+// model name -> the guards it no longer needs
+export const RETIRED={};
+
+// null: keep the network's pick. Otherwise {action,guard,reason}. `model` is the network that made the pick (RETIRED).
+export function guardPick(state,actions,pick,top=[],{model=null}={}){
+  const on=name=>!(RETIRED[model]??[]).includes(name);
   if(pick?.type==='CHOICE'&&state?.choice){
     const t=temporaryDiscover(state,actions,pick,top);
-    return t&&{action:t.action,guard:'affordable_temporary_discover',reason:`${t.card} (${t.cost}) over ${t.over}: ${t.mana} mana and the card is Temporary`};
+    if(t)return {action:t.action,guard:'affordable_temporary_discover',reason:`${t.card} (${t.cost}) over ${t.over}: ${t.mana} mana and the card is Temporary`};
+    const d=on('temporary_discover_dead_card')&&temporaryDeadCard(state,actions,pick);
+    if(d)return {action:d.action,guard:'temporary_discover_dead_card',reason:`${d.card} over ${d.over}: nothing fits ${d.mana} mana, so the dead card leaves the deck`};
+    const k=on('kazakus_rushed_trial')&&kazakusRushed(state,actions,pick);
+    if(k)return {action:k.action,guard:'kazakus_rushed_trial',reason:`Rushed Trial over ${k.over}: ${k.mana} mana, enemy minions now, spends ${k.rushed} vs ${k.other}`};
+    return null;
   }
   if(!pick||state?.choice)return null;
   // A board-wipe minion comes before every ordering guard: nothing else on the menu is worth keeping if all of our
   // minions die at the start of the next turn.
   const bw=boardWipe(state,actions,pick,top);
   if(bw)return bw;
+  const cw=on('catacombs_without_mana')&&catacombsWithoutMana(state,actions,pick,top);
+  if(cw)return {action:cw.action,guard:'catacombs_without_mana',reason:`${cw.card} would leave ${cw.left} mana for its Temporary card`};
   const s=fromState(state,actions,{full:true});
   // decks/priest-egg: Haunt on our own Egg of Khelos before anything else (egg-guard.mjs).
   const egg=eggHaunt(s);

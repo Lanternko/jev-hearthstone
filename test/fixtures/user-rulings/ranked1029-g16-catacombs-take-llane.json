@@ -1,0 +1,331 @@
+{
+ "source": {
+  "batchGame": "ranked-2026-10-29T13-04-05-846Z game 16",
+  "ownTurn": 4,
+  "engineTurn": 7,
+  "time": "2026-10-29T15:11:50.597Z",
+  "livePick": "c10e123",
+  "note": "The Cursed Catacombs discover of the same turn (0 mana): Twilight Timehopper / King Llane (TIME_875t, hidden in our deck by the opponent's Garona) / Blasphemy. The network took Timehopper (0.547). User: take King Llane, a card that only takes up a deck slot; picked Temporary it is discarded and leaves the deck (R-160)."
+ },
+ "parsed": {
+  "kazRuns": [],
+  "gone": [
+   "TLC_603",
+   "TLC_451",
+   "CAP_405",
+   "BE_085",
+   "BE_151"
+  ],
+  "shreds": 0,
+  "publicPlays": [
+   {
+    "playerId": 1,
+    "engineTurn": 3,
+    "cardId": "BE_085"
+   }
+  ],
+  "discards": {
+   "1": 1
+  },
+  "trials": [
+   {
+    "cardId": "CAP_405tb2",
+    "owner": 1,
+    "progress": 0,
+    "effects": [
+     "CAP_405t5",
+     "CAP_405t9"
+    ]
+   }
+  ]
+ },
+ "state": {
+  "gameNumber": 16,
+  "turn": 7,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 0,
+   "maxMana": 4,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 3,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 68,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 69,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 118,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 119,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 16,
+     "cardId": "CATA_210",
+     "name": "Twilight Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 20,
+     "cardId": "TIME_025",
+     "name": "Twilight Timehopper",
+     "text": "[x]<b>Battlecry:</b> Shuffle 2\nShreds of Time into your\ndeck. When drawn, deal 3\ndamage to your hero.",
+     "baseCost": 2,
+     "baseAttack": 4,
+     "baseHealth": 4,
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 19,
+     "cardId": "BE_726",
+     "name": "Ritual of C'Thun",
+     "text": "[x]In 2 turns, choose a\nC'Thun ability to trigger.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "ROGUE",
+   "mana": 0,
+   "maxMana": 3,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 8,
+   "deckCount": 20,
+   "board": [
+    {
+     "entityId": 70,
+     "cardId": "HERO_03aq",
+     "name": "Reaver V-07-TR-0N",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 71,
+     "cardId": "HERO_03aqhp",
+     "name": "Dagger Mastery",
+     "text": "<b>Hero Power</b>\nEquip a 1/2 Dagger.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 65,
+     "cardId": "TIME_003",
+     "name": "Portal Vanguard",
+     "text": "[x]<b>Rewind</b>\n<b>Battlecry:</b> Draw a random\nminion. Give it +2/+2.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 39,
+     "cardId": "TIME_039",
+     "name": "Deja Vu",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "<b>Discover</b> a copy\nof a card in your opponent's hand."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 72,
+     "cardId": "VAC_COIN2",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 90,
+     "cardId": "CAP_405",
+     "name": "Godfather Kazakus",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> Plot a custom sham trial! Then choose the trial's length."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 65,
+     "cardId": "TIME_003",
+     "name": "Portal Vanguard",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 2,
+     "text": "[x]<b>Rewind</b>\n<b>Battlecry:</b> Draw a random\nminion. Give it +2/+2."
+    }
+   ]
+  },
+  "optionsId": 20,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    7,
+    4,
+    8
+   ],
+   "complete": true
+  },
+  "choice": {
+   "id": 10,
+   "playerId": 1,
+   "type": "GENERAL",
+   "min": 1,
+   "max": 1,
+   "entities": [
+    {
+     "entityId": 123,
+     "cardId": "TIME_025",
+     "name": "Twilight Timehopper",
+     "text": "[x]<b>Battlecry:</b> Shuffle 2\nShreds of Time into your\ndeck. When drawn, deal 3\ndamage to your hero.",
+     "baseCost": 2,
+     "baseAttack": 4,
+     "baseHealth": 4,
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 4,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 124,
+     "cardId": "TIME_875t",
+     "name": "King Llane",
+     "text": "[x]<b>Start of Game:</b> Hide from\nGarona in the enemy's deck.\n<b>Battlecry:</b> Draw a card. Shuffle\nthis back into your deck.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 122,
+     "cardId": "BE_086",
+     "name": "Blasphemy",
+     "text": "Deal $2 damage to all enemies. If this is\nthe highest Cost card in your hand, do it again.",
+     "baseCost": 4,
+     "COST": 4,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "revision": 321328,
+   "offeredAt": "23:11:47.8852807",
+   "sourceId": 6,
+   "source": {
+    "entityId": 6,
+    "cardId": "TLC_451",
+    "name": "Cursed Catacombs",
+    "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+    "baseCost": 0,
+    "ZONE_POSITION": 0,
+    "CARDTYPE": "SPELL"
+   }
+  },
+  "fingerprint": "aa216d5f2ddf26bacc7e",
+  "decisionFingerprint": "0c954c8ad452efdbf676"
+ },
+ "options": [
+  {
+   "id": "c10e123",
+   "type": "CHOICE",
+   "choiceId": 10,
+   "entityId": 123
+  },
+  {
+   "id": "c10e124",
+   "type": "CHOICE",
+   "choiceId": 10,
+   "entityId": 124
+  },
+  {
+   "id": "c10e122",
+   "type": "CHOICE",
+   "choiceId": 10,
+   "entityId": 122
+  }
+ ]
+}

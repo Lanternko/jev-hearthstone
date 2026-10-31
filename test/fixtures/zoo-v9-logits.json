@@ -1,10 +1,10 @@
 {
  "v9": true,
- "steps": 125,
+ "steps": 137,
  "obsLen": 620,
  "actLen": 238,
- "sumLogits": 2086.166959,
- "sumValue": 32.05827,
+ "sumLogits": 2621.096229,
+ "sumValue": 30.241494,
  "first": [
   {
    "obs": [

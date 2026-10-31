@@ -88,7 +88,7 @@ export async function next({shot,skip}={}){
   const n=await netPick({parsed:s.parsed,state:s.state,actions:full});
   if(n){
    // net-guards.mjs: orderings the result-only reward cannot tell apart (buff before attacking, Life Tap before ending).
-   const g=guardPick(s.state,full,n.action,n.top)??n.guard??null;
+   const g=guardPick(s.state,full,n.action,n.top,{model:n.model})??n.guard??null;
    const action=g?.action??n.action,source=g?'selfplay_net_guard':'selfplay_net';
    if(g)console.log(`guard ${g.guard}: network chose ${n.action.id}, playing ${action.id} (${g.reason})`);
    await record({createdAt:new Date().toISOString(),plannerVersion,state:s.state,options:full,rawOptions:rawActions,action,source,net:{value:n.value,top:n.top,pick:n.action.id,...(g?{guard:g.guard,reason:g.reason}:{})},latencyMs:0,cost:'0'});

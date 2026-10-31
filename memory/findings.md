@@ -7048,7 +7048,7 @@
 - 日期：2026-10-29
 - 說法：zoo-v9（牌組 warlock-zakajz）開前瞻（`--look a`，depth 1、samples 2、beam 8）比貪婪強，但沒有蛋牧那麼多，且因對手而異。模擬器 b31012f48995、每對手每條件 4000 局、同牌局：對 egg 0.1.0 49.1%→53.7%（+4.6），對 zakajz-v1 48.1%→54.3%（+6.2），對 dh（E-254 網路）50.2%→52.3%（+2.1，區間重疊）；三對手合計 49.1%（48.2–50.0）→53.4%（52.5–54.3），+4.3。depth 2（看對手下一回合）不比 depth 1 好，對 egg 還低 2.1 分（原因未查）。
 - 證據：E-273（`runtime/headroom-20261029/out/`、`result.md`）。
-- 狀態：已驗（2026-10-29），單一模型 v9、單一 sim 版本；數字不可與 E-255 混比（F-875 改過 sim）。v9 的 value 對強對手高估（F-874、F-877）可能讓增益被低估。
+- 狀態：已驗（2026-10-29），單一模型 v9、單一 sim 版本；數字不可與 E-255 混比（F-875 改過 sim）。v9 的 value 對強對手高估（F-874、F-877）可能讓增益被低估。 2026-10-29 補：E-286 用修正尺（`--own-value`）重量，v9 lookown−plain +2.7、look2own +2.9，仍「待定」；對現役 0.2.0 沒意義（F-885）。
 - 相關：E-273、E-255、E-272、F-874、F-877
 - 來源：2026-10-29 派工
 
@@ -7065,7 +7065,7 @@
 - 日期：2026-10-29
 - 說法：value 頭在貪婪對局上校準變好，不等於對前瞻搜尋有用。E-272 修訂版（只換 value、policy 逐位同 v9）在 P6A／egg 0.1.0 的 ECE 從 0.158／0.328 降到 0.080／0.104，但同 seed 開前瞻（E-275）勝率從 v9 的 53.4% 掉到 26.1%（look−plain −23.1，三個對手全掉，dh −35.9 最重）；貪婪勝場與 v9 逐項相等，所以是搜尋排線被新 value 誤導。搜尋要的是同一回合內各條線「交出局面」的相對順序，監督式擬合勝負（MSE 對 ±1）只在貪婪軌跡的局面分布上壓絕對偏差，對搜尋展開到的局面沒有保證。E-273 對 v9 的「待定 +4.3」因此沒有被解開，仍以 E-273 為準。
 - 證據：E-272 修訂結果補記、E-275 結果補記；`runtime/headroom-e275-20261029/out/`（72 run，sim b31012f48995）、`runtime/cata-search/calib-e272/`。
-- 狀態：已驗（2026-10-29）；原因（貪婪軌跡 vs 搜尋局面的分布差、或 MSE 壓平同回合內的差異）未分辨。
+- 狀態：已驗（2026-10-29）；原因（貪婪軌跡 vs 搜尋局面的分布差、或 MSE 壓平同回合內的差異）未分辨。 2026-10-29 補：最可能的原因是 F-882 的座位機制（擬合資料只有學習方座位，搜尋卻從對手座位估值），崩法和 E-277 一樣；沒用 `--own-value` 重量 E-275 證實（F-885）。
 - 相關：E-272、E-273、E-275、F-874、F-876、F-877、F-878
 - 來源：2026-10-29 App（lead 收 E-275 結果）
 
@@ -7082,7 +7082,7 @@
 - 日期：2026-10-29
 - 說法：zoo 0.2.0 開前瞻（`--look a`，深度 1）會崩，不是「沒有規劃空間」，而是搜尋端把交手後的局面從**對手座位**用學習方自己的 value 頭估值再翻號（`src/selfplay-search.mjs` 約 183、219 行 `sign:handed?-1:1`），而 0.2.0 從 v9 起已用 `--opp`（對手是獨立網路）練了 405 輪（E-254 150＋E-270 105＋E-271 150），value 頭幾乎只看過 warlock-zakajz 座位的局面（鏡像 0.15 除外），對蛋牧／DH 座位的估值已經失效。
 - 證據：E-277（0.2.0，4000 局／格）look−plain：egg −52.4、dh −47.0、zakajz −15.1；zakajz 崩得最少，正是唯一有鏡像訓練（對手座位也是 zakajz）的對手。本機重現（seed 3000001、30 局×2 座位、對 egg 0.1.0、`runtime/headroom-020-20261029/repro-local/`）：0.2.0 plain 36/60、0.2.0 look 4/60、**v10 look 33/60**（v10 只在 v9 後用 `--opp` 練 150 輪，仍正常）。訓練時 `train/ppo.py` 的 `look_ahead` 走同一支 node 搜尋，所以 E-271／E-278 的蒸餾目標在蛋牧／DH 局也受同一問題影響（λ0.1 下 E-271 B 仍進步，但目標品質打折）。
-- 狀態：假說，待驗（直接驗法：把搜尋端交手後的估值改成從學習方座位編碼、或對 0.2.0 在對手座位局面量校準；本次沒改碼）。若成立：E-277「到頂」判定作廢（量錯東西）、E-275 的崩法同源、E-278 的蒸餾目標要先修搜尋端再重跑才算數。
+- 狀態：成立（2026-10-29，E-286）：搜尋改從學習方座位估交手後局面（`--own-value`，seatView＝flip＋回合已用完）後，0.2.0 look 從 17.1% 回到 53.9%（同牌局 +36.8 分，egg +48.3、dh +48.1、zakajz +13.9），plain 逐局重現。只換座位不夠：本機 seed 3000001 0.2.0 15/60、v10 18/60（look 會在有牌可出時提早結束回合），加上「回合已用完」（mana 0、無人可攻擊、地點未就緒）才回到 36/60、34/60。修好後 headroom：0.2.0 lookown−plain −1.3＝到頂；v9 +2.7＝待定。E-277「到頂」判定作廢（量錯東西），由 E-286 取代。
 - 相關：E-277、E-273、E-275、E-278、F-878、F-880、R-151
 - 來源：2026-10-29 App（lead 核對 E-277 結果後本機重現）
 
@@ -7101,3 +7101,237 @@
 - 狀態：模擬中成立（只對 0.2.0、只對模擬蛋牧，F-784）。
 - 相關：E-284、E-281、R-154
 - 來源：2026-10-29 App
+
+### F-885
+- 日期：2026-10-29
+- 說法：zoo 的「value 頭／前瞻／搜尋蒸餾」這一線（E-272、E-273、E-275、E-277、E-278、E-286）的綜合結論：(1) zoo 0.2.0 貪婪本身真的比 v9 強（同牌局 plain +6.2），但在修正後的尺（`--own-value`）上 depth 1／2 前瞻沒有收益（lookown−plain −1.3、look2own −2.1，三對手都在 ±2 內，區間重疊），依 E-273 規則是「到頂」；v9 在同尺上 +2.7（look2 +2.9）仍「待定」，對現役沒意義。(2) 同配方搜尋蒸餾從 0.2.0 續訓 150 輪（E-278）不採用：蛋牧 −2.6、dh −2.4、shaman −1.7，zakajz／鏡像持平。(3) 之前的「前瞻崩掉」（E-277 0.2.0 −38.2、E-275 擬合新 value 頭 −23.1）是同一個機制：value 頭只在它練過的座位上可靠，搜尋拿它從對手座位估交手後的局面等於亂數（F-882、L-065）；E-277 的「到頂」是量錯，作廢。E-275 沒用新尺重量，歸因是推論。(4) 結構限制：用 `--opp` 練的網路，value 頭不會估對手座位，所以 depth-1 搜尋只能靠「交手後從自己座位看、回合已用完」的估值，對手回合的資訊被壓成一個靜態盤面；要讓搜尋拿到更多可用的 value，得讓 value 頭重新學對手座位（共用自戰雙座位、或加對手座位 value loss），不是再擬合或再蒸餾。
+- 證據：E-286 結果表（`runtime/headroom-own-20261029/result.md` sha256 8a8995b9…，8×250 局×2 座位×3 對手×3 條件）、E-286 配對 0.2.0 lookown−舊 look +36.8；E-278 結果補記；E-275、E-272 驗收；E-277 plain 列。
+- 狀態：成立（2026-10-29）；全部模擬、單一 sim b31012f48995；前瞻只量到 depth 2、samples 2、beam 8，更深或更寬的搜尋沒量；(4) 的「怎麼修」是提案，沒驗。
+- 相關：F-882、F-878、F-880、F-874、F-877、L-065、R-155、E-286、E-278、E-277、E-275、E-272
+- 來源：2026-10-29 App lead 整理（使用者「先停 整理成研究記憶」）
+
+### F-886
+- 日期：2026-10-29
+- 說法：(1) 「先 buff 再打臉」用 board-score shaping 很難直接鼓勵：兩種順序場面相同、只差敵方血量；純 potential shaping 在 value 頭學會血量價值後，兩種順序的優勢差會被下一步扣回（只在 value 頭還不準時有幫助）；`--shape-final` 贏局時敵方血量本來就是 0，也不分順序。能直接比較順序的是前瞻（搜尋比回合末局面）或規則守門。(2) 現役配方仍有錯序：E-271 A 對 egg 每局約少打 0.43 點臉（約 2.8% 的 zoo 回合），主要是 Entropic Continuity、Floating Lessons、Vaultkeeper；γ 0.98 減 58%、`--distill-info` 減 30%。(3) E-283 I 臂的搜尋蒸餾用的是舊估值座位（F-882 前的方式），仍在全新 seed 上對 egg +2.8；和 E-278（0.2.0 續訓、同樣舊座位）不採用的結果不同，差別在起點（start-A2105 vs 0.2.0）與 `--distill-info`，沒有分開量。
+- 證據：train/ppo.py shaping（約 1121–1131 行）與 GAE（884–885 行）；E-287 表；E-283 判定表。
+- 狀態：(1) 推導，未實驗；(2) 成立（模擬、貪婪、1000 局）；(3) 觀察，未歸因
+- 相關：E-287、E-283、R-156、F-876、F-882、R-155
+- 來源：2026-10-29 App（使用者問 shaping 能不能鼓勵先 buff）
+
+### F-887
+- 日期：2026-10-29
+- 說法：zoo（warlock-zakajz）用 `--distill-info` 時，被標 info:1 的決策約占 learner 決策的 63%，因為 Life Tap（power.draw）幾乎每個有 2 費、還沒用英雄技能的決策都合法，`touchesInfo` 只要合法步驟裡有一個 info 步就標。所以 E-283 的 I 實際上是「蒸餾比例約 0.1 → 約 0.65」，不是只針對抽牌／Discover；I 的增益與 30% 錯序下降可能來自蒸餾量，不是「資訊」範圍。要真的只針對抽牌時機，標記要改成「不含 Life Tap」或「首選步驟本身是 info 步」。`--distill-buff` 在這個牌組只多標約 2%。
+- 證據：5090 `runtime/shape-20261029/r2/I/log.csv` 第一列 searched 5487、info_searched 5136、decisions 8208；r3-J-stopped/smoke/log.csv 5551／5200（E-288）。
+- 狀態：有效（2026-10-29）
+- 相關：E-283、E-288、F-874、F-886
+- 來源：2026-10-29 App（/goal 第 3 輪 smoke）
+
+### F-888
+- 日期：2026-10-29
+- 發現：zoo 0.2.0（warlock-zakajz）在費用夠、無其他牌可出、對手場上有大隻手下時，Kazakus 審判長度偏好 4 費 Grueling（0.548）勝過 7 費 Rushed（0.410）。實例：ranked-2026-10-29T13-04-05-846Z 第 14 局 T20（`game-0014-decisions.jsonl` 中 pick c20e348），選 Shiv＋Convicted、對面 C'Thun 12/12，延後一回合生效後當回合結束就輸。使用者裁定應選 Rushed（R-157）。
+- 狀態：待驗（只有一例；尚未量測這類局面的選擇比例與強制 Rushed 的勝率差）
+- 相關：R-157、R-118
+- 來源：2026-10-29 天梯 50 場批次第 14 局
+
+### F-889
+- 日期：2026-10-29
+- 發現：zoo 0.2.0 在「手上有 Floating Lessons 和還沒下的手下」時，偏好先下手下再 buff（ranked 第 15 局 T5：o4 Cult Neophyte 0.284，Lessons 打 Fanatic 各 0.228）。這樣手上的隨機 buff 就少一個可能的落點。使用者裁定先 Lessons（R-158）。
+- 狀態：待驗（只有一例）
+- 相關：R-158
+- 來源：2026-10-29 天梯 50 場批次第 15 局
+
+### F-890
+- 日期：2026-10-29
+- 發現：Ritual of C'Thun 選到 Glare of C'Thun 時，在回合開始用 `ChoiceType=TARGET`（CountMin=1/Max=1，Source=BE_726，選項是敵方手下）問目標。`candidates()` 只認 GENERAL 和 MULLIGAN，所以回傳空清單，loop 一直印「waiting (not my turn)」。第 15 局 T15 卡了 46 秒，最後由使用者手動點了 Remnant of Rage（5/4）。
+- 狀態：已修（2026-10-29）：`candidates` 接受 TARGET 1/1；`choiceView` 把 Source BE_726 的 TARGET 當成模擬器的 `glare` 選擇；`plan()` 直接點敵方場上那隻。拿當局 Power.log 重播：網路選 Remnant of Rage 0.964，點在敵方手下那排。第 16 局起生效（批次每局重開 loop）。實戰還沒驗證到。
+- 相關：L-067
+- 來源：2026-10-29 天梯批次第 15 局，使用者「卡住了 沒有用儀式打人」
+
+### F-891
+- 日期：2026-10-29
+- 發現：Cursed Catacombs 在 0 費時沒有任何防護。`temporaryDiscover`（`src/net-guards.mjs`）只在「選到的牌打不起、但有別張打得起」時改選；三張都打不起就回 null。打出 Catacombs 這一步也沒有 guard 擋（R-147 只是裁定，沒有實作）。另外 King Llane（TIME_875t）只在 `data/cards.enUS.json` 裡，`src/` 沒有任何規則；模擬器的牌庫不認得它（view note「discover option not in deck: King Llane」），網路的 decision 紀錄裡它的 name 是 null。網路不知道它是對手塞進來的死牌。
+- 狀態：已用 guard 擋（2026-10-29：`catacombs_without_mana`、`temporary_discover_dead_card`，R-161）；模型本身還沒學會（F-892）
+- 相關：R-147、R-159、R-160
+- 來源：2026-10-29 天梯批次第 16 局 decisions.jsonl 第 43504、43505 行
+
+### F-892
+- 日期：2026-10-29
+- 發現：三個新 guard（R-161）要退休，得讓模型在模擬器裡學會。模擬器現況：(1) King Llane／Garona 完全沒實作（`src/` 沒有 TIME_875／TIME_875t），對手牌組也沒有 Garona，所以 R-160 在現有模擬器裡學不到，要先由 role-env 實作 Garona 與 King Llane、role-opponent 把帶 Garona 的牌組放進對手池；(2) Cursed Catacombs 與 Kazakus 審判都在模擬器裡，但 zoo 0.2.0 仍答錯（0.614 打墓穴、0.548 選 Grueling），只靠勝負的獎勵分不出來，下次 zoo 訓練要用回歸題當門檻（`npm run regress`），必要時從這類局面開局。
+- 狀態：待做（下次 zoo 訓練）
+- 相關：R-157、R-159、R-160、R-161、F-891
+- 來源：2026-10-29 App 加 guard 時查 `src/`
+
+### F-893
+- 日期：2026-10-29
+- 發現：ranked 批次第 21 局第 10 回合（23:41:07 起）連續 8 個點擊沒反應，loop 以「Eight dead gestures in a row」停下，批次 STOP game_incomplete_or_runner_error。不是座標問題：畫面是爐石的「你已經從賽局斷線，正在重新連線」對話框，2 分鐘後仍在重連（回合照樣在跑）。同一時間排程「NTNU VPN Keepalive」在 23:41:20 停掉舊 session 198802、23:41:25 重新啟動 VPN（`automations\logs\vpn-ntnu.log`），到 23:44 都還沒寫 `VPN up`。查證（2026-10-30 00:0x）：VPN 是全通道——`Get-NetRoute 0.0.0.0/0` 只有一條，走 `_Common_NTNU_Staff_and_Student - vpn.ntnu.edu.tw`，Wi-Fi 沒有預設路由，所以爐石的連線也走 NTNU。時間順序是 VPN session 先自己掉（23:41:07 第一個點擊沒反應，keepalive 23:41:20 才發現 session 已失效），不是 keepalive 重連造成；重連 23:41:25 第一次失敗，23:44:07 才恢復。VPN 一掉，經 NTNU 出口的爐石連線就斷，恢復後出口換了，舊連線接不回去。
+- 補查（2026-10-30，`GameNetLogger.log`、`BattleNet.log`、vpn-ntnu.log）：(1) 23:40:35 遊戲伺服器 ConnectionReset，同時 Battle.net 連線斷（`Bnet_OnDisconnected`）；(2) 23:40:45 遊戲伺服器自己重連成功（走 Wi-Fi，VPN 已死、路由已退回 Wi-Fi），但 Battle.net 連線沒有重連（ReconnectMgr `m_numUtilReconnectAttempts = 0`、`m_gameReconnectType = LOGIN`，爐石的設計是重新登入時再回到對局），斷線對話框一直擋住點擊；(3) keepalive 23:41:25 第一次重連 VPN 失敗（`There is no active session!`），腳本只記 log、等下一輪 5 分鐘；23:43:51 是使用者手動觸發才成功（23:44:07）；(4) VPN 一起來路由切回通道，23:44:34 遊戲連線再斷一次；23:45:50 用戶端結束。結論：Wi-Fi 一直在，遊戲伺服器 10 秒內就能經 Wi-Fi 接回，卡住的是 Battle.net 連線，要靠重開用戶端（登入時自動回到對局）；VPN 中途重連會再打斷一次。
+- 狀態：已修（2026-10-30，使用者選先修重連，不在對局中延後 VPN）：(1) keepalive 改每 1 分鐘、探兩次才動手、同一輪第一次 start 失敗會停 session 等 15 秒再試（L-069）；(2) loop 在點擊沒反應時查 `BattleNet.log` 的 `Bnet_OnDisconnected`，有新的就 exit 3；runner 等 VPN 回來（最多 5 分鐘，之後走 Wi-Fi）→ 殺掉並經 Battle.net 重開用戶端 → 90 秒內有新 Power.log 就接回對局繼續打，否則記 `Disconnected`（算輸）、點回套牌畫面打下一局；同批第 3 次斷線才停（`src/reconnect.mjs`、`test/reconnect.test.mjs`）。重開與回套牌畫面 2026-10-30 01:22 實測可行（13 秒開好）；**接回對局還沒實測**。2026-10-30 01:41 演練（E-290）：keepalive 49 秒自己連回；兩局之間斷線用戶端不跳對話框、離線停在套牌畫面，VPN 回來也不原地重連，所以 runner 排每局前先查 `Bnet_OnDisconnected`（L-071）。2026-10-30 02:52（E-291）：**接回同一局實測可行**，啟動指令到回到對局約 25 秒，直接進對局、不經過主畫面；Battle.net 本身離線時會吃掉啟動指令，已改成每 30 秒重送；接回後「結束回合」點不動，未查。2026-10-30 03:45（E-293、F-895）：砍掉重開也能接回（31 秒）；接回後 options 被 parser 清掉而閒置的問題已修，實測能繼續打；「有 options 但結束回合點不動」沒有重現
+- 相關：E-250
+- 來源：2026-10-29 App 讀 `runtime/last-game.log`、截圖、vpn-ntnu.log
+
+### F-894
+- 日期：2026-10-30
+- 說法：判定 spec 的校準條件（候選在 [0.6,1) 的高估量要小於 A）用 400 局量測，雜訊比要量的差還大。同一個 A 模型，在三輪不同的校準 seed 上，高估量是 0.07、0.10、0.05；三輪五個候選的高估量都落在 0.08 到 0.17 之間。這條件等於擲硬幣，而且會把勝率兩條都過的候選擋掉（第 2 輪 I：0.12 對 0.10；第 3 輪 K：0.15 對 0.05）。
+- 證據：judge-r1／r2／r3 的 calib-*.txt（seed 1250001、1350001、1450001），E-283、E-292。
+- 狀態：成立（2026-10-30）。沒量過校準的 seed 間標準差。下一次配方搜尋若要保留這條件，應該加大局數，或用多個 seed 取配對差的區間，再判「縮小」。
+- 相關：E-292、E-283、judge-spec.md
+- 來源：2026-10-30 App（/goal 第 3 輪判定）
+
+### F-895
+- 日期：2026-10-30
+- 說法：重開後接回同一局的用戶端，Power.log 先印我方的 `DebugPrintOptions`（`mainEntity` 空白），之後才是 CREATE_GAME 快照；快照裡 GameEntity 的回合是一般的 `tag=TURN value=N`。parser 遇到 CREATE_GAME 會把 options 一起清掉，伺服器在我方動作前不會再送，所以 loop 會一直以為不是我方回合。
+- 證據：E-293 兩次接回的 Power.log；`test/power.test.mjs`「a rejoined game takes the shown turn from the CREATE_GAME snapshot」、`test/reconnect.test.mjs`「a rejoined client with our turn and no options ends the turn instead of idling」。
+- 狀態：已修（2026-10-30）：`shownTurn` 從快照取；loop 我方回合沒有 options 超過 10 秒就按結束回合，實測接回後能繼續打（E-293）。代價是接回那一回合不出牌。
+- 相關：F-893、E-291、E-293、L-075
+### F-896
+- 日期：2026-10-30
+- 說法：NTNU BIG-IP 的 VPN session 從連上起 8 小時就被伺服器切斷，是固定的上限，不是網路不穩。ranked 第 21 局的斷線（F-893）就是這個。
+- 證據：`automations/logs/vpn-ntnu.log` 的 `VPN up` 到下一次 `unreachable`：10-27 04:48→12:48、12:48→20:52、20:53→10-28 04:53、10-28 05:03→13:07、10-29 15:40→23:41（加上 keepalive 每分鐘檢查的延遲）。另有幾次不規則斷線（10-28 15:32、10-29 06:47），原因不明。
+- 狀態：已處理（2026-10-30）：runner 排每一局前用 `vpnAgeMs()`（最後一行 `VPN up` 起算）檢查，超過 `VPN_RENEW_MS`（7.5 小時）就 `renewVpn()`（`-stop /s <id>` → kick keepalive → `waitVpn`），再 `restartClient()`＋`toDeckScreen()`，讓到期斷線發生在兩局之間（E-296）。不規則斷線仍走對局中的恢復流程（E-294、E-295）。
+- 相關：F-893、E-294、E-295、E-296、L-074
+### F-897
+- 日期：2026-10-30
+- 說法：前瞻把對手回合交給對手自己的網路估值，好壞跟著那個網路的校準偏差走，不是普遍更好：對 zoo 0.2.0 合計和 `--own-value` 一樣（+0.1），對 v9 +1.7；dh 網路高估自己時變差（−3.1），egg 網路低估自己時變好（+3.2）。zoo 0.2.0 的前瞻瓶頸不在「誰來估對手回合」。
+- 證據：E-297（`runtime/oppvalue-20261030/result.md`、`out/calib-*.txt`）。
+- 狀態：成立（2026-10-30）；偏差→效果的因果是推論。
+- 相關：F-882、F-885、E-286、R-155
+### F-898
+- 日期：2026-10-30
+- 說法：shaping 連續失敗符合文獻預期，不是調參問題。(1) 潛在式 shaping 等價於用 Φ 初始化價值（Wiewiora 1106.5267），只改學習速度、不改收斂策略；高維任務實測加速也只有一點（2307.10142）。這幾輪都從已練過的起點接著練，可加速的空間接近 0。(2) 非潛在式（`--shape-final`、γ 調低）會改目標（Ng 1999；2410.12197），結果是勝率退步。(3) 本專案特有：shaping 項進了 critic 目標（ppo.py 的 `adv + v`，MSE、沒有夾在 ±1），而這個 value 頭同時是前瞻／蒸餾的估值器，所以 shaping 會汙染搜尋（E-274 的 S 臂估值超出 ±1、校準變差）。(4) `--shape-gamma 1.0` 和 PPO γ 0.995 不一致，嚴格說已不是純潛在式。成功的對局 AI（AlphaZero 1712.01815、KataGo 1902.10565、DouZero 2106.06135、DeepNash 2206.15378、Suphx 2003.13590）價值目標都只用終局結果；稠密資訊改放輔助預測頭（KataGo 的 ownership／score）或終局獎勵預測（Suphx 的 GRP），策略改進靠搜尋蒸餾（ExIt 1705.08439、2007.12509、Muesli 2104.06159）。OpenAI Five（1912.06680）是反例：從零練、局長約 2 萬步，用了稠密 shaped reward。
+- 證據：`runtime/shaping-lit-20261030/verified.tsv`（83 列、67 個 arXiv ID 全部經 API 核對標題）；關鍵摘要 App 親自讀過；train/ppo.py 883–890、1125–1136、1233 行。
+- 狀態：成立（2026-10-30，文獻＋程式推論；沒有新實驗）。建議的下一步見 handoff「價值訊號」。
+- 相關：F-876、F-874、F-882、F-885、E-176、E-274、E-283、E-292、R-155
+
+### F-899
+- 日期：2026-10-30
+- 說法：5090 改走 Tailscale、「NTNU VPN Keepalive」停用後，ranked runner 的 VPN 步驟會變成每次白等：`waitVpn` 探測 140.122.184.29:22 永遠不通，每次斷線多等 5 分鐘；最後一筆 `VPN up` 停在 08:16，超過 7.5 小時後每場排局前都會 `renewVpn`＋重開用戶端＋再等 5 分鐘。已改成只在 keepalive 排程啟用（Ready/Running）時才等 VPN、才換新 session（`vpnInUse()`）。
+- 證據：src/reconnect.mjs `keepaliveOn`／`vpnInUse`；runtime/ranked-continuous.mjs 三處閘門；test/reconnect.test.mjs「with the keepalive task disabled…」；npm test 942/942；當下 `f5fpc -info` 沒有 session、排程狀態 Disabled。
+- 狀態：已修（2026-10-30，沒有實戰驗證）。
+- 相關：F-893、F-896、E-296、L-080
+
+### F-900
+- 日期：2026-10-30
+- 說法：2026-10-30 標準天梯 40 局 30 勝 10 負（75%），前一天 10-29 是 20 勝 21 負（49%），兩者差異 Fisher p≈0.02。網路權重沒換（都是 zoo 0.2.0）；兩天之間的改動只有三個 net-guard（10-29 第 19 局起生效）和起手留牌表 0.2.1（今天第一次上實戰）。進步集中在兩個對手職業：牧師 3-6 → 6-1、死騎 3-2 → 8-0（合計 6-8 → 14-1，p≈0.005）。術士內戰沒變（5-4 → 6-6）。一部分是對手組成的運氣：10-29 輸掉的 Beatrix 快攻聖騎（0-4）和蛋牧（Egg of Khelos，0-2）今天幾乎沒遇到（只有 1 場帶 Holy Eggbearer 的牧師，贏）。把這 6 場拿掉，10-29 是 20-15（57%），和今天的差距就不顯著（p≈0.14）。依局長分：超過 18 回合的長局還是幾乎都輸（今天 1-3、10-29 1-8），但今天的長局比較少；13–18 回合的中局從 6-9 進步到 11-6。今天的對手牌位不知道：HDT 沒在記錄（最後一筆 10-29 23:44），用戶端 log 也沒有牌位。10-29 結束時是白金 9–10（HDT StarLevel 31–32）。
+- 證據：scratchpad 解析腳本，跑 runtime/ranked-2026-10-2{7,9}*、ranked-2026-10-30*、以及最後一局（Logs/Hearthstone_2026_10_30_13_20_21/Power.log 最後一個 CREATE_GAME 之後）；用 GameAccountId lo=62924327 認出我方。逐局勝負和 status.json 完全一致。
+- 狀態：觀察（2026-10-30）。要判斷是不是牌技真的進步，還需要更多遇到聖騎／蛋牧的局，或在 sim 裡對 Beatrix 聖騎、蛋牧分別量 guard＋留牌表的效果。
+- 相關：F-883、F-892、E-281、R-152、R-161
+
+### F-901
+- 日期：2026-10-30
+- 說法：value 頭從線性 MSE（λ-return）改成 tanh＋BCE（E-298 V，目標 λ-return；VZ，目標終局 z），在 E-271 A 配方上練 150 輪，校準沒有可量到的改善：每局平均 Brier 配對差（候選 − A，2000 局）四格的 95% 區間都含 0（V 對 zakajz −0.0058，上界 +0.0001 最接近）；VZ 對 egg 的 [0.6,1) 高估反而從 +0.074 變 +0.170。勝率小退（V 對 dh、zakajz，VZ 對 zakajz 超過 1.5 分）。前瞻空間（`--own-value` depth 1 look−plain 合計）A +3.3、V +1.7、VZ +0.7：改 value 頭後前瞻空間變小，不是變大。另外，A 的 v 在夾到 ±1 前後 Brier 只差 0.0001，原本 MSE 頭幾乎不出界，「沒限制在 ±1」不是 A 校準的瓶頸。
+- 證據：`runtime/value-bce-20261030/out/`（calib/*.txt、*.tsv，compare.txt，look-summary.txt）；E-298 判定段。
+- 狀態：已量測（2026-10-30，單一配方、單一 seed 48 訓練；候選每項 2 個量測 seed）。
+- 相關：E-298、E-271、E-286、F-898、R-163、R-155
+
+### F-902
+- 日期：2026-10-30
+- 說法：標準天梯 10-25 到 10-30 共 167 局（68 敗），依對手牌組（從揭露的牌分類）統計，佔敗場最多的依序是：zakajz 術士內戰 41 局 21-20（占全部局數 25%、敗場 29%）；C'Thun 牧師（Azalina／Glare／Wrath of C'Thun）14 局 5-9（敗場 13%）；C'Thun DH 14 局 7-7（10%）；蛋牧 9 局 2-7（10%）；Beatrix 聖騎 5 局 1-4（6%）。打得好的：法師 10-0、死騎非吸血 6-0、盜賊 6-1、薩滿 9-3、死騎吸血 9-4。模擬器的對手牌組有 warlock-zakajz、priest-egg(-hsr)、dh-cthun、dh-void、shaman-cthun，沒有 C'Thun 牧師、Beatrix 聖騎、Moon 牧師、吸血死騎。蛋牧已經在對手池裡（占 0.5），實戰還是 2-7，代表模擬蛋牧和真人蛋牧不像（呼應 R-144 第 3 點：只對很弱的模擬對手變強不算進步）。實戰薩滿多是 Al'Akir／Witch's Apprentice 元素，和 shaman-cthun 不完全一樣，但這個對局本來就贏。
+- 證據：scratchpad arch.js（分類規則：牧師有 Egg of Khelos／Holy Eggbearer→蛋牧，否則有 C'Thun 系列牌→C'Thun 牧師，否則有 Blessing of the Moon／Kaldorei→Moon 牧師；死騎有 Bloated Leech／Blood Sucker／Body Bagger／Infested Breath→吸血；聖騎有 Scarlet Bruiser／Beatrix→Beatrix）；decks/ 目錄。
+- 狀態：觀察（2026-10-30）。樣本小：C'Thun 牧師 n=14、Beatrix n=5。部分更正（2026-10-31）：「C'Thun 牧師」其實是阿薩林納（JAIL_430）牧師，C'Thun／卡札庫斯等牌是複製自我們牌庫（R-165），重算見 F-903。
+- 相關：F-900、F-871、E-271、R-151
+
+### F-903
+- 日期：2026-10-31
+- 說法：以開局揭露 JAIL_430（阿薩林納）重新分類，10-25 以來標準天梯對阿薩林納牧師 13 局 5-8（10-30 批次前 2-8，10-30 批次 3-0）；敗場多在 17–22 回合的長局。它對我們出過的我方牌（局數）：Cult Neophyte 7、Mawman Cultist 6、Platysaur 6、Shred of Time 5、Tachyon Barrage 5、Twilight Egg 5、Twilight Timehopper 5、Godfather Kazakus 5、Glacial Shard 5、C'thrax Brute 4、Blasphemy 4、Floating Lessons 3、Entropic Continuity 3、Zakajz 3、Cursed Catacombs 3、Ruinous Velocidrake 2。它 40 血、拿我們的牌打我們，加上戰吼補滿手，所以短局打不死就輸長局。其餘牧師 22 局 10-12，其中 9 局有蛋牧牌。模擬器沒有 JAIL_430，對手池沒有這副牌，所以網路從沒練過這個對局；它是敗場第二多的對手，補強優先序排第一。
+- 證據：scratchpad games.json＋az.cjs（Power.log FULL_ENTITY 的 JAIL_430 與對手控制的我方牌 cardId）；`grep -r JAIL_430 src/ decks/` 無結果。
+- 狀態：觀察（2026-10-31）。n=13。
+- 相關：F-902、R-165、F-900
+
+### F-904
+- 日期：2026-10-31
+- 說法：10-31 標準天梯批次（zoo 0.2.0 網路＋0.2.1 留牌表，同 10-30）47 局 28-19（60%），牌位鑽石 6→鑽石 2（HDT 47 局全有紀錄，R-033 第 3 點生效）。比 10-30 的 30-10 低，主因是對手變強：對牌位鑽石 6 以上的對手 10-12，對鑽石 10–7 是 5-1，對白金以下 13-6。先手後手沒差（後手 15-10、先手 13-9）。前 18 局 8-10，後 29 局 20-9。長度是最清楚的分界：HDT 回合數 ≤7 輪 23-3、8–9 輪 3-8、≥10 輪 2-8，也就是說前期沒打死對手就幾乎必輸（同 F-900、F-903）。各對手（10-31，括號是 10-25 以來合計）：zakajz 內戰 11-4（32-24）、蛋牧 2-4（4-11）、阿薩林納牧師 2-2（8-10）、Beatrix 聖騎 1-2（2-6）、戰士 0-2（2-4）、薩滿 3-1、死騎非吸血 2-2、盜賊 3-0。19 敗裡蛋牧 4、zakajz 4、阿薩林納 2、Beatrix 2、戰士 2、死騎 2，其他各 1。對 zakajz 內戰從約 50% 變成 73%；蛋牧、阿薩林納、Beatrix 仍是負勝率，跟 F-902／F-903 的補強優先序一致，並把蛋牧（合計 4-11）的嚴重程度提到跟阿薩林納（8-10）同級。批次在第 47 局後由 `STOP_AFTER_GAME: mulligan execution misfire was recovered` 結束（`src/loop.mjs:310`），第 47 局沒進 status.json。
+- 證據：`runtime/ranked-2026-10-30T20-47-33-610Z/`（status.json、game-00NN-Power.log）；HDT DeckStats.xml（StartTime ≥ 2026-10-31T04:4，StarLevel、OpponentStarLevel、Coin、Turns）；scratchpad parse.mjs 解析＋臨時分類腳本（規則同 F-902，另加阿薩林納＝揭露 Azalina Soulsever，R-165）。
+- 狀態：觀察（2026-10-31）。
+- 相關：F-900、F-902、F-903、R-165
+
+### F-905
+- 日期：2026-10-31
+- 說法：模擬器實作阿薩林納牧師（R-165）。開局：清單有 JAIL_430 的一方英雄 40 血，從對手清單（去掉 Broxigar）不放回抽 20 張複製加進牌庫（`raw.copied`）一起洗，cthunStart 改看合併後的牌庫。卡牌：Azalina 戰吼抽到滿手；Mind Sweeper 持有期間打過複製牌→敵方隨從全體 2 傷；Unshackle Soul 消滅一個隨從，持有期間打過複製牌→費用 1；Dark Deacon 持有期間施放 2 個暗影法術→選一個 C'Thun 能力；Dark Terraforming 對目標 5 傷、同排左右依序少 1。Psychic Conjurer 與 Intertwined Fate（fate2）從對手牌庫拿的牌也標成複製牌。牌組 `decks/priest-azalina/list.json` 20 張是從 16 局實戰揭露的牌重建的（Azalina 1、Mind Sweeper 2、Unshackle Soul 2、Kaldorei Priestess 2、Lunarwing Messenger 2、Intertwined Fate 2、Spawn of C'Thun 2、Dark Deacon 2、Soothsayer 1、Shadow Word: Ruin 1、Dark Terraforming 1、Elder Word: Foresight 1、C'Thun 1），待驗。隨機走法 300 局對 zakajz、200 局對 zoo 都打完（約 20 回合）。副作用：這幾張牧師牌現在模擬器能打，Blessing of the Moon 的牌池變大，蛋牧對局走向跟著變，`test/fixtures/zoo-v9-logits.json` 用原產生器重產（steps 125 不變，sumLogits 2086.166959→2085.503179；移除本次 sim 改動時舊值仍逐位通過，encoder 沒變）。模擬器版本 b31012f48995→4656bbec982f，之前的比較要用新版本重跑。
+- 證據：`test/priest-azalina-sim.test.mjs`（7 條）；`node src/selfplay.mjs 300 1 priest-azalina warlock-zakajz`；`node src/sim-version.mjs`；npm test 952/952。
+- 狀態：已實作（2026-10-31）。複製牌抽法已由使用者確認（R-167：可重複，上限是我方張數，與實作一致）。其餘疑點待用實戰 Power.log 核對：哪些算複製對手的牌、複製牌算不算開局在牌庫、Dark Terraforming 擴散、Unshackle 1 費後被再減費。牌組重建待驗；沒有駕駛網路，沒進對手池；encoder 字彙裡沒有這些新牌（會落到 other）。
+- 相關：R-165、F-903、F-904
+
+### F-906
+- 日期：2026-10-31
+- 說法：從實戰局面建的模擬根（`shadowView`→`simRoot`）裡，對手場上的怪沒有 `maxAttacks`（`src/sim.mjs` 讀實戰狀態時只替我方的怪設），`beginTurn` 只重設 `attacks=0`，而 `attacks>=undefined` 永遠是 false，所以對手下回合同一隻怪能無限攻擊。凡是從實戰局面往下模擬到對手回合的東西都受影響：實戰 depth 2 前瞻、回歸題前瞻（E-289、E-299 的 d2／d2own）、playout。自我對弈（從 newGame 開始）不受影響。
+- 修法：`beginTurn` 加 `b.maxAttacks??=b.windfury?2:1`。sim 版本 4656bbec982f→aa061d57abf2。
+- 證據：`test/live-root-attacks.test.mjs`（拿掉修正會失敗）；E-300 修前修後；npm test 953/953。
+- 狀態：已修（2026-10-31），未 commit。E-289、E-299 的 d2 數字要重看；實戰若有開 depth 2，之前的對手回合都高估了對手。
+- 相關：E-300、E-299、E-289、L-085
+
+---
+### F-907 阿薩林納牧師改用 HSReplay Moon 版（不帶麥迪文）＋Moonwell
+- 日期：2026-10-31
+- 說法：使用者貼了 HSReplay 的 Azalina Priest（Moon）與 C'Thun Priest 兩份牌表，要先做「Moon 版沒帶麥迪文的」。我們 13 局阿薩林納實戰裡 Moon 8 局（3-5）、純 C'Thun 1、混合 3、都不像 1；Medivh／Atiesh／Karazhan 0/13 局出現，所以拿掉這三張。`decks/priest-azalina/list.json` 從 F-905 的重建混合版換成 Moon 的 17 張＋3 張實戰非 C'Thun 局看過、模擬器已支援的牌：Servant of Zuramat（BE_228）1、Undeath Sentence（JAIL_940）1、Dark Terraforming（BE_EVENT_102）1。實戰也看過 Elder Word: Manifest（BE_222）2 局，但模擬器沒實作，沒放。
+- 模擬器：新增 Moonwell（EDR_476）：對所有敵方角色（含英雄）4 傷、所有友方角色回 4 血（`MOONWELL`，kind `moonwell`）。sim 版本 aa061d57abf2→7dfd353e0c63；zoo-v9-logits 夾具沒變。
+- 證據：`test/priest-azalina-sim.test.mjs` 8/8（新加 Moonwell 測試、牌表 20 張且每張 20 費可出）；npm test 954/954。
+- 狀態：已做（2026-10-31），未 commit。C'Thun 版（要先做 Entropic Rift BE_220）使用者延後；卡札庫斯 Sentenced for Smuggling 偷的牌算不算複製牌還沒答覆。
+- 相關：F-905、R-165、R-167
+
+---
+### F-908 阿薩林納牧師 C'Thun 版（使用者給的牌組代碼）＋Entropic Rift
+- 日期：2026-10-31
+- 說法：使用者貼了牌組代碼 `AAECAa0GAufYB/OJCAnwnwSFhgevyQes2Qf04Afo8Qfh+gf7iQj8iQgAAA==`，要做成 C'Thun 版。新牌組 `decks/priest-azalina-cthun`：Azalina 1、C'Thun 1、Shadow Word: Ruin 2、Kaldorei Priestess 2、Soothsayer 2、Unshackle Soul 2、Slime 'em! 2、Entropic Rift 2、Elder Word: Foresight 2、Spawn of C'Thun 2、Dark Deacon 2。Moon 版（F-907）仍在 `decks/priest-azalina`。
+- 模擬器：新增 Entropic Rift（BE_220，`RIFT`，kind `rift`）：自我對弈從「模擬器能出的牧師暗影法術」隨機拿 2 張（簡化：真卡是任何職業的隨機暗影法術）；實戰沒有 s.game 時回 exact:false。因為它是有模型的牧師卡，Blessing of the Moon 牌池變大，zoo-v9-logits 夾具重產（sumLogits→2621.096229、steps 137）。sim 版本 7dfd353e0c63→a0d3051c3e92。
+- 證據：`test/priest-azalina-sim.test.mjs` 9/9（兩副牌表 20 張且每張 20 費可出、Rift 給 2 張暗影法術）；對 zakajz 隨機對隨機 40 局都打完（23-17）；npm test 955/955。
+- 狀態：已做（2026-10-31），未 commit。兩副都還沒駕駛、沒進對手池。
+- 相關：F-907、F-905、R-165
+
+### F-909
+- 日期：2026-10-31
+- 說法：模擬器不認得效果的武器，現在照攻擊力與耐久度裝備（使用者 2026-10-31「沒遇過的武器，就算不知道效果，但仍然知道他的攻擊力和耐久度」）。之前 `gameModel` 只認 Axe of Cenarius、Tentacle Lash、Eyemaul、Tiny Pal 四把，其他武器打不出來；`opponentDealer` 抽到的武器還被換成沒效果的法術。現在任何武器都是 `{kind:'weapon'}`，揮擊時不認得的效果照舊略過（exact=false），`pooled()` 讓武器保留武器。我方牌組的武器都已有模型，自我對弈不受影響（zoo-v9 logits 夾具沒變）。
+- 證據：`test/unknown-weapon.test.mjs`（Command Claw 裝備、打臉 2、耐久 2→1；抽給對手的 Staff 仍是 1/6 武器）；npm test 957/957；sim 版本 aa061d57abf2→dc3885884feb；E-301 補跑。
+- 狀態：已實作（2026-10-31），未 commit。武器效果（Staff 亡語全場清、Command Claw 加攻）仍沒做。
+- 相關：E-301、F-906、R-166
+
+### F-910 阿薩林納牧師兩副都有駕駛了（v1），對 zoo 0.2.0 約 60%
+- 日期：2026-10-31
+- 說法：E-302 用主線配方（PPO＋λ0.1 搜尋蒸餾）從 egg 0.1.0 依卡名接續，對手固定 zoo 0.2.0（`--opp-lr 0`），各 300 輪。對 zoo 0.2.0 的 4000 局（全新 seed）：Moon 版 61.1%（59.5–62.5）、C'Thun 版 59.0%（57.4–60.5）；同一副牌讓 egg 0.1.0 直接開只有 24.5%／26.3%。實戰阿薩林納對我們 10-8，量級相符；駕駛只對固定的 0.2.0 練過，可能部分是針對它的剝削。
+- 檔案：`models/selfplay/priest-azalina-pilot-v1-20261031.{pt,json}`（obs/act 454/152）、`models/selfplay/priest-azalina-cthun-pilot-v1-20261031.{pt,json}`（458/154），sim dc3885884feb。
+- zoo 擴詞彙：zoo 下一輪 `--decks` 加這兩副後多 7 張（Mind Sweeper、Unshackle Soul、Moonwell、Azalina Soulsever、Dark Terraforming、Entropic Rift、Dark Deacon），obs 646→674、act 248→262；`--resume` 依卡名搬權重，新格從 0 開始（之前落到 other）。既有模型與實戰不受影響：`src/selfplay-net.mjs` 用各模型 json 自己的 names 建 encoder。配方 `runtime/zoo-azalina-20261031/run.sh`（A：阿薩林納占對手 0.30；B：0.45），等使用者批准。
+- 證據：`runtime/azalina-20261031/`（out/、eval/、M.txt、C.txt、orchestrate.log）。
+- 狀態：已匯出（2026-10-31），未 commit；zoo 訓練未開。
+- 相關：E-302、F-907、F-908、R-165、F-902
+
+### F-911 zoo 加阿薩林納對手池：B 臂對阿薩林納 +3～4，DH 小退，仍輸阿薩林納
+- 日期：2026-10-31
+- 說法：E-303 從 zoo 0.2.0 加兩副阿薩林納駕駛進對手池練 150 輪。B（阿薩林納占對手 45%）對 Moon 駕駛 39.1→42.5、對 C'Thun 駕駛 42.5→46.8；egg、v9、zakajz、鏡像持平，shaman −0.9、DH −2.2（雜訊邊緣）。A（30%）對 DH −5.1，不採用。zoo 仍輸阿薩林納駕駛（約 43–47%），150 輪只拉近一部分；駕駛本身是針對 0.2.0 練出來的（F-910），所以這個差距可能誇大。
+- 證據：`runtime/zoo-azalina-20261031/eval/`（m-*.txt、summary.txt、A.json、B.json）、A.txt、B.txt、orchestrate.log。
+- 狀態：挑選評估完成（2026-10-31）；B 還沒做全新 seed 的 role-audit，沒匯出到 models/selfplay、沒部署、未 commit。2026-11-01 role-audit（E-304）：阿薩林納兩項進步成立，DH 退步也成立（−2.3 FAIL），不採用；見 F-912。
+- 相關：E-303、E-302、F-910、E-271
+
+### F-912 全新 seed 複核：zoo B 對阿薩林納的進步成立，但 DH 真的退步
+- 日期：2026-11-01
+- 說法：E-303 B 在全新 seed（330001 起，每對每邊 5000 局）對阿薩林納 C'Thun 42.3→46.7（+4.5）、Moon 41.4→43.7（+2.3），兩項 --beat PASS；DH 52.9→50.6（−2.3），超過容許的 1.5，FAIL，兩座位都退；shaman −1.2、v9 −1.0、egg −0.3、zakajz +0.9、鏡像 50.0，都在容許內。B 不能取代 zoo 0.2.0。
+- 證據：`runtime/audit-zooB-20261101/`（summary.txt、judge/compare-*.txt、judge/*-{Z020,B}-*.json、judge.sh、orchestrate.log）；sim dc3885884feb。
+- 狀態：已判定（2026-11-01，role-audit，E-304）。
+- 相關：E-304、E-303、F-911、F-913
+
+### F-913 zoo B 把 F-881 的錯招放大：乾燥局面丟 Tachyon 10.9%→35.1%
+- 日期：2026-11-01
+- 說法：題庫 G4b 跑 B：F-881 類別（對手空場、最佳非 Tachyon 線沒出牌的 211 個 DRY 局面）B 選 Tachyon 74 次＝35.1%，zoo 0.2.0 同一份程式重跑 23 次＝10.9%（與 baseline 檔一致），是已量測題的退步。另一方面，5 題使用者裁決題（ranked1029 g14／g15／g16×2、ranked1031 g1）B 過 4 題、0.2.0 都沒過；只剩 small-minion-into-taunt 兩邊都沒過（B 的 P(forbidden) 51%、0.2.0 76%）。
+- 證據：`runtime/audit-zooB-20261101/B-20261031-171727.{json,txt}`、`warlock-zoo-0.2.0-20261031-171735.{json,txt}`（也在 runtime/regress/）。
+- 狀態：已量測（2026-11-01，E-304）；原因沒查（可能是對手池裡阿薩林納前期空場局多）。交 role-train 判斷。
+- 相關：F-881、E-280、E-304、R-161
+
+
+### F-914 實戰可以依對手職業換網路（專家查表，目前空）
+- 日期：2026-11-01
+- 說法：`src/selfplay-shadow.mjs` 新增 `SPECIALISTS[deck][對手職業]`（職業用 power.mjs 讀到的對手英雄 cardClass，例如 'PRIEST'、'DEMONHUNTER'）。實戰 `runtime(state)` 以 `state.opponent.heroClass` 查表，有專家就用專家網路，其他職業或還不知道職業時照 `MODELS`；`JEV_NET_MODEL` 仍優先。網路快取以檔案為鍵，專家各自一份。`game-zoo` 的 `checkModel` 開局前檢查該牌組所有專家檔都在（開局前不知道對手職業）。起手留牌表沒改，仍照 `MODELS`。表是空的，專家要過 role-audit 才填。
+- 證據：`test/specialist-route.test.mjs`（3 條：表空、對專家職業用專家／其他職業與未知照 MODELS、缺檔開局前擋下且 JEV_NET_MODEL 優先）；npm test 960/960。
+- 狀態：已實作（2026-11-01）。2026-11-01 填入第一個專家：warlock-zakajz 對 PRIEST → zoo 0.2.2（R-168）。同日填第二個：對 DEMONHUNTER → warlock-zakajz-dh-v1-20261101（F-916、R-168）。用途：使用者「每次大版本對主要對手微調」（F-912 DH 退步是起因）。
+- 相關：F-911、F-912、R-151
+
+### F-915 DH 專家 v1：對 DH +3.5，其他職業都退
+- 日期：2026-11-01
+- 說法：E-305 從 zoo 0.2.0 專對 DH 微調 150 輪。B 臂（DH 0.8＋舊池 0.2）挑選評估對 DH 54.1→57.6%（55.5–59.8），先手 60.0→65.3、後手 48.3→50.0；A 臂（全 DH）只 +1.5。兩臂對 egg、v9、zakajz、阿薩林納都退 3–6 分，留 0.2 舊池擋不住遺忘，所以只能透過 F-914 的 SPECIALISTS 在對手是 DH 時上場。
+- 檔案：`models/selfplay/warlock-zakajz-dh-v1-20261101.{pt,json}`（obs/act 646/248、sim dc3885884feb）。
+- 狀態：已匯出（2026-11-01），未複核、沒填 SPECIALISTS、沒部署、未 commit。2026-11-01 role-audit 複核通過（E-306、F-916）。
+- 相關：E-305、F-914、F-912、E-304
+
+### F-916 全新 seed 複核：DH 專家 v1 對 DH 52.6→57.4，題庫 F-881 反而改善
+- 日期：2026-11-01
+- 說法：`warlock-zakajz-dh-v1-20261101` 在全新 seed（360001 起，每邊 5000 局）對 DH 52.6→57.4（+4.8，--beat PASS），先手 60.9→64.6、後手 44.3→50.3。其他職業退 3.5–4.5（shaman 82.1→78.7、egg 58.6→54.9、阿薩林納 Moon 40.2→35.7、v9 53.6→49.3、zakajz v1 54.2→49.8），只當參考。題庫 F-881 乾燥局面丟 Tachyon 10.9%→0.5%（和 F-913 的 zoo B 放大到 35.1% 相反）；使用者裁決題 0.2.0 0/5、dh-v1 過 3＋ok 1，只剩 g16 catacombs-take-llane fail。可以填進 SPECIALISTS 對 DEMONHUNTER（決定交主 session）。
+- 證據：`runtime/audit-dhv1-20261101/`；sim dc3885884feb。
+- 狀態：已判定（2026-11-01，role-audit，E-306）。
+- 相關：E-306、E-305、F-915、F-914、F-913、F-881

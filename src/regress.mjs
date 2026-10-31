@@ -20,6 +20,7 @@ import {loadNet} from './selfplay-net.mjs';
 import {shadowView,assertEncoded,MODELS} from './selfplay-shadow.mjs';
 import {loadList,cardDb} from './selfplay.mjs';
 import {F881_DECKS,loadExamNets,gradeF881} from './regress-f881.mjs';
+import {GUARD_QUESTIONS,RETIRED} from './net-guards.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 export const QUESTIONS=resolve(ROOT,'eval/regress/questions.json');
@@ -48,26 +49,34 @@ export function loadPosition(q){
   if(!j)throw Error(`${q.id}: source not found`);
   const state=dig(j,src.state),options=dig(j,src.options);
   if(!state||!options)throw Error(`${q.id}: state or options missing (${src.state}, ${src.options})`);
-  return {state,options};
+  return {state,options,extra:src.parsed?dig(j,src.parsed):null};
 }
 
 // The parser output the live bridge reads, rebuilt from the recorded state alone: both players (first player from the
 // turn's parity), our hand and board (so the hidden deck is the list minus what is visible).  What the recording does
-// not hold stays unknown: the discard count (0), ritual and trial clocks (none), Shreds of Time.
-export function synthParsed(state){
+// not hold stays unknown: the discard count (0), ritual and trial clocks (none), Shreds of Time.  A fixture can add what
+// the parse knew (source.parsed): the Kazakus picks of a run under way (kazRuns), the own cards that left the deck
+// for other zones (gone, card ids; else the hidden deck keeps them), the Shreds of Time shuffled in (shreds), the
+// public plays that start ritual clocks (publicPlays) and the discard counts by player id (discards), and the Kazakus trials in play (trials).
+export function synthParsed(state,{kazRuns=null,gone=[],shreds=0,publicPlays=[],discards=null,trials=[]}={}){
   const me=state.me.playerId,op=state.opponent.playerId;
   const first=Number(state.turn)%2===1;
   const player=(pid,isFirst,side)=>({id:100+pid,playerId:pid,tags:{CONTROLLER:String(pid),CARDTYPE:'PLAYER',RESOURCES:String(side.maxMana??0),FATIGUE:String(side.fatigue??0),...(isFirst?{FIRST_PLAYER:'1'}:{})}});
   const card=(c,zone)=>({id:c.entityId,cardId:c.cardId,tags:{CONTROLLER:String(me),ZONE:zone,CARDTYPE:c.CARDTYPE}});
   const ents=[player(me,first,state.me),player(op,!first,state.opponent),
-    ...(state.me.hand??[]).map(c=>card(c,'HAND')),...(state.me.board??[]).map(c=>card(c,'PLAY'))];
-  return {entities:new Map(ents.map(e=>[e.id,e])),gameNumber:state.gameNumber,publicPlays:[]};
+    ...(state.me.hand??[]).map(c=>card(c,'HAND')),...(state.me.board??[]).map(c=>card(c,'PLAY')),
+    ...gone.map((cardId,i)=>card({entityId:800000+i,cardId},'GRAVEYARD')),
+    ...Array.from({length:shreds},(_,i)=>({...card({entityId:810000+i,cardId:'TIME_025t'},'DECK'),generatedShred:true})),
+    // Kazakus' trials under way: {cardId, owner, progress, effects}, in the SECRET zone as trialTimers reads them
+    ...trials.map((t,i)=>({id:820000+i,cardId:t.cardId,trialEffects:t.effects,tags:{CONTROLLER:String(t.owner),ZONE:'SECRET',QUEST_PROGRESS:String(t.progress)}}))];
+  return {entities:new Map(ents.map(e=>[e.id,e])),gameNumber:state.gameNumber,publicPlays,
+    ...(kazRuns?{kazRuns:new Map([[me,kazRuns]])}:{}),...(discards?{discards:new Map(Object.entries(discards).map(([k,v])=>[Number(k),v]))}:{})};
 }
 
 // Ask `net` about one position.  Returns {top,pBest,pForbidden,result,notes} or {unsupported}.
 export function gradePosition(q,net,{cards=cardDb(),list,parsed='synth'}={}){
-  const {state,options}=loadPosition(q);
-  const view=shadowView(parsed==='synth'?synthParsed(state):null,state,options,{cards,list});
+  const {state,options,extra}=loadPosition(q);
+  const view=shadowView(parsed==='synth'?synthParsed(state,extra??{}):null,state,options,{cards,list});
   if(!view)return {unsupported:'shadowView returned null (not a RUNNING decision, or a mulligan)'};
   assertEncoded(view,net);
   const r=net.rank(view.s,view.legal);
@@ -155,6 +164,16 @@ export function compareReports(base,cur,{tolerance=F881_TOLERANCE}={}){
   return {baseline:base.model,candidate:cur.model,regressions,improvements,added,missing};
 }
 
+// The net-guards a model has learned (GUARD_QUESTIONS): a guard is retirable once every one of its questions in this
+// report passes. Guards with no question in the report are left out.
+export function guardStatus(rep){
+  const byId=new Map(rep.questions.map(r=>[r.id,r]));
+  return Object.entries(GUARD_QUESTIONS).filter(([,ids])=>ids.some(id=>byId.has(id))).map(([guard,ids])=>{
+    const pass=ids.filter(id=>byId.get(id)?.result==='pass').length;
+    return {guard,pass,total:ids.length,retirable:pass===ids.length,retired:(RETIRED[rep.model]??[]).includes(guard)};
+  });
+}
+
 export function renderReport(rep,cmp=null){
   const L=[];
   const s=rep.summary;
@@ -166,6 +185,7 @@ export function renderReport(rep,cmp=null){
     else if(r.result==='fail')L.push(`  FAIL ${r.id}: top ${r.top}${r.pBest!=null?`, P(best) ${(r.pBest*100).toFixed(0)}%`:''}${r.pForbidden!=null?`, P(forbidden) ${(r.pForbidden*100).toFixed(0)}%`:''} [${r.evidence}]`);
     else L.push(`  ${r.result.toUpperCase()} ${r.id}: ${r.reason}`);
   }
+  for(const g of guardStatus(rep))L.push(`guard ${g.guard}: ${g.pass}/${g.total} questions pass${g.retirable?` -> retirable for ${rep.model}`:''}${g.retired?' (retired)':''}`);
   if(cmp){
     L.push(`vs baseline ${cmp.baseline}: ${cmp.regressions.length} regressions, ${cmp.improvements.length} improvements`);
     for(const r of cmp.regressions)L.push(`  REGRESSION ${r.id}: ${r.from} -> ${r.to} [${r.evidence}]`);

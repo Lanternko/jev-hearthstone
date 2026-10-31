@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {moves} from '../src/sim.mjs';
+import {moves,apply,hero} from '../src/sim.mjs';
 import {newGame,loadList,cardDb,rawCard,playout,randomPolicy,rushPolicy} from '../src/selfplay.mjs';
 import {vocabulary,encode,obsSize,actSize} from '../src/selfplay-encode.mjs';
 import {Arena,packed} from '../src/selfplay-env.mjs';
-import {infoStep,touchesInfo} from '../src/selfplay-rollout.mjs';
+import {infoStep,touchesInfo,touchesBuff} from '../src/selfplay-rollout.mjs';
 
 const DB=cardDb(),LIST=loadList('warlock-discard'),LISTS=[LIST,LIST],V=vocabulary(LISTS);
 // A caller that picks by its own dice, so a test replays.
@@ -306,4 +306,42 @@ test('infoStep marks Life Tap, a draw or Discover card and a random offer, and n
   assert.equal(infoStep(s,{kind:'choose',id:'a'}),true);
   s.choice={kind:'cthun',options:['a','b']};
   assert.equal(infoStep(s,{kind:'choose',id:'a'}),false);
+});
+
+test('touchesBuff marks a position where a minion can hit the enemy hero and another step raises the Attack of a ready minion, and never the attacks alone', ()=>{
+  const zoo=loadList('warlock-zakajz'),lists=[zoo,zoo];let marked=0,plain=0;
+  for(let seed=1;seed<=30;seed++){
+    const pick=randomPolicy(seed);
+    playout(newGame({lists,seed}),(s,legal)=>{
+      const face=hero(s,'opp')?.id,hits=legal.filter(m=>m.kind==='attack'&&m.targetId===face&&s.me.some(b=>b.id===m.id));
+      const raise=legal.filter(m=>m.kind!=='attack'&&m.kind!=='end'&&m.kind!=='choose').some(m=>{
+        const a=apply(s,m).s;
+        return s.me.some(b=>b.type==='MINION'&&b.hp>0&&b.canAttack&&!b.frozen&&!b.dormant&&b.attacks<b.maxAttacks&&(a.me.find(x=>x.id===b.id)?.atk??-1)>b.atk);
+      });
+      const got=touchesBuff(s,legal);
+      assert.equal(got,hits.length>0&&raise,`seed ${seed} turn ${s.turn}`);
+      assert.equal(touchesBuff(s,legal.filter(m=>m.kind==='attack'||m.kind==='end')),false);
+      if(got)marked++;else plain++;
+      return pick(s,legal);
+    });
+  }
+  assert.ok(marked>5&&plain>100,`${marked} marked, ${plain} plain`);
+});
+
+test('with buff a view carries info:1 where touchesBuff holds; with info and buff where either holds', ()=>{
+  const zoo=loadList('warlock-zakajz'),lists=[zoo,zoo];
+  const a=new Arena({lists,n:8,seed:17,buff:true}),b=new Arena({lists,n:8,seed:17,info:true,buff:true}),c=new Arena({lists,n:8,seed:17}),pick=caller(17);
+  let v=a.views(),w=b.views(),u=c.views(),marked=0;
+  for(let i=0;i<600;i++){
+    v.forEach((e,k)=>{
+      const t=a.tables[k],buff=touchesBuff(t.s,t.legal),info=touchesInfo(t.s,t.legal);
+      assert.equal(e.info,buff?1:undefined,`step ${i} table ${k}`);
+      assert.equal(w[k].info,buff||info?1:undefined,`step ${i} table ${k}`);
+      const {info:_,...rest}=e;assert.deepEqual(rest,u[k]);
+      if(buff)marked++;
+    });
+    const acts=v.map(pick);
+    v=a.step(acts);w=b.step(acts);u=c.step(acts);
+  }
+  assert.ok(marked>5,`${marked} marked`);
 });

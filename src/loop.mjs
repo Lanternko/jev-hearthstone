@@ -8,6 +8,8 @@ import {createMulliganRetry,clockToday} from './mulligan-retry.mjs';
 import {recoverCommittedMulligan} from './mulligan-recovery.mjs';
 import {createDeadSkip} from './dead-skip.mjs';
 import * as win from './win.mjs';
+import {bnetDrops,droppedSince,kickVpn} from './reconnect.mjs';
+let dropWatch;
 import {appendFile,mkdir,readdir,stat,rm} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 
@@ -118,7 +120,7 @@ if(shot){
   if((await stat(SHOTS+f).catch(()=>null))?.mtimeMs<old)await rm(SHOTS+f,{force:true}).catch(()=>{});
 }
 
-let acted=0,idle=0,stuck=0,missed=0;
+let acted=0,idle=0,stuck=0,missed=0,noOptionsSince=null;
 const mulliganRetry=createMulliganRetry();
 const deadSkip=createDeadSkip();
 let mulliganReceiptWait=null;
@@ -133,6 +135,15 @@ function recoverMulligan(d,after){
 }
 try{
   const box=await boxOf(win);
+  const drops=await bnetDrops().catch(()=>null);
+  // 2026-10-30 drill: waiting for dead gestures found the drop 38 s late, and a turn is 75 s. Watch the log
+  // instead, kick the VPN keepalive at once rather than at its next minute, and hand over to the runner.
+  if(drops&&!dry)dropWatch=setInterval(async()=>{
+    if(!droppedSince(drops,await bnetDrops().catch(()=>drops)))return;
+    clearInterval(dropWatch);kickVpn();
+    console.log(`${stamp()} BNET_DISCONNECTED: Battle.net dropped (log watch); keepalive kicked, handing over for a client restart.`);
+    win.stop();process.exit(3);
+  },2000);
   console.log(`${stamp()} client ${box.client.width}x${box.client.height}${dry?' | DRY RUN, cursor only':''}`);
 
   while(acted<maxActions&&Date.now()<until){
@@ -159,6 +170,17 @@ try{
       if(mulliganRetry.attempts>=6){console.log(`${stamp()} Mulligan confirmation failed six times; stopping without toggling cards again.`);process.exitCode=1;break}
     }else try{d=await next({shot,skip:(a,st)=>deadSkip.skipped(st.turn,a)})}catch(e){console.log(`${stamp()} transient decide: ${e.message}${e.retryAfterMs?` (retry in ${e.retryAfterMs}ms)`:""}`);await wait(e.retryAfterMs??800);continue}
     if(!d.ready){
+      // 2026-10-30 rejoin drill: a relaunched client is sent our options before the CREATE_GAME snapshot, the
+      // parser drops them with the old state, and none come again until we act. The loop sat on "not my turn"
+      // until the client was kicked for idling, so after 10 s of our turn with no options, end it by hand.
+      const st=before.state;
+      if(st.me.current&&st.step==='MAIN_ACTION'&&st.optionsId==null&&!dry){
+        noOptionsSince??=Date.now();
+        if(Date.now()-noOptionsSince>10000){
+          console.log(`${stamp()} our turn but no options (rejoined client); ending the turn`);
+          noOptionsSince=null;await run(plan(box,st,{id:'o0',type:'END_TURN'}),win).catch(()=>{});await wait(3000);continue;
+        }
+      }else noOptionsSince=null;
       if(++idle%10===0)console.log(`${stamp()} waiting (${d.reason??'not my turn'})`);
       await wait(1500);continue;
     }
@@ -234,6 +256,9 @@ try{
       if(deadSkip.dead(d.state.turn,d.action))console.log(`${stamp()} ${d.action.id} died twice; off the menu for the rest of turn ${d.state.turn}`);
       // A mulligan during the intro is expected to die a few times; it says nothing about geometry.
       // Different actions dying in a row is the geometry, not one stubborn target.
+      // F-893: after a Battle.net drop the client's reconnect dialog eats every click and never clears;
+      // only a client restart does, and the runner owns that. Exit 3 hands the game over.
+      if(drops&&droppedSince(drops,await bnetDrops().catch(()=>drops))){console.log(`${stamp()} BNET_DISCONNECTED: Battle.net dropped; handing over for a client restart.`);process.exitCode=3;break}
       if(d.action.type!=='MULLIGAN'&&++stuck>=8){console.log('Eight dead gestures in a row -- coordinates are off; stopping.');break}
       await wait(600);continue;
     }
@@ -282,7 +307,7 @@ try{
       if(is[0]-was[0]!==played||is[1]!==was[1])await wait(loose(BOARD_SETTLE));
     }
   }
-  if(mulliganRecovery){console.log(`${stamp()} STOP_AFTER_GAME: mulligan execution misfire was recovered.`);process.exitCode=2}
+  if(mulliganRecovery&&process.exitCode!==3){console.log(`${stamp()} STOP_AFTER_GAME: mulligan execution misfire was recovered.`);process.exitCode=2}
   console.log(`${stamp()} done, ${acted} action(s)`);
 }catch(e){process.exitCode=1;console.error(`${stamp()} ${e.message}`)}
-finally{if(heartbeat)clearInterval(heartbeat);win.stop()}
+finally{if(heartbeat)clearInterval(heartbeat);if(dropWatch)clearInterval(dropWatch);win.stop()}

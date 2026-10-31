@@ -1,0 +1,276 @@
+{
+ "source": {
+  "batchGame": "ranked-2026-10-29T13-04-05-846Z game 16",
+  "ownTurn": 4,
+  "engineTurn": 7,
+  "time": "2026-10-29T15:11:46.157Z",
+  "livePick": "o1",
+  "note": "Own turn 4, 0 of 4 mana after Grueling Trial; hand Twilight Egg / Cursed Catacombs / Twilight Timehopper / Ritual of C'Thun. The network opened Cursed Catacombs (0.614), so the Temporary pick was discarded at the end of the turn. User: no Catacombs with no mana left (R-147)."
+ },
+ "parsed": {
+  "kazRuns": [],
+  "gone": [
+   "TLC_603",
+   "CAP_405",
+   "BE_085",
+   "BE_151"
+  ],
+  "shreds": 0,
+  "publicPlays": [
+   {
+    "playerId": 1,
+    "engineTurn": 3,
+    "cardId": "BE_085"
+   }
+  ],
+  "discards": {
+   "1": 1
+  },
+  "trials": [
+   {
+    "cardId": "CAP_405tb2",
+    "owner": 1,
+    "progress": 0,
+    "effects": [
+     "CAP_405t5",
+     "CAP_405t9"
+    ]
+   }
+  ]
+ },
+ "state": {
+  "gameNumber": 16,
+  "turn": 7,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 0,
+   "maxMana": 4,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 23,
+   "board": [
+    {
+     "entityId": 68,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 69,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 118,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 119,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 16,
+     "cardId": "CATA_210",
+     "name": "Twilight Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 6,
+     "cardId": "TLC_451",
+     "name": "Cursed Catacombs",
+     "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>.",
+     "baseCost": 0,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 20,
+     "cardId": "TIME_025",
+     "name": "Twilight Timehopper",
+     "text": "[x]<b>Battlecry:</b> Shuffle 2\nShreds of Time into your\ndeck. When drawn, deal 3\ndamage to your hero.",
+     "baseCost": 2,
+     "baseAttack": 4,
+     "baseHealth": 4,
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 19,
+     "cardId": "BE_726",
+     "name": "Ritual of C'Thun",
+     "text": "[x]In 2 turns, choose a\nC'Thun ability to trigger.",
+     "baseCost": 1,
+     "COST": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "ROGUE",
+   "mana": 0,
+   "maxMana": 3,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 8,
+   "deckCount": 20,
+   "board": [
+    {
+     "entityId": 70,
+     "cardId": "HERO_03aq",
+     "name": "Reaver V-07-TR-0N",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 71,
+     "cardId": "HERO_03aqhp",
+     "name": "Dagger Mastery",
+     "text": "<b>Hero Power</b>\nEquip a 1/2 Dagger.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 65,
+     "cardId": "TIME_003",
+     "name": "Portal Vanguard",
+     "text": "[x]<b>Rewind</b>\n<b>Battlecry:</b> Draw a random\nminion. Give it +2/+2.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 39,
+     "cardId": "TIME_039",
+     "name": "Deja Vu",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "<b>Discover</b> a copy\nof a card in your opponent's hand."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 72,
+     "cardId": "VAC_COIN2",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 90,
+     "cardId": "CAP_405",
+     "name": "Godfather Kazakus",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> Plot a custom sham trial! Then choose the trial's length."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 65,
+     "cardId": "TIME_003",
+     "name": "Portal Vanguard",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 2,
+     "text": "[x]<b>Rewind</b>\n<b>Battlecry:</b> Draw a random\nminion. Give it +2/+2."
+    }
+   ]
+  },
+  "optionsId": 20,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    7,
+    4,
+    8
+   ],
+   "complete": true
+  },
+  "fingerprint": "ad5e7ee7a029ff0e38e8",
+  "decisionFingerprint": "7eaba4bbbe2f63531753"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 6,
+   "type": "POWER",
+   "id": "o1"
+  }
+ ]
+}

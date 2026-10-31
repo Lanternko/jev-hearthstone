@@ -30,7 +30,8 @@
 // whose effect comes later (Kazakus, its picks and trials, Rituals), for --rollout to choose decisions by.
 // With "info":true each view also carries info:1 when one of its steps has a result that depends on cards
 // not seen yet (Life Tap, a draw or a Discover, see infoStep in src/selfplay-rollout.mjs), for
-// train/ppo.py --distill-info to ask the look ahead about. With a shape the ended of a game carries
+// train/ppo.py --distill-info to ask the look ahead about. With "buff":true a view carries info:1 too when a minion of ours can hit the
+// enemy hero and another step raises the Attack of a minion that can still attack (touchesBuff, --distill-buff). With a shape the ended of a game carries
 // phiEnd:[Φ of seat 0, Φ of seat 1] at the last position (train/ppo.py --shape-final).
 // With "restart":{frac,cap} a share frac of the games dealt (by the hash of the seed, so every process agrees)
 // begins at a position of the pool instead of anew (src/selfplay-restart.mjs, train/ppo.py --restart-frac):
@@ -80,7 +81,7 @@ import {newGame,loadList,winner,randomPolicy,rushPolicy} from './selfplay.mjs';
 import {vocabulary,encode,obsSize,actSize,oracle,oracleSize} from './selfplay-encode.mjs';
 import {blank,before,after} from './selfplay-audit.mjs';
 import {search,redeal} from './selfplay-search.mjs';
-import {Rollouts,touchesDelayed,touchesInfo} from './selfplay-rollout.mjs';
+import {Rollouts,touchesDelayed,touchesInfo,touchesBuff} from './selfplay-rollout.mjs';
 import {loadNet} from './selfplay-net.mjs';
 import {phi} from './board-score.mjs';
 import {eggGuard} from './egg-guard.mjs';
@@ -100,10 +101,10 @@ const RIVALS={random:randomPolicy,rush:rushPolicy};
 const unit=(k,salt)=>(Math.imul(Math.imul(k+1,salt)^(k>>>3),0x2545f491)>>>0)/4294967296;
 
 export class Arena{
-  constructor({lists,n,seed=1,rival=null,maxSteps=1500,audit=false,hold=false,swap=false,timers=false,extra=false,stages=false,imbue=false,pile=false,egg=false,mix=null,mirror=0,shape=null,marks=false,info=false,seatDecks=false,restart=null,oracle=false,names=null}){
+  constructor({lists,n,seed=1,rival=null,maxSteps=1500,audit=false,hold=false,swap=false,timers=false,extra=false,stages=false,imbue=false,pile=false,egg=false,mix=null,mirror=0,shape=null,marks=false,info=false,buff=false,seatDecks=false,restart=null,oracle=false,names=null}){
     if(rival!=null&&!RIVALS[rival])throw Error(`unknown rival ${rival}`);
     if(mix&&mix.length!==lists.length-1)throw Error(`${mix.length} weights for ${lists.length-1} rival decks`);
-    Object.assign(this,{lists,rival,maxSteps,hold,swap,mix,mirror,shape,marks,info,seatDecks,oracle,egg,restart:restart&&{frac:restart.frac,pool:new RestartPool({cap:restart.cap})},next:seed|0,vocab:vocabulary(lists,undefined,{timers,extra,stages,imbue,pile,names}),stats:audit?blank():null});
+    Object.assign(this,{lists,rival,maxSteps,hold,swap,mix,mirror,shape,marks,info,buff,seatDecks,oracle,egg,restart:restart&&{frac:restart.frac,pool:new RestartPool({cap:restart.cap})},next:seed|0,vocab:vocabulary(lists,undefined,{timers,extra,stages,imbue,pile,names}),stats:audit?blank():null});
     this.tables=Array.from({length:n},()=>this.deal({}));
   }
   get dims(){return {obs:obsSize(this.vocab),act:actSize(this.vocab),names:this.vocab.names,timers:this.vocab.timers,extra:this.vocab.extra,stages:this.vocab.stages,imbue:this.vocab.imbue,pile:this.vocab.pile,...(this.oracle?{oracle:oracleSize(this.vocab)}:{})}}
@@ -161,7 +162,7 @@ export class Arena{
   view(t,ended){
     const shaped=this.shape?{phi:phi(t.s,this.shape),turn:t.s.turn}:{};
     const late=this.marks&&!ended&&(t.late??touchesDelayed(t.s,t.legal))?{late:1}:{};
-    const guess=this.info&&touchesInfo(t.s,t.asked??t.legal)?{info:1}:{};
+    const guess=this.info&&touchesInfo(t.s,t.asked??t.legal)||this.buff&&touchesBuff(t.s,t.asked??t.legal)?{info:1}:{};
     return {seat:t.s.seat,...encode(t.s,t.asked??t.legal,this.vocab),...shaped,...late,...guess,...(this.seatDecks?{decks:t.seats}:{}),...(this.oracle?{orc:oracle(t.s,this.vocab)}:{}),...(ended?{ended}:{})};
   }
   views(){return this.tables.map(t=>this.view(t))}
@@ -325,7 +326,7 @@ if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
     try{
       const m=JSON.parse(line);
       if(m.cmd==='reset'){
-        arena=new Arena({lists:(m.decks??['warlock-discard','warlock-discard']).map(loadList),n:m.n,seed:m.seed,rival:m.rival??null,audit:!!m.audit,hold:!!m.hold,swap:!!m.swap,timers:!!m.timers,extra:!!m.extra,stages:!!m.stages,imbue:!!m.imbue,names:m.names??null,pile:!!m.pile,egg:!!m.egg,mix:m.mix??null,mirror:m.mirror??0,shape:m.shape??null,marks:!!m.marks,info:!!m.info,seatDecks:!!m.seatDecks,restart:m.restart??null,oracle:!!m.oracle});
+        arena=new Arena({lists:(m.decks??['warlock-discard','warlock-discard']).map(loadList),n:m.n,seed:m.seed,rival:m.rival??null,audit:!!m.audit,hold:!!m.hold,swap:!!m.swap,timers:!!m.timers,extra:!!m.extra,stages:!!m.stages,imbue:!!m.imbue,names:m.names??null,pile:!!m.pile,egg:!!m.egg,mix:m.mix??null,mirror:m.mirror??0,shape:m.shape??null,marks:!!m.marks,info:!!m.info,buff:!!m.buff,seatDecks:!!m.seatDecks,restart:m.restart??null,oracle:!!m.oracle});
         bin=!!m.bin;raw=bin&&!!m.raw;
         out={...arena.dims,sim:simVersion(),envs:arena.views()};
       }else if(m.cmd==='step')out={envs:arena.step(m.actions)};

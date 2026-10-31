@@ -15,7 +15,7 @@ export async function latestLog(root=LOG_ROOT){
 export function createParser(){
   let entities=new Map(),aliases=new Map(),game=null,block=null,options=null,option=null,choice=null,localPlayer=null,handOwner=null,revision=0,gameNumber=0,optionsOpen=false;
   let choices=new Map(),shownTurn=0,played=0,playedAt=null,playDepth=0,submitted=new Map(),chosenPacket=null,chosenResults=new Map(),effectStack=[];
-  let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null,kazRuns=new Map(),kazLast=null;
+  let publicPlays=[],initialHeroHealth=new Map(),discards=new Map(),playing=null,kazRuns=new Map(),kazLast=null,snapGame=false;
   // A card that leaves the hand for the graveyard without being the card played was discarded. The
   // game keeps no count of its own in the log, and the self-play network was trained with one.
   const leaves=(e,id,zone)=>{if(zone==='GRAVEYARD'&&e.tags.ZONE==='HAND'&&id!==playing){const c=Number(e.tags.CONTROLLER);discards.set(c,(discards.get(c)??0)+1)}};
@@ -45,6 +45,13 @@ export function createParser(){
       if(/DebugPrintPower\(\) -\s*BLOCK_START/.test(line))playDepth++;else if(/DebugPrintPower\(\) -\s*BLOCK_END/.test(line))playDepth=Math.max(0,playDepth-1)}
     m=line.match(/PowerTaskList\.DebugPrintPower\(\) -\s*TAG_CHANGE Entity=GameEntity tag=TURN value=(\d+)/);
     if(m){shownTurn=Number(m[1]);continue}
+    // A rejoined client starts from a CREATE_GAME snapshot whose GameEntity lists a plain `tag=TURN`, never
+    // a TAG_CHANGE (2026-10-30 drill: shownTurn stayed 0 and the loop waited 20 s for turn 6 on screen).
+    if(line.includes('PowerTaskList.DebugPrintPower()')){
+      if(/-\s*GameEntity EntityID=/.test(line))snapGame=true;
+      else if(snapGame&&(m=line.match(/-\s*tag=TURN value=(\d+)/)))shownTurn=Number(m[1]);
+      else if(!/-\s*tag=/.test(line))snapGame=false;
+    }
     m=line.match(/GameState\.DebugPrintPower\(\) -\s*(.*)/);
     if(m){const s=m[1];
       if(s==='CREATE_GAME'){shownTurn=0;played=0;playedAt=null;playDepth=0;entities=new Map();aliases=new Map();game=null;block=null;options=null;choice=null;localPlayer=null;handOwner=null;choices=new Map();submitted=new Map();chosenPacket=null;chosenResults=new Map();effectStack=[];publicPlays=[];initialHeroHealth=new Map();discards=new Map();playing=null;kazRuns=new Map();kazLast=null;gameNumber++;continue}
@@ -204,7 +211,9 @@ export function candidates(parsed,state){
   if(state.status!=='RUNNING')return [];
   if(state.choice){
     const c=state.choice;
-    if(c.type==='GENERAL'&&c.min===1&&c.max===1)return c.entities.map(e=>({id:`c${c.id}e${e.entityId}`,type:'CHOICE',choiceId:c.id,entityId:e.entityId}));
+    // TARGET: a ritual that completes at the start of the turn asks for its target this way (Glare of C'Thun,
+    // 2026-10-29 ranked game 15: no option was offered and the turn sat until the user clicked).
+    if((c.type==='GENERAL'||c.type==='TARGET')&&c.min===1&&c.max===1)return c.entities.map(e=>({id:`c${c.id}e${e.entityId}`,type:'CHOICE',choiceId:c.id,entityId:e.entityId}));
     if(c.type==='MULLIGAN'){const es=mulliganCards(c.entities);if(es.length>5)return [];return Array.from({length:2**es.length},(_,mask)=>({id:`m${mask}`,type:'MULLIGAN',choiceId:c.id,replace:es.filter((e,i)=>mask&(1<<i)).map(e=>e.entityId)})).filter(a=>a.replace.length>=c.min&&a.replace.length<=c.max);}
     return [];
   }

@@ -19,6 +19,15 @@ A Hearthstone bot. Jev (called through the AI Gateway) picks the actions, and `s
 - **Every mistake caught becomes a lesson.** If it can be checked automatically, add a test and name it in the lesson's check field.
 - `STATUS.md` is retired; the old log is read-only history in `memory/archive/STATUS-2026-10-27.md`. Model version notes stay in `docs/selfplay-versions.md`.
 
+## 回報實驗結果（使用者的規則，2026-10-30，格式取自 basketball-autochess）
+只有回報實驗結果時用這個格式；其他回覆照平常寫。第一行就是 `# 總評`，其餘五段用粗體標題，照字面、照順序：
+1. **總評**（`# 總評`，五級擇一附分數，寫成 `**4/5 大致達成 有部分退步**`）：5 重大達成／4 大致達成 有部分退步／3 一半一半／2 主目標達成 但是有副作用／1 失敗。
+2. **這次目標**：一句話。
+3. **進步了什麼**、4. **退步了什麼**：各幾點，用勝率從多少到多少、對哪個對手這種講法。
+5. **直觀證據**：小表或例子。
+6. **要你決定的事**：approve 與否、下一步選項。
+- 不寫細節段：區間、種子、雜湊、檔案路徑、memory ID、測試數都不放進回報（已記在 memory 和 runtime 檔）。
+
 ## Commands
 ```bash
 npm test          # node --test, must stay green

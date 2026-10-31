@@ -52,17 +52,26 @@ function context(cards){
 const OUTCAST=['CORE_BT_480','CORE_BT_491','CS3_017','BT_814'];
 const contexts=new WeakMap();
 
-function seat(k,list,cards,s){
-  const ids=Object.entries(list.cards).flatMap(([id,n])=>Array(n).fill(id));
+const expand=list=>Object.entries(list.cards).flatMap(([id,n])=>Array(n).fill(id));
+function seat(k,list,cards,s,enemy){
+  const ids=expand(list);
   for(const id of [list.hero,list.power,...ids])if(!cards[id])throw Error(`unknown card ${id}`);
   let deck=ids.map((id,i)=>rawCard(cards[id],(k+1)*100+i));
+  // Azalina Soulsever's Start of Game (R-165): 20 cards copied from the enemy's deck join ours (raw.copied).
+  if(list.cards.JAIL_430){
+    const pool=expand(enemy).filter(id=>id!=='TIME_020');
+    for(let i=0;i<20&&pool.length;i++){
+      const [id]=pool.splice(roll(s,pool.length),1);
+      deck.push({...rawCard(cards[id],(k+1)*100+60+i),copied:true});
+    }
+  }
   // Broxigar's Start of Game: he disappears; the Portals to Argus bring him back to the hand.
   const brox=deck.find(c=>c.cardId==='TIME_020')??null;
   if(brox)deck=deck.filter(c=>c!==brox);
   for(let i=deck.length-1;i>0;i--){const j=roll(s,i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}
   const p=rawCard(cards[list.power],(k+1)*100+99),t=textOf(p);
   return {seat:k,hand:[],deck,weapon:null,locations:0,sites:[],mana:0,crystals:0,fatigue:0,discardCount:0,spellTax:0,timers:[],
-    died:0,cthunSeen:[],cthunStart:ids.includes('BE_013'),brox,studies:0,grave:[],rattles:0,slimePile:[],elderWord:null,playedKinds:[],lastKinds:[],
+    died:0,cthunSeen:[],cthunStart:deck.some(c=>c.cardId==='BE_013'),brox,studies:0,grave:[],rattles:0,slimePile:[],elderWord:null,playedKinds:[],lastKinds:[],
     power:{id:p.entityId,name:p.name,cost:p.COST,gain:heroAttackGain(p),draw:/\bdraw a card\b/i.test(t)?1:0,
       summon:/summon a random basic totem/i.test(t)?1:0,
       heal:Number(/restore #?(\d+) health/i.exec(t)?.[1]??0),
@@ -75,8 +84,9 @@ export function newGame({lists,seed=1,cards=cardDb()}){
   if(!contexts.has(cards))contexts.set(cards,context(cards));
   let s={game:contexts.get(cards),seed:seed|0,turn:1,full:true,additive:true,objective:null,drawState:{me:{}},
     tauntAtStart:false,faceDealt:0,nextToken:0,choice:null};
-  const [a,b]=lists.map((list,k)=>seat(k,list,cards,s));
+  const [a,b]=lists.map((list,k)=>seat(k,list,cards,s,lists[1-k]));
   s={...s,...a,them:b,me:[heroBody(cards[lists[0].hero],0,'me')],opp:[heroBody(cards[lists[1].hero],1,'opp')]};
+  lists.forEach((list,k)=>{if(list.cards.JAIL_430){const h=(k?s.opp:s.me)[0];h.hp=h.maxHp=40}});
   drawCards(s,3);
   s=flip(s);
   drawCards(s,4);

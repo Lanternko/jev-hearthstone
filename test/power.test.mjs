@@ -143,3 +143,18 @@ tag=ZONE value=HAND`)+'\n'+names+'\n'+power(`TAG_CHANGE Entity=1 tag=STEP value=
 TAG_CHANGE Entity=4 tag=ZONE value=PLAY`);
   assert.equal(parsePower(log).localPlayer,2);
 });
+
+test('a rejoined game takes the shown turn from the CREATE_GAME snapshot',()=>{
+  // 2026-10-30 drill: the snapshot has no TAG_CHANGE for TURN, so shownTurn stayed 0 and the loop waited 20 s.
+  const p=createParser();
+  p.feed([
+    'D 02:52:13.1709202 GameState.DebugPrintPower() - CREATE_GAME',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -     CREATE_GAME',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -         GameEntity EntityID=1',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -             tag=STEP value=MAIN_ACTION',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -             tag=TURN value=6',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -         Player EntityID=2 PlayerID=1 GameAccountId=[hi=1 lo=2]',
+    'D 02:52:13.1709202 PowerTaskList.DebugPrintPower() -             tag=TURN value=3',
+  ].join('\n')+'\n');
+  assert.equal(p.result().shownTurn,6);
+});

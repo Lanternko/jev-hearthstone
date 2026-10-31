@@ -1365,6 +1365,130 @@
    ],
    "note": "Tachyon Barrage castable (Coin counted) on own turn 1-3, empty enemy board, best non-Tachyon line plays only Coin / Life Tap / end (DRY). E-280 judged casting it a mistake (T-H -8.0 points). Metric: share of DRY positions where the greedy line casts Tachyon (lower is better), and mean P(Tachyon).",
    "unsupported": null
+  },
+  {
+   "id": "fx:ranked1029-g14-kazakus-rushed-trial",
+   "kind": "position",
+   "deck": "warlock-zakajz",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked1029-g14-kazakus-rushed-trial.json",
+    "state": "state",
+    "options": "options",
+    "parsed": "parsed"
+   },
+   "evidence": "user",
+   "best": [
+    "c20e349"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-157",
+    "F-888"
+   ],
+   "note": "Kazakus trial length after Spurious Shiv + Convicted for Conspiracy, with 7 mana, nothing else to play and enemy minions to take: Rushed (immediate) over Grueling. zoo 0.2.0 picked Grueling.",
+   "unsupported": null
+  },
+  {
+   "id": "fx:ranked1029-g15-lessons-before-neophyte",
+   "kind": "position",
+   "deck": "warlock-zakajz",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked1029-g15-lessons-before-neophyte.json",
+    "state": "state",
+    "options": "options",
+    "parsed": "parsed"
+   },
+   "evidence": "user",
+   "best": [
+    "o3t1",
+    "o3t2"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o4",
+    "o3t0"
+   ],
+   "rulings": [
+    "R-158"
+   ],
+   "note": "Own turn 3, 3 mana: Floating Lessons on a Faceless Fanatic first (the random hand buff can hit Cult Neophyte), then Cult Neophyte. zoo 0.2.0 played the Neophyte first.",
+   "unsupported": null
+  },
+  {
+   "id": "fx:ranked1029-g16-catacombs-no-mana",
+   "kind": "position",
+   "deck": "warlock-zakajz",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked1029-g16-catacombs-no-mana.json",
+    "state": "state",
+    "options": "options",
+    "parsed": "parsed"
+   },
+   "evidence": "user",
+   "best": [
+    "o0"
+   ],
+   "ok": [],
+   "forbidden": [
+    "o1"
+   ],
+   "rulings": [
+    "R-147",
+    "R-159"
+   ],
+   "note": "Own turn 4, 0 mana left after Grueling Trial: keep Cursed Catacombs (its Temporary pick cannot be played and is discarded). zoo 0.2.0 played it (0.614).",
+   "unsupported": null
+  },
+  {
+   "id": "fx:ranked1029-g16-catacombs-take-llane",
+   "kind": "position",
+   "deck": "warlock-zakajz",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked1029-g16-catacombs-take-llane.json",
+    "state": "state",
+    "options": "options",
+    "parsed": "parsed"
+   },
+   "evidence": "user",
+   "best": [
+    "c10e124"
+   ],
+   "ok": [],
+   "forbidden": [],
+   "rulings": [
+    "R-160",
+    "F-891"
+   ],
+   "note": "Cursed Catacombs discover with nothing affordable: take King Llane (the opponent's Garona card hidden in our deck), so the Temporary copy is discarded and the deck loses a dead card. zoo 0.2.0 took Twilight Timehopper (0.547).",
+   "unsupported": null
+  },
+  {
+   "id": "fx:ranked1031-g1-small-minion-into-taunt",
+   "kind": "position",
+   "deck": "warlock-zakajz",
+   "source": {
+    "file": "test/fixtures/user-rulings/ranked1031-g1-small-minion-into-taunt.json",
+    "state": "state",
+    "options": "options",
+    "parsed": "parsed"
+   },
+   "evidence": "user",
+   "best": [
+    "o3t0"
+   ],
+   "ok": [
+    "o1t0",
+    "o2t0"
+   ],
+   "forbidden": [
+    "o4t0"
+   ],
+   "rulings": [
+    "R-166"
+   ],
+   "note": "Own turn 5: Glacial Shard 2/1 trades into the 2/2 Taunt Ossodon; Brute 3/5 or Mawman 4/4 also kill it and live. Not the 7/7 Ruinous Velocidrake, which is kept for Sawbones / Remnant of Rage. zoo 0.2.0 sent the Velocidrake (0.797).",
+   "unsupported": null
   }
  ]
 }

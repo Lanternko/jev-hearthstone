@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
+import {join} from 'node:path';
+import {tmpdir} from 'node:os';
 import {moves} from '../src/sim.mjs';
 import {newGame,loadList} from '../src/selfplay.mjs';
-import {loadNet} from '../src/selfplay-net.mjs';
+import {loadNet,MODEL} from '../src/selfplay-net.mjs';
 
 const net=loadNet();
 // Positions of self-play with the answers PyTorch gave to them (train/export.py).
@@ -27,4 +29,18 @@ test('a simulator state is ranked: one share for each legal step, best first',()
   assert.ok(steps.every((x,i)=>!i||steps[i-1].logit>=x.logit));
   assert.ok(steps.every(x=>legal.includes(x.move)));
   assert.ok(Number.isFinite(value));
+});
+
+test('a network with valueSquash "tanh" gives tanh of its value head, steps unchanged',()=>{
+  const dir=mkdtempSync(join(tmpdir(),'squash-'));
+  const doc=JSON.parse(readFileSync(MODEL,'utf8'));
+  writeFileSync(join(dir,'net.json'),JSON.stringify({...doc,valueSquash:'tanh'}));
+  const tanh=loadNet(join(dir,'net.json'));
+  for(const r of rows.slice(0,4)){
+    const a=net.forward(r.obs,r.acts),b=tanh.forward(r.obs,r.acts);
+    assert.deepEqual(b.logits,a.logits);
+    assert.ok(Math.abs(b.value-Math.tanh(a.value))<1e-12);
+    assert.ok(Math.abs(tanh.value(r.obs)-Math.tanh(net.value(r.obs)))<1e-12);
+  }
+  rmSync(dir,{recursive:true});
 });

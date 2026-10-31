@@ -1,6 +1,6 @@
 // User-authorized unattended ranked batch. Inspect only between games.
 import {spawn} from 'node:child_process';
-import {mkdir,readFile,writeFile,appendFile,rename,open,readdir} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,appendFile,rename,open,readdir,stat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import * as win from '../src/win.mjs';
@@ -15,6 +15,7 @@ try {process.loadEnvFile('.env.local')} catch(e) {if(e.code!=='ENOENT')throw e}
 const {inspect}=await import('../src/bridge.mjs');
 const {latestLog}=await import('../src/power.mjs');
 const {lastGameLog}=await import('../src/game-health.mjs');
+const {waitVpn,killClient,restartClient,toDeckScreen,bnetDrops,vpnAgeMs,VPN_RENEW_MS,renewVpn,vpnInUse,ensureHdt}=await import('../src/reconnect.mjs');
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const startedAt=new Date().toISOString();
 const tag='ranked-'+startedAt.replace(/[:.]/g,'-');
@@ -40,6 +41,30 @@ function child(file,args=[],{outputFile,timeoutMs}={}){return new Promise(async(
 })}
 async function click(x,y){await win.focus();const g=await win.geometry();await win.click(x*g.width/2560,y*g.height/1440)}
 async function stopRequested(){return readFile('runtime/stop').then(()=>true,()=>false)}
+// F-893: loop exit 3 is a Battle.net drop. Wait for the VPN, restart the client, then either play on in
+// the game the login offers back, or take the loss and go back to the deck screen for the next one.
+async function recover(ordinal){
+ state.phase='reconnecting';state.disconnects=(state.disconnects??0)+1;await save();
+ await note(`game ${ordinal}: Battle.net dropped (F-893); waiting for the VPN, then restarting the client`);
+ await killClient();
+ const useVpn=await vpnInUse();
+ const vpn=useVpn&&await waitVpn();
+ const client=await restartClient();
+ await note(`game ${ordinal}: VPN ${!useVpn?'not in use':vpn?'up':'still down after 5 minutes, using Wi-Fi'}; client ${client?'restarted':'did not come back'}`);
+ if(!client)return 'failed';
+ // The new client writes no Power.log until it is in a game, so a rejoin is the first one to appear.
+ const until=Date.now()+90000;
+ while(Date.now()<until){
+  if(await stat(join(client,'Power.log')).then(()=>true,()=>false)){
+   if((await child('src/await-game.mjs',[],{timeoutMs:60000})).code===0){await note(`game ${ordinal}: rejoined`);return 'rejoined'}
+   break;
+  }
+  await wait(3000);
+ }
+ const deck=await toDeckScreen(click);
+ await note(`game ${ordinal}: not rejoined; ${deck?'back on the deck screen':'deck screen not reached'}`);
+ return deck?'lost':'failed';
+}
 await save();await note(`continuous ranked start; ${state.plannerVersion}; six consecutive losses stop`);
 try {
  // A freshly launched client may not create Power.log until its first match.
@@ -52,6 +77,24 @@ try {
   if(winLimit!==null&&state.wins>=winLimit){state.stopReason='win_limit_reached';break}
   if(await stopRequested()){state.stopReason='user_stop';break}
   const ordinal=state.games+1;state.currentGame=ordinal;state.phase='queueing';await save();
+  // The BIG-IP cuts a session at 8 hours; renew it here, between games, once a game could run into that cut.
+  const age=await vpnInUse()?await vpnAgeMs():null;
+  if(age!=null&&age>VPN_RENEW_MS){
+   await note(`game ${ordinal}: VPN session is ${(age/3600000).toFixed(1)} h old; renewing it before queueing`);
+   const up=await renewVpn();
+   if(!await restartClient()||!await toDeckScreen(click)){state.stopReason='client_restart_failed';break}
+   await note(`game ${ordinal}: VPN ${up?'renewed':'not back, using Wi-Fi'}; client back on the deck screen`);
+  }
+  // F-893, 2026-10-30 drill: a drop between games leaves the client on the deck screen with no dialog,
+  // offline, and 開始 does nothing. It never reconnects in place, so any drop it logged means restart first.
+  if((await bnetDrops()).count>0){
+   await note(`game ${ordinal}: client is offline (Battle.net dropped between games); restarting it`);
+   if(await vpnInUse())await waitVpn();
+   if(!await restartClient()||!await toDeckScreen(click)){state.stopReason='client_restart_failed';break}
+  }
+  // F-900: rank, opponent rank, coin and replays come only from HDT. Without it the game still runs.
+  const hdt=await ensureHdt();
+  if(hdt!=='running')await note(`game ${ordinal}: HDT was not running; ${hdt==='started'?'started it':'could not start it, this game has no rank or replay'}`);
   let started=false;
   for(let attempt=1;attempt<=3;attempt++){
    if(await stopRequested())break;
@@ -63,24 +106,33 @@ try {
   if(!started){state.stopReason=await stopRequested()?'user_stop':'match_failed_to_start';break}
   const since=new Date().toISOString();state.phase='playing';state.currentGameStartedAt=since;await save();await note(`game ${ordinal} started`);
   const logPath=join(dir,`game-${String(ordinal).padStart(4,'0')}.log`);
-  const run=await child('src/loop.mjs',[],{outputFile:logPath,timeoutMs:48*60000});
+  let run=await child('src/loop.mjs',[],{outputFile:logPath,timeoutMs:48*60000});
+  let lost=false;
+  if(run.code===3){
+   await writeFile(join(dir,`game-${String(ordinal).padStart(4,'0')}-Power-before-restart.log`),lastGameLog(await readFile((await latestLog()).path,'utf8')));
+   const how=await recover(ordinal);
+   if(how==='failed'){state.stopReason='client_restart_failed';break}
+   if(how==='rejoined'){const again=logPath.replace(/\.log$/,'-rejoin.log');run=await child('src/loop.mjs',[],{outputFile:again,timeoutMs:48*60000});await appendFile(logPath,await readFile(again))}
+   else lost=true;
+  }
   await writeFile('runtime/last-game.log',await readFile(logPath));
   await wait(20000);
   const health=await child('runtime/health.mjs',[since]);
   const rank=await child('runtime/rank.mjs');
-  const post=(await inspect()).state;
-  const text=await readFile((await latestLog()).path,'utf8');
-  await writeFile(join(dir,`game-${String(ordinal).padStart(4,'0')}-Power.log`),lastGameLog(text));
+  // Lost to a drop: the new client has no Power.log, and latestLog() would hand back an older session's.
+  const post=lost?{status:'DISCONNECTED'}:(await inspect()).state;
+  if(!lost)await writeFile(join(dir,`game-${String(ordinal).padStart(4,'0')}-Power.log`),lastGameLog(await readFile((await latestLog()).path,'utf8')));
   const rows=(await readFile('runtime/decisions.jsonl','utf8')).split('\n').filter(Boolean).filter(l=>{try{return JSON.parse(l).createdAt>=since}catch{return false}});
   await writeFile(join(dir,`game-${String(ordinal).padStart(4,'0')}-decisions.jsonl`),rows.join('\n')+'\n');
-  const result=/^(Win|Loss|Tie)\b/.exec(health.text)?.[1]??'Unknown';
+  const result=lost?'Disconnected':/^(Win|Loss|Tie)\b/.exec(health.text)?.[1]??'Unknown';
   state.results.push({ordinal,since,finishedAt:new Date().toISOString(),result,health:health.text,rank:rank.text,plannerVersion:state.plannerVersion,logPath});state.games++;
-  if(result==='Win'){state.wins++;state.consecutiveLosses=0}else if(result==='Loss'){state.losses++;state.consecutiveLosses++}else if(result==='Tie'){state.ties++;state.consecutiveLosses=0}
+  if(result==='Win'){state.wins++;state.consecutiveLosses=0}else if(result==='Loss'||result==='Disconnected'){state.losses++;state.consecutiveLosses++}else if(result==='Tie'){state.ties++;state.consecutiveLosses=0}
   await note(`game ${ordinal} done | ${health.text} | HDT: ${rank.text} | losses in row ${state.consecutiveLosses}`);
   state.phase='between_games';await save();
   if(health.code!==0){state.stopReason='model_trouble';break}
   if(run.code===2&&post.status==='COMPLETE'&&result!=='Unknown'){state.stopReason='mulligan_execution_misfire';break}
-  if(run.code!==0||run.timedOut||post.status!=='COMPLETE'||result==='Unknown'){state.stopReason='game_incomplete_or_runner_error';break}
+  if(lost){if(state.disconnects>=3){state.stopReason='repeated_disconnects';break}}
+  else if(run.code!==0||run.timedOut||post.status!=='COMPLETE'||result==='Unknown'){state.stopReason='game_incomplete_or_runner_error';break}
   if(state.consecutiveLosses>=6){state.stopReason='six_consecutive_losses';break}
  }
 }catch(e){state.stopReason='runner_error';state.error=e.message;await note(`STOP ${e.message}`)}

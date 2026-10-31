@@ -44,6 +44,10 @@
 | R-155 | rulings-zoo.md |
 | R-161 | rulings.md |
 | R-162 | rulings-zoo.md |
+| R-165 | rulings.md |
+| R-166 | rulings.md |
+| R-167 | rulings.md |
+| R-168 | rulings-zoo.md |
 
 ## 舊 ID 對照（2026-10-30 整併）
 

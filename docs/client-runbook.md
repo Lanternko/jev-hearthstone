@@ -98,12 +98,14 @@ JEV_DECK=warlock-zakajz JEV_FOLLOW_NET=1 JEV_OFFLINE=1 node runtime/ranked-conti
 | `model_trouble` | `health.mjs` 非 0：致命錯誤，或 `rule_fallback` 列 >= 3（`game-health.mjs:30`） |
 | `mulligan_execution_misfire` | loop exit 2、對局已結束、勝負已知（loop 印 `STOP_AFTER_GAME`） |
 | `game_incomplete_or_runner_error` | loop 非 0 或逾時、對局未結束、或勝負 Unknown |
+| `client_restart_failed` | Battle.net 斷線後重開用戶端失敗，或回不到套牌畫面（F-893） |
+| `repeated_disconnects` | 同一批第 3 次斷線且沒接回對局 |
 | `six_consecutive_losses` | 連輸 6 場 |
 | `runner_error` | 例外（含上面的拒絕訊息） |
 
 輸出位置：`runtime/ranked-<時間>/`（`status.json`、`record-legend.log`、`game-NNNN.log`、`game-NNNN-Power.log`、`game-NNNN-decisions.jsonl`、`opponent-prior-at-launch.json`、原始碼雜湊）、`runtime/batch.txt`（每場一行）、`runtime/active-ranked-run.json`。結束時鎖改名成 `finished-runner.lock`。
 
-斷線復原：L-039 的處理順序（重新連線失敗 -> 退出遊戲 -> `Battle.net.exe --exec="launch WTCG"` 重開 -> 回到套牌畫面）是人工流程，程式碼沒有實作；遇到離線視窗 runner 會因 `await-game` 逾時而停，需人工處理後重跑。
+斷線復原（F-893，2026-10-30 起自動）：點擊沒反應時 loop 查最新 log 資料夾的 `BattleNet.log`，有新的 `Bnet_OnDisconnected` 就 exit 3（不再算成 8 次點擊失敗）。runner 的 `recover()`（`src/reconnect.mjs`）：等 VPN（探 5090:22，最多 5 分鐘，穩定 20 秒；逾時就走 Wi-Fi）→ `taskkill` 爐石、把舊資料夾的 Power.log 改名成 Power_old.log → `Battle.net.exe --exec="launch WTCG"` → 90 秒內新資料夾出現 Power.log 且對局 RUNNING 就接回去繼續打（`game-NNNN-rejoin.log`），否則該局記 `Disconnected`（算輸），用 `LoadingScreen.log` 的 `currMode=` 判斷畫面，只在 HUB 點《爐石戰記》(1275,435) 回套牌畫面，接著排下一局。同一批第 3 次斷線停 `repeated_disconnects`；用戶端沒起來或回不到套牌畫面停 `client_restart_failed`。人工處理照 L-039。
 
 階級：`rank.mjs` 讀 HDT `DeckStats.xml` 最後一場天梯，印 `<時間> <勝負> level N stars N legend N`（鑽石 10 = 41 … 鑽石 1 = 50，傳說 = 51），達傳說 exit 0。
 

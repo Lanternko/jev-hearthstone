@@ -18,7 +18,7 @@
 // step's mean as if by one more game of that mean, and on each deal the step takes the offered line of the
 // highest such score. Without picks there is one line, "", and the score is the plain mean.
 // A result is 1 for a win of the seat that took the step, 1/2 for a draw, 0 for a loss.
-import {moves,apply,gameModel} from './sim.mjs';
+import {moves,apply,gameModel,hero} from './sim.mjs';
 import {winner} from './selfplay.mjs';
 import {redeal} from './selfplay-search.mjs';
 
@@ -55,6 +55,17 @@ export function infoStep(s,m){
   return !!g&&(INFO_KINDS.has(g.kind)||!!g.draw||!!g.discoverMinion||!!g.outcast?.draw||!!g.drawZeroAtk);
 }
 export const touchesInfo=(s,legal)=>legal.some(m=>infoStep(s,m));
+
+// Can a minion of ours hit the enemy hero while another step (not an attack, not the end, not a pick) raises the
+// Attack of a minion that can still attack? Then that step first leaves the enemy hero lower than the hit first
+// (E-287, R-156); --distill-buff always asks the look ahead about such a position. The order of face hits alone
+// is not marked: it moves nothing (R-156).
+const ready=s=>s.me.filter(b=>b.type==='MINION'&&b.hp>0&&b.canAttack&&!b.frozen&&!b.dormant&&b.attacks<b.maxAttacks);
+export function touchesBuff(s,legal){
+  const face=hero(s,'opp')?.id,r=ready(s);
+  if(face==null||!legal.some(m=>m.kind==='attack'&&m.targetId===face&&r.some(b=>b.id===m.id)))return false;
+  return legal.some(m=>m.kind!=='attack'&&m.kind!=='end'&&m.kind!=='choose'&&(a=>r.some(b=>(a.me.find(x=>x.id===b.id)?.atk??-1)>b.atk))(apply(s,m).s));
+}
 
 export class Rollouts{
   constructor({follow=27,maxSteps=1500}={}){

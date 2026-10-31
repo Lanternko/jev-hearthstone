@@ -1,0 +1,604 @@
+{
+ "source": {
+  "batchGame": "ranked-2026-10-29T13-04-05-846Z game 14",
+  "engineTurn": 20,
+  "time": "2026-10-29T14:54:27.918Z",
+  "note": "Godfather Kazakus trial-length pick after Spurious Shiv (CAP_405t5) and Convicted for Conspiracy (CAP_405t2). Mana for 7, nothing else to play, enemy minions to take. The network picked Grueling (c20e348). User: Rushed (c20e349, 7 mana, immediate). R-157 / F-888. parsed: what the real parse of game-0014-Power.log (34536 lines, the trial offer) knew; with it the rebuilt view equals the live one (zoo 0.2.0 Grueling 0.548).",
+  "livePick": "c20e348"
+ },
+ "parsed": {
+  "kazRuns": [
+   "CAP_405t5",
+   "CAP_405t2"
+  ],
+  "gone": [
+   "TIME_029",
+   "CORE_UNG_205",
+   "CORE_UNG_205",
+   "TIME_025",
+   "CATA_210",
+   "BE_726",
+   "CORE_SCH_713",
+   "TLC_451",
+   "TIME_025",
+   "TLC_603",
+   "BE_086",
+   "TLC_451",
+   "TIME_029",
+   "TLC_603",
+   "BE_726",
+   "BE_728",
+   "BE_085",
+   "BE_151",
+   "TIME_026",
+   "BE_094",
+   "BE_094",
+   "CATA_210"
+  ],
+  "discards": {
+   "1": 1
+  },
+  "shreds": 3,
+  "publicPlays": [
+   {
+    "playerId": 2,
+    "engineTurn": 2,
+    "cardId": "BE_726"
+   },
+   {
+    "playerId": 2,
+    "engineTurn": 8,
+    "cardId": "BE_726"
+   },
+   {
+    "playerId": 2,
+    "engineTurn": 12,
+    "cardId": "BE_085"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 17,
+    "cardId": "BE_726"
+   }
+  ]
+ },
+ "state": {
+  "gameNumber": 14,
+  "turn": 20,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 2,
+   "heroClass": "WARLOCK",
+   "mana": 8,
+   "maxMana": 10,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 1,
+   "deckCount": 9,
+   "board": [
+    {
+     "entityId": 61,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 16,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 62,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 268,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 8,
+     "HEALTH": 10,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 36,
+     "cardId": "CAP_405",
+     "name": "Godfather Kazakus",
+     "text": "<b>Battlecry:</b> Plot a custom sham trial! Then choose the trial's length.",
+     "baseCost": 3,
+     "baseAttack": 3,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 50,
+     "cardId": "TIME_027",
+     "name": "Tachyon Barrage",
+     "text": "Deal $6 damage split among all enemies. Shuffle 2 Shreds of Time into your deck.",
+     "baseCost": 2,
+     "COST": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 1,
+   "heroClass": "PRIEST",
+   "mana": 1,
+   "maxMana": 10,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 6,
+   "deckCount": 16,
+   "board": [
+    {
+     "entityId": 59,
+     "cardId": "HERO_09c",
+     "name": "King Anduin",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "DAMAGE": 18,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 60,
+     "cardId": "HERO_09bp",
+     "name": "Lesser Heal",
+     "text": "<b>Hero Power</b>\nRestore #2 Health.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 337,
+     "cardId": "BE_013t5",
+     "name": "Faceless Fanatic",
+     "text": "<b>Taunt</b>",
+     "baseCost": 2,
+     "baseAttack": 2,
+     "baseHealth": 3,
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 10,
+     "cardId": "BE_013",
+     "name": "C'Thun, Eye of the Empire",
+     "text": "<b>Old God.</b> If you've triggered all 4 C'Thun abilities this game, this minion's abilities are tripled.",
+     "baseCost": 10,
+     "baseAttack": 12,
+     "baseHealth": 12,
+     "COST": 10,
+     "ATK": 12,
+     "HEALTH": 12,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 338,
+     "cardId": "BE_013t5",
+     "name": "Faceless Fanatic",
+     "text": "<b>Taunt</b>",
+     "baseCost": 2,
+     "baseAttack": 2,
+     "baseHealth": 3,
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 1,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 3,
+     "entityId": 73,
+     "cardId": "TIME_025",
+     "name": "Twilight Timehopper",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 4,
+     "text": "[x]<b>Battlecry:</b> Shuffle 2\nShreds of Time into your\ndeck. When drawn, deal 3\ndamage to your hero."
+    },
+    {
+     "public": true,
+     "engineTurn": 5,
+     "entityId": 6,
+     "cardId": "BE_221",
+     "name": "Elder Word: Foresight",
+     "CARDTYPE": "SPELL",
+     "COST": 3,
+     "text": "Draw a card and reduce its Cost by (2). <i>(The next Shadow spell you play repeats this!)</i>"
+    },
+    {
+     "public": true,
+     "engineTurn": 7,
+     "entityId": 81,
+     "cardId": "BE_728",
+     "name": "Zakajz the Corruptor",
+     "CARDTYPE": "MINION",
+     "COST": 4,
+     "ATK": 5,
+     "HEALTH": 5,
+     "text": "[x]<b>Battlecry:</b> Reduce the Cost\nof minions in your hand and\ndeck by (1) and increase the\nCost of spells by (1)."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 76,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 15,
+     "cardId": "BE_014",
+     "name": "Spawn of C'Thun",
+     "CARDTYPE": "MINION",
+     "COST": 4,
+     "ATK": 2,
+     "HEALTH": 2,
+     "text": "[x]<b>Battlecry:</b> If C'Thun\nstarted in your deck,\nchoose one of its\nabilities to trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 79,
+     "cardId": "CAP_405",
+     "name": "Godfather Kazakus",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 3,
+     "text": "<b>Battlecry:</b> Plot a custom sham trial! Then choose the trial's length."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 67,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b>& Your opponent's spells cost (1) more next turn."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 182,
+     "cardId": "CAP_405tb3",
+     "name": "Unending Trial",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "In 4 turns, {0} {1}"
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 4,
+     "cardId": "CORE_DMF_067",
+     "name": "Prize Vendor",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "text": "<b>Battlecry and Deathrattle:</b>& Each player draws a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 11,
+     "entityId": 27,
+     "cardId": "BE_220",
+     "name": "Entropic Rift",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Get two random Shadow Spells."
+    },
+    {
+     "public": true,
+     "engineTurn": 11,
+     "entityId": 17,
+     "cardId": "CS3_024",
+     "name": "Taelan Fordring",
+     "CARDTYPE": "MINION",
+     "COST": 5,
+     "ATK": 3,
+     "HEALTH": 3,
+     "text": "[x]<b><b>Taunt</b>, Divine Shield</b>\n<b>Deathrattle:</b>& Draw your\nhighest Cost minion."
+    },
+    {
+     "public": true,
+     "engineTurn": 13,
+     "entityId": 68,
+     "cardId": "TLC_451",
+     "name": "Cursed Catacombs",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 13,
+     "entityId": 7,
+     "cardId": "BE_012",
+     "name": "Dark Deacon",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "[x]<b>Battlecry:</b> If you've cast 2\nShadow spells while holding\nthis, choose a C'Thun ability\nto trigger. <i>({0} left!)</i>@[x]<b>Battlecry:</b> If you've cast 2\nShadow spells while holding\nthis, choose a C'Thun ability\nto trigger. <i>(Ready)</i>@[x]<b>Battlecry:</b> If you've cast 2\nShadow spells while holding\nthis, choose a C'Thun ability\nto trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 13,
+     "entityId": 16,
+     "cardId": "CORE_DMF_067",
+     "name": "Prize Vendor",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 3,
+     "text": "<b>Battlecry and Deathrattle:</b>& Each player draws a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 13,
+     "entityId": 77,
+     "cardId": "BE_729",
+     "name": "Mawman Cultist",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 4,
+     "HEALTH": 4,
+     "text": "ALL spells cost (1) more."
+    },
+    {
+     "public": true,
+     "engineTurn": 13,
+     "entityId": 20,
+     "cardId": "BE_220",
+     "name": "Entropic Rift",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Get two random Shadow Spells."
+    },
+    {
+     "public": true,
+     "engineTurn": 15,
+     "entityId": 8,
+     "cardId": "BE_204",
+     "name": "Gargantuan Slitherer",
+     "CARDTYPE": "MINION",
+     "COST": 6,
+     "ATK": 6,
+     "HEALTH": 7,
+     "text": "<b>Taunt</b>\n<b>Battlecry:</b>& Choose a C'Thun\nability to trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 15,
+     "entityId": 249,
+     "cardId": "CATA_499",
+     "name": "Disposable Acolytes",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "[x]When you play\nor discard this,\nsummon two random\n1-Cost minions."
+    },
+    {
+     "public": true,
+     "engineTurn": 15,
+     "entityId": 190,
+     "cardId": "CORE_EX1_302",
+     "name": "Mortal Coil",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Deal $1 damage to a minion. If it dies,\ndraw a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 17,
+     "entityId": 65,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it."
+    },
+    {
+     "public": true,
+     "engineTurn": 17,
+     "entityId": 69,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b>& Your opponent's spells cost (1) more next turn."
+    },
+    {
+     "public": true,
+     "engineTurn": 17,
+     "entityId": 248,
+     "cardId": "TLC_515",
+     "name": "Cultist Map",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "<b>Discover</b> a card from your deck. If you play it this turn, also pick one of the others."
+    },
+    {
+     "public": true,
+     "engineTurn": 17,
+     "entityId": 74,
+     "cardId": "TIME_027",
+     "name": "Tachyon Barrage",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $6 damage split among all enemies. Shuffle 2 Shreds of Time into your deck."
+    },
+    {
+     "public": true,
+     "engineTurn": 17,
+     "entityId": 78,
+     "cardId": "BE_726",
+     "name": "Ritual of C'Thun",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "[x]In 2 turns, choose a\nC'Thun ability to trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 19,
+     "entityId": 10,
+     "cardId": "BE_013",
+     "name": "C'Thun, Eye of the Empire",
+     "CARDTYPE": "MINION",
+     "COST": 10,
+     "ATK": 12,
+     "HEALTH": 12,
+     "text": "<b>Old God.</b> If you've triggered all 4 C'Thun abilities this game, this minion's abilities are tripled."
+    }
+   ]
+  },
+  "optionsId": 92,
+  "mulliganResult": {
+   "choiceId": 2,
+   "kept": [
+    56,
+    51,
+    33
+   ],
+   "complete": true
+  },
+  "choice": {
+   "id": 20,
+   "playerId": 2,
+   "type": "GENERAL",
+   "min": 1,
+   "max": 1,
+   "entities": [
+    {
+     "entityId": 347,
+     "cardId": "CAP_405tb3b",
+     "name": "Unending Trial",
+     "text": "The trial finishes in 4 turns.",
+     "baseCost": 0,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 348,
+     "cardId": "CAP_405tb2b",
+     "name": "Grueling Trial",
+     "text": "The trial finishes at the start of your next turn.",
+     "baseCost": 4,
+     "COST": 4,
+     "CARDTYPE": "SPELL"
+    },
+    {
+     "entityId": 349,
+     "cardId": "CAP_405tb1b",
+     "name": "Rushed Trial",
+     "text": "The trial finishes immediately!",
+     "baseCost": 7,
+     "COST": 7,
+     "CARDTYPE": "SPELL"
+    }
+   ],
+   "revision": 286360,
+   "offeredAt": "22:54:26.6841938",
+   "sourceId": 36,
+   "source": {
+    "entityId": 36,
+    "cardId": "CAP_405",
+    "name": "Godfather Kazakus",
+    "text": "<b>Battlecry:</b> Plot a custom sham trial! Then choose the trial's length.",
+    "baseCost": 3,
+    "baseAttack": 3,
+    "baseHealth": 3,
+    "COST": 3,
+    "ATK": 3,
+    "HEALTH": 3,
+    "ZONE_POSITION": 2,
+    "CARDTYPE": "MINION",
+    "EXHAUSTED": 1
+   }
+  },
+  "fingerprint": "6284eb9defc5da8bafe4",
+  "decisionFingerprint": "d84a6ea82b96154e1de7"
+ },
+ "options": [
+  {
+   "id": "c20e347",
+   "type": "CHOICE",
+   "choiceId": 20,
+   "entityId": 347
+  },
+  {
+   "id": "c20e348",
+   "type": "CHOICE",
+   "choiceId": 20,
+   "entityId": 348
+  },
+  {
+   "id": "c20e349",
+   "type": "CHOICE",
+   "choiceId": 20,
+   "entityId": 349
+  }
+ ],
+ "expected": {
+  "best": [
+   "c20e349"
+  ]
+ }
+}

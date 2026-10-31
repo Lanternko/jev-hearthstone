@@ -10,11 +10,12 @@ description: 訓練：寫自我對弈訓練配方（train/ppo.py 參數、對手
 
 ## 負責
 - 訓練配方：`train/ppo.py` 的參數、對手池、resume 來源；配方寫成 `runtime/<名稱>/run_*.sh`。
-- 在 5090 跑（`ssh kojiek@140.122.184.29`，venv `~/venvs/jev-hearthstone`）：
+- 在 5090 跑（`ssh kojiek@100.97.181.15`，Tailscale，L-080；venv `~/venvs/jev-hearthstone`）：
   - 一條 ssh 只負責啟動（setsid/nohup），腳本最後 touch DONE／FAILED 旗標。
   - 啟動後立刻讀 log 開頭，確認對手與 resume 來源符合預期（resume 換對手要 `--opp-fresh`）。
+  - **確認開跑後立刻用 `run_in_background` 跑 `bash train/await-5090.sh <5090 上放 DONE/FAILED 的目錄>`**（L-082）。它在 DONE 或 FAILED 出現時才退出，只叫醒一次，不算輪詢。醒來就收結果、更新 memory、主動回報，不要等使用者問。exit 2 是 5090 連不上，照 L-080 處理。
   - 重啟前先 `ps -eo pid,args` 確認沒有在跑；殺程序用 PID，不用 `pkill -f`。
-  - 連不上時照 `~/.claude/CLAUDE.md` 的 VPN 程序做一次，不重試迴圈。
+  - 連不上時照 `~/.claude/CLAUDE.md` 的 5090 連線程序做一次，不重試迴圈。
 - 匯出：`python train/export.py <policy.pt> <out.json>`；匯出的 json 必須有 `sim` 欄位（G2）。
 
 ## 不准

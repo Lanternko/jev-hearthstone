@@ -59,6 +59,18 @@
 - 相關：R-147、R-115、F-891、F-892
 - 來源：使用者 2026-10-29
 
+### R-166 小怪換對方小嘲諷，大怪留著打大的
+- 日期：2026-10-31
+- 情境：10-31 批次第 1 局我方第 5 回合（5 費）。剛下 Ruinous Velocidrake 7/7；對方 Reanimated Ossodon 2/2 嘲諷擋在 Sawbones 5/3、Defias Smuggler 2/3、兩隻 Remnant of Rage 5/4 前面。網路叫 7/7 去撞 2/2（0.797），後面 Glacial Shard 2/1 白撞 Sawbones 5/3。
+- 裁決：要換怪清掉對方的 2/2 嘲諷，用小隻的（Glacial Shard 2/1 對換；C'thrax Brute 3/5、Mawman 4/4 也能殺且活著）。7/7 留著去殺 Sawbones 或 Remnant of Rage 這種大的。
+- 完整走法（使用者 2026-10-31 補）：Glacial Shard 2/1 撞 Ossodon 2/2；可攻擊的 C'thrax Brute 3/5 撞 Defias Smuggler 2/3；Mawman 4/4 撞 Remnant of Rage 5/4；Velocidrake 7/7（突襲）撞另一隻 Remnant 5/4。對方只剩 Sawbones 5/3 與 Unstable Prototype 0/1，我方留 Velocidrake 7/2、Brute 3/3、兩隻還不能攻擊的 Brute 3/5。
+- 理由：使用者 2026-10-31：這局我們落後；打到第 5 回合場面還沒明顯優勢，死騎靠 Sawbones 建立的手牌優勢和後續解場法術（衝刺手下）會逆轉。所以要趁現在把場面清乾淨。（當時對方手牌 9 張、我方 4 張；賽後 HDT 看到對方手上有 Staff of the Endbringer 全場清、兩張 Morbid Swarm、Command Claw、Sawbones。）App 補：7 點攻擊打 2 血的怪浪費 5 點。
+- 使用者 2026-10-31 補：不管知不知道對方手上是什麼（對方前面預備過一次，死騎牌組只有 2 種預備牌），手牌 4 對 9 落後是公開資訊，光看手牌數就該判斷要搶場面。
+- 模擬器的盲點（E-300、E-301）：模擬對手從先驗池隨機發牌，這個局面四種打法都算約 98% 勝，看不出落後，也看不出要搶場面。
+- 落在：回歸題 `fx:ranked1031-g1-small-minion-into-taunt`（`test/fixtures/user-rulings/ranked1031-g1-small-minion-into-taunt.json`）；不加 guard（使用者 2026-10-31「先不加」，讓模型自己學，回歸題驗收）。
+- 相關：F-904
+- 來源：使用者 2026-10-31「換怪要殺掉對方22」；回合由使用者在選項中確認是我方第 5 回合
+
 
 ---
 
@@ -104,6 +116,31 @@
 
 
 ---
+
+## 對手牌組
+
+### R-165 C'Thun 牧師就是阿薩林納牧師
+- 日期：2026-10-31
+- 情境：F-902 把揭露 C'Thun 系列牌的牧師分成「C'Thun 牧師」
+- 裁決：實戰的 C'Thun 牧師通常帶阿薩林納（Azalina Soulsever，JAIL_430）偷牌。它出的 C'Thun、卡札庫斯、Zakajz、暮光蛋等牌多半是從我們牌庫複製來的，不是它自己的套牌。分類對手時看開局有沒有揭露 JAIL_430，不要看 C'Thun 系列牌。
+- 理由：原文未載（使用者的遊戲知識）。卡牌文字：40 血；牌庫一半換成對手牌庫的複製；戰吼抽到滿手。
+- 落在：`src/selfplay.mjs` seat／newGame（40 血、20 張複製牌帶 raw.copied）、`src/sim.mjs` AZALINA／SWEEPER／UNSHACKLE／DEACON／TERRAFORM、`decks/priest-azalina/list.json`（2026-10-31，F-905；同日改成 Moon 版不帶麥迪文＋Moonwell，F-907）、`decks/priest-azalina-cthun`＋Entropic Rift（F-908）；還沒進對手池
+- 狀態：有效
+- 相關：F-902、F-903
+- 來源：使用者 2026-10-31「克蘇恩牧師通常都是帶阿薩林納 可以偷牌的版本」
+
+
+---
+### R-167 阿薩林納偷牌可以重複，上限是我們帶的張數
+- 日期：2026-10-31
+- 情境：實作 JAIL_430 時問使用者複製牌怎麼挑（F-905 疑點 1）
+- 裁決：阿薩林納的 20 張複製牌從我們的牌組抽，可以偷到重複的牌（例如 2 張 Mawman Cultist），但同一張不會超過我們牌組裡的張數。
+- 理由：原文未載（使用者的遊戲知識）。
+- 落在：`src/selfplay.mjs` seat（從對手 30 張展開清單不放回抽 20 張）；`test/priest-azalina-sim.test.mjs` 檢查每張複製牌數 ≤ 我方張數
+- 狀態：有效
+- 相關：R-165、F-905
+- 來源：使用者 2026-10-31「好像沒有規定不能偷到不重複的牌。也就是可能偷到2張maw（不會超過三張，因為我只有帶2張」
+
 
 ## 客戶端操作
 

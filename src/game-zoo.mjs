@@ -5,7 +5,7 @@
 import {spawn} from 'node:child_process';
 import {existsSync,mkdirSync,openSync,writeSync} from 'node:fs';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {MODELS,modelFile,modelFor} from './selfplay-shadow.mjs';
+import {MODELS,SPECIALISTS,modelFile,modelFor} from './selfplay-shadow.mjs';
 
 export const DEFAULT_DECK='warlock-zoo';
 // node src/game-zoo.mjs [deck]; flags are not part of the deck name.
@@ -19,6 +19,11 @@ export function checkModel(deck){
     error:`no network for deck '${deck}'; decks with one: ${Object.keys(MODELS).join(', ')} (JEV_NET_MODEL names a file)`};
   if(!existsSync(file))return {ok:false,deck,file,name,
     error:`network file for deck '${deck}' not found: ${file}; build ${name} first, or set JEV_NET_MODEL`};
+  // The opponent's class is known only once the game starts, so every specialist of the deck must be there too.
+  if(!process.env.JEV_NET_MODEL)for(const cls of Object.keys(SPECIALISTS[deck]??{})){
+    const f=modelFile(deck,cls);
+    if(!existsSync(f))return {ok:false,deck,file:f,name:modelFor(deck,cls),error:`specialist for deck '${deck}' against ${cls} not found: ${f}`};
+  }
   return {ok:true,deck,file,name};
 }
 

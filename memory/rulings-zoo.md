@@ -169,3 +169,15 @@
 - 狀態：有效
 - 相關：F-881、E-280
 
+
+---
+### R-168 打牧師用 zoo 0.2.2，其他職業維持 0.2.0
+- 日期：2026-11-01
+- 情境：E-304 複核 E-303 B：對阿薩林納兩副 +4.5／+2.3、蛋牧 −0.3，但 DH −2.3 FAIL，不能整體取代 0.2.0（F-912）。主 session 建議只讓 B 打牧師。
+- 裁決：E-303 B 命名為 zoo 0.2.2（只當專家採用，不是整體變強，所以升 PATCH），warlock-zakajz 對手是牧師時用它；其他職業（含 DH）維持 zoo 0.2.0。DH 專家（E-305）要在全新 seed 贏過 0.2.0 才換。
+  - 2026-11-01 補：DH 專家 `warlock-zakajz-dh-v1-20261101`（E-305 B）全新 seed 複核對 DH 52.6→57.4 PASS、題庫 F-881 改善（E-306、F-916），依本條「贏過 0.2.0 才換」填進 SPECIALISTS 對 DEMONHUNTER。它對其他職業退 3.5–4.5，只能打 DH。
+- 理由：B 的進步只在牧師；F-913 的乾燥局面 Tachyon 錯招（10.9%→35.1%）照樣會出現在對牧師的局，但使用者裁決題 B 過 4/5、0.2.0 過 0/5。
+- 落在：`src/selfplay-shadow.mjs` SPECIALISTS；`models/selfplay/warlock-zoo-0.2.2.{json,pt}`（json sha256 e0bc4c41…，＝`runtime/zoo-azalina-20261031/eval/B.json`）；`test/specialist-route.test.mjs`
+- 狀態：有效
+- 相關：F-912、F-913、F-914、E-303、E-304、E-305、R-144、R-151
+- 來源：使用者 2026-11-01「牧師-》B」

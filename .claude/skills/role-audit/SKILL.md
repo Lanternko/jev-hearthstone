@@ -15,7 +15,7 @@ description: 評估與審計：用 selfplay-match 與 selfplay-compare 在獨立
   - exit 1／0：照實回報，附完整輸出。
 - 題庫：候選模型另跑 `npm run regress -- --deck <牌組> --model <候選檔> --baseline eval/regress/baseline-<現役模型>.json`（exit 1 = 有題退步），不得退步已量測的題（`evidence:measured`，如 F-881）；`evidence:user` 的退步照實列出交主管判斷。題庫只用來考試，不准拿去訓練。
 - 複核：別的角色在 findings 裡寫「已證實」的數字，抽查時自己重跑。
-- 重度量測（上千局）在 5090 跑（做法同 role-train 的 5090 規則）。
+- 重度量測（上千局）在 5090 跑（做法同 role-train 的 5090 規則）：腳本最後寫 DONE／FAILED，開跑後立刻用 `run_in_background` 跑 `bash train/await-5090.sh <目錄>`，醒來就主動回報（L-082）。
 
 ## 不准
 - 不改任何被評估的東西：模型、訓練、模擬器、對手。看到問題寫 findings 交回去。

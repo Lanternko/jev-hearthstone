@@ -48,6 +48,8 @@
 | L-069 | lessons-live.md |
 | L-079 | lessons.md |
 | L-084 | lessons-live.md |
+| L-085 | lessons.md |
+| L-086 | lessons-train.md |
 
 ## 舊 ID 對照（2026-10-30 整併）
 

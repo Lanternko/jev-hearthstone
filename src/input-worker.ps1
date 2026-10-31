@@ -37,6 +37,11 @@ public class Hs {
  public static uint RDown(){return SendInput(1,new INPUT[]{Mk(RDOWN,0,0)},Marshal.SizeOf(typeof(INPUT)));}
  public static uint RUp(){return SendInput(1,new INPUT[]{Mk(RUP,0,0)},Marshal.SizeOf(typeof(INPUT)));}
  public static long WindowAtCursor(){POINT p;GetCursorPos(out p);return (long)WindowFromPoint(p);}
+ [DllImport("user32.dll")] public static extern IntPtr GetAncestor(IntPtr h,uint flags);
+ [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr h,int cmd);
+ [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h,out uint pid);
+ public static long RootAtCursor(){return (long)GetAncestor((IntPtr)WindowAtCursor(),2);}
+ public static uint PidOf(long h){uint pid;GetWindowThreadProcessId((IntPtr)h,out pid);return pid;}
 }
 "@
 [void][Hs]::SetProcessDPIAware()
@@ -91,9 +96,23 @@ function Arm($g,$sx,$sy,$settle,$trace) {
     $refocused = $true
   }
   [void][Hs]::Move($sx,$sy); Start-Sleep -Milliseconds 40
+  # L-077, 2026-10-30 13:48: the Claude desktop window came back over the client while it read as minimized;
+  # every click landed on it (hwnd at the cursor was Claude's) and ranked 開始 was pressed three times for nothing.
+  # Only Claude's own window is moved aside; anything else on top is left for the dead-gesture report.
+  $minimized = $null
+  $root = [Hs]::RootAtCursor()
+  if ($root -ne 0 -and $root -ne $g.handle) {
+    $owner = Get-Process -Id ([Hs]::PidOf($root)) -ErrorAction SilentlyContinue
+    if ($owner -and $owner.ProcessName -match '^claude$') {
+      [void][Hs]::ShowWindow([intptr]$root, 6); Start-Sleep -Milliseconds 300
+      [void][Hs]::SetForegroundWindow([intptr]$g.handle); Start-Sleep -Milliseconds 220
+      [void][Hs]::Move($sx,$sy); Start-Sleep -Milliseconds 40
+      $minimized = $root
+    }
+  }
   $rc = [Hs]::Move($sx,$sy); Start-Sleep -Milliseconds $settle
   [void]$trace.Add((Probe $g 'armed' $sx $sy))
-  @{refocused=$refocused;moveRc=[int]$rc}
+  @{refocused=$refocused;moveRc=[int]$rc;minimized=$minimized}
 }
 
 Reply @{ok=$true;ready=$true}
@@ -136,7 +155,7 @@ while ($null -ne ($line = [Console]::In.ReadLine())) {
         Start-Sleep -Milliseconds $c.hold
         $rcU = [Hs]::Up(); $errU = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
         [void]$tr.Add((Probe $g 'up' $sx $sy))
-        Reply @{ok=$true;trace=@{kind='click';target=@{x=$c.x;y=$c.y};handle=$g.handle;refocused=$arm.refocused;
+        Reply @{ok=$true;trace=@{kind='click';target=@{x=$c.x;y=$c.y};handle=$g.handle;refocused=$arm.refocused;minimized=$arm.minimized;
           rc=@{arm=$arm.moveRc;down=[int]$rcD;up=[int]$rcU};err=@{down=[int]$errD;up=[int]$errU};probes=$tr.ToArray()}}
       }
       'drag' {

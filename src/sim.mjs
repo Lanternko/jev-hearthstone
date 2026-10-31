@@ -309,6 +309,8 @@ const HAUNT=/^give a minion \+2\/\+3, reborn, and taunt\.?$/i;
 const SLIME=/^destroy all minions\. each player gets a 3-cost spell that resummons theirs\.?$/i;
 const ECTOPLASM=/^resummon all friendly minions that were slimed\.?$/i;
 const MEDIVH=/^deal 4 damage to all minions\. costs \(1\) if you control a legendary card\.?$/i;
+const RIFT=/^get two random shadow spells\.?$/i;
+const MOONWELL=/^deal \$?4 damage to all enemy characters\. restore #?4 health to all friendly characters\.?$/i;
 const SMITE=/^deal 3 damage to a minion\.?$/i;
 const RUIN=/^destroy all minions with 5 or more attack\.?$/i;
 const EGGBEARER=/^battlecry: draw a 0-attack minion\.?$/i;
@@ -331,6 +333,14 @@ const BARRIER=/^give a character divine shield. give minions in your hand \+2 he
 const LIGHTSPAWN=/^lifesteal battlecry: deal damage to an enemy minion equal to this minion's health.?$/i;
 const SMUGGLER=/^prepare. battlecry: give a friendly minion \+2 attack and rush.?$/i;
 const FLAY=/^deal 3 damage to a random enemy./i;
+// decks/priest-azalina (2026-10-31, R-165): Azalina's priest starts at 40 with 20 cards of ours shuffled in
+// (src/selfplay.mjs newGame). A card copied from the opponent carries raw.copied; playing one marks every
+// card still in hand (copyHeld), which turns on Mind Sweeper's battlecry and Unshackle Soul's discount.
+const AZALINA=/^your starting health is 40\. your deck is 20 cards, plus 20 copied from your enemy\. battlecry: draw until your hand is full\.?$/i;
+const SWEEPER=/^battlecry: if you played a copy of an opponent's card while holding this, deal 2 damage to all enemy minions\.?$/i;
+const UNSHACKLE=/^destroy a minion\. if you played a copy of an opponent's card while holding this, this costs \(1\)\.?$/i;
+const DEACON=/^battlecry: if you've cast 2 shadow spells while holding this, choose a c'thun ability to trigger\./i;
+const TERRAFORM=/^deal 5 damage to a minion\. this continues to the left and right with 1 less damage\.?$/i;
 // The Outcast cards Illidari Studies can find; the bonus fires from either end of the hand.
 // decks/shaman-cthun (2026-10-27): Eyemaul and Tiny Pal's swings, the elementals, Warden Maiev,
 // Wailing Vapor, Hijacked Securitybot, Skywall Sentinel's Herald, Unstable Prototype, the Discovers.
@@ -377,6 +387,8 @@ export function gameModel(c){
     if(SLIME.test(c.text))return {kind:'slime'};
     if(ECTOPLASM.test(c.text))return {kind:'ectoplasm'};
     if(MEDIVH.test(c.text))return {kind:'aoe',damage:4};
+    if(MOONWELL.test(c.text))return {kind:'moonwell',damage:4,heal:4};
+    if(RIFT.test(c.text))return {kind:'rift',n:2};
     if(SMITE.test(c.text))return {kind:'boltMinion',damage:3,target:'any'};
     if(FIREBOLT.test(c.text))return {kind:'boltMinion',damage:3,lifesteal:true,returnOnKill:true,target:'any'};
     if(RUIN.test(c.text))return {kind:'ruin'};
@@ -386,6 +398,9 @@ export function gameModel(c){
     if(FATE.test(c.text))return {kind:'fate'};
     if(BARRIER.test(c.text))return {kind:'barrier',target:'friend',optional:true};
     if(FLAY.test(c.text))return {kind:'flay',damage:3,elder:true};
+    // decks/priest-azalina
+    if(UNSHACKLE.test(c.text))return {kind:'destroyMinion',target:'any'};
+    if(TERRAFORM.test(c.text))return {kind:'terraform',damage:5,target:'any'};
     return null;
   }
   // Any weapon equips by its Attack and Durability; a text not modelled (an opponent's weapon) only loses its effect
@@ -395,6 +410,10 @@ export function gameModel(c){
   // decks/priest-egg
   if(EGG.test(c.text))return {kind:'minion',egg:true};
   if(SOOTHSAYER.test(c.text))return {kind:'minion'};
+  // decks/priest-azalina
+  if(AZALINA.test(c.text))return {kind:'minion',fillHand:true};
+  if(SWEEPER.test(c.text))return {kind:'minion',sweeper:true};
+  if(DEACON.test(c.text))return {kind:'minion',deacon:true};
   if(NZOTH.test(c.text))return {kind:'minion',nzoth:true};
   if(SERVANT.test(c.text))return {kind:'minion',silence:true,target:'any'};
   if(EGGBEARER.test(c.text))return {kind:'minion',drawZeroAtk:true};
@@ -451,6 +470,7 @@ export function costOf(s,c){
   if(MEDIVH.test(c.text)&&s.me.some(b=>b.type==='MINION'&&b.hp>0&&b.legendary))base=1;
   // Gravedawn Sunbloom's Kindred: two less after a Holy card on our last turn.
   if(SUNBLOOM.test(c.text)&&(s.lastKinds??[]).includes(c.raw?.school))base=Math.max(0,base-2);
+  if(UNSHACKLE.test(c.text)&&c.copyHeld)base=1;                   // Unshackle Soul after a copied card
   const k=costKind(c.text);
   if(k===2&&(s.died??0)>0)base=0;                                  // Hungering Cavern
   else if(k===3&&(s.studies??0)>0)base=Math.max(0,base-1);         // Illidari Studies
@@ -459,7 +479,7 @@ export function costOf(s,c){
 // Whether a card's cost follows the demon hunter's state (Remnant of Rage, Hungering Cavern, Illidari Studies).
 export const dhCost=c=>costKind(c.text)>0;
 // Cards whose price follows the board beyond the demon hunter's: Medivh's Triumph and N'Zoth (decks/priest-egg).
-export const stateCost=c=>dhCost(c)||MEDIVH.test(c.text??'')||NZOTH.test(c.text??'')||SUNBLOOM.test(c.text??'');
+export const stateCost=c=>dhCost(c)||MEDIVH.test(c.text??'')||NZOTH.test(c.text??'')||SUNBLOOM.test(c.text??'')||UNSHACKLE.test(c.text??'');
 const COST_KINDS=new Map();
 const costKind=t=>{
   let v=COST_KINDS.get(t);
@@ -783,8 +803,28 @@ function applyStep(s0,m){
       for(const b of [...s.me,...s.opp])if(b.type==='MINION'&&!b.dormant)strike({},b,model.damage);
       return {s,exact:true,note:''};
     }
+    // decks/priest-azalina: Moonwell hits every enemy character and heals every friendly one.
+    if(model.kind==='moonwell'){
+      for(const b of s.opp)if(!b.dormant)strike({},b,model.damage);
+      for(const b of s.me)if(!b.dormant&&b.hp>0)b.hp=Math.min(b.maxHp,b.hp+model.heal);
+      return {s,exact:true,note:''};
+    }
     if(model.kind==='ruin'){
       for(const b of [...s.me,...s.opp])if(b.type==='MINION'&&!b.dormant&&b.atk>=5)b.hp=0;
+      return {s,exact:true,note:''};
+    }
+    // decks/priest-azalina: Unshackle Soul, and Dark Terraforming's 5 that spreads out one less each step.
+    if(model.kind==='destroyMinion'){
+      const t=[...s.me,...s.opp].find(b=>b.id===m.targetId);
+      if(t)t.hp=0;
+      return {s,exact:true,note:''};
+    }
+    if(model.kind==='terraform'){
+      const t=[...s.me,...s.opp].find(b=>b.id===m.targetId);
+      if(t){
+        const row=(t.side==='me'?s.me:s.opp).filter(b=>b.type==='MINION'),i=row.indexOf(t);
+        row.forEach((b,j)=>{const n=model.damage-Math.abs(j-i);if(n>0&&!b.dormant)strike({},b,n)});
+      }
       return {s,exact:true,note:''};
     }
     if(model.kind==='boltMinion'){
@@ -815,6 +855,13 @@ function applyStep(s0,m){
     }
     if(model.kind==='undeath'){rattleSome(s,model.n);return {s,exact:true,note:''}}
     // Intertwined Fate: a copy from our deck, then one from theirs (picked by card id).
+    // decks/priest-azalina-cthun: Entropic Rift's Shadow spells come from the Priest ones the simulator can play.
+    if(model.kind==='rift'){
+      if(!s.game)return {s,exact:false,note:'random Shadow spells; observe and replan'};
+      const pool=blessPool(s).filter(r=>r.CARDTYPE==='SPELL'&&r.school==='SHADOW');
+      for(let k=0;k<model.n&&pool.length;k++){const raw=pool[roll(s,pool.length)];gain(s,{...raw,entityId:-(++s.nextToken)})}
+      return {s,exact:true,note:''};
+    }
     if(model.kind==='fate'&&s.game){
       offer(s,'fate1',sample(s,[...new Set(s.deck.map(d=>d.cardId))],3));
       return {s,exact:true,note:''};
@@ -920,6 +967,9 @@ function applyStep(s0,m){
         offer(s,'xavius',sample(s,ids,3));
       }
       if(model.cthun==='always'||model.cthun==='started'&&s.cthunStart)cthun(s);
+      if(model.deacon&&(c.shadows??0)>=2)cthun(s);
+      if(model.sweeper&&c.copyHeld)for(const t of s.opp)if(t.type==='MINION'&&!t.dormant)strike({},t,2);
+      if(model.fillHand&&s.game)pull(s,Math.max(0,10-s.hand.length));
       if(model.oldGod)oldGod(s,b);
       if(model.outcast&&edge){
         if(model.outcast.draw)pull(s,model.outcast.draw);
@@ -945,7 +995,7 @@ function applyStep(s0,m){
       if(model.imbue)imbue(s);
       if(model.conjurer&&s.game&&s.them.deck.length){
         const r=s.them.deck[roll(s,s.them.deck.length)];
-        gain(s,{...r,entityId:-(++s.nextToken)});
+        gain(s,{...r,entityId:-(++s.nextToken),copied:true});
       }
       if(model.lightspawn&&m.targetId!=null){
         // Cleansing Lightspawn: as much damage as its own Health, healed back through its Lifesteal.
@@ -1259,6 +1309,9 @@ function afterPlay(s0,s,m){
   if(!c)return;
   const raw=c.raw??{},kinds=[raw.school,...(raw.races??[])].filter(Boolean);
   if(kinds.length)s.playedKinds=[...(s.playedKinds??[]),...kinds];
+  // decks/priest-azalina: what the cards still in hand saw while they were held.
+  if(raw.copied)for(const x of s.hand)x.copyHeld=true;
+  if(c.type==='SPELL'&&raw.school==='SHADOW')for(const x of s.hand)if(DEACON.test(x.text))x.shadows=(x.shadows??0)+1;
   if(c.type!=='SPELL'||raw.school!=='SHADOW')return;
   const before=s0.elderWord,model=modelOf(s0,c);
   s.elderWord=model?.elder?model:null;
@@ -1522,7 +1575,7 @@ function settle(s,kind,id){
     if(x){x.cost=Math.max(0,x.cost-s.power.bless);x.raw={...x.raw,COST:x.cost}}
   }else if(kind==='fate1'||kind==='fate2'){
     const raw=id!=null&&(kind==='fate1'?s.deck:s.them.deck).find(d=>d.cardId===id);
-    if(raw)gain(s,{...raw,entityId:-(++s.nextToken)});
+    if(raw)gain(s,{...raw,entityId:-(++s.nextToken),...(kind==='fate2'?{copied:true}:{})});
     if(kind==='fate1'){
       const theirs=[...new Set(s.them.deck.map(d=>d.cardId))];
       if(theirs.length)offer(s,'fate2',sample(s,theirs,3));

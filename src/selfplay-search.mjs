@@ -28,6 +28,8 @@
 // value for the seat to act, with the sign turned). With `ownValue` it is valued from ours instead
 // (seatView: the same position seen from our chair, the sign kept): a network trained only against
 // other networks (train/ppo.py --opp) has learned to value its own chair, not theirs (F-882).
+// With `oppValue` (t => the other side's own network's value of t, for the seat to act) such a position
+// is valued by the network that plays that side, with the sign turned, and is not sent back to ours.
 import {moves,apply,roll,handCard,hpOf,flip} from './sim.mjs';
 import {winner,cardDb,rawCard} from './selfplay.mjs';
 import {encode} from './selfplay-encode.mjs';
@@ -78,6 +80,7 @@ export function seatView(s){
   return {...v,mana:0,me:v.me.map(b=>({...b,canAttack:false})),sites:(v.sites??[]).map(x=>({...x,ready:false}))};
 }
 // What the network is shown of a position t to value, and the sign of its answer for `seat`.
+const clip=v=>Math.max(-.98,Math.min(.98,v));
 export const valueAsk=(t,seat,vocab,own)=>t.seat===seat||!own?{obs:encode(t,[],vocab).obs,sign:t.seat===seat?1:-1}:{obs:encode(seatView(t),[],vocab).obs,sign:1};
 const key=(s,obs,handed)=>obs.join()+(handed?`|${names(s.them.hand)}|${names(s.them.deck)}`:`|${s.choice?.options.length??''}`);
 
@@ -194,7 +197,7 @@ export function replies(t,net,k,cap=40){
 // mean change of those that were (a guess, so within the bounds of a value), and never above the
 // worst of them: it was not seen to survive the reply, and the reply is what tends to bring a score
 // down.
-function* further(beams,legal,vocab,{expand,replies:k,reply,own=false}){
+function* further(beams,legal,vocab,{expand,replies:k,reply,own=false,oppValue=null}){
   const seat=beams[0].root.seat,ends=[];
   for(const b of beams){
     b.top=legal.map((_,r)=>r).filter(r=>Number.isFinite(b.best[r])&&b.at[r]).sort((x,y)=>b.best[y]-b.best[x]).slice(0,expand);
@@ -205,6 +208,7 @@ function* further(beams,legal,vocab,{expand,replies:k,reply,own=false}){
       b.again.set(r,replies(t,reply,k).map(s=>{
         const w=winner(s),n={v:null};
         if(w!=null)n.v=w==='draw'?0:w===seat?1:-1;
+        else if(oppValue&&s.seat!==seat)n.v=-clip(oppValue(s));
         else ends.push(Object.assign(n,valueAsk(s,seat,vocab,own)));
         return n;
       }));
@@ -212,7 +216,7 @@ function* further(beams,legal,vocab,{expand,replies:k,reply,own=false}){
   }
   if(ends.length){
     const values=yield ends.map(n=>n.obs);
-    ends.forEach((n,i)=>{n.v=n.sign*Math.max(-.98,Math.min(.98,values[i]))});
+    ends.forEach((n,i)=>{n.v=n.sign*clip(values[i])});
   }
   for(const b of beams){
     if(!b.again.size)continue;
@@ -227,8 +231,9 @@ function* further(beams,legal,vocab,{expand,replies:k,reply,own=false}){
 // favour. With `ownValue` a state where the other side is to play is sent as seatView shows it, and
 // its value is taken as the root seat's. `legal` must be moves(s). `deal(s,seed)` gives each sample its position (redeal; a live view passes
 // opponentDealer of src/opponent-hand.mjs, which also deals the cards of the other side's hand).
-export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal,ownValue=false}={}){
+export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal,ownValue=false,oppValue=null}={}){
   if(turns>1&&!reply)throw Error('turns=2 needs the network that plays the reply');
+  if(ownValue&&oppValue)throw Error("ownValue and oppValue each value the other side's turn: pass one");
   const seat=s.seat,total=legal.map(()=>0);
   if(legal.length<2)return total;
   const beams=Array.from({length:samples},(_,d)=>{
@@ -255,7 +260,8 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
           node.board=standing(t,handed);
         }
         if(!over&&handed&&ownValue)Object.assign(node,valueAsk(t,seat,vocab,true));
-        if(!over)ask.push(node);
+        if(!over&&handed&&oppValue)node.v=-clip(oppValue(t));
+        else if(!over)ask.push(node);
         next.set(k,node);
       });
       b.next=[...next.values()];
@@ -263,7 +269,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
     if(ask.length){
       const values=yield ask.map(n=>n.obs);
       // The network's guess has no bounds of its own; a game really won or lost must outrank any guess.
-      ask.forEach((n,i)=>{n.v=n.sign*Math.max(-.98,Math.min(.98,values[i]))});
+      ask.forEach((n,i)=>{n.v=n.sign*clip(values[i])});
     }
     for(const b of beams){
       if(orders)b.next=keepBestOrder(b.next);
@@ -282,7 +288,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
     if(orders&&dominance)b.lines=keepPlain(b.lines);
     if(orders)settle(b,legal,seat);
   }
-  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply,own:ownValue});
+  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply,own:ownValue,oppValue});
   for(const b of beams){
     const floor=Math.min(...b.best.filter(Number.isFinite));
     b.best.forEach((v,r)=>{total[r]+=(Number.isFinite(v)?v:floor)/samples});

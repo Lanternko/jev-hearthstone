@@ -129,3 +129,10 @@
 - 對應測試或關卡：`test/selfplay-search-own-value.test.mjs`（ownValue 下送出的狀態全部是學習方座位、mana 0、無人可攻擊）；headroom 量測用 `--own-value`，`--json` 的 look 欄 `a+own` 與舊量尺不混比。
 - 相關：F-882、E-277、E-286、E-275
 
+### L-086 ssh 啟動時 `&&` 鏈接背景工作，ssh 仍掛住；5090 閘門缺舊模型檔
+- 日期：2026-10-31
+- 發生什麼：E-302 啟動用 `ssh gpu5090 "cd … && setsid nohup bash run.sh > log 2>&1 &"` 類的一條指令，`&&` 鏈加 `&` 讓整條鏈變成背景子 shell，仍握著 ssh 的 channel，本機 ssh 不返回（L-044 第 2 點的變形，只是沒有 sleep）。只好停掉本機 ssh，遠端照常跑。另外 5090 同步目錄只帶了要用的模型，`test/selfplay-*.test.mjs` 讀不到 models/selfplay 的舊 json 而失敗；`train/test_expand.py` 要舊 .pt 也失敗。
+- 以後一律：啟動用 `ssh -f host 'setsid nohup bash /abs/run.sh > /abs/log 2>&1 < /dev/null &'`，不在同一條指令前面用 `&&` 鏈 cd（cd 寫進 run.sh）；同步目錄要跑 node 閘門就一併送 `models/selfplay/*.json`（約 51M），需要舊 .pt 的 Python 測試在本機跑。
+- 對應測試或關卡：無（啟動步驟；role-train skill 照 L-044 規則 1）
+- 相關：L-044、E-302
+- 來源：2026-10-31 側 session（阿薩林納駕駛）

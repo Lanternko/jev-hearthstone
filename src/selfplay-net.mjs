@@ -53,15 +53,17 @@ export function loadNet(path=MODEL){
   const vocab={names:doc.names,index:new Map(doc.names.map((n,i)=>[n,i])),size:doc.names.length+1,timers:!!doc.timers,extra:!!doc.extra,stages:!!doc.stages,imbue:!!doc.imbue,pile:!!doc.pile};
   if(obsSize(vocab)!==doc.obs||actSize(vocab)!==doc.act)
     throw Error(`${path}: made for states of ${doc.obs} and steps of ${doc.act}, the encoder now gives ${obsSize(vocab)} and ${actSize(vocab)}`);
+  // A --value-bce network (valueSquash "tanh") gives tanh of its value head; the older ones give it as it is.
+  const squash=doc.valueSquash==='tanh'?Math.tanh:x=>x;
   // -> {logits:[one per step], value}; the value is for the seat to act, between about -1 and 1.
   function forward(obs,acts){
     // score.0 reads the state's half e and then the step's half: the sums over e are the same for every step.
     const e=linear(L.body2,linear(L.body0,obs,true),true),half=partial(L.score0,e);
     const logits=acts.map(a=>linear(L.score2,linear(L.score0,linear(L.step0,a,true),true,half,e.length))[0]);
-    return {logits,value:linear(L.value2,linear(L.value0,e,true))[0]};
+    return {logits,value:squash(linear(L.value2,linear(L.value0,e,true))[0])};
   }
   // The value alone of an encoded state, as train/ppo.py's look_ahead asks it.
-  const value=obs=>linear(L.value2,linear(L.value0,linear(L.body2,linear(L.body0,obs,true),true),true))[0];
+  const value=obs=>squash(linear(L.value2,linear(L.value0,linear(L.body2,linear(L.body0,obs,true),true),true))[0]);
   // The network's reading of a simulator state: every legal step with its share of the choice.
   function rank(s,legal=moves(s)){
     const {obs,acts}=encode(s,legal,vocab),{logits,value}=forward(obs,acts);

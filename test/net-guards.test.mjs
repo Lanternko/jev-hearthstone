@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {cardDb,rawCard} from '../src/selfplay.mjs';
-import {guardPick} from '../src/net-guards.mjs';
+import {readFileSync} from 'node:fs';
+import {guardPick,RETIRED} from '../src/net-guards.mjs';
 
 // 2026-10-25 zoo game: the network attacked before Entropic Continuity, and ended a turn with 2 mana and Life Tap unused.
 const cards=cardDb();
@@ -308,4 +309,46 @@ test('decks/priest-egg: Haunt goes on our own Egg of Khelos, live as in self-pla
   assert.equal(g?.action,actions[1]);
   assert.equal(g.guard,'haunt_own_egg');
   assert.equal(guardPick(state,actions,actions[1]),null,'already the pick');
+});
+
+// 2026-10-29 ranked batch (R-157, R-159, R-160): the live positions, from the user-ruling fixtures.
+const fx=name=>JSON.parse(readFileSync(new URL(`./fixtures/user-rulings/ranked1029-${name}.json`,import.meta.url),'utf8'));
+const livePick=f=>f.options.find(o=>o.id===f.source.livePick);
+const opt=(f,id)=>f.options.find(o=>o.id===id);
+
+test('Kazakus: Rushed Trial over Grueling with the mana for it and enemy minions on the board',()=>{
+  const f=fx('g14-kazakus-rushed-trial');
+  const g=guardPick(f.state,f.options,livePick(f));
+  assert.equal(g?.action,opt(f,'c20e349'));
+  assert.equal(g.guard,'kazakus_rushed_trial');
+  assert.equal(guardPick({...f.state,opponent:{...f.state.opponent,board:f.state.opponent.board.filter(e=>e.CARDTYPE!=='MINION')}},f.options,livePick(f)),null,'no enemy minions');
+  assert.equal(guardPick({...f.state,me:{...f.state.me,mana:6}},f.options,livePick(f)),null,'Rushed does not fit');
+  // Grueling plus the hand spends more than Rushed: 8 mana with two 4-cost cards beside Grueling
+  const hand=[...f.state.me.hand,{...f.state.me.hand[0],entityId:901,COST:4},{...f.state.me.hand[0],entityId:902,COST:4}];
+  assert.equal(guardPick({...f.state,me:{...f.state.me,hand}},f.options,livePick(f)),null,'Grueling spends more');
+});
+
+test('Cursed Catacombs is kept when no mana would be left for its Temporary card',()=>{
+  const f=fx('g16-catacombs-no-mana');
+  const g=guardPick(f.state,f.options,livePick(f));
+  assert.equal(g?.action,opt(f,'o0'));
+  assert.equal(g.guard,'catacombs_without_mana');
+  assert.equal(guardPick({...f.state,me:{...f.state.me,mana:1}},f.options,livePick(f)),null,'1 mana left');
+});
+
+test('a Temporary Discover with nothing affordable takes the dead King Llane',()=>{
+  const f=fx('g16-catacombs-take-llane');
+  const g=guardPick(f.state,f.options,livePick(f));
+  assert.equal(g?.action,opt(f,'c10e124'));
+  assert.equal(g.guard,'temporary_discover_dead_card');
+  assert.equal(guardPick({...f.state,me:{...f.state.me,mana:2}},f.options,livePick(f))?.guard,undefined,'Timehopper fits: the affordable pick stands');
+});
+
+test('a retired guard stays off for the model that learned it',()=>{
+  const f=fx('g16-catacombs-take-llane');
+  RETIRED['test-model']=['temporary_discover_dead_card'];
+  try{
+    assert.equal(guardPick(f.state,f.options,livePick(f),[],{model:'test-model'}),null);
+    assert.equal(guardPick(f.state,f.options,livePick(f),[],{model:'other'})?.guard,'temporary_discover_dead_card');
+  }finally{delete RETIRED['test-model']}
 });

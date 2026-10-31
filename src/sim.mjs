@@ -388,7 +388,9 @@ export function gameModel(c){
     if(FLAY.test(c.text))return {kind:'flay',damage:3,elder:true};
     return null;
   }
-  if(c?.type==='WEAPON')return AXE.test(c.text)||LASH.test(c.text)||EYEMAUL.test(c.text)||TINY_PAL.test(c.text)?{kind:'weapon'}:null;
+  // Any weapon equips by its Attack and Durability; a text not modelled (an opponent's weapon) only loses its effect
+  // on the swing (E-301). Axe of Cenarius, Tentacle Lash, Eyemaul and Tiny Pal have theirs after the attack.
+  if(c?.type==='WEAPON')return {kind:'weapon'};
   if(c?.type!=='MINION')return null;
   // decks/priest-egg
   if(EGG.test(c.text))return {kind:'minion',egg:true};

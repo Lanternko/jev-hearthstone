@@ -53,10 +53,11 @@ function generic(r,crystals,entityId){
   return {entityId,cardId:'GENERIC_MINION',CARDTYPE:'MINION',name:'Generic minion',text:'',COST:cost,ATK:cost,HEALTH:cost+1};
 }
 
-// One card from the pool as the simulator takes it. A weapon or a location is something the simulator does not play
-// from the other side's hand; it becomes a spell of its cost that does nothing.
+// One card from the pool as the simulator takes it. A weapon is equipped by its Attack and Durability (its text, if not
+// modelled, does nothing; E-301). A location is something the simulator does not play from the other side's hand; it
+// becomes a spell of its cost that does nothing.
 function pooled(c,entityId){
-  if(c.type==='MINION'||c.type==='SPELL')return rawCard(c,entityId);
+  if(c.type==='MINION'||c.type==='SPELL'||c.type==='WEAPON')return rawCard(c,entityId);
   return {entityId,cardId:'GENERIC_SPELL',CARDTYPE:'SPELL',name:'Generic spell',text:'',COST:c.cost??0};
 }
 

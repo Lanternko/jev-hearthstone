@@ -1,0 +1,521 @@
+{
+ "source": {
+  "batchGame": "ranked-2026-10-30T20-47-33-610Z game 1",
+  "ownTurn": 5,
+  "engineTurn": 10,
+  "time": "2026-10-30T20:53:49.262Z",
+  "livePick": "o4t0",
+  "note": "Own turn 5 after Ruinous Velocidrake (7/7). Enemy: Reanimated Ossodon 2/2 Taunt in front of Sawbones 5/3, Defias Smuggler 2/3 and two Remnant of Rage 5/4. The network sent the Velocidrake into the 2/2 (0.797) and later suicided Glacial Shard 2/1 into Sawbones. User: trade a small minion into the 2/2 (Glacial Shard), keep the Velocidrake for a big target (R-166). The second Ritual of Summoning was the Cursed Catacombs pick, a deck card."
+ },
+ "state": {
+  "gameNumber": 1,
+  "turn": 10,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 0,
+   "maxMana": 5,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 19,
+   "board": [
+    {
+     "entityId": 73,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 4,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 74,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 95,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 26,
+     "cardId": "BE_729",
+     "name": "Mawman Cultist",
+     "text": "ALL spells cost (1) more.",
+     "baseCost": 3,
+     "baseAttack": 4,
+     "baseHealth": 4,
+     "COST": 3,
+     "ATK": 4,
+     "HEALTH": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 29,
+     "cardId": "CORE_UNG_205",
+     "name": "Glacial Shard",
+     "text": "<b>Battlecry:</b> <b>Freeze</b> an enemy.",
+     "baseCost": 1,
+     "baseAttack": 2,
+     "baseHealth": 1,
+     "COST": 1,
+     "ATK": 2,
+     "HEALTH": 1,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 124,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 125,
+     "cardId": "BE_085t",
+     "name": "C'thrax Brute",
+     "text": "<b>Taunt</b>",
+     "baseCost": 4,
+     "baseAttack": 3,
+     "baseHealth": 5,
+     "COST": 4,
+     "ATK": 3,
+     "HEALTH": 5,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 33,
+     "cardId": "TIME_029",
+     "name": "Ruinous Velocidrake",
+     "text": "[x]<b>Rush</b>\n<b>Battlecry:</b> Cast a Shred\n of Time from your deck to\n   summon a copy of this.",
+     "baseCost": 5,
+     "baseAttack": 5,
+     "baseHealth": 5,
+     "COST": 5,
+     "ATK": 7,
+     "HEALTH": 7,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    }
+   ],
+   "hand": [
+    {
+     "entityId": 22,
+     "cardId": "TLC_603",
+     "name": "Platysaur",
+     "text": "<b>Battlecry:</b> Draw a card. <b>Deathrattle:</b> Discard it.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 27,
+     "cardId": "TIME_029",
+     "name": "Ruinous Velocidrake",
+     "text": "[x]<b>Rush</b>\n<b>Battlecry:</b> Cast a Shred\n of Time from your deck to\n   summon a copy of this.",
+     "baseCost": 5,
+     "baseAttack": 5,
+     "baseHealth": 5,
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 5,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "RUSH": 1
+    },
+    {
+     "entityId": 23,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "text": "<b>Battlecry:</b>& Your opponent's spells cost (1) more next turn.",
+     "baseCost": 2,
+     "baseAttack": 3,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION"
+    },
+    {
+     "entityId": 12,
+     "cardId": "CATA_210",
+     "name": "Twilight Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION"
+    }
+   ],
+   "fatigue": 0,
+   "drawHazards": []
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "DEATHKNIGHT",
+   "mana": 0,
+   "maxMana": 5,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 9,
+   "deckCount": 11,
+   "board": [
+    {
+     "entityId": 75,
+     "cardId": "HERO_11c",
+     "name": "Darion Mograine",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 2,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 76,
+     "cardId": "HERO_11cbp",
+     "name": "Ghoul Charge",
+     "text": "[x]<b>Hero Power</b>\nSummon a 1/1 Ghoul\nwith <b>Charge</b>. It dies at\nend of turn.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER"
+    },
+    {
+     "entityId": 45,
+     "cardId": "END_004",
+     "name": "Remnant of Rage",
+     "text": "[x]Costs (1) less for each\nminion that died this turn.\n <b>Battlecry:</b>& Draw 2 cards.",
+     "baseCost": 7,
+     "baseAttack": 5,
+     "baseHealth": 4,
+     "COST": 7,
+     "ATK": 5,
+     "HEALTH": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 49,
+     "cardId": "JAIL_444",
+     "name": "Sawbones",
+     "text": "[x]<b>Prepare</b>. <b>Battlecry:</b> Destroy\nall your other minions. Draw\na card and refresh a Mana\n   for each one destroyed.",
+     "baseCost": 5,
+     "baseAttack": 5,
+     "baseHealth": 3,
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 3,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 112,
+     "cardId": "TLC_443t",
+     "name": "Reanimated Ossodon",
+     "text": "<b>Taunt</b>",
+     "baseCost": 2,
+     "baseAttack": 2,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 2,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 42,
+     "cardId": "BE_207",
+     "name": "Unstable Prototype",
+     "text": "[x]<b><b>Reborn</b>\n</b><b>Deathrattle:</b>& Give all\nminions in your\nhand +1/+1.",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 1,
+     "COST": 1,
+     "HEALTH": 1,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 67,
+     "cardId": "JAIL_998",
+     "name": "Defias Smuggler",
+     "text": "<b>Prepare</b>. <b>Battlecry:</b>\nGive a friendly minion\n+2 Attack and <b>Rush</b>.",
+     "baseCost": 3,
+     "baseAttack": 2,
+     "baseHealth": 3,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 3,
+     "ZONE_POSITION": 5,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 41,
+     "cardId": "END_004",
+     "name": "Remnant of Rage",
+     "text": "[x]Costs (1) less for each\nminion that died this turn.\n <b>Battlecry:</b>& Draw 2 cards.",
+     "baseCost": 7,
+     "baseAttack": 5,
+     "baseHealth": 4,
+     "COST": 7,
+     "ATK": 5,
+     "HEALTH": 4,
+     "ZONE_POSITION": 6,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 30,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 3,
+     "entityId": 39,
+     "cardId": "CORE_EX1_096",
+     "name": "Loot Hoarder",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 2,
+     "HEALTH": 1,
+     "text": "<b>Deathrattle:</b> Draw a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 7,
+     "entityId": 69,
+     "cardId": "TLC_443",
+     "name": "Reluctant Wrangler",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 1,
+     "HEALTH": 1,
+     "text": "[x]<b>Reborn</b>\n<b>Deathrattle:</b>& Summon a 2/2\nUndead Beast with <b>Taunt</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 68,
+     "cardId": "RLK_708",
+     "name": "Chillfallen Baron",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 2,
+     "text": "<b>Battlecry and Deathrattle:</b>& Draw a card."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 49,
+     "cardId": "JAIL_444",
+     "name": "Sawbones",
+     "CARDTYPE": "MINION",
+     "COST": 5,
+     "ATK": 5,
+     "HEALTH": 3,
+     "text": "[x]<b>Prepare</b>. <b>Battlecry:</b> Destroy\nall your other minions. Draw\na card and refresh a Mana\n   for each one destroyed."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 42,
+     "cardId": "BE_207",
+     "name": "Unstable Prototype",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 0,
+     "HEALTH": 1,
+     "text": "[x]<b><b>Reborn</b>\n</b><b>Deathrattle:</b>& Give all\nminions in your\nhand +1/+1."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 34,
+     "cardId": "TLC_436",
+     "name": "Reanimated Pterrordax",
+     "CARDTYPE": "MINION",
+     "COST": 5,
+     "ATK": 4,
+     "HEALTH": 3,
+     "text": "<b><b>Rush</b>, Lifesteal</b>\nCosts <b>Corpses</b> instead\nof Mana."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 67,
+     "cardId": "JAIL_998",
+     "name": "Defias Smuggler",
+     "CARDTYPE": "MINION",
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 3,
+     "text": "<b>Prepare</b>. <b>Battlecry:</b>\nGive a friendly minion\n+2 Attack and <b>Rush</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 45,
+     "cardId": "END_004",
+     "name": "Remnant of Rage",
+     "CARDTYPE": "MINION",
+     "COST": 7,
+     "ATK": 5,
+     "HEALTH": 4,
+     "text": "[x]Costs (1) less for each\nminion that died this turn.\n <b>Battlecry:</b>& Draw 2 cards."
+    },
+    {
+     "public": true,
+     "engineTurn": 9,
+     "entityId": 41,
+     "cardId": "END_004",
+     "name": "Remnant of Rage",
+     "CARDTYPE": "MINION",
+     "COST": 7,
+     "ATK": 5,
+     "HEALTH": 4,
+     "text": "[x]Costs (1) less for each\nminion that died this turn.\n <b>Battlecry:</b>& Draw 2 cards."
+    }
+   ]
+  },
+  "optionsId": 35,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [],
+   "complete": true
+  },
+  "fingerprint": "b8b65ece6dd835f16008",
+  "decisionFingerprint": "9203e6c8ed803d22e820"
+ },
+ "options": [
+  {
+   "option": 1,
+   "entityId": 95,
+   "type": "POWER",
+   "id": "o1t0",
+   "targetId": 112
+  },
+  {
+   "option": 2,
+   "entityId": 26,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 112
+  },
+  {
+   "option": 3,
+   "entityId": 29,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 112
+  },
+  {
+   "option": 4,
+   "entityId": 33,
+   "type": "POWER",
+   "id": "o4t0",
+   "targetId": 112
+  }
+ ],
+ "parsed": {
+  "gone": [
+   "BE_085",
+   "TLC_451",
+   "BE_085",
+   "BE_094",
+   "BE_729",
+   "CORE_UNG_205",
+   "TIME_029"
+  ],
+  "shreds": 0,
+  "publicPlays": [
+   {
+    "playerId": 1,
+    "engineTurn": 2,
+    "cardId": "BE_085"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 6,
+    "cardId": "TLC_451"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 6,
+    "cardId": "BE_085"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 6,
+    "cardId": "BE_094"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 8,
+    "cardId": "BE_729"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 8,
+    "cardId": "CORE_UNG_205"
+   },
+   {
+    "playerId": 1,
+    "engineTurn": 10,
+    "cardId": "TIME_029"
+   }
+  ],
+  "discards": {}
+ }
+}

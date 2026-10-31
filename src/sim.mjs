@@ -1614,6 +1614,7 @@ export function beginTurn(s){
   s.sites=s.sites.map(x=>{const cooldown=Math.max(0,(x.cooldown??0)-1);return {...x,cooldown,ready:!cooldown}});
   for(const b of s.me){
     b.attacks=0;b.exhausted=false;b.rushOnly=false;
+    b.maxAttacks??=b.windfury?2:1;                                // the live view gives the opponent's board none (E-300)
     if(b.type==='HERO'){b.atk=s.weapon?.atk??0;b.canAttack=b.atk>0;b.lifesteal=weaponSteals(s.weapon)}
     else b.canAttack=!b.dormant;
   }

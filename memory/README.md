@@ -7,7 +7,7 @@
 
 | 檔案 | 用途 | ID |
 | --- | --- | --- |
-| [handoff.md](handoff.md) | 交接說明：**只有「目前狀態」一份**（不是日誌）。進行中的工作、誰在做、未 commit 的改動、下一步、開放問題。每次收工覆寫。 | 無 |
+| [handoff.md](handoff.md) | 交接說明：**只有「目前狀態」一份**（不是日誌）。線上基準、進行中、等使用者裁定、待辦，每條最多兩行，細節只留 ID 與路徑；已結案、已上線的刪掉。每次收工覆寫。上限 8KB（`test/handoff-size.test.mjs`），舊全文先存 `archive/`。 | 無 |
 | [lessons.md](lessons.md) | 經驗教訓（通則）：發生什麼、以後一律怎麼做、對應的測試或關卡。每次都讀。 | `L-001`… |
 | `lessons-<範圍>.md` | 範圍專屬教訓：[train](lessons-train.md)（訓練、5090）、[live](lessons-live.md)（實戰客戶端、ranked、重連）、[jev](lessons-jev.md)（Jev＋policy 時代）。工作碰到那個範圍才讀。 | 同一序列 |
 | [lessons-ids.md](lessons-ids.md) | L-ID 索引：每條在哪個檔、整併時併掉的舊 ID 在哪條。 | — |

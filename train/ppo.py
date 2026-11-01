@@ -192,8 +192,9 @@ class Arena:
         return self.recv()
 
     def send(self, **m):
-        if 'v' in m:  # values go as float32 in base64, not as a list of decimals
-            m['vBin'] = base64.b64encode(np.asarray(m.pop('v'), np.float32).tobytes()).decode()
+        for k in ('v', 'lg'):  # values (and logits) go as float32 in base64, not as a list of decimals
+            if k in m:
+                m[k + 'Bin'] = base64.b64encode(np.asarray(m.pop(k), np.float32).tobytes()).decode()
         self.p.stdin.write((json.dumps(m) + '\n').encode())
         self.p.stdin.flush()
 
@@ -212,13 +213,17 @@ class Arena:
             unpack(r, *((r['obs'], r['act'], r.get('oracle', 0)) if 'act' in r else (self.obs, self.act, self.oracle)))
         if 'askBin' in r:
             r['ask'] = blob(r.pop('askBin')).reshape(r.pop('asked'), self.obs)
+        if 'polObsBin' in r:  # replyRemote: positions for the reply network, in its own vocabulary
+            ro, ra = r.pop('polDims')
+            r['pol'] = blob(r.pop('polObsBin')).reshape(-1, ro), blob(r.pop('polActsBin')).reshape(-1, ra), r.pop('polSteps')
         return r
 
-    def look(self, tables, value, **m):
-        """The look ahead at these tables, with value(states) the value of each -> a score for each step of each."""
+    def look(self, tables, value, policy=None, **m):
+        """The look ahead at these tables, with value(states) the value of each -> a score for each step of each.
+        policy(pol) answers the reply network's positions of a replyRemote look ahead (answers())."""
         r = self.call(cmd='plan', tables=tables, **m)
         while 'ask' in r:
-            r = self.call(cmd='values', v=value(r['ask']))
+            r = self.call(cmd='values', **answers(r, value, policy))
         return r['scores']
 
     def step(self, actions):
@@ -300,7 +305,7 @@ class Pool:
             out[w] = r
         return out
 
-    def look(self, tables, value, **m):
+    def look(self, tables, value, policy=None, **m):
         """As Arena.look, but each worker is answered as soon as it asks, and the states of all the
         workers asking at that moment go to value() together. Those batches differ from run to run,
         so a value may differ in its last bits from the one the lockstep rounds of call() would give."""
@@ -318,15 +323,16 @@ class Pool:
             asking = []
             for w, r in ready:
                 if 'ask' in r:
-                    asking.append((w, r['ask']))
+                    asking.append((w, r['ask'], r.get('pol')))
                     continue
                 for (j, _), sc in zip(who[w], r['scores']):
                     scores[j] = sc
                 left -= 1
             if asking:
-                v, at = value(np.concatenate([a for _, a in asking])), 0
-                for w, a in asking:
-                    self.send(w, {'cmd': 'values', 'v': v[at:at + len(a)]})
+                v, at = value(np.concatenate([a for _, a, _ in asking])), 0
+                lg = policy([p for _, _, p in asking if p]) if any(p for _, _, p in asking) else None
+                for w, a, p in asking:
+                    self.send(w, {'cmd': 'values', 'v': v[at:at + len(a)], **({'lg': lg.pop(0)} if p else {})})
                     at += len(a)
         return scores
 
@@ -504,6 +510,46 @@ class Net(nn.Module):
         return logits.masked_fill(~mask, -1e9), self.judge(e, raw)
 
 
+def answers(r, value, policy):
+    """The values command for a reply that asks: the value of each state of "ask", and with "pol"
+    the reply network's logits (policy) for each of its positions."""
+    m = {'v': value(r['ask']) if len(r['ask']) else []}
+    if 'pol' in r:
+        m['lg'] = policy([r['pol']])[0]
+    return m
+
+
+REPLY_NETS = {}  # the reply networks of --reply-gpu, by the path of their export
+
+
+def reply_policy(path):
+    """--reply-gpu: the network of an export (train/export.py) on DEVICE, as policy(pols) for the look ahead:
+    for each (obs, acts, steps) of pols, the logits of every step of every position, one after another."""
+    if path not in REPLY_NETS:
+        with open(path) as f:
+            doc = json.load(f)
+        sd = {k: torch.from_numpy(np.frombuffer(base64.b64decode(t['data']), '<f4').copy()).reshape(t['shape'])
+              for k, t in doc['tensors'].items()}
+        net = Net(doc['obs'], doc['act'], doc['width'])
+        net.load_state_dict(sd)
+        REPLY_NETS[path] = net.to(DEVICE).eval()  # the logits only: no squash of the value is needed
+    net = REPLY_NETS[path]
+
+    @torch.no_grad()
+    def policy(pols):
+        out = []
+        for obs, acts, steps in pols:
+            at, rows = 0, []
+            for n in steps:
+                rows.append(torch.as_tensor(acts[at:at + n]))
+                at += n
+            logits, _ = net(torch.as_tensor(obs), *padded(rows))
+            mask = padded(rows)[1].to(DEVICE)
+            out.append(logits[mask].float().cpu().numpy())
+        return out
+    return policy
+
+
 def padded(acts):
     """A list of [steps, features] tensors as one padded batch and its mask."""
     lengths = torch.tensor([len(a) for a in acts])
@@ -540,7 +586,8 @@ def ahead(args):
     own = {'ownValue': True} if getattr(args, 'own_value', False) else {}
     if args.depth < 2:
         return own
-    return {'turns': args.depth, 'expand': args.expand, 'replies': args.replies, 'reply': args.reply, **own}
+    remote = {'replyRemote': True} if getattr(args, 'reply_gpu', False) else {}
+    return {'turns': args.depth, 'expand': args.expand, 'replies': args.replies, 'reply': args.reply, **remote, **own}
 
 
 @torch.no_grad()
@@ -550,7 +597,8 @@ def look_ahead(net, arena, idx, samples, width, ahead=None):
     ahead: the options of a look ahead past the end of the turn ({} for none), see --depth."""
     def value(x):
         return net.judge(net.body(torch.as_tensor(x, dtype=torch.float32).to(DEVICE))).cpu().numpy()
-    return arena.look(idx, value, samples=samples, width=width, **(ahead or {}))
+    policy = reply_policy((ahead or {})['reply']) if (ahead or {}).get('replyRemote') else None
+    return arena.look(idx, value, policy, samples=samples, width=width, **(ahead or {}))
 
 
 @torch.no_grad()
@@ -1325,6 +1373,7 @@ def main():
     p.add_argument('--depth', type=int, default=1, choices=(1, 2), help="turns a look ahead covers: 2 plays on through the other side's next turn, by --reply")
     p.add_argument('--expand', type=int, default=4, help='with --depth 2: first steps of each deal looked at past the turn, the best of one turn')
     p.add_argument('--replies', type=int, default=2, help="with --depth 2: the other side's best first steps followed, greedy after them")
+    p.add_argument('--reply-gpu', action='store_true', help="with --depth 2: run the --reply network here (on --device) in batches, not in each node process")
     p.add_argument('--reply', default='models/selfplay/warlock-zoo-v2.json', help="with --depth 2: the exported network (train/export.py) that plays the other side's turn")
     p.add_argument('--own-value', action='store_true', help="in a look ahead, value the positions where the other side is to play from the looking seat's own chair (src/selfplay-search.mjs seatView), not from theirs with the sign turned: a network trained with --opp has learned only its own chair (F-882)")
     p.add_argument('--keep-every', type=int, default=10, help='iterations between the numbered copies under <run>/ckpt')

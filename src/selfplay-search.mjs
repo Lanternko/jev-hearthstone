@@ -173,22 +173,41 @@ function settle(b,legal,seat){
 // each of its `k` best -> the positions where each line ends (our turn again, the game over, or cut
 // off after `cap` steps).
 export function replies(t,net,k,cap=40){
-  const pick=(s,legal)=>{
-    if(legal.length<2)return [0];
-    const {obs,acts}=encode(s,legal,net.vocab);
-    const {logits}=net.forward(obs,acts);
-    return logits.map((x,i)=>[x,i]).sort((x,y)=>y[0]-x[0]).map(([,i])=>i);
-  };
-  const seat=t.seat,first=moves(t),out=[];
-  for(const i of pick(t,first).slice(0,k)){
-    let s=apply(t,first[i]).s;
-    for(let n=1;n<cap&&s.seat===seat&&winner(s)==null;n++){
-      const legal=moves(s);
-      if(!legal.length)break;
-      s=apply(s,legal[pick(s,legal)[0]]).s;
-    }
-    out.push(s);
+  return replyLines([t],net,k,cap).next().value[0];
+}
+
+// replies for every position of ts at once -> the ends of each one's lines. The lines move a step
+// at a time together, so that every choice of a round is one batch for the network. With `remote`
+// the network is not run here: the generator yields {policy:[{obs,acts},...]} (encoded by the
+// vocabulary of net) and is sent back the logits of each, one per step; without it nothing is
+// yielded. Either way the lines are those of one line after another: each moves alone.
+export function* replyLines(ts,net,k,cap=40,remote=false){
+  // The order of the steps by logit, best first; equal logits keep the order of the steps.
+  const order=logits=>logits.map((x,i)=>[x,i]).sort((x,y)=>y[0]-x[0]).map(([,i])=>i);
+  function* rank(asks){
+    const need=asks.filter(a=>a.legal.length>=2),enc=need.map(a=>encode(a.s,a.legal,net.vocab));
+    const logits=!enc.length?[]:remote?yield {policy:enc}:enc.map(({obs,acts})=>net.forward(obs,acts).logits);
+    need.forEach((a,i)=>{a.order=order(logits[i])});
+    for(const a of asks)a.order??=[0];
   }
+  const roots=ts.map(t=>({s:t,legal:moves(t)}));
+  yield* rank(roots);
+  const lines=[],out=ts.map(()=>[]);
+  roots.forEach((r,j)=>{for(const i of r.order.slice(0,k))lines.push({j,seat:r.s.seat,s:apply(r.s,r.legal[i]).s,n:1})});
+  for(;;){
+    const asks=[];
+    for(const l of lines){
+      if(l.done)continue;
+      if(!(l.n<cap&&l.s.seat===l.seat&&winner(l.s)==null)){l.done=true;continue}
+      const legal=moves(l.s);
+      if(!legal.length){l.done=true;continue}
+      asks.push({l,s:l.s,legal});
+    }
+    if(!asks.length)break;
+    yield* rank(asks);
+    for(const a of asks){a.l.s=apply(a.s,a.legal[a.order[0]]).s;a.l.n++}
+  }
+  for(const l of lines)out[l.j].push(l.s);
   return out;
 }
 
@@ -197,23 +216,29 @@ export function replies(t,net,k,cap=40){
 // mean change of those that were (a guess, so within the bounds of a value), and never above the
 // worst of them: it was not seen to survive the reply, and the reply is what tends to bring a score
 // down.
-function* further(beams,legal,vocab,{expand,replies:k,reply,own=false,oppValue=null}){
-  const seat=beams[0].root.seat,ends=[];
+function* further(beams,legal,vocab,{expand,replies:k,reply,own=false,oppValue=null,replyRemote=false}){
+  const seat=beams[0].root.seat,ends=[],asked=[];
   for(const b of beams){
     b.top=legal.map((_,r)=>r).filter(r=>Number.isFinite(b.best[r])&&b.at[r]).sort((x,y)=>b.best[y]-b.best[x]).slice(0,expand);
     b.again=new Map();
     for(const r of b.top){
       const t=b.at[r];
       if(winner(t)!=null){b.again.set(r,[b.best[r]]);continue}
-      b.again.set(r,replies(t,reply,k).map(s=>{
-        const w=winner(s),n={v:null};
-        if(w!=null)n.v=w==='draw'?0:w===seat?1:-1;
-        else if(oppValue&&s.seat!==seat)n.v=-clip(oppValue(s));
-        else ends.push(Object.assign(n,valueAsk(s,seat,vocab,own)));
-        return n;
-      }));
+      b.again.set(r,null);  // its place in the order of the steps, filled below
+      asked.push([b,r,t]);
     }
   }
+  // Every reply of every sample at once (replyLines), then valued in the order they were asked.
+  const lines=yield* replyLines(asked.map(([,,t])=>t),reply,k,40,replyRemote);
+  asked.forEach(([b,r],j)=>{
+    b.again.set(r,lines[j].map(s=>{
+      const w=winner(s),n={v:null};
+      if(w!=null)n.v=w==='draw'?0:w===seat?1:-1;
+      else if(oppValue&&s.seat!==seat)n.v=-clip(oppValue(s));
+      else ends.push(Object.assign(n,valueAsk(s,seat,vocab,own)));
+      return n;
+    }));
+  });
   if(ends.length){
     const values=yield ends.map(n=>n.obs);
     ends.forEach((n,i)=>{n.v=n.sign*clip(values[i])});
@@ -231,7 +256,9 @@ function* further(beams,legal,vocab,{expand,replies:k,reply,own=false,oppValue=n
 // favour. With `ownValue` a state where the other side is to play is sent as seatView shows it, and
 // its value is taken as the root seat's. `legal` must be moves(s). `deal(s,seed)` gives each sample its position (redeal; a live view passes
 // opponentDealer of src/opponent-hand.mjs, which also deals the cards of the other side's hand).
-export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal,ownValue=false,oppValue=null}={}){
+// With `replyRemote` the reply network is run by the caller: the generator also yields
+// {policy:[{obs,acts},...]} (see replyLines) and is sent back the logits of each.
+export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=true,dominance=false,turns=1,expand=4,replies=2,reply=null,deal=redeal,ownValue=false,oppValue=null,replyRemote=false}={}){
   if(turns>1&&!reply)throw Error('turns=2 needs the network that plays the reply');
   if(ownValue&&oppValue)throw Error("ownValue and oppValue each value the other side's turn: pass one");
   const seat=s.seat,total=legal.map(()=>0);
@@ -288,7 +315,7 @@ export function* search(s,legal,vocab,{samples=2,width=8,seed=1,depth=40,orders=
     if(orders&&dominance)b.lines=keepPlain(b.lines);
     if(orders)settle(b,legal,seat);
   }
-  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply,own:ownValue,oppValue});
+  if(turns>1)yield* further(beams,legal,vocab,{expand,replies,reply,own:ownValue,oppValue,replyRemote});
   for(const b of beams){
     const floor=Math.min(...b.best.filter(Number.isFinite));
     b.best.forEach((v,r)=>{total[r]+=(Number.isFinite(v)?v:floor)/samples});

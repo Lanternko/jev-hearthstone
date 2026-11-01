@@ -13,6 +13,9 @@
 //          the look ahead of src/selfplay-search.mjs for the seat to act at each of those tables.
 //          With "ownValue" a state where the other side is to play is asked as the seat to act at the
 //          table sees it (seatView), and its value is read for that seat (F-882).
+//          With "replyRemote":true the reply network is run by the caller: a reply may also carry
+//          "pol":[{obs,acts},...] (positions in that network's vocabulary), and the values command
+//          then also carries "lg", the logits of every step of every one of them in order.
 //   {"cmd":"fork","table":i,"steps":[k,...],"games":100,"seed":1}
 //       -> {"envs":[view,...]}: for each of those legal steps of table i, `games` copies of the game
 //          with the step taken, each on its own deal of the hidden cards (the same deals for every
@@ -168,8 +171,9 @@ export class Arena{
   views(){return this.tables.map(t=>this.view(t))}
   // Start a look ahead at these tables; -> {ask} or {scores}, see answer().
   // turns=2 looks on through the other side's next turn, played by the network of the file `reply`.
-  plan(tables,{samples=2,width=8,turns=1,expand=4,replies=2,reply=null,ownValue=false}={}){
-    const ahead={...(turns>1?{turns,expand,replies,reply:replyNet(reply)}:{}),...(ownValue?{ownValue:true}:{})};
+  // With replyRemote that network is run by the caller: see "pol" in answer.
+  plan(tables,{samples=2,width=8,turns=1,expand=4,replies=2,reply=null,ownValue=false,replyRemote=false}={}){
+    const ahead={...(turns>1?{turns,expand,replies,reply:replyNet(reply),replyRemote:!!replyRemote}:{}),...(ownValue?{ownValue:true}:{})};
     this.plans=tables.map(i=>{
       const t=this.tables[i];
       if(!t)throw Error(`no table ${i}`);
@@ -179,15 +183,26 @@ export class Arena{
     });
     return this.asked();
   }
+  // A search waits either for values (a list of states) or, with replyRemote, for the reply network's
+  // logits ({policy:[{obs,acts},...]}); the states of the first go out as "ask", the second as "pol".
   asked(){
     if(this.plans.every(p=>p.r.done)){const scores=this.plans.map(p=>p.r.value);this.plans=null;return {scores}}
-    return {ask:this.plans.flatMap(p=>p.r.done?[]:p.r.value)};
+    const waiting=this.plans.filter(p=>!p.r.done),pol=waiting.flatMap(p=>p.r.value.policy??[]);
+    return {ask:waiting.flatMap(p=>p.r.value.policy?[]:p.r.value),...(pol.length?{pol}:{})};
   }
-  answer(v){
+  // v: a value for each state of "ask"; lg: the logits of every step of every position of "pol", one after another.
+  answer(v,lg=[]){
     if(!this.plans)throw Error('no look ahead is waiting for values');
-    let at=0;
-    for(const p of this.plans)if(!p.r.done){const n=p.r.value.length;p.r=p.g.next(v.slice(at,at+n));at+=n}
+    let at=0,lat=0;
+    for(const p of this.plans){
+      if(p.r.done)continue;
+      if(p.r.value.policy){
+        const logits=p.r.value.policy.map(({acts})=>{const x=lg.slice(lat,lat+acts.length);lat+=acts.length;return x});
+        p.r=p.g.next(logits);
+      }else{const n=p.r.value.length;p.r=p.g.next(v.slice(at,at+n));at+=n}
+    }
     if(at!==v.length)throw Error(`${v.length} values for ${at} states`);
+    if(lat!==lg.length)throw Error(`${lg.length} logits for ${lat} steps`);
     return this.asked();
   }
   // Games played on from one position, to measure a step by the results instead of by a guess.
@@ -293,8 +308,14 @@ function blocked(out,{obs,act,oracle:orcLen=0}){
       if(x.length!==obs)throw Error(`a state of ${x.length} numbers, not ${obs}`);
       o.set(x,i*obs);
     });
-    const {ask,...rest}=out;
-    return {...rest,asked:ask.length,blocks:{askBin:o}};
+    const {ask,pol,...rest}=out;
+    if(!pol)return {...rest,asked:ask.length,blocks:{askBin:o}};
+    // The reply network's positions, in its own vocabulary: polDims [state, step] numbers, polSteps the steps of each.
+    const ro=pol[0].obs.length,ra=pol[0].acts[0].length;
+    const po=new Float32Array(pol.length*ro),pa=new Float32Array(pol.reduce((n,p)=>n+p.acts.length,0)*ra);
+    let at=0;
+    pol.forEach((p,i)=>{po.set(p.obs,i*ro);for(const r of p.acts){pa.set(r,at);at+=ra}});
+    return {...rest,asked:ask.length,polDims:[ro,ra],polSteps:pol.map(p=>p.acts.length),blocks:{askBin:o,polObsBin:po,polActsBin:pa}};
   }
   if(!out.envs?.length)return out;
   const o=new Float32Array(out.envs.length*obs),a=new Float32Array(out.envs.reduce((n,e)=>n+e.acts.length,0)*act);
@@ -333,7 +354,7 @@ if(import.meta.url===pathToFileURL(process.argv[1]??'').href){
       else if(m.cmd==='deal')out={envs:arena.dealAt(m.tables,m.seeds)};
       else if(m.cmd==='stats')out={stats:arena.stats};
       else if(m.cmd==='plan')out=arena.plan(m.tables,m);
-      else if(m.cmd==='values')out=arena.answer(m.vBin==null?m.v:floats(m.vBin));
+      else if(m.cmd==='values')out=arena.answer(m.vBin==null?m.v:floats(m.vBin),m.lgBin==null?m.lg??[]:floats(m.lgBin));
       else if(m.cmd==='fork')out=arena.fork(m.table,m);
       else if(m.cmd==='side')out=arena.play(m.actions);
       else if(m.cmd==='seedpool')out=arena.seed(m);

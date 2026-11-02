@@ -16,6 +16,8 @@ from ppo import Arena, load, padded, tensors
 
 def main(path, out, check=None):
     net, ck = load(path)
+    if ck.get('arch', 'mlp') != 'mlp':
+        raise SystemExit(f'{path} is a --arch {ck["arch"]} network: src/selfplay-net.mjs runs only the MLP, measure it with train/ppo.py --eval')
     doc = {k: ck[k] for k in ('obs', 'act', 'width', 'names', 'decks', 'iters')}
     doc['timers'] = bool(ck.get('timers', False))
     doc['extra'] = bool(ck.get('extra', False))

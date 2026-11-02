@@ -80,6 +80,17 @@ assert ppo.STAGES and ppo.IMBUE and ppo.PILE and ppo.EGG, 'priest-egg-hsr did no
 ppo.vocab_flags(Flags)
 print('vocab_flags turns the egg cells on for priest-egg-hsr too')
 
+
+class TokenFlags(Flags):  # --arch transformer turns the token rows on; the MLP of Flags (no arch) leaves them off
+    arch = 'transformer'
+
+
+ppo.vocab_flags(TokenFlags)
+assert ppo.TOKENS, '--arch transformer left the token rows off the module'
+ppo.vocab_flags(Flags)
+assert not ppo.TOKENS, 'the token rows stayed on for an MLP'
+print('vocab_flags sets the token rows of --arch transformer')
+
 # The zoo list now has Fatebreaker where the network's vocabulary had Darkest Depths (2026-10-25), so many boards name a card
 # the old network never saw and are skipped: enough compared boards is the requirement, not more compared than skipped.
 sys.exit(0 if worst < 1e-5 and seen >= 100 else 1)

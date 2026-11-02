@@ -175,7 +175,7 @@ class Arena:
         self.p = subprocess.Popen(['node', str(ROOT / 'src' / 'selfplay-env.mjs')], cwd=ROOT,
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         self.send(cmd='reset', n=n, seed=seed, decks=list(decks), rival=rival, audit=audit, bin=True, raw=True, hold=hold, swap=swap, timers=TIMERS,
-                  extra=EXTRA, stages=STAGES, imbue=IMBUE, pile=PILE, egg=EGG, **({'names': NAMES} if NAMES else {}), mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'info': True} if INFO else {}), **({'buff': True} if BUFF else {}), **({'seatDecks': True} if SEATDECKS else {}),
+                  extra=EXTRA, stages=STAGES, imbue=IMBUE, pile=PILE, egg=EGG, tokens=TOKENS, **({'names': NAMES} if NAMES else {}), mix=MIX, mirror=MIRROR, **({'shape': SHAPE} if SHAPE else {}), **({'marks': True} if MARKS else {}), **({'info': True} if INFO else {}), **({'buff': True} if BUFF else {}), **({'seatDecks': True} if SEATDECKS else {}),
                   **({'restart': restart} if restart else {}), **({'oracle': True} if oracle else {}))
         if wait:
             self.started()
@@ -380,6 +380,11 @@ TIMER_COLS = 33  # the clocks of the state: three blocks of the eleven effects o
 STAGE_COLS = 14  # the egg stages of the state: seven bodies of each chair in src/selfplay-encode.mjs
 IMBUE_COLS = 2  # the Imbue counts of the state: one cell for each chair in src/selfplay-encode.mjs
 PILE_COLS = 4  # the Slime 'em! piles of the state: two cells for each chair in src/selfplay-encode.mjs
+CORPSE_COLS = 4  # the Corpse cells of the state (decks/dk-corpse): there when the vocabulary holds this card, see src/selfplay-encode.mjs
+CORPSE_CARD = 'Reanimated Pterrordax'
+TOKENS = False  # whether the state ends with the token rows of src/selfplay-encode.mjs: --arch transformer, or the network's own
+TOKEN_COUNT, TOKEN_FEATS, TOKEN_SLOT = 24, 16, 4  # the token rows: ten cards in hand, seven minions of each side; the cell of the card's slot
+SCALAR_COLS, HEAD_COLS = 30, 30 + 7 * 8 + 7 * 6  # the scalars of the state, and they with the two blocks of minion cells before the four card counts
 
 
 def vocab_flags(args):
@@ -388,8 +393,9 @@ def vocab_flags(args):
     These must be set on the module, not in main: Arena, load and the checkpoint read the module globals, so a
     local of the same name leaves them False and the arena then builds a state the checkpoint cannot be mapped
     onto (--imbue once did exactly that: 428 cells against a network that wanted its 430)."""
-    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
+    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR, TOKENS
     TIMERS = args.timers
+    TOKENS = getattr(args, 'arch', 'mlp') == 'transformer'
     EXTRA = args.extra or len(args.decks) >= 3 or 'dh-cthun' in args.decks
     egg = any(d == 'priest-egg' or d.startswith('priest-egg-') for d in args.decks)  # priest-egg-hsr too
     STAGES = args.stages or egg
@@ -419,13 +425,15 @@ def state_sources(old, new):
     src/selfplay-encode.mjs;
     old and new are {names, obs, timers, extra, stages} of the two networks."""
     v0, v1 = len(old['names']) + 1, len(new['names']) + 1
-    blocks = lambda d: TIMER_COLS * d['timers'] + d['extra'] + STAGE_COLS * d['stages'] + IMBUE_COLS * d['imbue'] + PILE_COLS * d['pile']
+    blocks = lambda d: TIMER_COLS * d['timers'] + d['extra'] + STAGE_COLS * d['stages'] + IMBUE_COLS * d['imbue'] + PILE_COLS * d['pile'] + CORPSE_COLS * (CORPSE_CARD in d['names'])
     head = old['obs'] - 4 * v0 - blocks(old)
     if head != new['obs'] - 4 * v1 - blocks(new):
         raise SystemExit('the two networks do not see the same head of the state: the layout changed, there is nothing to map by name')
     if (old['timers'] and not new['timers']) or (old['extra'] and not new['extra']) or (old['stages'] and not new['stages'])             or (old['imbue'] and not new['imbue']) or (old['pile'] and not new['pile']):
         raise SystemExit('the network has clocks, the extra cell, egg stages, Imbue counts or Slime piles that the new one would not show: '
                          'add --timers, --extra, --stages, --imbue or --pile')
+    if CORPSE_CARD in old['names'] and CORPSE_CARD not in new['names']:
+        raise SystemExit('the network shows Corpses that the new vocabulary would not: it needs ' + CORPSE_CARD)
     slots = card_slots(old['names'], new['names'])
     src = list(range(head))
     for b in range(4):
@@ -446,6 +454,8 @@ def state_sources(old, new):
     if new['pile']:
         src += [at + i if old['pile'] else None for i in range(PILE_COLS)]
         at += PILE_COLS
+    if CORPSE_CARD in new['names']:
+        src += [at + i if CORPSE_CARD in old['names'] else None for i in range(CORPSE_COLS)]
     return src
 
 
@@ -503,11 +513,77 @@ class Net(nn.Module):
         return torch.tanh(v) if self.squash and not raw else v
 
     def forward(self, obs, acts, mask, raw=False):
-        obs, acts, mask = obs.to(DEVICE), acts.to(DEVICE), mask.to(DEVICE)
+        # A state with token rows (one played against a --arch transformer network) is read without them: they come last.
+        obs, acts, mask = obs[..., :self.body[0].in_features].to(DEVICE), acts.to(DEVICE), mask.to(DEVICE)
         e = self.body(obs)
         a = self.step(acts)
         logits = self.score(torch.cat([e.unsqueeze(1).expand(-1, a.shape[1], -1), a], -1)).squeeze(-1)
         return logits.masked_fill(~mask, -1e9), self.judge(e, raw)
+
+
+class TokenNet(nn.Module):
+    """--arch transformer: the cards in hand and the minions as tokens (the token rows of src/selfplay-encode.mjs), each
+    the embedding of its card's slot plus its cells, beside one token of the rest of the state: the scalars, the cards
+    left in the deck and the blocks after the card counts. The hand and the table enter only as tokens. The layers of
+    self-attention read them all; the state's token gives the value, and each step (encoded as for Net) looks at the
+    tokens once more before it is scored beside the state's token."""
+
+    def __init__(self, obs, act, names, width=128, layers=3, heads=4):
+        super().__init__()
+        self.oracle = 0
+        self.squash = False
+        self.base = obs - TOKEN_COUNT * TOKEN_FEATS
+        v = names + 1
+        self.register_buffer('cols', torch.tensor(list(range(SCALAR_COLS)) + list(range(HEAD_COLS + 3 * v, self.base))), persistent=False)
+        self.state = nn.Sequential(nn.Linear(len(self.cols), width), nn.ReLU(), nn.Linear(width, width))
+        self.card = nn.Embedding(v, width)
+        self.cells = nn.Linear(TOKEN_FEATS - 1, width)
+        layer = nn.TransformerEncoderLayer(width, heads, 2 * width, dropout=0.0, batch_first=True, norm_first=True)
+        self.trunk = nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
+        self.norm = nn.LayerNorm(width)
+        self.step = nn.Sequential(nn.Linear(act, width), nn.ReLU())
+        self.look = nn.MultiheadAttention(width, heads, batch_first=True)
+        self.score = nn.Sequential(nn.Linear(2 * width, width), nn.ReLU(), nn.Linear(width, 1))
+        self.value = nn.Sequential(nn.Linear(width, width), nn.ReLU(), nn.Linear(width, 1))
+
+    def tokens(self, obs):
+        """The tokens after the trunk, the state's first, and which of them are empty places."""
+        obs = obs.to(DEVICE)
+        rows = obs[:, self.base:].reshape(len(obs), TOKEN_COUNT, TOKEN_FEATS)
+        cells = torch.cat([rows[..., :TOKEN_SLOT], rows[..., TOKEN_SLOT + 1:]], -1)
+        x = torch.cat([self.state(obs[:, self.cols]).unsqueeze(1), self.card(rows[..., TOKEN_SLOT].long()) + self.cells(cells)], 1)
+        empty = torch.cat([torch.zeros(len(obs), 1, dtype=torch.bool, device=obs.device), rows[..., 0] == 0], 1)
+        return self.norm(self.trunk(x, src_key_padding_mask=empty)), empty
+
+    def body(self, obs):
+        return self.tokens(obs)[0][:, 0]
+
+    def judge(self, e, raw=False):
+        v = self.value(e).squeeze(-1)
+        return torch.tanh(v) if self.squash and not raw else v
+
+    def forward(self, obs, acts, mask, raw=False):
+        h, empty = self.tokens(obs)
+        acts, mask = acts.to(DEVICE), mask.to(DEVICE)
+        a = self.step(acts)
+        a = a + self.look(a, h, h, key_padding_mask=empty, need_weights=False)[0]
+        e = h[:, 0]
+        logits = self.score(torch.cat([e.unsqueeze(1).expand(-1, a.shape[1], -1), a], -1)).squeeze(-1)
+        return logits.masked_fill(~mask, -1e9), self.judge(e, raw)
+
+
+def build(obs, act, width, oracle=0, arch='mlp', names=0, layers=3, heads=4):
+    """The network of --arch: Net, or TokenNet over a state with token rows (names: the length of the vocabulary)."""
+    if arch != 'transformer':
+        return Net(obs, act, width, oracle)
+    if oracle:
+        raise SystemExit('--oracle is not built for --arch transformer')
+    return TokenNet(obs, act, names, width, layers, heads)
+
+
+def built(ck):
+    """The network a checkpoint was trained as, without its weights."""
+    return build(ck['obs'], ck['act'], ck['width'], ck.get('oracle', 0), ck.get('arch', 'mlp'), len(ck['names']), ck.get('layers', 3), ck.get('heads', 4))
 
 
 def answers(r, value, policy):
@@ -667,8 +743,9 @@ def pairing_lines(decks, pairs):
 
 def load(path):
     """A saved network; the games it is then measured in are encoded as it was trained, with or without the clocks and the extra cell."""
-    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
+    global TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR, TOKENS
     ck = torch.load(path, weights_only=True, map_location='cpu')
+    TOKENS = bool(ck.get('tokens', False))
     TIMERS = bool(ck.get('timers', False))
     EXTRA = bool(ck.get('extra', False))
     STAGES = bool(ck.get('stages', False))
@@ -677,7 +754,7 @@ def load(path):
     EGG = bool(ck.get('egg', False))
     MIX = ck.get('mix')
     MIRROR = ck.get('mirror', 0.0)
-    net = Net(ck['obs'], ck['act'], ck['width'], ck.get('oracle', 0))
+    net = built(ck)
     net.load_state_dict(ck['net'])
     net.squash = ck.get('value_squash') == 'tanh'
     return net.to(DEVICE).eval(), ck
@@ -1346,11 +1423,15 @@ def main():
     p.add_argument('--vf', type=float, default=0.5)
     p.add_argument('--ent', type=float, default=0.01)
     p.add_argument('--width', type=int, default=256)
+    p.add_argument('--arch', choices=('mlp', 'transformer'), default='mlp', help='the network: the MLP of Net, or TokenNet over the cards as tokens (plain PPO only)')
+    p.add_argument('--layers', type=int, default=3, help='with --arch transformer: layers of self-attention')
+    p.add_argument('--heads', type=int, default=4, help='with --arch transformer: heads of each attention')
     p.add_argument('--rival', type=float, default=0.25, help='share of games with a frozen copy in one seat')
     p.add_argument('--snapshot-every', type=int, default=5)
     p.add_argument('--pool', type=int, default=8)
     p.add_argument('--eval-every', type=int, default=5)
     p.add_argument('--eval-games', type=int, default=400)
+    p.add_argument('--eval-seed', type=int, default=None, help='with --eval: the first seed of its games, apart from the ones the training evals played')
     p.add_argument('--seed', type=int, default=1)
     p.add_argument('--out', default=None, help='run directory, default runtime/selfplay/<time>')
     p.add_argument('--resume', default=None, help='a policy.pt to go on from')
@@ -1421,7 +1502,7 @@ def main():
     p.add_argument('--rollout-temp', type=float, default=1.0, help='with --rollout-temp-decay: the temperature at the branch')
     p.add_argument('--rollout-temp-decay', type=float, default=None, help='with --rollout: play the copies at --rollout-temp * this^(steps since the branch) instead of greedily')
     args = p.parse_args()
-    global NAMES, DEVICE, WORKERS, SHAPE, INFO, BUFF, MARKS, SEATDECKS, TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR
+    global NAMES, DEVICE, WORKERS, SHAPE, INFO, BUFF, MARKS, SEATDECKS, TIMERS, EXTRA, STAGES, IMBUE, PILE, EGG, MIX, MIRROR, TOKENS
     if len(args.decks) < 2:
         raise SystemExit('--decks needs two decks or more')
     if args.mix is not None and len(args.mix) != len(args.decks) - 1:
@@ -1461,6 +1542,10 @@ def main():
     if kl_on and not args.kl_ref and not args.resume:
         raise SystemExit('--kl-weight keeps the network near the one it resumes from; it needs --resume or --kl-ref')
     MARKS = args.rollout or kl_on
+    if args.arch == 'transformer' and (args.resume or args.oracle or args.distill or args.distill_weight is not None or args.teacher
+                                       or args.value_only or args.restart_frac or args.opp or args.search or kl_on):
+        raise SystemExit('--arch transformer is plain PPO from scratch for now: no --resume, --oracle, --distill, --distill-weight, '
+                         '--teacher, --value-only, --restart-frac, --opp, --search or --kl-weight')
     opps = {}
     if args.opp:
         if args.distill:
@@ -1508,16 +1593,19 @@ def main():
 
     if args.eval:
         net, ck = load(args.eval)
+        seeded = {} if args.eval_seed is None else {'seed': args.eval_seed}
         if args.vs:
             old, ck2 = load(args.vs)
-            if ck2['obs'] != ck['obs'] or ck2.get('timers', False) != ck.get('timers', False):
+            tok = lambda c: TOKEN_COUNT * TOKEN_FEATS * bool(c.get('tokens', False))  # a network without token rows reads the state without them
+            if ck2['obs'] - tok(ck2) != ck['obs'] - tok(ck) or ck2.get('timers', False) != ck.get('timers', False):
                 raise SystemExit(f'{args.vs} sees other states than {args.eval}: measure them with src/selfplay-match.mjs')
-            w, d, l = duel(net, old, ck['decks'], args.eval_games, look=look)
+            TOKENS = bool(ck.get('tokens', False) or ck2.get('tokens', False))
+            w, d, l = duel(net, old, ck['decks'], args.eval_games, look=look, **seeded)
             print(f'{args.eval} (iter {ck["iters"]}{", looking ahead" if look else ""}) against {args.vs} (iter {ck2["iters"]}): {w}W {d}D {l}L, {w / (w + d + l):.1%}')
             return
         for rival in RIVALS:
             pairs = {}
-            w, d, l = evaluate(net, ck['decks'], args.eval_games, rival=rival, look=look, pairs=pairs)
+            w, d, l = evaluate(net, ck['decks'], args.eval_games, rival=rival, look=look, pairs=pairs, **seeded)
             print(f'{args.eval} (iter {ck["iters"]}{", looking ahead" if look else ""}) against {rival}: {w}W {d}D {l}L, {w / (w + d + l):.1%}')
             print('\n'.join(pairing_lines(ck['decks'], pairs)))
         return
@@ -1541,7 +1629,7 @@ def main():
         EGG = EGG or bool(ck.get('egg', False))
     arena = make(args.envs, args.seed, args.decks, swap=args.swap, restart={'frac': args.restart_frac, 'cap': args.restart_pool} if args.restart_frac else None,
                  oracle=args.oracle)
-    net = Net(arena.obs, arena.act, args.width, arena.oracle).to(DEVICE)
+    net = build(arena.obs, arena.act, args.width, arena.oracle, args.arch, len(arena.names), args.layers, args.heads).to(DEVICE)
     net.squash = args.value_bce  # a start without it: its raw output is taken as the value before the tanh
     if ck and ck.get('value_squash') == 'tanh' and not args.value_bce:
         raise SystemExit(f'the value of {args.resume} is a tanh: go on with --value-bce')
@@ -1683,6 +1771,8 @@ def main():
             del pool[:-args.pool]
         ck = {'net': {k: v.cpu() for k, v in net.state_dict().items()}, 'obs': arena.obs, 'act': arena.act, 'width': args.width,
               'names': arena.names, 'decks': value_decks or args.decks, 'iters': it, 'timers': TIMERS, 'sim': arena.sim}
+        if args.arch == 'transformer':  # the MLP checkpoints keep the keys they always had
+            ck.update(arch='transformer', layers=args.layers, heads=args.heads, tokens=True)
         if net.oracle:
             ck['oracle'] = net.oracle
         if net.squash:

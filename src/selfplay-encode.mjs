@@ -32,6 +32,11 @@ const MADE={
   // Totems and Watfin's Discover of any minion cannot be named here: they take the "other" slot.
   CORE_UNG_809:['UNG_809t1'],
   CATA_565:['CATA_565t'],
+  // decks/dk-corpse: Morbid Swarm's Ants, Blackwing Experiment's Dragon Breath, and (by the hero power
+  // id, see vocabulary) Darion's Frail Ghoul.
+  EDR_813:['EDR_813at'],
+  CATA_464:['CATA_464t'],
+  HERO_11cbp:['HERO_11bpt'],
 };
 
 // One slot per card of the lists, The Coin, the Spider token, the cards the lists make (MADE), and a
@@ -47,14 +52,28 @@ const MADE={
 // an older network's vocabulary does not hold them and they all shared the "other" slot (F-853).
 // `pile` adds two cells for each chair with what Slime 'em! put aside for its Ectoplasm: how many
 // minions (over seven, capped) and the most breaks an egg among them has left (over five) (F-861).
+// `corpses` is not asked for: a vocabulary that holds Reanimated Pterrordax (decks/dk-corpse) has it, one that does not goes
+// without, so every network made before the Death Knight sees the state it was trained on. It adds four cells at the very end:
+// each chair's Corpses (over ten), the cards in my hand that cost Corpses instead of mana (over ten) and how many of them I can
+// pay for now (over ten). Those cards (a hand card's printed cost is its Corpse cost) count as affordable by Corpses, not by mana (F-931).
 // `fixed` (a network's own names) keeps that vocabulary whatever the decks: a card it does not hold shares the "other" slot,
 // as it does for the network when it plays (train/ppo.py --value-only).
-export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false,imbue=false,pile=false,names:fixed=null}={}){
+// `tokens` (train/ppo.py --arch transformer) adds one row of TOKEN_FEATS cells for each card in hand and each minion on the table
+// at the very end of the state, after every other block, so a network without it reads the same state as a prefix (see TOKEN_COUNT).
+export function vocabulary(lists,cards=cardDb(),{timers=false,extra=false,stages=false,imbue=false,pile=false,tokens=false,names:fixed=null}={}){
   const ids=lists.flatMap(l=>Object.keys(l.cards));
   const names=fixed?[...fixed]:[...new Set([...ids.map(id=>cards[id].name),'The Coin','Spider',...ids.flatMap(id=>(MADE[id]??[]).map(m=>cards[m].name)),
-    ...(imbue?IMBUE_IDS.filter(id=>cards[id]).map(id=>cards[id].name):[])])];
-  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages,imbue,pile};
+    ...(imbue?IMBUE_IDS.filter(id=>cards[id]).map(id=>cards[id].name):[]),
+    ...lists.flatMap(l=>(MADE[l.power]??[]).map(m=>cards[m].name))])];
+  return {names,index:new Map(names.map((n,i)=>[n,i])),size:names.length+1,timers,extra,stages,imbue,pile,tokens,corpses:hasCorpses(names)};
 }
+
+// The one name that turns the Corpse cells on, for the vocabulary here and for a network's own names (src/selfplay-net.mjs, train/ppo.py).
+export const CORPSE_CARD='Reanimated Pterrordax';
+export const hasCorpses=names=>names.includes(CORPSE_CARD);
+const CORPSE_COST=/costs corpses instead of mana/i;
+const corpseCard=c=>CORPSE_COST.test(c.text??'');
+const CORPSE_COLS=4;
 
 // decks/priest-egg, the 2026-10-27 Imbue list. A network trained with `imbue` knows every one of its
 // cards by its own slot even when the list is not among its training decks, so a vocabulary can be
@@ -77,7 +96,12 @@ const imbues=p=>Math.min((p?.bless??0)/MAX_IMBUE,1);
 // Each chair's Slime 'em! pile: how many minions over seven (capped), then the most breaks an egg in it has left over five.
 const PILE_COLS=4;
 const pileCells=p=>[Math.min((p?.length??0)/7,1),Math.max(0,...(p??[]).map(e=>EGG_STAGE[e.raw?.cardId]??0))/5];
-export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0)+(v.imbue?IMBUE_COLS:0)+(v.pile?PILE_COLS:0);
+// The cards as tokens: up to ten in hand, then my minions and the other chair's, a row each in that order, a row of zeros for each
+// place left empty. A row is: present, the zone (hand, mine, theirs: three cells), the card's slot of the vocabulary as a number
+// (the network looks it up, it is no amount), cost, Attack, Health (in tens), ready to attack (a minion) or affordable now (a card in
+// hand), Taunt, Rush, Divine Shield, Stealth, can only attack minions, temporary (a card in hand), and its place in the zone over ten.
+export const HAND_TOKENS=10,TOKEN_COUNT=HAND_TOKENS+14,TOKEN_FEATS=16,TOKEN_SLOT=4;
+export const obsSize=v=>SCALARS+7*SLOT+7*FOE+4*v.size+(v.timers?3*DELAYED.length:0)+(v.extra?1:0)+(v.stages?STAGE_COLS:0)+(v.imbue?IMBUE_COLS:0)+(v.pile?PILE_COLS:0)+(v.corpses?CORPSE_COLS:0)+(v.tokens?TOKEN_COUNT*TOKEN_FEATS:0);
 export const actSize=v=>KINDS.length+v.size+3+TARGET+v.size;
 
 const t=n=>(n??0)/10;
@@ -85,6 +109,7 @@ const slot=(v,name)=>v.index.get(name)??v.size-1;
 const minions=bs=>bs.filter(b=>b.type==='MINION');
 // With the extra cell the cost a card is shown at follows the discounts of the demon hunter; any other card keeps its printed cost, as before.
 const cost=(s,c,v)=>v.extra&&stateCost(c)?costOf(s,c):c.cost;
+const afford=(s,c,v)=>v.corpses&&corpseCard(c)?(s.corpses??0)>=c.cost:cost(s,c,v)<=s.mana;
 const ready=b=>b.canAttack&&b.atk>0&&!b.frozen&&!b.dormant&&(b.attacks??0)<(b.maxAttacks??1);
 
 function observe(s,v){
@@ -95,7 +120,7 @@ function observe(s,v){
     t(s.weapon?.atk),t(s.weapon?.durability),t(th.weapon?.atk),t(th.weapon?.durability),t(me.atk),+!!ready(me),
     +(!!s.power&&!s.power.used&&s.power.cost<=s.mana),s.seat,t(s.turn),+!s.choice,+(s.choice?.kind==='discover'),
     +(s.choice?.kind==='site'),t(s.sites.length),t(s.sites.filter(x=>x.ready).length),t(th.locations),
-    t(s.hand.filter(c=>c.temp).length),t(s.hand.filter(c=>cost(s,c,v)<=s.mana).length)])o[k++]=x;
+    t(s.hand.filter(c=>c.temp).length),t(s.hand.filter(c=>afford(s,c,v)).length)])o[k++]=x;
   minions(s.me).slice(0,7).forEach((b,i)=>{
     o.splice(k+i*SLOT,SLOT,1,t(b.atk),t(b.hp),+!!ready(b),+!!b.taunt,+!!b.rush,+!!b.ds,+!!b.rushOnly);
   });
@@ -129,7 +154,19 @@ function observe(s,v){
     o[k]=imbues(s.power);o[k+1]=imbues(th.power);
     k+=IMBUE_COLS;
   }
-  if(v.pile)o.splice(k,PILE_COLS,...pileCells(s.slimePile),...pileCells(th.slimePile));
+  if(v.pile){o.splice(k,PILE_COLS,...pileCells(s.slimePile),...pileCells(th.slimePile));k+=PILE_COLS}
+  if(v.corpses){
+    const paid=s.hand.filter(corpseCard);
+    o.splice(k,CORPSE_COLS,t(s.corpses),t(th.corpses),t(paid.length),t(paid.filter(c=>(s.corpses??0)>=c.cost).length));
+    k+=CORPSE_COLS;
+  }
+  if(v.tokens){
+    const row=(at,zone,name,cost,b,first,i)=>o.splice(k+at*TOKEN_FEATS,TOKEN_FEATS,1,+(zone===0),+(zone===1),+(zone===2),slot(v,name),t(cost),t(b.atk),t(b.hp),
+      +!!first,+!!b.taunt,+!!b.rush,+!!b.ds,+!!b.stealth,+!!b.rushOnly,+!!b.temp,i/10);
+    s.hand.slice(0,HAND_TOKENS).forEach((c,i)=>row(i,0,c.name,cost(s,c,v),c,afford(s,c,v),i));
+    minions(s.me).slice(0,7).forEach((b,i)=>row(HAND_TOKENS+i,1,b.name,0,b,ready(b),i));
+    minions(s.opp).slice(0,7).forEach((b,i)=>row(HAND_TOKENS+7+i,2,b.name,0,b,false,i));
+  }
   return o;
 }
 
@@ -151,8 +188,8 @@ function thing(s,id,v){
 function act(s,m,v){
   const a=new Array(actSize(v)).fill(0),V=v.size;
   let k=KINDS.length;
-  // Prepare (a hand card, decks/priest-egg) takes the place of 'use' (a location), so the step vector keeps its size.
-  a[KINDS.indexOf(m.kind==='prepare'?'use':m.kind)]=1;
+  // Prepare (a hand card, decks/priest-egg) and Trade (R-170) take the place of 'use' (a location), so the step vector keeps its size.
+  a[KINDS.indexOf(m.kind==='prepare'||m.kind==='trade'?'use':m.kind)]=1;
   const from=m.kind==='power'||m.kind==='end'?null:thing(s,m.id,v);
   if(from){a[k+slot(v,from.name)]=1;a[k+V]=t(from.cost);a[k+V+1]=t(from.atk);a[k+V+2]=t(from.hp)}
   k+=V+3;

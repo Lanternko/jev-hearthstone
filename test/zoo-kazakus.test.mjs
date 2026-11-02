@@ -103,3 +103,28 @@ test('a played trial of unknown effects still gives its clock and the note',()=>
   assert.deepEqual(v.s.timers[0].effects,[]);
   assert.ok(v.notes.includes('kazakus picks not reconstructed'));
 });
+
+// The 07:24 game of 2026-11-02: the opponent (player 2) plays a Grueling Trial. Their three picks showed only as UNKNOWN
+// ENTITY; the trial is revealed when played, naming its effects by dbfId (Criminal Contract, then Conviction, which fired).
+const OPP_LOG=readFileSync(new URL('./fixtures/kazakus-opp-power.log',import.meta.url),'utf8');
+
+test('the opponent\'s played trial reads its two effects off the revealed card',()=>{
+  const parsed=parsePower(OPP_LOG);
+  assert.equal(parsed.entities.get(112).trialEffects,undefined);
+  assert.deepEqual(trialTimers(parsed,2,9),[{left:1,effect:'trial',effects:['CAP_405t6','CAP_405t2'],unknown:false}]);
+  const v=view(stateOf({parsed,turn:9}));
+  assert.deepEqual(v.s.them.timers,[{left:1,effect:'trial',effects:['CAP_405t6','CAP_405t2'],unknown:false}]);
+  assertEncoded(v,net);
+  assert.ok(!v.notes.includes('kazakus picks not reconstructed'));
+  // Without the tags the clock stays, and the opponent's unknown effects now leave the note too.
+  for(const t of ['ADDITIONAL_PLAY_REQS_1','ADDITIONAL_PLAY_REQS_2','MODULAR_ENTITY_PART_1','MODULAR_ENTITY_PART_2'])delete parsed.entities.get(112).tags[t];
+  const w=view(stateOf({parsed,turn:9}));
+  assert.deepEqual(w.s.them.timers,[{left:1,effect:'trial',effects:[],unknown:true}]);
+  assert.ok(w.notes.includes('kazakus picks not reconstructed'));
+});
+
+test('MODULAR_ENTITY_PART_1/2 stand in when ADDITIONAL_PLAY_REQS is missing',()=>{
+  const parsed=parsePower(OPP_LOG),tags=parsed.entities.get(112).tags;
+  delete tags.ADDITIONAL_PLAY_REQS_1;delete tags.ADDITIONAL_PLAY_REQS_2;
+  assert.deepEqual(trialTimers(parsed,2,9)[0].effects,['CAP_405t2','CAP_405t6']);
+});

@@ -134,6 +134,19 @@ export function ritualTimers(plays,playerId,turn){
 // Godfather Kazakus' trials, by the card the game puts in hand: how many of their owner's turn starts until they fire.
 const TRIAL_TURNS={CAP_405tb1:0,CAP_405tb2:1,CAP_405tb3:4};
 const isTrial=e=>Object.hasOwn(TRIAL_TURNS,e?.cardId);
+// The trial card names its two effects by dbfId in ADDITIONAL_PLAY_REQS_1/2 (in the order picked; MODULAR_ENTITY_PART_1/2
+// holds the same pair sorted). The opponent's picks show in the log only as UNKNOWN ENTITY, but the trial they play is
+// revealed with these tags (2026-11-02 07:24, Grueling Trial with CAP_405t6 and CAP_405t2).
+const EFFECT_DBF={132837:'CAP_405t1',132849:'CAP_405t2',132843:'CAP_405t3',132838:'CAP_405t4',132844:'CAP_405t5',
+  132850:'CAP_405t6',132851:'CAP_405t7',132856:'CAP_405t8',132848:'CAP_405t9'};
+function trialEffects(e){
+  if(e?.trialEffects)return e.trialEffects;
+  for(const [a,b] of [['ADDITIONAL_PLAY_REQS_1','ADDITIONAL_PLAY_REQS_2'],['MODULAR_ENTITY_PART_1','MODULAR_ENTITY_PART_2']]){
+    const pair=[EFFECT_DBF[e?.tags?.[a]],EFFECT_DBF[e?.tags?.[b]]];
+    if(pair.every(Boolean))return pair;
+  }
+  return null;
+}
 
 // A trial in play sits in the SECRET zone and counts the turn starts of its owner in QUEST_PROGRESS; the simulator's `left`
 // is what remains of that (it fires when the count reaches the trial's length). Without the tag, count them like
@@ -147,7 +160,8 @@ export function trialTimers(parsed,playerId,turn){
     const play=parsed.publicPlays?.find(p=>p.entityId===e.id);
     const progress=e.tags.QUEST_PROGRESS!=null?Number(e.tags.QUEST_PROGRESS):play?Math.floor((turn-play.engineTurn)/2):0;
     const left=turns-progress;
-    if(left>0)out.push({left,effect:'trial',effects:e.trialEffects??[],unknown:!e.trialEffects});
+    const effects=trialEffects(e);
+    if(left>0)out.push({left,effect:'trial',effects:effects??[],unknown:!effects});
   }
   return out;
 }
@@ -167,7 +181,7 @@ export function kazakusState(parsed,state,s,notes){
   }
   for(const c of s.hand){
     if(!isTrial(c.raw))continue;
-    const effects=parsed?.entities?.get(c.id)?.trialEffects;
+    const effects=trialEffects(parsed?.entities?.get(c.id));
     if(effects?.length===2)c.trial={turns:TRIAL_TURNS[c.raw.cardId],effects};
     else notes.push('kazakus picks not reconstructed');
   }
@@ -206,7 +220,7 @@ export function shadowView(parsed,state,actions,{cards=cardDb(),list=loadList(de
   if(mine.note)notes.push(mine.note);
   s.choice=choiceView(state,s,notes);
   kazakusState(parsed,state,s,notes);
-  for(const x of s.timers)if(x.unknown){notes.push('kazakus picks not reconstructed');break}
+  for(const x of [...s.timers,...s.them.timers])if(x.unknown){notes.push('kazakus picks not reconstructed');break}
   delete s.game;
   const legal=actions.map(a=>legalMove(parsed,state,a));
   const byAction=new Map(actions.map((a,i)=>[a.id,i]));

@@ -1,0 +1,29 @@
+D 07:24:50.1287752 GameState.DebugPrintPower() -     SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=112 zone=HAND zonePos=4 cardId= player=2] CardID=CAP_405tb2
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=CONTROLLER value=2
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=CARDTYPE value=SPELL
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=TAG_LAST_KNOWN_COST_IN_HAND value=4
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=COST value=4
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=LAST_AFFECTED_BY value=61
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ZONE value=SECRET
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ENTITY_ID value=112
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ELITE value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=CLASS value=WARLOCK
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=JUST_PLAYED value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ZONE_POSITION value=0
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=NUM_TURNS_IN_HAND value=3
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=CREATOR value=61
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=DISPLAYED_CREATOR value=61
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=MODULAR_ENTITY_PART_1 value=132849
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=MODULAR_ENTITY_PART_2 value=132850
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ADDITIONAL_PLAY_REQS_1 value=132850
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=ADDITIONAL_PLAY_REQS_2 value=132849
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=QUEST_PROGRESS_TOTAL value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=1037 value=0
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=1068 value=0
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=CREATOR_DBID value=127067
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=SPAWN_TIME_COUNT value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=OBJECTIVE value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=3557 value=4
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=4741 value=1
+D 07:24:50.1287752 GameState.DebugPrintPower() -         tag=4901 value=0
+D 07:24:53.7795406 GameState.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=嚴厲審判 id=112 zone=SECRET zonePos=0 cardId=CAP_405tb2 player=2] tag=NUM_TURNS_IN_PLAY value=1 

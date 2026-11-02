@@ -12,6 +12,11 @@ A Hearthstone bot. Jev (called through the AI Gateway) picks the actions, and `s
   - `npm run gestures`.
 - **One batch of fixes per session.** After a batch, record it in `memory/` (see below) and have the user start a new session. Don't carry the old conversation forward.
 
+## 5090 folders (the user's rule, 2026-11-02)
+- `~/side_projects/jev-hearthstone/` is the synced training copy; leave it alone.
+- Every experiment dir goes in `~/side_projects/jev-hearthstone-lab/experiments/<name>/`, flat with no sub-categories. Old backups go in `jev-hearthstone-lab/archive/`. Never create `jev-hearthstone-*` dirs in the `side_projects` root, and leave no single scripts or logs in `jev-hearthstone-lab/`.
+- Old paths in `memory/` and `runtime/*/run.sh` are history; don't edit them. Don't move a dir while its job is still running.
+
 ## Memory (`memory/`, the user's rule, 2026-10-27)
 - **All agents (Claude, Codex, cloud project threads) talk only through `memory/`.** No handing work over through chat: anything another agent must pick up goes into `memory/handoff.md` or the matching field file. Rules and field definitions: `memory/README.md`.
 - **Start of work:** read `memory/handoff.md`, then `memory/lessons.md` (general lessons), then `memory/rulings.md` (general rulings); add `memory/rulings-<deck>.md` only when the work touches that deck (zoo, egg, discard), and `memory/lessons-<area>.md` only when it touches that area (train, live, jev). Look up `findings.md` / `experiments.md` with grep when needed.
@@ -19,14 +24,15 @@ A Hearthstone bot. Jev (called through the AI Gateway) picks the actions, and `s
 - **Every mistake caught becomes a lesson.** If it can be checked automatically, add a test and name it in the lesson's check field.
 - `STATUS.md` is retired; the old log is read-only history in `memory/archive/STATUS-2026-10-27.md`. Model version notes stay in `docs/selfplay-versions.md`.
 
-## 回報實驗結果（使用者的規則，2026-10-30，格式取自 basketball-autochess）
-只有回報實驗結果時用這個格式；其他回覆照平常寫。第一行就是 `# 總評`，其餘五段用粗體標題，照字面、照順序：
-1. **總評**（`# 總評`，五級擇一附分數，寫成 `**4/5 大致達成 有部分退步**`）：5 重大達成／4 大致達成 有部分退步／3 一半一半／2 主目標達成 但是有副作用／1 失敗。
-2. **這次目標**：一句話。
-3. **進步了什麼**、4. **退步了什麼**：各幾點，用勝率從多少到多少、對哪個對手這種講法。
-5. **直觀證據**：小表或例子。
-6. **要你決定的事**：approve 與否、下一步選項。
-- 不寫細節段：區間、種子、雜湊、檔案路徑、memory ID、測試數都不放進回報（已記在 memory 和 runtime 檔）。
+## 回報實驗結果（使用者的規則，2026-11-03 改三段式，格式取自 basketball-autochess R-145）
+只有回報實驗結果時用這個格式（實驗收尾、對實驗結果的稽核、派出去跑實驗的結果）；發版、部署、收工說明、回答問題等其他回覆照平常寫。使用者同時管很多視窗，要一眼看懂重點、具體例子、下一步怎麼決定。第一行就是 `# 總評`，其餘兩段用粗體標題，照字面、照順序：
+1. **總評與核心結論**（`# 總評`，一級標題）：第一行只寫 `**4/5（建議採用／不採用）**`，不加五級文字標籤（分數已表達同樣意思）（5 重大達成／4 大致達成 有部分退步／3 一半一半／2 主目標達成 但是有副作用／1 失敗；有實質退步就不給 5）。第二行直接寫**核心結論**：一句話講清楚這次要驗證的問題成不成立、為什麼，不要把結論藏在後面。
+2. **關鍵數據與例子**（`**關鍵數據與例子**`）：一張小表，用勝率從多少到多少、對哪個對手這種講法；加最多 2–3 點說明哪裡變好、哪裡變差或副作用。禁止把同一個指標拆成正反兩段重複講。
+3. **要你決定的事**（`**要你決定的事**`）：approve 與否、2–3 個下一步選項，標明建議哪個、為什麼。
+- 一則回覆只寫一份三段；稽核也用這三段（核心結論＝原結論站不站得住，關鍵數據＝核對成立與有疑慮處）。
+- 禁止回報工程基本功與除錯流水帳：資料核對吻合、事前 commit、修掉過程腳本 bug、區間、種子、雜湊、檔案路徑、memory ID、測試數，一律只進 memory 和 runtime 檔；回覆在第 3 段結束，不加「細節」段。
+- 派工開跑與超時續跑只報 1–2 行狀態（在做什麼＋目前進度），不預先背誦方法細節。派工 spec 要子 session 回報時，也指定這三段。
+- 收尾前由 `.claude/hooks/report_format_reminder.py`（PostToolUse，matcher `mcp__ccd_turn__wrap_up`）提醒。
 
 ## Commands
 ```bash

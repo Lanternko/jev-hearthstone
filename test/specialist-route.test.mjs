@@ -17,11 +17,11 @@ const withSpecialists=async(table,f)=>{
   try{return await f()}finally{for(const k of Object.keys(SPECIALISTS))delete SPECIALISTS[k];Object.assign(SPECIALISTS,old)}
 };
 
-// User 2026-11-01: priests get zoo 0.2.2 (E-303 B), demon hunters dh-v1 (E-305 B), every other class keeps 0.2.0.
-test('warlock-zakajz plays zoo 0.2.2 against priests, dh-v1 against demon hunters and 0.2.0 against the rest', async()=>{
+// User 2026-11-01: demon hunters get dh-v1 (E-305 B); priests (0.2.2 pulled, F-918) and every other class keep 0.2.0.
+test('warlock-zakajz plays dh-v1 against demon hunters and 0.2.0 against priests and the rest', async()=>{
   await withEnv({JEV_NET_MODEL:null},()=>{
-    assert.deepEqual(SPECIALISTS,{'warlock-zakajz':{PRIEST:'warlock-zoo-0.2.2',DEMONHUNTER:'warlock-zakajz-dh-v1-20261101'}});
-    assert.equal(modelFor('warlock-zakajz','PRIEST'),'warlock-zoo-0.2.2');
+    assert.deepEqual(SPECIALISTS,{'warlock-zakajz':{DEMONHUNTER:'warlock-zakajz-dh-v1-20261101'}});
+    assert.equal(modelFor('warlock-zakajz','PRIEST'),'warlock-zoo-0.2.0');
     assert.equal(modelFor('warlock-zakajz','DEMONHUNTER'),'warlock-zakajz-dh-v1-20261101');
     assert.equal(modelFor('warlock-zakajz','SHAMAN'),'warlock-zoo-0.2.0');
     assert.equal(modelFor('warlock-zakajz',undefined),'warlock-zoo-0.2.0');
@@ -29,7 +29,7 @@ test('warlock-zakajz plays zoo 0.2.2 against priests, dh-v1 against demon hunter
   });
 });
 
-test('the live network pick against a priest comes from zoo 0.2.2 and encodes the position', async()=>{
+test('the live network pick against a priest comes from zoo 0.2.0 and encodes the position', async()=>{
   const {cardDb,rawCard}=await import('../src/selfplay.mjs');
   const cards=cardDb(),C=(id,entityId,extra={})=>({...rawCard(cards[id],entityId),...extra});
   const player=(id,first=false)=>({id:100+id,playerId:id,tags:{CONTROLLER:String(id),RESOURCES:'4',FATIGUE:'0',...(first?{FIRST_PLAYER:'1'}:{})}});
@@ -44,7 +44,7 @@ test('the live network pick against a priest comes from zoo 0.2.2 and encodes th
   await withEnv({JEV_NET_MODEL:null,JEV_DECK:'warlock-zakajz'},async()=>{
     const pick=await netPick({parsed,state,actions});
     assert.ok(pick,'the network picks');
-    assert.equal(pick.model,'warlock-zoo-0.2.2');
+    assert.equal(pick.model,'warlock-zoo-0.2.0');
     const dh=await netPick({parsed,state:{...state,opponent:{...state.opponent,heroClass:'DEMONHUNTER'}},actions});
     assert.equal(dh.model,'warlock-zakajz-dh-v1-20261101');
     const shaman=await netPick({parsed,state:{...state,opponent:{...state.opponent,heroClass:'SHAMAN'}},actions});

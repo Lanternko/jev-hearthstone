@@ -199,6 +199,40 @@ export function tapFirst(net,view,i,deck){
   return next?.kind==='power'?tap:-1;
 }
 
+// Draw before the first attack (F-928; 2026-11-02 ranked game 12, our turn 9: attacked first, Life Tapped after, and
+// the card drawn was the Blasphemy that would have been lethal). The network often taps after its attacks although
+// the tap was open all along. When the network's pick is an attack, Life Tap is open, and the network's own greedy
+// line for the rest of this turn includes a Life Tap, the tap goes first: the same plays, one card earlier, no extra
+// life paid. The cards drawn in the roll-out are random; only whether the line taps is read. `s` is a simulator state
+// with `legal` = moves(s) (live: simRoot of the view), `pick` the attack the network chose -> the Life Tap move in
+// `legal`, or null. Simulation and live play call this one function.
+export function tapBeforeAttack(net,s,legal,pick,{steps=40}={}){
+  if(pick?.kind!=='attack'||!(s.power?.draw>0))return null;
+  const tap=legal.find(x=>x.kind==='power'&&x.targetId==null);
+  if(!tap||(s.hand?.length??0)>=10||!((s.deck?.length??0)>0))return null;
+  let cur=s,m=pick;
+  for(let n=0;n<steps&&m&&m.kind!=='end';n++){
+    if(n>0&&m.kind==='power'&&cur.power?.draw>0)return tap;
+    const r=apply(cur,m);
+    if(r.exact===false||r.s.seat!==s.seat)return null;
+    cur=r.s;
+    const next=moves(cur);
+    m=next.length?net.rank(cur,next).steps[0]?.move:null;
+  }
+  return null;
+}
+
+// Live: the index in view.legal of the Life Tap to play before the attack view.legal[i], or -1.
+export function tapBeforeAttackLive(net,view,i,deck){
+  const m=view.legal[i];
+  if(m?.kind!=='attack')return -1;
+  const root=simRoot(view.s,deck),sm=moves(root);
+  const same=(a,b)=>a.kind===b.kind&&(a.id??null)===(b.id??null)&&(a.targetId??null)===(b.targetId??null);
+  const step=sm.find(x=>same(x,m));
+  const tap=step&&tapBeforeAttack(net,root,sm,step);
+  return tap?view.legal.findIndex(x=>x?.kind==='power'&&x.targetId==null):-1;
+}
+
 // A minion that wipes the board at the start of our turn (Doomsayer, NEW1_021). The network encodes opponent minions
 // only by atk/hp/taunt/ds/stealth, so it spends the turn on face damage and loses everything (2026-10-27 game 15,
 // turn 11: Mawman 4/7 and Faceless Fanatic 2/6 went face, Ruinous Velocidrake 5/5 (Rush) hit the Doomsayer down to 2,
@@ -294,6 +328,7 @@ export const GUARD_QUESTIONS={
 };
 // model name -> the guards it no longer needs
 export const RETIRED={};
+export const guardOn=(model,name)=>!(RETIRED[model]??[]).includes(name);
 
 // null: keep the network's pick. Otherwise {action,guard,reason}. `model` is the network that made the pick (RETIRED).
 export function guardPick(state,actions,pick,top=[],{model=null}={}){

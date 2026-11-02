@@ -1,0 +1,381 @@
+{
+ "note": "ranked 2026-11-02 game 12, engine turn 17, first attack after Entropic Continuity (F-928)",
+ "state": {
+  "gameNumber": 12,
+  "turn": 17,
+  "step": "MAIN_ACTION",
+  "status": "RUNNING",
+  "me": {
+   "playerId": 1,
+   "heroClass": "WARLOCK",
+   "mana": 8,
+   "maxMana": 9,
+   "current": true,
+   "playstate": "PLAYING",
+   "handCount": 0,
+   "deckCount": 22,
+   "board": [
+    {
+     "entityId": 58,
+     "cardId": "HERO_07f",
+     "name": "Nemesis Gul'dan",
+     "baseHealth": 30,
+     "HEALTH": 30,
+     "DAMAGE": 21,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 59,
+     "cardId": "HERO_07ebp",
+     "name": "Life Tap",
+     "text": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 177,
+     "cardId": "TLC_228",
+     "name": "Bralma Searstone",
+     "text": "Your Elementals deal\n1 extra damage.",
+     "baseCost": 3,
+     "baseAttack": 1,
+     "baseHealth": 5,
+     "COST": 3,
+     "ATK": 2,
+     "HEALTH": 6,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0
+    },
+    {
+     "entityId": 182,
+     "cardId": "TIME_029",
+     "name": "Ruinous Velocidrake",
+     "text": "[x]<b>Rush</b>\n<b>Battlecry:</b> Cast a Shred\n of Time from your deck to\n   summon a copy of this.",
+     "baseCost": 5,
+     "baseAttack": 5,
+     "baseHealth": 5,
+     "COST": 5,
+     "ATK": 6,
+     "HEALTH": 6,
+     "DAMAGE": 4,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0,
+     "NUM_ATTACKS_THIS_TURN": 0,
+     "RUSH": 1
+    },
+    {
+     "entityId": 19,
+     "cardId": "CATA_210",
+     "name": "Twilight Egg",
+     "text": "[x]<b>Deathrattle:</b> Summon a\n{0}/{1} Whelp. <i>(Gains +1/+1\n  at the start of your turns!)  </i>",
+     "baseCost": 1,
+     "baseAttack": 0,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 3,
+     "ZONE_POSITION": 3,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    },
+    {
+     "entityId": 16,
+     "cardId": "CORE_SCH_713",
+     "name": "Cult Neophyte",
+     "text": "<b>Battlecry:</b>& Your opponent's spells cost (1) more next turn.",
+     "baseCost": 2,
+     "baseAttack": 3,
+     "baseHealth": 2,
+     "COST": 2,
+     "ATK": 4,
+     "HEALTH": 3,
+     "ZONE_POSITION": 4,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 0
+    }
+   ],
+   "hand": [],
+   "fatigue": 0,
+   "drawHazards": [
+    3,
+    3
+   ]
+  },
+  "opponent": {
+   "playerId": 2,
+   "heroClass": "PRIEST",
+   "mana": 0,
+   "maxMana": 8,
+   "current": false,
+   "playstate": "PLAYING",
+   "handCount": 4,
+   "deckCount": 29,
+   "board": [
+    {
+     "entityId": 60,
+     "cardId": "HERO_09x",
+     "name": "Banshee Tyrande",
+     "baseHealth": 30,
+     "HEALTH": 40,
+     "DAMAGE": 34,
+     "CARDTYPE": "HERO"
+    },
+    {
+     "entityId": 124,
+     "cardId": "EDR_449p",
+     "name": "Blessing of the Moon",
+     "text": "[x]Choose a playable Priest\nminion or spell to add to\nyour hand. It costs (<b>",
+     "baseCost": 2,
+     "COST": 2,
+     "CARDTYPE": "HERO_POWER",
+     "EXHAUSTED": 1
+    },
+    {
+     "entityId": 168,
+     "cardId": "DEEP_006",
+     "name": "Stone Drake",
+     "text": "<b>Divine Shield</b>, <b>Taunt</b>,\n<b>Lifesteal</b>, <b>Elusive</b>",
+     "baseCost": 6,
+     "baseAttack": 2,
+     "baseHealth": 8,
+     "COST": 6,
+     "ATK": 2,
+     "HEALTH": 8,
+     "ZONE_POSITION": 1,
+     "CARDTYPE": "MINION",
+     "TAUNT": 1,
+     "DIVINE_SHIELD": 0,
+     "EXHAUSTED": 1,
+     "NUM_ATTACKS_THIS_TURN": 0,
+     "CHARGE": 1
+    },
+    {
+     "entityId": 199,
+     "cardId": "CORE_RLK_814",
+     "name": "Crystalsmith Cultist",
+     "text": "<b>Battlecry:</b> If you're\nholding a Shadow spell,& gain +1/+1.",
+     "baseCost": 1,
+     "baseAttack": 1,
+     "baseHealth": 2,
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "ZONE_POSITION": 2,
+     "CARDTYPE": "MINION",
+     "EXHAUSTED": 1
+    }
+   ],
+   "secretCount": 0,
+   "initialHealth": 40,
+   "publicPlays": [
+    {
+     "public": true,
+     "engineTurn": 2,
+     "entityId": 77,
+     "cardId": "BE_726",
+     "name": "Ritual of C'Thun",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "[x]In 2 turns, choose a\nC'Thun ability to trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 4,
+     "entityId": 81,
+     "cardId": "TIME_027",
+     "name": "Tachyon Barrage",
+     "CARDTYPE": "SPELL",
+     "COST": 2,
+     "text": "Deal $6 damage split among all enemies. Shuffle 2 Shreds of Time into your deck."
+    },
+    {
+     "public": true,
+     "engineTurn": 6,
+     "entityId": 72,
+     "cardId": "BE_726",
+     "name": "Ritual of C'Thun",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "[x]In 2 turns, choose a\nC'Thun ability to trigger."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 40,
+     "cardId": "EDR_449",
+     "name": "Lunarwing Messenger",
+     "CARDTYPE": "MINION",
+     "COST": 2,
+     "ATK": 3,
+     "HEALTH": 2,
+     "text": "<b>Lifesteal</b>\n<b>Battlecry:</b> <b>Imbue</b> your Hero Power."
+    },
+    {
+     "public": true,
+     "engineTurn": 8,
+     "entityId": 125,
+     "cardId": "BE_228",
+     "name": "Servant of Zuramat",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> <b>Silence</b> a minion."
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 45,
+     "cardId": "CORE_EX1_197",
+     "name": "Shadow Word: Ruin",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "Destroy all minions with 5 or more Attack."
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 83,
+     "cardId": "AV_COIN2",
+     "name": "The Coin",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "Gain 1 Mana Crystal this turn only."
+    },
+    {
+     "public": true,
+     "engineTurn": 10,
+     "entityId": 151,
+     "cardId": "CORE_CS1_130",
+     "name": "Holy Smite",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "Deal $3 damage\nto a minion."
+    },
+    {
+     "public": true,
+     "engineTurn": 12,
+     "entityId": 80,
+     "cardId": "BE_086",
+     "name": "Blasphemy",
+     "CARDTYPE": "SPELL",
+     "COST": 4,
+     "text": "Deal $2 damage to all enemies. If this is\nthe highest Cost card in your hand, do it again."
+    },
+    {
+     "public": true,
+     "engineTurn": 12,
+     "entityId": 161,
+     "cardId": "END_027",
+     "name": "Wings of Eternity",
+     "CARDTYPE": "SPELL",
+     "COST": 1,
+     "text": "[x]<b>Discover</b> a Dragon\nfrom the past with a\n<b>Dark Gift</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 14,
+     "entityId": 66,
+     "cardId": "TLC_451",
+     "name": "Cursed Catacombs",
+     "CARDTYPE": "SPELL",
+     "COST": 0,
+     "text": "<b>Discover</b> another\ncard from your deck. Make it <b>Temporary</b>."
+    },
+    {
+     "public": true,
+     "engineTurn": 14,
+     "entityId": 43,
+     "cardId": "EDR_476",
+     "name": "Moonwell",
+     "CARDTYPE": "SPELL",
+     "COST": 6,
+     "text": "Deal $4 damage to all enemy characters. Restore #4 Health to all friendly characters."
+    },
+    {
+     "public": true,
+     "engineTurn": 16,
+     "entityId": 168,
+     "cardId": "DEEP_006",
+     "name": "Stone Drake",
+     "CARDTYPE": "MINION",
+     "COST": 6,
+     "ATK": 2,
+     "HEALTH": 8,
+     "text": "<b>Divine Shield</b>, <b>Taunt</b>,\n<b>Lifesteal</b>, <b>Elusive</b>"
+    },
+    {
+     "public": true,
+     "engineTurn": 16,
+     "entityId": 199,
+     "cardId": "CORE_RLK_814",
+     "name": "Crystalsmith Cultist",
+     "CARDTYPE": "MINION",
+     "COST": 1,
+     "ATK": 1,
+     "HEALTH": 2,
+     "text": "<b>Battlecry:</b> If you're\nholding a Shadow spell,& gain +1/+1."
+    }
+   ]
+  },
+  "optionsId": 65,
+  "mulliganResult": {
+   "choiceId": 1,
+   "kept": [
+    21,
+    31
+   ],
+   "complete": true
+  },
+  "fingerprint": "89395767cc49e40af2f7",
+  "decisionFingerprint": "91cccc72d7f7ea913c43"
+ },
+ "options": [
+  {
+   "id": "o0",
+   "type": "END_TURN",
+   "option": 0
+  },
+  {
+   "option": 1,
+   "entityId": 59,
+   "type": "POWER",
+   "id": "o1"
+  },
+  {
+   "option": 2,
+   "entityId": 177,
+   "type": "POWER",
+   "id": "o2t0",
+   "targetId": 168
+  },
+  {
+   "option": 3,
+   "entityId": 182,
+   "type": "POWER",
+   "id": "o3t0",
+   "targetId": 168
+  },
+  {
+   "option": 4,
+   "entityId": 19,
+   "type": "POWER",
+   "id": "o4t0",
+   "targetId": 168
+  },
+  {
+   "option": 5,
+   "entityId": 16,
+   "type": "POWER",
+   "id": "o5t0",
+   "targetId": 168
+  }
+ ],
+ "picked": "o3t0"
+}
